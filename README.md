@@ -20,7 +20,9 @@ HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
 3. 美颜（小程序）
 4. 智能换正装（小程序）
 
-> 由于商业原因，完整版的HivisionIDPhoto需在微信小程序使用，在微信搜一搜“焕影一新”即可。
+> 由于商业原因，完整版的HivisionIDPhoto需在微信小程序使用，在微信搜索“焕影一新”或扫描下方二维码即可。
+
+<img src="https://linimages.oss-cn-beijing.aliyuncs.com/huanyingCode.jpg" alt="alt text" width="160" height="160">
 
 ---
 
