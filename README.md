@@ -28,7 +28,7 @@ HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
 
 
 
-## 🔧环境依赖和安装
+# 🔧环境依赖和安装
 
 - Python >= 3.7 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
 - onnxruntime
