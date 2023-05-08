@@ -51,7 +51,7 @@ def idphoto_inference(input_image,
 if __name__ == "__main__":
     HY_HUMAN_MATTING_WEIGHTS_PATH = "./hivision_modnet.onnx"
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
-    sizes = ["一寸", "二寸", "自定义"]
+    sizes = ["一寸", "二寸"]
     colors = ["蓝色", "白色", "红色"]
 
     title = "<h1 id='title'>焕影一新-证件照制作</h1>"
