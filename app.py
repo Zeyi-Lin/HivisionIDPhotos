@@ -69,8 +69,8 @@ if __name__ == "__main__":
             with gr.Column():
                 # 上传图片
                 img_input = gr.Image().style(height=350)
-                size_options = gr.Dropdown(choices=sizes, label="证件照尺寸", value="一寸", elem_id="size")
-                color_options = gr.Dropdown(choices=colors, label="背景色", value="蓝色", elem_id="color")
+                size_options = gr.Radio(choices=sizes, label="证件照尺寸", value="一寸", elem_id="size")
+                color_options = gr.Radio(choices=colors, label="背景色", value="蓝色", elem_id="color")
 
                 img_but = gr.Button('开始制作')
                 # 案例图片
