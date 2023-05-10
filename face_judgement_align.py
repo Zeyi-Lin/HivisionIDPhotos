@@ -460,6 +460,7 @@ def debug_mode_process(testImages):
 
 @calTime("主函数")
 def IDphotos_create(input_image,
+                    mode="ID",
                     size=(413, 295),
                     head_measure_ratio=0.2,
                     head_height_ratio=0.45,
@@ -496,8 +497,7 @@ def IDphotos_create(input_image,
     """
 
     # Step0. 数据准备/图像预处理
-    matting_params = {"aliyun": {"oss_image_name": oss_image_name, "user": user},
-                      "modnet": {"human_sess": human_sess}}
+    matting_params = {"modnet": {"human_sess": human_sess}}
     rotation_params = {"L1": None, "L2": None, "L3": None, "clockwise": None, "drawed_image": None}
     input_image = resize_image_esp(input_image, 2000)  # 将输入图片resize到最大边长为2000
 
@@ -511,6 +511,9 @@ def IDphotos_create(input_image,
 
     # Step3. 抠图
     origin_png_image = image_matting(input_image, matting_params)
+    if mode == "Matting":
+        return origin_png_image, origin_png_image, None, None, None, None, None, None, None
+
     origin_png_image_pre = origin_png_image.copy()  # 备份一下现在抠图结果图，之后在iphoto_cutting函数有用
 
     # Step4. 旋转矫正

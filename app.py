@@ -20,6 +20,7 @@ def idphoto_inference(input_image,
                       top_distance_min=0.10):
 
     colors_bgr = {"蓝色": (86, 140, 212), "白色": (255, 255, 255), "红色": (233, 51, 35)}
+    mode = "ID"
 
     if size_option == "一寸":
         id_height = 413
@@ -27,9 +28,13 @@ def idphoto_inference(input_image,
     elif size_option == "二寸":
         id_height = 626
         id_width = 413
+    elif size_option == "不改尺寸只换底":
+        mode = "Matting"
+
 
     result_image_hd, result_image_standard, typography_arr, typography_rotate, \
     _, _, _, _, id_temp_info = IDphotos_create(input_image,
+                                               mode=mode,
                                                size=(id_height, id_width),
                                                head_measure_ratio=head_measure_ratio,
                                                head_height_ratio=head_height_ratio,
@@ -42,6 +47,7 @@ def idphoto_inference(input_image,
                                                IS_DEBUG=False,
                                                top_distance_max=top_distance_max,
                                                top_distance_min=top_distance_min)
+
     result_image_standard = np.uint8(add_background(result_image_standard, bgr=colors_bgr[color_option]))
     result_image_hd = np.uint8(add_background(result_image_hd, bgr=colors_bgr[color_option]))
 
@@ -51,7 +57,7 @@ def idphoto_inference(input_image,
 if __name__ == "__main__":
     HY_HUMAN_MATTING_WEIGHTS_PATH = "./hivision_modnet.onnx"
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
-    sizes = ["一寸", "二寸"]
+    sizes = ["不改尺寸只换底", "一寸", "二寸"]
     colors = ["蓝色", "白色", "红色"]
 
     title = "<h1 id='title'>焕影一新-证件照制作</h1>"
