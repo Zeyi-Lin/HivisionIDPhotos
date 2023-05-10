@@ -91,4 +91,4 @@ if __name__ == "__main__":
                       outputs=[img_output_standard, img_output_standard_hd], queue=True)
         example_images.click(fn=set_example_image, inputs=[example_images], outputs=[img_input])
 
-    demo.launch(server_name="0.0.0.0", enable_queue=True)
+    demo.launch(enable_queue=True)
