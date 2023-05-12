@@ -79,6 +79,10 @@ python app.py
 运行程序将生成一个本地Web页面，在页面中可完成证件照的操作与交互。
 
 
+# 引用项目
+1. MTCNN：https://github.com/ipazc/mtcnn
+2. ModNet：https://github.com/ZHKKKe/MODNet
+
 
 # 🏠关于我们
 
