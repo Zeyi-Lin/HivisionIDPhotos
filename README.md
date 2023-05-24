@@ -5,7 +5,7 @@
 
 <div align="center"><h2>HivisionIDPhoto：焕影一新小程序官方证件照制作算法</h2></div>
 
-> 🚀谢谢你对我们的工作感兴趣。您可能还想查看我们在图像领域的其他成果，欢迎来信:xiaolin199912@gmail.com
+> 🚀谢谢你对我们的工作感兴趣。您可能还想查看我们在图像领域的其他成果，欢迎来信:zeyi.lin@swanhub.co
 
 - 在线demo已更新：[![SwanHub Demo](https://img.shields.io/static/v1?label=HivisionIDphoto&message=SwanHub%20Demo&color=blue)](http://blackswanai.cn/ZeYiLin/HivisionIDPhotos/demo)
 
