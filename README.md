@@ -68,7 +68,7 @@ pip install gradio
 
 ```
 git lfs install
-git clone http://182.92.206.173/ZeYiLin/HivisionIDPhotos.git
+https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
 ```
 
 **推理！**
