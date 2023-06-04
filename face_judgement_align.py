@@ -512,7 +512,7 @@ def IDphotos_create(input_image,
     # Step3. 抠图
     origin_png_image = image_matting(input_image, matting_params)
     if mode == "Matting":
-        return origin_png_image, origin_png_image, None, None, None, None, None, None, None
+        return origin_png_image, origin_png_image, None, None, None, None, None, None, 1
 
     origin_png_image_pre = origin_png_image.copy()  # 备份一下现在抠图结果图，之后在iphoto_cutting函数有用
 
@@ -542,8 +542,7 @@ def IDphotos_create(input_image,
     face_num = len(faces)
     # 报错MTCNN检测结果不等于1的图片
     if face_num != 1:
-        status_id = "1101" if face_num == 0 else "1102"
-        raise IDError(f"人脸检测出错！检测出了{face_num}张人脸", face_num=face_num, diary=api_diary, status_id=status_id)
+        return None, None, None, None, None, None, None, None, 0
     # 符合条件的进入下一环
     else:
         result_image_hd, result_image_standard, clothing_params = \
@@ -554,19 +553,8 @@ def IDphotos_create(input_image,
     # Step7. 排版照参数获取
     typography_arr, typography_rotate = generate_layout_photo(input_height=size[0], input_width=size[1])
 
-    # Step*: 如果开启了DEBUG模式，那么会保存一系列中间过程的图像，将将这些图片拼接到一起
-    if IS_DEBUG:
-        testImages.append(["result_image", result_image_standard])
-        result_image_test = debug_mode_process(testImages)
-        cv2.imwrite("test_image_hconcat.jpg", result_image_test)
-    id_temp_info = {
-        "face_x1y1": (clothing_params["relative_x"], clothing_params["relative_y"]),
-        "face_width": clothing_params["w"],
-        "face_height": clothing_params["h"]
-    }
     return result_image_hd, result_image_standard, typography_arr, typography_rotate, \
-           clothing_params["relative_x"], clothing_params["relative_y"], clothing_params["w"], clothing_params[
-               "h"], id_temp_info
+           clothing_params["relative_x"], clothing_params["relative_y"], clothing_params["w"], clothing_params["h"], 1
 
 
 if __name__ == "__main__":
@@ -576,7 +564,7 @@ if __name__ == "__main__":
     input_image = cv2.imread("test.jpg")
 
     result_image_hd, result_image_standard, typography_arr, typography_rotate, \
-    _, _, _, _, id_temp_info = IDphotos_create(input_image,
+    _, _, _, _, _ = IDphotos_create(input_image,
                                                size=(413, 295),
                                                head_measure_ratio=0.2,
                                                head_height_ratio=0.45,
