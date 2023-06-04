@@ -4,16 +4,16 @@
 - 2023.6.4：**自定义底色、人脸检测Bug通知**上线
 - 2023.5.10：**不改尺寸只换底**上线
 
+<br>
+<br>  
+
+
 # OverView
 
 > 🚀谢谢你对我们的工作感兴趣。您可能还想查看我们在图像领域的其他成果，欢迎来信:zeyi.lin@swanhub.co
 
 - 在线demo已更新：[![SwanHub Demo](https://img.shields.io/static/v1?label=HivisionIDphoto&message=SwanHub%20Demo&color=blue)](http://blackswanai.cn/ZeYiLin/HivisionIDPhotos/demo)
 
-
-
-<br>
-<br>  
 
 
 HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
