@@ -1,8 +1,20 @@
 <div align="center"><h2>HivisionIDPhoto：焕影一新小程序官方证件照制作算法</h2></div>
 
+# 😎项目更新
+- 2023.6.4：**自定义底色、人脸检测Bug通知**上线
+- 2023.5.10：**不改尺寸只换底**上线
+
+# OverView
+
 > 🚀谢谢你对我们的工作感兴趣。您可能还想查看我们在图像领域的其他成果，欢迎来信:zeyi.lin@swanhub.co
 
 - 在线demo已更新：[![SwanHub Demo](https://img.shields.io/static/v1?label=HivisionIDphoto&message=SwanHub%20Demo&color=blue)](http://blackswanai.cn/ZeYiLin/HivisionIDPhotos/demo)
+
+
+
+<br>
+<br>  
+
 
 HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
 
@@ -23,13 +35,6 @@ HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
 
 如果HivisionIDPhoto对你有帮助，请star这个repo或推荐给你的朋友，解决证件照应急制作问题！
 
-# 项目更新
-
-- 2023.6.4：**自定义底色、人脸检测Bug通知**上线
-- 2023.5.10：**不改尺寸只换底**上线
-
-<br>
-<br>  
 
 
 # 🔧环境依赖和安装
