@@ -52,7 +52,7 @@ HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
 1. Clone repo
 
 ```bash
-git clone http://182.92.206.173/ZeYiLin/HivisionIDPhotos.git
+git lfs install && git clone https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
