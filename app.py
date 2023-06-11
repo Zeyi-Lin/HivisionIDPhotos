@@ -1,7 +1,9 @@
+import cv2
 import gradio as gr
 import onnxruntime
 from face_judgement_align import IDphotos_create
 from hivisionai.hycv.vision import add_background
+from color_gradient import generate_gradient
 import pathlib
 import numpy as np
 
@@ -15,9 +17,10 @@ if __name__ == "__main__":
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
     sizes = ["一寸", "二寸", "不改尺寸只换底", "自定义尺寸"]
     colors = ["蓝色", "白色", "红色", "自定义底色"]
+    render = ["纯色", "上下渐变(白)"]
 
     title = "<h1 id='title'>焕影一新-证件照制作</h1>"
-    description = "<h3>😎6.8更新：新增自定义尺寸</h3>"
+    description = "<h3>😎6.11更新：新增上下渐变选项</h3>"
     css = '''
     h1#title, h3 {
       text-align: center;
@@ -44,6 +47,8 @@ if __name__ == "__main__":
                     custom_color_G = gr.Number(value=0, label="G", interactive=True)
                     custom_color_B = gr.Number(value=0, label="B", interactive=True)
 
+                render_options = gr.Radio(choices=render, label="渲染方式", value="纯色", elem_id="render")
+
                 img_but = gr.Button('开始制作')
                 # 案例图片
                 example_images = gr.Dataset(components=[img_input],
@@ -59,6 +64,7 @@ if __name__ == "__main__":
             def idphoto_inference(input_image,
                                   size_option,
                                   color_option,
+                                  render_options,
                                   custom_color_R,
                                   custom_color_G,
                                   custom_color_B,
@@ -119,6 +125,8 @@ if __name__ == "__main__":
                                                      top_distance_max=top_distance_max,
                                                      top_distance_min=top_distance_min)
 
+                cv2.imwrite("./testPerson.png", result_image_standard)
+
                 if status == 0:
                     result_messgae = {
                         img_output_standard: gr.update(value=None),
@@ -127,10 +135,15 @@ if __name__ == "__main__":
                     }
 
                 else:
-
-                    result_image_standard = np.uint8(
-                        add_background(result_image_standard, bgr=colors_bgr[color_option]))
-                    result_image_hd = np.uint8(add_background(result_image_hd, bgr=colors_bgr[color_option]))
+                    if render_options == "纯色":
+                        result_image_standard = np.uint8(
+                            add_background(result_image_standard, bgr=colors_bgr[color_option]))
+                        result_image_hd = np.uint8(add_background(result_image_hd, bgr=colors_bgr[color_option]))
+                    else:
+                        result_image_standard = np.uint8(
+                            add_background(result_image_standard, bgr=colors_bgr[color_option], gradient=True))
+                        result_image_hd = np.uint8(
+                            add_background(result_image_hd, bgr=colors_bgr[color_option], gradient=True))
 
                     result_messgae = {
                         img_output_standard: result_image_standard,
@@ -155,7 +168,7 @@ if __name__ == "__main__":
         color_options.input(change_color, inputs=[color_options], outputs=[custom_color])
         size_options.input(change_size, inputs=[size_options], outputs=[custom_size])
         img_but.click(idphoto_inference,
-                      inputs=[img_input, size_options, color_options,
+                      inputs=[img_input, size_options, color_options, render_options,
                               custom_color_R, custom_color_G, custom_color_B,
                               custom_size_height, custom_size_wdith],
                       outputs=[img_output_standard, img_output_standard_hd, notification], queue=True)

@@ -213,7 +213,28 @@ def draw_picture_rectangle(image, bbox, pen_size=2, pen_color=(0, 0, 255)):
     return image
 
 
-def add_background(input_image, bgr=(0, 0, 0), new_background=None):
+def generate_gradient(start_color, width, height):
+    # 定义背景颜色
+    end_color = (255, 255, 255) # 白色
+
+    # 创建一个空白图像
+    r_out = np.zeros((height, width), dtype=int)
+    g_out = np.zeros((height, width), dtype=int)
+    b_out = np.zeros((height, width), dtype=int)
+
+    # 生成渐变色
+    for y in range(height):
+        r = int((y / height) * end_color[0] + ((height - y) / height) * start_color[0])
+        g = int((y / height) * end_color[1] + ((height - y) / height) * start_color[1])
+        b = int((y / height) * end_color[2] + ((height - y) / height) * start_color[2])
+        r_out[y, :] = r
+        g_out[y, :] = g
+        b_out[y, :] = b
+
+    return r_out, g_out, b_out
+
+
+def add_background(input_image, bgr=(0, 0, 0), gradient=False):
     """
     本函数的功能为为透明图像加上背景。
     :param input_image: numpy.array(4 channels), 透明图像
@@ -223,25 +244,18 @@ def add_background(input_image, bgr=(0, 0, 0), new_background=None):
     """
     height, width = input_image.shape[0], input_image.shape[1]
     b, g, r, a = cv2.split(input_image)
-    if new_background is None:
+    a_cal = a / 255
+    if not gradient:
         # 纯色填充
         b2 = np.full([height, width], bgr[0], dtype=int)
         g2 = np.full([height, width], bgr[1], dtype=int)
         r2 = np.full([height, width], bgr[2], dtype=int)
-
-        a_cal = a / 255
-        output = cv2.merge(((b - b2) * a_cal + b2, (g - g2) * a_cal + g2, (r - r2) * a_cal + r2))
-
     else:
-        # 有背景图的填充
-        background = new_background
-        background = cv2.resize(background, (width, height))
-        b2, g2, r2 = cv2.split(background)
-        a_cal = a / 255
-        output = cv2.merge(((b - b2) * a_cal + b2, (g - g2) * a_cal + g2, (r - r2) * a_cal + r2))
+        b2, g2, r2 = generate_gradient(bgr, width, height)
+
+    output = cv2.merge(((b - b2) * a_cal + b2, (g - g2) * a_cal + g2, (r - r2) * a_cal + r2))
 
     return output
-
 
 def rotate_bound(image, angle):
     """
