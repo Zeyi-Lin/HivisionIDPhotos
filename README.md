@@ -4,7 +4,7 @@
 
 <div align="center"><h2>HivisionIDPhoto：焕影一新小程序官方证件照制作算法</h2></div>
 
-# <p class="inline-block animate-spin">😎</p>项目更新
+# 🤩项目更新
 - 2023.6.11: 更新**上下渐变色**
 - 2023.6.8: 更新**自定义尺寸**
 - 2023.6.4: 更新**自定义底色、人脸检测Bug通知**
