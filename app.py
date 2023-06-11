@@ -3,7 +3,6 @@ import gradio as gr
 import onnxruntime
 from face_judgement_align import IDphotos_create
 from hivisionai.hycv.vision import add_background
-from color_gradient import generate_gradient
 import pathlib
 import numpy as np
 
