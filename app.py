@@ -16,10 +16,10 @@ if __name__ == "__main__":
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
     sizes = ["一寸", "二寸", "不改尺寸只换底", "自定义尺寸"]
     colors = ["蓝色", "白色", "红色", "自定义底色"]
-    render = ["纯色", "上下渐变(白)"]
+    render = ["纯色", "上下渐变(白)", "中心渐变(白)"]
 
     title = "<h1 id='title'>焕影一新-证件照制作</h1>"
-    description = "<h3>😎6.11更新：新增上下渐变选项</h3>"
+    description = "<h3>😎6.13更新：新增中心渐变选项</h3>"
     css = '''
     h1#title, h3 {
       text-align: center;
@@ -138,11 +138,16 @@ if __name__ == "__main__":
                         result_image_standard = np.uint8(
                             add_background(result_image_standard, bgr=colors_bgr[color_option]))
                         result_image_hd = np.uint8(add_background(result_image_hd, bgr=colors_bgr[color_option]))
+                    elif render_options == "上下渐变(白)":
+                        result_image_standard = np.uint8(
+                            add_background(result_image_standard, bgr=colors_bgr[color_option], mode="updown_gradient"))
+                        result_image_hd = np.uint8(
+                            add_background(result_image_hd, bgr=colors_bgr[color_option], mode="updown_gradient"))
                     else:
                         result_image_standard = np.uint8(
-                            add_background(result_image_standard, bgr=colors_bgr[color_option], gradient=True))
+                            add_background(result_image_standard, bgr=colors_bgr[color_option], mode="center_gradient"))
                         result_image_hd = np.uint8(
-                            add_background(result_image_hd, bgr=colors_bgr[color_option], gradient=True))
+                            add_background(result_image_hd, bgr=colors_bgr[color_option], mode="center_gradient"))
 
                     result_messgae = {
                         img_output_standard: result_image_standard,
