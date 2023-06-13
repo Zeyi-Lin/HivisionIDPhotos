@@ -4,6 +4,12 @@
 
 <div align="center"><h2>HivisionIDPhoto：焕影一新小程序官方证件照制作算法</h2></div>
 
+<div align="center"> 
+<img src="sources/demoImage.png" width=900>
+</div>
+
+
+
 # 🤩项目更新
 - 2023.6.13: 更新**中心渐变色**
 - 2023.6.11: 更新**上下渐变色**
