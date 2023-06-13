@@ -1,4 +1,4 @@
-<div align="center"><h2 style="color:#3972d6;"><img src="https://linimages.oss-cn-beijing.aliyuncs.com/hivision_photo_logo.png" width=80>HivisionIDPhoto
+<div align="center"><h1><img src="https://linimages.oss-cn-beijing.aliyuncs.com/hivision_photo_logo.png" width=80>HivisionIDPhoto
 
 焕影一新小程序官方证件照制作算法</h2></div>
 
