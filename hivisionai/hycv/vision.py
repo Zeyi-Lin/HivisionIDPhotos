@@ -236,7 +236,7 @@ def generate_gradient(start_color, width, height, mode="updown"):
         # 生成中心渐变色
         img = np.zeros((height, width, 3))
         # 定义椭圆中心和半径
-        center = (height//2, width//2)
+        center = (width//2, height//2)
         end_axies = max(height, width)
         # 定义渐变色
         end_color = (255, 255, 255)
