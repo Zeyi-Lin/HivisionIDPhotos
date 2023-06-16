@@ -1,60 +1,50 @@
 <div align="center">
 <h1><img src="https://linimages.oss-cn-beijing.aliyuncs.com/hivision_photo_logo.png" width=80>HivisionIDPhoto</h1>
 
-中文 / [English]()
+English / [中文](README_EN.md)
 
 <img src="sources/demoImage.png" width=900>
 </div>
 
-
-
-
-# 🤩项目更新
-- 2023.6.13: 更新**中心渐变色**
-- 2023.6.11: 更新**上下渐变色**
-- 2023.6.8: 更新**自定义尺寸**
-- 2023.6.4: 更新**自定义底色、人脸检测Bug通知**
-- 2023.5.10: 更新**不改尺寸只换底**
+# 🤩Project Update
+- 2023.6.13: Updated **center gradient color**
+- 2023.6.11: Updated **top and bottom gradient color**
+- 2023.6.8: Updated **custom size**
+- 2023.6.4: Updated **custom background color and face detection bug notification**
+- 2023.5.10: Updated **change background without changing size**
 <br>
 
 
-# OverView
+# Overview
 
-> 🚀谢谢你对我们的工作感兴趣。您可能还想查看我们在图像领域的其他成果，欢迎来信:zeyi.lin@swanhub.co
+> 🚀Thank you for your interest in our work. You may also want to check out our other achievements in the field of image processing. Please feel free to contact us at zeyi.lin@swanhub.co.
 
-- 在线demo已更新：[![SwanHub Demo](https://img.shields.io/static/v1?label=HivisionIDphoto&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+HivisionIDPhoto aims to develop a practical intelligent algorithm for producing ID photos. It uses a complete set of model workflows to recognize various user photo scenarios, perform image segmentation, and generate ID photos. 
 
+**HivisionIDPhoto can:**
 
+1. Perform lightweight image segmentation
+2. Generate standard ID photos and six-inch layout photos according to different size specifications
+3. Provide beauty features (in mini-programs)
+4. Provide intelligent formal wear replacement (in mini-programs)
 
-HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
-
-它利用一套完善的模型工作流程，实现对多种用户拍照场景的识别、抠图与证件照生成。
-
-**HivisionIDPhoto可以做到：**
-
-1. 轻量级抠图
-2. 根据不同尺寸规格生成不同的标准证件照、六寸排版照
-3. 美颜（小程序）
-4. 智能换正装（小程序）
-
-> 由于商业原因，完整版的HivisionIDPhoto需在微信小程序使用，在微信搜索“焕影一新”或扫描下方二维码即可。
+> Due to commercial reasons, the full version of HivisionIDPhoto needs to be used in WeChat mini-programs. Please search for "焕影一新" in WeChat or scan the QR code below.
 
 <img src="https://linimages.oss-cn-beijing.aliyuncs.com/huanyingCode.jpg" alt="alt text" width="160" height="160">
 
 ---
 
-如果HivisionIDPhoto对你有帮助，请star这个repo或推荐给你的朋友，解决证件照应急制作问题！
+If HivisionIDPhoto is helpful to you, please star this repo or recommend it to your friends to solve the problem of emergency ID photo production!
 
 
-
-# 🔧环境依赖和安装
+# 🔧Environment Dependencies and Installation
 
 - Python >= 3.7 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
 - onnxruntime
 - OpenCV
 - Option: Linux, Windows, MacOS
 
-### 安装
+### Installation
 
 1. Clone repo
 
@@ -74,40 +64,37 @@ pip install gradio
 
 
 
-# ⚡️快速推理
+# ⚡️Quick Inference
 
-模型与代码通过git-lfs下载。
+The model and code are downloaded through git-lfs.
 
 ```
 git lfs install
 https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
 ```
 
-**推理！**
+**Inference!**
 
 ```
 python app.py
 ```
 
-运行程序将生成一个本地Web页面，在页面中可完成证件照的操作与交互。
+Running the program will generate a local web page where you can complete ID photo operations and interactions.
 
 
-# 引用项目
-1. MTCNN：https://github.com/ipazc/mtcnn
-2. ModNet：https://github.com/ZHKKKe/MODNet
+# Reference Projects
+1. MTCNN: https://github.com/ipazc/mtcnn
+2. ModNet: https://github.com/ZHKKKe/MODNet
 
 
-# 🏠关于我们
+# 🏠About Us
 
-焕影一新项目由西电极创工作室出品，是西安电子科技大学的本科生双创优秀案例之一。团队已成立西安焕视灵智科技有限公司，聚焦于智能图像处理、AIGC、人工智能基础设施等领域的研究，产品焕影一新小程序已在全国拥有80+万用户，在年轻的学生群体形成了良好口碑与传播效应。
-
-
+Hivision project is produced by the Xidian Jichuang Workshop and is one of the excellent undergraduate innovation and entrepreneurship cases of Xidian University. The team has established Xi'an Huanshi Lingzhi Technology Co., Ltd., focusing on research in the fields of intelligent image processing, AIGC, artificial intelligence infrastructure, etc. The product "焕影一新" mini-program has more than 800,000 users nationwide and has formed a good reputation and dissemination effect among young student groups.
 
 
+# 📧Contact Us
 
-# 📧 联系我们
-
-如果您有任何问题，请发邮件至xiaolin199912@gmail.com
+If you have any questions, please email xiaolin199912@gmail.com.
 
 
 
