@@ -1,11 +1,10 @@
-<div align="center"><h1><img src="https://linimages.oss-cn-beijing.aliyuncs.com/hivision_photo_logo.png" width=80>HivisionIDPhoto
-
-焕影一新小程序官方证件照制作算法</h2></div>
+<div align="center"><h1><img src="https://linimages.oss-cn-beijing.aliyuncs.com/hivision_photo_logo.png" width=80>HivisionIDPhoto</h2></div>
 
 <div align="center"> 
 <img src="sources/demoImage.png" width=900>
 </div>
 
+中文 / [English]()
 
 
 # 🤩项目更新
