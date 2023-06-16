@@ -1,10 +1,12 @@
-<div align="center"><h1><img src="https://linimages.oss-cn-beijing.aliyuncs.com/hivision_photo_logo.png" width=80>HivisionIDPhoto</h2></div>
+<div align="center">
+<h1><img src="https://linimages.oss-cn-beijing.aliyuncs.com/hivision_photo_logo.png" width=80>HivisionIDPhoto</h1>
 
-<div align="center"> 
+中文 / [English]()
+
 <img src="sources/demoImage.png" width=900>
 </div>
 
-中文 / [English]()
+
 
 
 # 🤩项目更新
