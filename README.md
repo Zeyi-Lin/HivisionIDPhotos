@@ -71,7 +71,7 @@ The model and code are downloaded through git-lfs.
 
 ```
 git lfs install
-https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
+git clone https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
 ```
 
 **Inference!**
