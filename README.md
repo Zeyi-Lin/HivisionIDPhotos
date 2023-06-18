@@ -26,12 +26,12 @@ HivisionIDPhoto aims to develop a practical intelligent algorithm for producing 
 
 1. Perform lightweight image segmentation
 2. Generate standard ID photos and six-inch layout photos according to different size specifications
-3. Provide beauty features (in mini-programs)
-4. Provide intelligent formal wear replacement (in mini-programs)
+3. Provide beauty features (waiting)
+4. Provide intelligent formal wear replacement (waiting)
 
-> Due to commercial reasons, the full version of HivisionIDPhoto needs to be used in WeChat mini-programs. Please search for "焕影一新" in WeChat or scan the QR code below.
-
-<img src="https://linimages.oss-cn-beijing.aliyuncs.com/huanyingCode.jpg" alt="alt text" width="160" height="160">
+<div align="center">
+<img src="sources/gradio-image.jpeg" width=900>
+</div>
 
 ---
 
