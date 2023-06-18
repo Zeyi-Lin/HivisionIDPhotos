@@ -3,11 +3,15 @@
 
 [English](README.md) / 中文
 
+[![GitHub](https://img.shields.io/static/v1?label=GitHub&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
+[![SwanHub Demo](https://img.shields.io/static/v1?label=在线体验&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+
 <img src="sources/demoImage.png" width=900>
 </div>
 
 
 # 🤩项目更新
+- 在线体验: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 - 2023.6.19: 更新**排版照**
 - 2023.6.13: 更新**中心渐变色**
 - 2023.6.11: 更新**上下渐变色**
@@ -91,11 +95,6 @@ python app.py
 1. MTCNN: https://github.com/ipazc/mtcnn
 2. ModNet: https://github.com/ZHKKKe/MODNet
 
-
-# 🏠关于我们
-
-焕影一新项目由西电极创工作室出品，是西安电子科技大学的本科生双创优秀案例之一。团队已成立西安焕视灵智科技有限公司，聚焦于智能图像处理、AIGC、人工智能基础设施等领域的研究，产品焕影一新小程序已在全国拥有80+万用户，在年轻的学生群体形成了良好口碑与传播效应。
-
 # 📧联系我们
 
-如果您有任何问题，请发邮件至 xiaolin199912@gmail.com.
+如果您有任何问题，请发邮件至 zeyi.lin@swanhub.co

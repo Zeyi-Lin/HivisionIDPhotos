@@ -3,8 +3,8 @@
 
 English / [中文](README_CN.md)
 
-[![GitHub](https://img.shields.io/static/v1?label=HivisionIDPhotos&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
-[![SwanHub Demo](https://img.shields.io/static/v1?label=HivisionIDPhotos&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+[![GitHub](https://img.shields.io/static/v1?label=Github&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
+[![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 
 <img src="sources/demoImage.png" width=900>
 
@@ -12,6 +12,7 @@ English / [中文](README_CN.md)
 
 
 # 🤩Project Update
+- Online Demo: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 - 2023.6.19: Updated **Layout photo**
 - 2023.6.13: Updated **center gradient color**
 - 2023.6.11: Updated **top and bottom gradient color**
