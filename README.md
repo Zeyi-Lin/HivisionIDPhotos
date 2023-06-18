@@ -7,6 +7,7 @@ English / [中文](README_CN.md)
 </div>
 
 # 🤩Project Update
+- 2023.6.19: Updated **Layout photo**
 - 2023.6.13: Updated **center gradient color**
 - 2023.6.11: Updated **top and bottom gradient color**
 - 2023.6.8: Updated **custom size**

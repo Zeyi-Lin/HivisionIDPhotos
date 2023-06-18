@@ -86,7 +86,7 @@ def generate_layout_photo(input_height, input_width):
 
     return typography_arr, typography_rotate
 
-def generate_image(input_image, typography_arr, typography_rotate, width=295, height=413):
+def generate_layout_image(input_image, typography_arr, typography_rotate, width=295, height=413):
     LAYOUT_WIDTH = 1746
     LAYOUT_HEIGHT = 1180
     white_background = np.zeros([LAYOUT_HEIGHT, LAYOUT_WIDTH, 3], np.uint8)
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     typography_arr, typography_rotate = generate_layout_photo(input_height=413, input_width=295)
     print("typography_arr:", typography_arr)
     print("typography_rotate:", typography_rotate)
-    result_image = generate_image(cv2.imread("./32.jpg"), typography_arr, typography_rotate, width=295, height=413)
+    result_image = generate_layout_image(cv2.imread("./32.jpg"), typography_arr, typography_rotate, width=295, height=413)
     cv2.imwrite("./result_image.jpg", result_image)
 
 

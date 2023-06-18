@@ -3,6 +3,7 @@ import gradio as gr
 import onnxruntime
 from face_judgement_align import IDphotos_create
 from hivisionai.hycv.vision import add_background
+from layoutCreate import generate_layout_photo, generate_layout_image
 import pathlib
 import numpy as np
 
@@ -19,7 +20,7 @@ if __name__ == "__main__":
     render = ["纯色", "上下渐变(白)", "中心渐变(白)"]
 
     title = "<h1 id='title'>焕影一新-证件照制作</h1>"
-    description = "<h3>😎6.13更新：新增中心渐变选项</h3>"
+    description = "<h3>😎6.19更新：新增排版照</h3>"
     css = '''
     h1#title, h3 {
       text-align: center;
@@ -56,8 +57,10 @@ if __name__ == "__main__":
 
             with gr.Column():
                 notification = gr.Text(label="状态", visible=False)
-                img_output_standard = gr.Image(label="标准照").style(height=350)
-                img_output_standard_hd = gr.Image(label="高清照").style(height=350)
+                with gr.Row():
+                    img_output_standard = gr.Image(label="标准照").style(height=350)
+                    img_output_standard_hd = gr.Image(label="高清照").style(height=350)
+                img_output_layout = gr.Image(label="排版照").style(height=350)
 
 
             def idphoto_inference(input_image,
@@ -124,7 +127,7 @@ if __name__ == "__main__":
                                                      top_distance_max=top_distance_max,
                                                      top_distance_min=top_distance_min)
 
-                cv2.imwrite("./testPerson.png", result_image_standard)
+                # cv2.imwrite("./testPerson.png", result_image_standard)
 
                 if status == 0:
                     result_messgae = {
@@ -149,13 +152,22 @@ if __name__ == "__main__":
                         result_image_hd = np.uint8(
                             add_background(result_image_hd, bgr=colors_bgr[color_option], mode="center_gradient"))
 
+                    typography_arr, typography_rotate = generate_layout_photo(input_height=id_height, input_width=id_width)
+                    # print("typography_arr:", typography_arr)
+                    # print("typography_rotate:", typography_rotate)
+
+                    if mode == "Matting":
+                        result_layout_image = gr.update(visible=False)
+                    else:
+                        result_layout_image = generate_layout_image(result_image_standard, typography_arr, typography_rotate,
+                                                             width=id_width, height=id_height)
+
                     result_messgae = {
                         img_output_standard: result_image_standard,
                         img_output_standard_hd: result_image_hd,
+                        img_output_layout: result_layout_image,
                         notification: gr.update(visible=False)}
-
                 return result_messgae
-
 
             def change_color(colors):
                 if colors == "自定义底色":
@@ -175,7 +187,7 @@ if __name__ == "__main__":
                       inputs=[img_input, size_options, color_options, render_options,
                               custom_color_R, custom_color_G, custom_color_B,
                               custom_size_height, custom_size_wdith],
-                      outputs=[img_output_standard, img_output_standard_hd, notification], queue=True)
+                      outputs=[img_output_standard, img_output_standard_hd, img_output_layout, notification], queue=True)
         example_images.click(fn=set_example_image, inputs=[example_images], outputs=[img_input])
 
     demo.launch(enable_queue=True)
