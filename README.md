@@ -93,14 +93,9 @@ Running the program will generate a local web page where you can complete ID pho
 2. ModNet: https://github.com/ZHKKKe/MODNet
 
 
-# 🏠About Us
+# 📧Contact 
 
-Hivision project is produced by the Xidian Jichuang Workshop and is one of the excellent undergraduate innovation and entrepreneurship cases of Xidian University. The team has established Xi'an Huanshi Lingzhi Technology Co., Ltd., focusing on research in the fields of intelligent image processing, AIGC, artificial intelligence infrastructure, etc. The product Hivision mini-program has more than 800,000 users nationwide and has formed a good reputation and dissemination effect among young student groups.
-
-
-# 📧Contact Us
-
-If you have any questions, please email xiaolin199912@gmail.com.
+If you have any questions, please email Zeyi.lin@swanhub.co
 
 
 
