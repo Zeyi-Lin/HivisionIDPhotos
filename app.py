@@ -60,7 +60,7 @@ if __name__ == "__main__":
                 with gr.Row():
                     img_output_standard = gr.Image(label="标准照").style(height=350)
                     img_output_standard_hd = gr.Image(label="高清照").style(height=350)
-                img_output_layout = gr.Image(label="排版照").style(height=350)
+                img_output_layout = gr.Image(label="六存排版照").style(height=350)
 
 
             def idphoto_inference(input_image,
