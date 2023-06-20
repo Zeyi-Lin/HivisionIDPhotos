@@ -5,6 +5,7 @@ English / [中文](README_CN.md)
 
 [![GitHub](https://img.shields.io/static/v1?label=Github&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
 [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+[![zhihu](https://img.shields.io/static/v1?label=知乎&message=zhihu&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 
 <img src="sources/demoImage.png" width=900>
 
@@ -13,6 +14,7 @@ English / [中文](README_CN.md)
 
 # 🤩Project Update
 - Online Demo: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+- 2023.6.20: Updated **Forecast Size Selection**
 - 2023.6.19: Updated **Layout photo**
 - 2023.6.13: Updated **center gradient color**
 - 2023.6.11: Updated **top and bottom gradient color**
@@ -91,7 +93,8 @@ Running the program will generate a local web page where you can complete ID pho
 
 # Reference Projects
 1. MTCNN: https://github.com/ipazc/mtcnn
-2. ModNet: https://github.com/ZHKKKe/MODNet
+2. MTCNN-ONNX：https://swanhub.co/ZeYiLin/MTCNN-ONNX
+3. ModNet: https://github.com/ZHKKKe/MODNet
 
 
 # 📧Contact 

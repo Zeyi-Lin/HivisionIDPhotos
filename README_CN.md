@@ -5,6 +5,7 @@
 
 [![GitHub](https://img.shields.io/static/v1?label=GitHub&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
 [![SwanHub Demo](https://img.shields.io/static/v1?label=在线体验&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+[![zhihu](https://img.shields.io/static/v1?label=知乎&message=知乎&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 
 <img src="sources/demoImage.png" width=900>
 </div>
@@ -12,6 +13,7 @@
 
 # 🤩项目更新
 - 在线体验: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+- 2023.6.20: 更新**预设尺寸菜单**
 - 2023.6.19: 更新**排版照**
 - 2023.6.13: 更新**中心渐变色**
 - 2023.6.11: 更新**上下渐变色**

@@ -468,8 +468,6 @@ def IDphotos_create(input_image,
                     beauty=True,
                     fd68=None,
                     human_sess=None,
-                    oss_image_name="test_tmping.jpg",
-                    user=None,
                     IS_DEBUG=False,
                     top_distance_max=0.12,
                     top_distance_min=0.10):
@@ -511,7 +509,7 @@ def IDphotos_create(input_image,
 
     # Step3. 抠图
     origin_png_image = image_matting(input_image, matting_params)
-    if mode == "Matting":
+    if mode == "只换底":
         return origin_png_image, origin_png_image, None, None, None, None, None, None, 1
 
     origin_png_image_pre = origin_png_image.copy()  # 备份一下现在抠图结果图，之后在iphoto_cutting函数有用
