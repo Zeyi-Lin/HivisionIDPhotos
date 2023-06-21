@@ -102,4 +102,5 @@ Running the program will generate a local web page where you can complete ID pho
 If you have any questions, please email Zeyi.lin@swanhub.co
 
 
+Copyright © 2023, ZeYiLin. All Rights Reserved.
 
