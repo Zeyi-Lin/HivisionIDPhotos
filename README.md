@@ -13,7 +13,7 @@ English / [中文](README_CN.md)
 
 
 # 🤩Project Update
-- Online Demo: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+- Online Demo: [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 - 2023.6.20: Updated **Forecast Size Selection**
 - 2023.6.19: Updated **Layout photo**
 - 2023.6.13: Updated **center gradient color**
