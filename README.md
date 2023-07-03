@@ -8,7 +8,7 @@ English / [中文](README_CN.md)
 [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 [![zhihu](https://img.shields.io/static/v1?label=知乎&message=zhihu&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 
-<img src="/Users/linzeyi/Desktop/HivisionIDPhotos/sources/demoImage.png" width=900>
+<img src="./sources/demoImage.png" width=900>
 
 </div>
 
