@@ -97,7 +97,7 @@ git clone https://github.com/xiaolin199912/HivisionIDPhotos.git
 
 |        Model         | Parameters |    Dir    |                        Download Link                         |
 | :------------------: | :--------: | :-------: | :----------------------------------------------------------: |
-| hivision_modnet.onnx |    25 M    | `tiny.en` | [Download](https://github.com/xiaolin199912/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx) |
+| hivision_modnet.onnx |    25 M    | `./` | [Download](https://github.com/xiaolin199912/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx) |
 
 ### **2. Inference!**
 
