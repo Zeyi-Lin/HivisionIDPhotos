@@ -1,18 +1,20 @@
 <div align="center">
 <h1><img src="https://linimages.oss-cn-beijing.aliyuncs.com/hivision_photo_logo.png" width=80>HivisionIDPhoto</h1>
 
+
 English / [中文](README_CN.md)
 
 [![GitHub](https://img.shields.io/static/v1?label=Github&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
 [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 [![zhihu](https://img.shields.io/static/v1?label=知乎&message=zhihu&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 
-<img src="sources/demoImage.png" width=900>
+<img src="/Users/linzeyi/Desktop/HivisionIDPhotos/sources/demoImage.png" width=900>
 
 </div>
 
 
 # 🤩Project Update
+
 - Online Demo: [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 - 2023.6.20: Updated **Forecast Size Selection**
 - 2023.6.19: Updated **Layout photo**
@@ -21,7 +23,7 @@ English / [中文](README_CN.md)
 - 2023.6.8: Updated **custom size**
 - 2023.6.4: Updated **custom background color and face detection bug notification**
 - 2023.5.10: Updated **change background without changing size**
-<br>
+  <br>
 
 
 # Overview
@@ -40,6 +42,7 @@ HivisionIDPhoto aims to develop a practical intelligent algorithm for producing 
 <div align="center">
 <img src="sources/gradio-image.jpeg" width=900>
 </div>
+
 
 ---
 
@@ -75,6 +78,10 @@ pip install gradio
 
 # ⚡️Quick Inference
 
+### 1. Download Pre-trained Models
+
+**SwanHub：**
+
 The model and code are downloaded through git-lfs.
 
 ```
@@ -82,7 +89,19 @@ git lfs install
 git clone https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
 ```
 
-**Inference!**
+**GitHub：**
+
+```
+git clone https://github.com/xiaolin199912/HivisionIDPhotos.git
+```
+
+|        Model         | Parameters |    Dir    |                        Download Link                         |
+| :------------------: | :--------: | :-------: | :----------------------------------------------------------: |
+| hivision_modnet.onnx |    39 M    | `tiny.en` | [Download]([hivision_modnet.onnx](https://github.com/xiaolin199912/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx)) |
+
+### **2. Inference!**
+
+Run a Gradio Demo：
 
 ```
 python app.py
@@ -92,6 +111,7 @@ Running the program will generate a local web page where you can complete ID pho
 
 
 # Reference Projects
+
 1. MTCNN: https://github.com/ipazc/mtcnn
 2. MTCNN-ONNX：https://swanhub.co/ZeYiLin/MTCNN-ONNX
 3. ModNet: https://github.com/ZHKKKe/MODNet
