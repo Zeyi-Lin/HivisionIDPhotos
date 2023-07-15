@@ -16,6 +16,7 @@ English / [中文](README_CN.md)
 # 🤩Project Update
 
 - Online Demo: [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+- 2023.7.15: A Python library is planned for release！
 - 2023.6.20: Updated **Forecast Size Selection**
 - 2023.6.19: Updated **Layout photo**
 - 2023.6.13: Updated **center gradient color**
