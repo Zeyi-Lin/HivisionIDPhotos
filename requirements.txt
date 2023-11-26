@@ -2,3 +2,4 @@ opencv-python
 onnx
 onnxruntime
 numpy
+gradio==3.38.0
