@@ -1,44 +1,41 @@
 <div align="center">
-<h1>HivisionIDPhoto</h1>
+<h1><img src="https://linimages.oss-cn-beijing.aliyuncs.com/hivision_photo_logo.png" width=80>HivisionIDPhoto</h1>
 
+[English](README_EN.md) / 中文
 
-English / [中文](README_CN.md)
+[![GitHub](https://img.shields.io/static/v1?label=GitHub&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
+[![SwanHub Demo](https://img.shields.io/static/v1?label=在线体验&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+[![zhihu](https://img.shields.io/static/v1?label=知乎&message=知乎&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 
-[![GitHub](https://img.shields.io/static/v1?label=Github&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
-[![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
-[![zhihu](https://img.shields.io/static/v1?label=知乎&message=zhihu&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
-
-<img src="./sources/demoImage.png" width=900>
-
+<img src="sources/demoImage.png" width=900>
 </div>
 
 
-# 🤩Project Update
-
-- Online Demo: [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
-- 2023.7.15: A Python library is planned for release！
-- 2023.6.20: Updated **Forecast Size Selection**
-- 2023.6.19: Updated **Layout photo**
-- 2023.6.13: Updated **center gradient color**
-- 2023.6.11: Updated **top and bottom gradient color**
-- 2023.6.8: Updated **custom size**
-- 2023.6.4: Updated **custom background color and face detection bug notification**
-- 2023.5.10: Updated **change background without changing size**
-  <br>
-
+# 🤩项目更新
+- 在线体验: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+- 2023.6.20: 更新**预设尺寸菜单**
+- 2023.6.19: 更新**排版照**
+- 2023.6.13: 更新**中心渐变色**
+- 2023.6.11: 更新**上下渐变色**
+- 2023.6.8: 更新**自定义尺寸**
+- 2023.6.4: 更新**自定义底色、人脸检测Bug通知**
+- 2023.5.10: 更新**不改尺寸只换底**
 
 # Overview
 
-> 🚀Thank you for your interest in our work. You may also want to check out our other achievements in the field of image processing. Please feel free to contact us at zeyi.lin@swanhub.co.
+> 🚀谢谢你对我们的工作感兴趣。您可能还想查看我们在图像领域的其他成果，欢迎来信:zeyi.lin@swanhub.co.
 
-HivisionIDPhoto aims to develop a practical intelligent algorithm for producing ID photos. It uses a complete set of model workflows to recognize various user photo scenarios, perform image segmentation, and generate ID photos. 
+HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
 
-**HivisionIDPhoto can:**
+它利用一套完善的模型工作流程，实现对多种用户拍照场景的识别、抠图与证件照生成。
 
-1. Perform lightweight image segmentation
-2. Generate standard ID photos and six-inch layout photos according to different size specifications
-3. Provide beauty features (waiting)
-4. Provide intelligent formal wear replacement (waiting)
+
+**HivisionIDPhoto可以做到:**
+
+1. 轻量级抠图
+2. 根据不同尺寸规格生成不同的标准证件照、六寸排版照
+3. 美颜（waiting）
+4. 智能换正装（waiting）
 
 <div align="center">
 <img src="sources/gradio-image.jpeg" width=900>
@@ -47,10 +44,10 @@ HivisionIDPhoto aims to develop a practical intelligent algorithm for producing 
 
 ---
 
-If HivisionIDPhoto is helpful to you, please star this repo or recommend it to your friends to solve the problem of emergency ID photo production!
+如果HivisionIDPhoto对你有帮助，请star这个repo或推荐给你的朋友，解决证件照应急制作问题！
 
 
-# 🔧Environment Dependencies and Installation
+# 🔧环境安装与依赖
 
 - Python >= 3.7 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
 - onnxruntime
@@ -77,51 +74,29 @@ pip install gradio
 
 
 
-# ⚡️Quick Inference
+# ⚡️快速推理
 
-### 1. Download Pre-trained Models
-
-**SwanHub：**
-
-The model and code are downloaded through git-lfs.
+模型与代码通过git-lfs下载。
 
 ```
 git lfs install
 git clone https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
 ```
 
-**GitHub：**
-
-```
-git clone https://github.com/xiaolin199912/HivisionIDPhotos.git
-```
-
-|        Model         | Parameters |    Dir    |                        Download Link                         |
-| :------------------: | :--------: | :-------: | :----------------------------------------------------------: |
-| hivision_modnet.onnx |    25 M    | `./` | [Download](https://github.com/xiaolin199912/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx) |
-
-### **2. Inference!**
-
-Run a Gradio Demo：
+**推理！**
 
 ```
 python app.py
 ```
 
-Running the program will generate a local web page where you can complete ID photo operations and interactions.
+运行程序将生成一个本地Web页面，在页面中可完成证件照的操作与交互。
 
 
-# Reference Projects
+# 引用项目
 
 1. MTCNN: https://github.com/ipazc/mtcnn
-2. MTCNN-ONNX：https://swanhub.co/ZeYiLin/MTCNN-ONNX
-3. ModNet: https://github.com/ZHKKKe/MODNet
+2. ModNet: https://github.com/ZHKKKe/MODNet
 
+# 📧联系我们
 
-# 📧Contact 
-
-If you have any questions, please email Zeyi.lin@swanhub.co
-
-
-Copyright © 2023, ZeYiLin. All Rights Reserved.
-
+如果您有任何问题，请发邮件至 zeyi.lin@swanhub.co
