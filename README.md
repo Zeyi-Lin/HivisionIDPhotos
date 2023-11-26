@@ -1,5 +1,5 @@
 <div align="center">
-<h1><img src="https://linimages.oss-cn-beijing.aliyuncs.com/hivision_photo_logo.png" width=80>HivisionIDPhoto</h1>
+<h1>HivisionIDPhoto</h1>
 
 [English](README_EN.md) / 中文
 
