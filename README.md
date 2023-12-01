@@ -121,7 +121,19 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 
 
+# 🐳Docker部署
 
+在根目录下执行：
+
+```
+docker build -t hivision_idphotos .
+```
+
+等待镜像封装完毕后，运行以下指令，即可开启API服务：
+
+```
+docker run -p 8080:8080 hivision_idphotos
+```
 
 
 
