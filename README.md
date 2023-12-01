@@ -13,6 +13,7 @@
 
 # 🤩项目更新
 - 在线体验: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+- 2023.12.1: 更新**API部署（基于fastapi）**
 - 2023.6.20: 更新**预设尺寸菜单**
 - 2023.6.19: 更新**排版照**
 - 2023.6.13: 更新**中心渐变色**
@@ -65,11 +66,8 @@ cd  HivisionIDPhotos
 
 2. Install dependent packages
 
-```
-pip install numpy
-pip install opencv-python
-pip install onnxruntime
-pip install gradio
+```bash
+pip install -r requirements.txt
 ```
 
 
@@ -83,13 +81,23 @@ git lfs install
 git clone https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
 ```
 
-**推理！**
+**Demo**
 
-```
+```bash
 python app.py
 ```
 
 运行程序将生成一个本地Web页面，在页面中可完成证件照的操作与交互。
+
+**推理API**
+
+```bash
+python deploy_api.py
+```
+
+（wait）API文档待补充。
+
+
 
 
 # 引用项目

@@ -37,10 +37,12 @@ def idphoto_inference(input_image,
                       custom_color_B,
                       custom_size_height,
                       custom_size_width,
+                      sess=None,
                       head_measure_ratio=0.2,
                       head_height_ratio=0.45,
                       top_distance_max=0.12,
                       top_distance_min=0.10):
+
     idphoto_json = {
         "size_mode": mode_option,
         "color_mode": color_option,
