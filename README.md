@@ -7,7 +7,7 @@
 [![SwanHub Demo](https://img.shields.io/static/v1?label=在线体验&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 [![zhihu](https://img.shields.io/static/v1?label=知乎&message=知乎&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 
-<img src="sources/demoImage.png" width=900>
+<img src="assets/demoImage.png" width=900>
 </div>
 
 
@@ -39,7 +39,7 @@ HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
 4. 智能换正装（waiting）
 
 <div align="center">
-<img src="sources/gradio-image.jpeg" width=900>
+<img src="assets/gradio-image.jpeg" width=900>
 </div>
 
 
@@ -125,13 +125,13 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 在根目录下执行：
 
-```
+```bash
 docker build -t hivision_idphotos .
 ```
 
 等待镜像封装完毕后，运行以下指令，即可开启API服务：
 
-```
+```bash
 docker run -p 8080:8080 hivision_idphotos
 ```
 

@@ -6,10 +6,10 @@ from hivisionai.hycv.utils import get_box_pro
 from hivisionai.hycv.vision import resize_image_esp, IDphotos_cut, add_background, calTime, resize_image_by_min, \
     rotate_bound_4channels
 import onnxruntime
-from error import IDError
-from imageTransform import standard_photo_resize, hollowOutFix, get_modnet_matting, draw_picture_dots, detect_distance
-from layoutCreate import generate_layout_photo
-from move_image import move
+from src.error import IDError
+from src.imageTransform import standard_photo_resize, hollowOutFix, get_modnet_matting, draw_picture_dots, detect_distance
+from src.layoutCreate import generate_layout_photo
+from src.move_image import move
 
 testImages = []
 

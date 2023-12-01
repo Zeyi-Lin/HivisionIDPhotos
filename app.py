@@ -1,8 +1,8 @@
 import gradio as gr
 import onnxruntime
-from face_judgement_align import IDphotos_create
+from src.face_judgement_align import IDphotos_create
 from hivisionai.hycv.vision import add_background
-from layoutCreate import generate_layout_photo, generate_layout_image
+from src.layoutCreate import generate_layout_photo, generate_layout_image
 import pathlib
 import numpy as np
 
@@ -36,7 +36,6 @@ def idphoto_inference(input_image,
                       custom_color_B,
                       custom_size_height,
                       custom_size_width,
-                      sess=None,
                       head_measure_ratio=0.2,
                       head_height_ratio=0.45,
                       top_distance_max=0.12,

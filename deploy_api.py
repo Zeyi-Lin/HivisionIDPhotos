@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, Form
 import onnxruntime
-from face_judgement_align import IDphotos_create
-from layoutCreate import generate_layout_photo, generate_layout_image
+from src.face_judgement_align import IDphotos_create
+from src.layoutCreate import generate_layout_photo, generate_layout_image
 from hivisionai.hycv.vision import add_background
 import base64
 import numpy as np
