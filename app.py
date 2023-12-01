@@ -1,4 +1,3 @@
-import cv2
 import gradio as gr
 import onnxruntime
 from face_judgement_align import IDphotos_create

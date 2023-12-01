@@ -1,1 +1,0 @@
-{"payTime": {"face_number_and_angle_detection": "1.61", "aliyun_matting": "2.73", "MTCNN": "0.23", "IDphoto_cutting": "0.03", "Total": "4.64"}, "running": {"matting_model": "API", "status_top": 0, "move_value": 0, "cutting_mode": "01", "x1": 80, "y1": -69, "x2": 1354, "y2": 1714}}

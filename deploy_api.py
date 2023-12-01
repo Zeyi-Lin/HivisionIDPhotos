@@ -8,13 +8,12 @@ import numpy as np
 import cv2
 import ast
 
-
 app = FastAPI()
 
 
 # 将图像转换为Base64编码
 
-def img_base64(img:np.ndarray):
+def numpy_2_base64(img: np.ndarray):
     retval, buffer = cv2.imencode('.png', img)
     base64_image = base64.b64encode(buffer).decode('utf-8')
 
@@ -24,12 +23,11 @@ def img_base64(img:np.ndarray):
 # 证件照智能制作接口
 @app.post("/idphoto")
 async def idphoto_inference(input_image: UploadFile,
-                      size:str = Form(...),
-                      head_measure_ratio=0.2,
-                      head_height_ratio=0.45,
-                      top_distance_max=0.12,
-                      top_distance_min=0.10):
-
+                            size: str = Form(...),
+                            head_measure_ratio=0.2,
+                            head_height_ratio=0.45,
+                            top_distance_max=0.12,
+                            top_distance_min=0.10):
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -38,17 +36,17 @@ async def idphoto_inference(input_image: UploadFile,
     size = ast.literal_eval(size)
 
     result_image_hd, result_image_standard, typography_arr, typography_rotate, \
-    _, _, _, _, status = IDphotos_create(img,
-                                         size=size,
-                                         head_measure_ratio=head_measure_ratio,
-                                         head_height_ratio=head_height_ratio,
-                                         align=False,
-                                         beauty=False,
-                                         fd68=None,
-                                         human_sess=sess,
-                                         IS_DEBUG=False,
-                                         top_distance_max=top_distance_max,
-                                         top_distance_min=top_distance_min)
+        _, _, _, _, status = IDphotos_create(img,
+                                             size=size,
+                                             head_measure_ratio=head_measure_ratio,
+                                             head_height_ratio=head_height_ratio,
+                                             align=False,
+                                             beauty=False,
+                                             fd68=None,
+                                             human_sess=sess,
+                                             IS_DEBUG=False,
+                                             top_distance_max=top_distance_max,
+                                             top_distance_min=top_distance_min)
 
     # 如果检测到人脸数量不等于1（照片无人脸 or 多人脸）
     if status == 0:
@@ -60,8 +58,8 @@ async def idphoto_inference(input_image: UploadFile,
     else:
         result_messgae = {
             "status": True,
-            "img_output_standard": img_base64(result_image_standard),
-            "img_output_standard_hd": img_base64(result_image_hd),
+            "img_output_standard": numpy_2_base64(result_image_standard),
+            "img_output_standard_hd": numpy_2_base64(result_image_hd),
         }
 
     return result_messgae
@@ -70,31 +68,32 @@ async def idphoto_inference(input_image: UploadFile,
 # 透明图像添加纯色背景接口
 @app.post("/add_background")
 async def photo_add_background(input_image: UploadFile,
-                         color=(255, 255, 255)):
-
+                               color: str = Form(...)):
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
 
-    try:
-        result_messgae = {
-            "status": True,
-            "image": img_base64(add_background(img, bgr=color)),
-        }
+    color = ast.literal_eval(color)
 
-    except Exception as e:
-        print(e)
-        result_messgae = {
-            "status": False,
-        }
+    # try:
+    result_messgae = {
+        "status": True,
+        "image": numpy_2_base64(add_background(img, bgr=color)),
+    }
 
+    # except Exception as e:
+    #     print(e)
+    #     result_messgae = {
+    #         "status": False,
+    #         "error": e
+    #     }
 
     return result_messgae
 
 
 # 六寸排版照生成接口
 @app.post("/generate_layout_photos")
-async def generate_layout_photos(input_image: UploadFile, size:str = Form(...)):
+async def generate_layout_photos(input_image: UploadFile, size: str = Form(...)):
     try:
         image_bytes = await input_image.read()
         nparr = np.frombuffer(image_bytes, np.uint8)
@@ -112,7 +111,7 @@ async def generate_layout_photos(input_image: UploadFile, size:str = Form(...)):
 
         result_messgae = {
             "status": True,
-            "image": img_base64(result_layout_image),
+            "image": numpy_2_base64(result_layout_image),
         }
 
     except Exception as e:
@@ -121,7 +120,6 @@ async def generate_layout_photos(input_image: UploadFile, size:str = Form(...)):
         }
 
     return result_messgae
-
 
 
 if __name__ == "__main__":
@@ -133,13 +131,3 @@ if __name__ == "__main__":
 
     # 在8080端口运行推理服务
     uvicorn.run(app, host="0.0.0.0", port=8080)
-
-
-
-
-
-
-
-
-
-
