@@ -8,7 +8,9 @@ English / [中文](README.md)
 [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 [![zhihu](https://img.shields.io/static/v1?label=知乎&message=zhihu&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 
-<img src="./sources/demoImage.png" width=900>
+
+<img src="assets/demoImage.png" width=900>
+</div>
 
 </div>
 
@@ -16,15 +18,14 @@ English / [中文](README.md)
 # 🤩Project Update
 
 - Online Demo: [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
-- 2023.7.15: A Python library is planned for release！
-- 2023.6.20: Updated **Forecast Size Selection**
-- 2023.6.19: Updated **Layout photo**
-- 2023.6.13: Updated **center gradient color**
-- 2023.6.11: Updated **top and bottom gradient color**
-- 2023.6.8: Updated **custom size**
-- 2023.6.4: Updated **custom background color and face detection bug notification**
-- 2023.5.10: Updated **change background without changing size**
-  <br>
+- 2023.12.1: Update **API deployment (based on fastapi)**
+- 2023.6.20: Update **Preset size menu**
+- 2023.6.19: Update **Layout photos**
+- 2023.6.13: Update **Center gradient color**
+- 2023.6.11: Update **Top and bottom gradient color**
+- 2023.6.8: Update **Custom size**
+- 2023.6.4: Update **Custom background color, face detection bug notification**
+- 2023.5.10: Update **Change the background without changing the size**
 
 
 # Overview
@@ -41,7 +42,7 @@ HivisionIDPhoto aims to develop a practical intelligent algorithm for producing 
 4. Provide intelligent formal wear replacement (waiting)
 
 <div align="center">
-<img src="sources/gradio-image.jpeg" width=900>
+<img src="assets/gradio-image.jpeg" width=900>
 </div>
 
 
@@ -79,43 +80,72 @@ pip install gradio
 
 # ⚡️Quick Inference
 
-### 1. Download Pre-trained Models
 
-**SwanHub：**
-
-The model and code are downloaded through git-lfs.
+Models and codes are downloaded via git-lfs.
 
 ```
 git lfs install
 git clone https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
 ```
 
-**GitHub：**
+**Demo**
 
-```
-git clone https://github.com/xiaolin199912/HivisionIDPhotos.git
-```
-
-|        Model         | Parameters |    Dir    |                        Download Link                         |
-| :------------------: | :--------: | :-------: | :----------------------------------------------------------: |
-| hivision_modnet.onnx |    25 M    | `./` | [Download](https://github.com/xiaolin199912/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx) |
-
-### **2. Inference!**
-
-Run a Gradio Demo：
-
-```
+```bash
 python app.py
 ```
 
-Running the program will generate a local web page where you can complete ID photo operations and interactions.
+Running the program will generate a local web page, where operations and interactions with ID photos can be completed.
+
+**Deploy API service**
+
+```
+python deploy_api.py
+```
+
+**Request API service (Python)**
+
+Use Python to send a request to the service:
+
+ID photo production (input 1 photo, get 1 standard ID photo and 1 high-definition ID photo 4-channel transparent png):
+
+```bash
+python requests_api.py -u http://127.0.0.1:8080 -i test.jpg -o ./idphoto.png -s '(413,295)'
+```
+
+Add background color (input 1 4-channel transparent png, get 1 image with added background color):
+
+```bash
+python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg -c '(0,0,0)'
+```
+
+Get a six-inch layout photo (input a 3-channel photo, get a six-inch layout photo):
+
+```bash
+python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)'
+```
+# 🐳Docker deployment
+
+Execute in the root directory:
+
+```bash
+docker build -t hivision_idphotos .
+```
+
+After the image is packaged, run the following command to start the API service:
+
+```bash
+docker run -p 8080:8080 hivision_idphotos
+```
+
+
+
+
 
 
 # Reference Projects
 
 1. MTCNN: https://github.com/ipazc/mtcnn
-2. MTCNN-ONNX：https://swanhub.co/ZeYiLin/MTCNN-ONNX
-3. ModNet: https://github.com/ZHKKKe/MODNet
+2. ModNet: https://github.com/ZHKKKe/MODNet
 
 
 # 📧Contact 
