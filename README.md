@@ -51,25 +51,25 @@ HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
 
 # 🔧环境安装与依赖
 
-- Python >= 3.7 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
+- Python >= 3.7（项目主要测试在python 3.10）
 - onnxruntime
 - OpenCV
 - Option: Linux, Windows, MacOS
 
-1. 克隆项目
+**1. 克隆项目**
 
 ```bash
 git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
-2. 安装依赖环境
+**2. 安装依赖环境**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. 下载权重文件
+**3. 下载权重文件**
 
 在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases)下载权重文件`hivision_modnet_V1.0`，存到根目录下。
 
