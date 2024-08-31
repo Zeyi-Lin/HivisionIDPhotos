@@ -47,6 +47,7 @@ HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
 
 如果HivisionIDPhoto对你有帮助，请star这个repo或推荐给你的朋友，解决证件照应急制作问题！
 
+<br>
 
 # 🔧环境安装与依赖
 
@@ -55,33 +56,26 @@ HivisionIDPhoto旨在开发一种实用的证件照智能制作算法。
 - OpenCV
 - Option: Linux, Windows, MacOS
 
-### Installation
-
-1. Clone repo
+1. 克隆项目
 
 ```bash
-git lfs install && git clone https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
+git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
-2. Install dependent packages
+2. 安装依赖环境
 
 ```bash
 pip install -r requirements.txt
 ```
 
+3. 下载权重文件
 
+在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases)下载权重文件`hivision_modnet_V1.0`，存到根目录下。
 
-# ⚡️快速推理
+<br>
 
-模型与代码通过git-lfs下载。
-
-```
-git lfs install
-git clone https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
-```
-
-**Demo**
+# 运行Gradio Demo
 
 ```bash
 python app.py
@@ -89,12 +83,13 @@ python app.py
 
 运行程序将生成一个本地Web页面，在页面中可完成证件照的操作与交互。
 
-**部署API服务**
+<br>
+
+# 部署API服务
 
 ```
 python deploy_api.py
 ```
-
 
 
 **请求API服务（Python）**
@@ -119,7 +114,7 @@ python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.p
 python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  -s '(413,295)'
 ```
 
-
+<br>
 
 # 🐳Docker部署
 
@@ -135,15 +130,16 @@ docker build -t hivision_idphotos .
 docker run -p 8080:8080 hivision_idphotos
 ```
 
-
-
-
+<br>
 
 
 # 引用项目
 
 1. MTCNN: https://github.com/ipazc/mtcnn
 2. ModNet: https://github.com/ZHKKKe/MODNet
+
+<br>
+
 
 # 📧联系我们
 
