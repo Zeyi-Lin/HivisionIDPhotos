@@ -69,11 +69,16 @@ async def idphoto_inference(input_image: UploadFile,
 @app.post("/add_background")
 async def photo_add_background(input_image: UploadFile,
                                color: str = Form(...)):
+    
+    # 读取图像
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
 
+    # 将字符串转为元组
     color = ast.literal_eval(color)
+    # 将元祖的0和2号数字交换
+    color = (color[2], color[1], color[0])
 
     # try:
     result_messgae = {
