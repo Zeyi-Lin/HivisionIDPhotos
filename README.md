@@ -71,7 +71,7 @@ pip install -r requirements.txt
 
 **3. 下载权重文件**
 
-在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases)下载权重文件`hivision_modnet_V1.0`，存到根目录下。
+在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx`，存到根目录下。
 
 <br>
 
@@ -118,7 +118,7 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 # 🐳Docker部署
 
-在根目录下执行：
+在确保将模型权重文件[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)放到根目录下后，在根目录执行：
 
 ```bash
 docker build -t hivision_idphotos .

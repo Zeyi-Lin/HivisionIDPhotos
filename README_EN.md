@@ -28,6 +28,8 @@ English / [中文](README.md)
 - 2023.5.10: Update **Change the background without changing the size**
 
 
+<br>
+
 # Overview
 
 > 🚀Thank you for your interest in our work. You may also want to check out our other achievements in the field of image processing. Please feel free to contact us at zeyi.lin@swanhub.co.
@@ -50,10 +52,11 @@ HivisionIDPhoto aims to develop a practical intelligent algorithm for producing 
 
 If HivisionIDPhoto is helpful to you, please star this repo or recommend it to your friends to solve the problem of emergency ID photo production!
 
+<br>
 
 # 🔧Environment Dependencies and Installation
 
-- Python >= 3.7 (Recommend to use [Anaconda](https://www.anaconda.com/download/#linux) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html))
+- Python >= 3.7（The main test of the project is in Python 3.10.）
 - onnxruntime
 - OpenCV
 - Option: Linux, Windows, MacOS
@@ -63,32 +66,23 @@ If HivisionIDPhoto is helpful to you, please star this repo or recommend it to y
 1. Clone repo
 
 ```bash
-git lfs install && git clone https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
+git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
 2. Install dependent packages
 
 ```
-pip install numpy
-pip install opencv-python
-pip install onnxruntime
-pip install gradio
+pip install -r requirements.txt
 ```
 
+**3. Download Pretrain file**
 
+Download the weight file `hivision_modnet.onnx` from our [Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) and save it to the root directory.
 
-# ⚡️Quick Inference
+<br>
 
-
-Models and codes are downloaded via git-lfs.
-
-```
-git lfs install
-git clone https://swanhub.co/ZeYiLin/HivisionIDPhotos.git
-```
-
-**Demo**
+# Gradio Demo
 
 ```bash
 python app.py
@@ -96,7 +90,9 @@ python app.py
 
 Running the program will generate a local web page, where operations and interactions with ID photos can be completed.
 
-**Deploy API service**
+<br>
+
+# Deploy API service
 
 ```
 python deploy_api.py
@@ -123,9 +119,12 @@ Get a six-inch layout photo (input a 3-channel photo, get a six-inch layout phot
 ```bash
 python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)'
 ```
+
+<br>
+
 # 🐳Docker deployment
 
-Execute in the root directory:
+After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
 
 ```bash
 docker build -t hivision_idphotos .
@@ -137,16 +136,15 @@ After the image is packaged, run the following command to start the API service:
 docker run -p 8080:8080 hivision_idphotos
 ```
 
-
-
-
-
+<br>
 
 # Reference Projects
 
 1. MTCNN: https://github.com/ipazc/mtcnn
 2. ModNet: https://github.com/ZHKKKe/MODNet
 
+
+<br>
 
 # 📧Contact 
 
