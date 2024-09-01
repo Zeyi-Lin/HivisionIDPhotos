@@ -12,7 +12,12 @@
 <img src="assets/demoImage.png" width=900>
 </div>
 
-相关项目：[SwanLab](https://github.com/SwanHubX/SwanLab)，训练人像抠图模型全程用它来分析和监控，以及和实验室同学协作交流，大幅提升了训练效率。
+<br>
+
+> **相关项目**：  
+> - [SwanLab](https://github.com/SwanHubX/SwanLab)：训练人像抠图模型全程用它来分析和监控，以及和实验室同学协作交流，大幅提升了训练效率。
+
+<br>
 
 # 🤩项目更新
 - 在线体验: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
