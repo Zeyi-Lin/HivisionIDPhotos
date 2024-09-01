@@ -209,8 +209,7 @@ if __name__ == "__main__":
                       inputs=[img_input, mode_options, size_list_options, color_options, render_options,
                               custom_color_R, custom_color_G, custom_color_B,
                               custom_size_height, custom_size_wdith],
-                      outputs=[img_output_standard, img_output_standard_hd, img_output_layout, notification],
-                      queue=True)
+                      outputs=[img_output_standard, img_output_standard_hd, img_output_layout, notification])
         example_images.click(fn=set_example_image, inputs=[example_images], outputs=[img_input])
 
-    demo.launch(enable_queue=True)
+    demo.launch()
