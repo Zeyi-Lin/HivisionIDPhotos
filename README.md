@@ -1,7 +1,7 @@
 <div align="center">
 <h1>HivisionIDPhoto</h1>
 
-[English](README_EN.md) / 中文
+[English](README_EN.md) / 中文 / [日本語](README_JP.md)
 
 [![GitHub](https://img.shields.io/static/v1?label=GitHub&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
 [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
