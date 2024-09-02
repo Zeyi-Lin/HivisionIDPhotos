@@ -152,3 +152,7 @@ docker run -p 8080:8080 hivision_idphotos
 # 📧お問い合わせ
 
 ご質問がある場合は、zeyi.lin@swanhub.coまでメールでお問い合わせください。
+
+# 貢献者
+
+[Zeyi-Lin](https://github.com/Zeyi-Lin)、[SAKURA-CAT](https://github.com/SAKURA-CAT)、[Feudalman](https://github.com/Feudalman)、[swpfY](https://github.com/swpfY)、[Kaikaikaifang](https://github.com/Kaikaikaifang)、[ShaohonChen](https://github.com/ShaohonChen)、[KashiwaByte](https://github.com/KashiwaByte)
