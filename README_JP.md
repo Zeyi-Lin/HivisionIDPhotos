@@ -118,7 +118,7 @@ python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.p
 6 インチのレイアウト写真を取得（3 チャンネルの写真を入力し、6 インチのレイアウト写真を取得）：
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  -s '(413,295)' -k 30
+python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  -s '(413,295)' -k 200
 ```
 
 <br>

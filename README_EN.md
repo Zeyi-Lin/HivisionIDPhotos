@@ -114,7 +114,7 @@ python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.p
 Get a six-inch layout photo (input a 3-channel photo, get a six-inch layout photo):
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)' -k 30
+python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)' -k 200
 ```
 
 <br>
