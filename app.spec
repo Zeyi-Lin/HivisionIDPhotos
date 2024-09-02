@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_data_files
 
-datas = [('hivisionai', 'hivisionai'), ('hivision_modnet.onnx', '.')]
+datas = [('hivisionai', 'hivisionai'), ('hivision_modnet.onnx', '.'), ('size_list_CN.csv', '.')]
 datas += collect_data_files('gradio_client')
 datas += collect_data_files('gradio')
 

@@ -10,7 +10,8 @@ from image_utils import resize_image_to_kb
 from data_utils import csv_to_size_list
 
 # 获取尺寸列表
-size_list_dict = csv_to_size_list("size_list_CN.csv")
+root_dir = os.path.dirname(os.path.abspath(__file__))
+size_list_dict = csv_to_size_list(os.path.join(root_dir, "size_list_CN.csv"))
 print(size_list_dict)
 
 color_list_dict = {
@@ -227,7 +228,6 @@ def idphoto_inference(
 
 if __name__ == "__main__":
     # 预加载 ONNX 模型
-    root_dir = os.path.dirname(os.path.abspath(__file__))
     HY_HUMAN_MATTING_WEIGHTS_PATH = os.path.join(root_dir, "hivision_modnet.onnx")
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
 
