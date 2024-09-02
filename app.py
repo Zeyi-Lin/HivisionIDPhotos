@@ -6,14 +6,12 @@ from src.layoutCreate import generate_layout_photo, generate_layout_image
 import pathlib
 import numpy as np
 from image_utils import resize_image_to_kb
+from data_utils import csv_to_size_list
 
-size_list_dict = {
-    "一寸": (413, 295),
-    "二寸": (626, 413),
-    "教师资格证": (413, 295),
-    "国家公务员考试": (413, 295),
-    "初级会计考试": (413, 295),
-}
+# 获取尺寸列表
+size_list_dict = csv_to_size_list("size_list_CN.csv")
+print(size_list_dict)
+
 color_list_dict = {
     "蓝色": (86, 140, 212),
     "白色": (255, 255, 255),
@@ -233,7 +231,7 @@ if __name__ == "__main__":
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
 
     size_mode = ["尺寸列表", "只换底", "自定义尺寸"]
-    size_list = ["一寸", "二寸", "教师资格证", "国家公务员考试", "初级会计考试"]
+    size_list = list(size_list_dict.keys())
     colors = ["蓝色", "白色", "红色", "自定义底色"]
     render = ["纯色", "上下渐变(白)", "中心渐变(白)"]
     image_kb = ["不设置", "自定义"]
