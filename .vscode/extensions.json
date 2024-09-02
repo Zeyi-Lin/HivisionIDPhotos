@@ -1,0 +1,29 @@
+{
+  "recommendations": [
+    /**
+     * python插件
+     */
+    "ms-python.black-formatter",
+    "donjayamanne.python-extension-pack",
+    "njpwerner.autodocstring",
+    // 数据库
+    "qwtel.sqlite-viewer",
+    /**
+     * 代码协作、标记
+     */
+    // 代码风格统一
+    "editorconfig.editorconfig",
+    // 代码标记,比如TODO FIXME等
+    "gruntfuggly.todo-tree",
+    // 代码协作，git协作
+    "eamodio.gitlens",
+    // 其他
+    "PKief.material-icon-theme",
+    "davidanson.vscode-markdownlint",
+    "usernamehw.errorlens",
+    "tamasfe.even-better-toml",
+    // 单元测试
+    "vitest.explorer",
+    "littlefoxteam.vscode-python-test-adapter"
+  ]
+}
