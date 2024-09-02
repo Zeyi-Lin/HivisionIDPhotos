@@ -1,0 +1,107 @@
+{
+  /** 文件夹材质 */
+  "workbench.iconTheme": "material-icon-theme",
+  /* 自定义图标关联 */
+  "material-icon-theme.folders.associations": {
+    "swanlab": "api",
+    "swanlog": "log",
+    "readme_files": "custom",
+    "run": "core",
+    "system": "core",
+    "data": "guard",
+    "unit": "test",
+    "converter": "log",
+    "tutils": "utils"
+  },
+  "material-icon-theme.files.associations": {
+    ".env.mock": "Tune",
+    "requirements-dev.txt": "python-misc",
+    "requirements-media.txt": "python-misc"
+  },
+  /** 前端代码格式化部分，eslint和prettier */
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  // 每次保存的时候自动格式化
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.format.enable": true,
+  /** 后端代码格式化部分，python格式化 */
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
+  },
+  /** TODO tree 配置 */
+  "todo-tree.general.tags": [
+    "TODO", // 待办
+    "FIXME", // 待修复
+    "COMPAT", // 兼容性问题
+    "WARNING" // 警告
+  ],
+  "todo-tree.highlights.customHighlight": {
+    "TODO": {
+      "icon": "check",
+      "type": "tag",
+      "foreground": "#ffff00",
+      "iconColour": "#ffff"
+    },
+    "WARNING": {
+      "icon": "alert",
+      "type": "tag",
+      "foreground": "#ff0000",
+      "iconColour": "#ff0000"
+    },
+    "FIXME": {
+      "icon": "flame",
+      "type": "tag",
+      "foreground": "#ff0000",
+      "iconColour": "#ff0000"
+    },
+    "COMPAT": {
+      "icon": "flame",
+      "type": "tag",
+      "foreground": "#00ff00",
+      "iconColour": "#ffff"
+    }
+  },
+  /** i18n */
+  "i18n-ally.sortKeys": true,
+  "i18n-ally.keepFulfilled": true,
+  "i18n-ally.localeCountryMap": {
+    "en": "br", // show UK's flag instead of US's
+    "zh": "cn", // show Chinese flag for 'zh'
+    "ko": "ko" // show Korean flag for 'ko'
+  },
+  "i18n-ally.localesPaths": ["vue/src/i18n"],
+  "i18n-ally.keystyle": "nested", // 翻译路径格式,
+  "i18n-ally.namespace": true,
+  "i18n-ally.enabledParsers": ["json", "json5"],
+  "i18n-ally.sourceLanguage": "zh-CN", // 翻译源语言 是你翻译文件的名字
+  "i18n-ally.displayLanguage": "zh-CN", //显示语言
+
+  /** tailwind */
+  "css.customData": [".vscode/tailwind.json"],
+  /** python代码注释 */
+  "autoDocstring.docstringFormat": "numpy",
+
+  /** markdown格式检查 */
+  "markdownlint.config": {
+    // 允许使用html标签
+    "MD033": false,
+    // 允许首行不是level1标题
+    "MD041": false
+  },
+
+  /** 不显示文件夹 */
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/__pycache__": true,
+    ".idea": true
+  },
+  "python.testing.pytestEnabled": true
+}

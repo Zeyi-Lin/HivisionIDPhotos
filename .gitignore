@@ -1,5 +1,6 @@
 *.pyc
-__pycache__/
+**/__pycache__
 .idea
 .DS_Store
 hivision_modnet.onnx
+output/*.jpg
