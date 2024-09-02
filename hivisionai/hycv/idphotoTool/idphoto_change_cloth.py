@@ -23,18 +23,18 @@ def change_cloth(input_image:np.array,
                  ):
 
     # ============= 1. 得到头脖子图、纯头图、纯脖子图的相关信息 =============== #
-    # 1.1 获取原图input_image属性
+    # 1.1 获取原图 input_image 属性
     input_height, input_width = input_image.shape[0], input_image.shape[1]
     # print("input_height:", input_height)
     # print("input_width", input_width)
     b, g, r, input_a = cv2.split(input_image)
 
-    # 1.2 得到头脖子图headneck_image、纯头图head_image
+    # 1.2 得到头脖子图 headneck_image、纯头图 head_image
     input_image = add_background(input_image, bgr=(255, 255, 255))
     headneck_image = get_modnet_matting(input_image, checkpoint_path="./checkpoint/huanying_headneck3.onnx")
     head_image = get_modnet_matting(input_image, checkpoint_path="./checkpoint/huanying_head3.onnx")
 
-    # 1.3 得到优化后的脖子图neck_threshold_image
+    # 1.3 得到优化后的脖子图 neck_threshold_image
     _, _, _, headneck_a = cv2.split(headneck_image)
     _, _, _, head_a = cv2.split(head_image)
     neck_a = cv2.subtract(headneck_a, head_a)
@@ -42,12 +42,12 @@ def change_cloth(input_image:np.array,
     neck_threshold_image = cut_BiggestAreas(cv2.merge(
         (np.uint8(b), np.uint8(g), np.uint8(r), np.uint8(neck_threshold_a))))
 
-    # 1.4 得到优化后的头脖子图headneck_threshold_image
+    # 1.4 得到优化后的头脖子图 headneck_threshold_image
     _, headneck_threshold_a = cv2.threshold(headneck_a, 180, 255, cv2.THRESH_BINARY)
     headneck_threshold_image = cut_BiggestAreas(
         cv2.merge((np.uint8(b), np.uint8(g), np.uint8(r), np.uint8(headneck_threshold_a))))
 
-    # 1.5 获取脖子图、头脖子图的A矩阵
+    # 1.5 获取脖子图、头脖子图的 A 矩阵
     _, _, _, neck_threshold_a2 = cv2.split(neck_threshold_image)
     _, _, _, headneck_threshold_a2 = cv2.split(headneck_threshold_image)
 
@@ -60,32 +60,32 @@ def change_cloth(input_image:np.array,
 
 
     # ============= 2. 得到原来的衣服的相关信息 =============== #
-    # 2.1 抠出原来衣服cloth_image_input
+    # 2.1 抠出原来衣服 cloth_image_input
     cloth_origin_image_a = cv2.subtract(np.uint8(input_a), np.uint8(headneck_a))
     _, cloth_origin_image_a = cv2.threshold(cloth_origin_image_a, 180, 255, cv2.THRESH_BINARY)
     cloth_image_input = cut_BiggestAreas(cv2.merge((np.uint8(b), np.uint8(g), np.uint8(r), np.uint8(cloth_origin_image_a))))
 
-    # 2.2 对cloth_image_input做裁剪（减去上面的大片透明区域）
+    # 2.2 对 cloth_image_input 做裁剪（减去上面的大片透明区域）
     cloth_image_input_top_y, _, _, _ = get_box_pro(cloth_image_input, model=2)
     cloth_image_input_cut = cloth_image_input[cloth_image_input_top_y:, :]
 
 
 
     # ============= 3.计算脖子的衔接点信息，为新服装拼接作准备 ===============#
-    # 3.1 得到裁剪透明区域后的脖子图neck_cut_image，以及它的坐标信息
+    # 3.1 得到裁剪透明区域后的脖子图 neck_cut_image，以及它的坐标信息
     neck_y_top, neck_y_bottom, neck_x_left, neck_x_right = get_box_pro(neck_threshold_image, model=2)
     neck_cut_image = get_cutbox_image(neck_threshold_image)
     neck_height = input_height - (neck_y_top + neck_y_bottom)
     neck_width = input_width - (neck_x_right + neck_x_left)
 
-    # 3.2 对neck_cut_image做“尖尖”检测，得到较低的“尖尖”对于脖子高度的比率y_neck_corner_ratio
+    # 3.2 对 neck_cut_image 做“尖尖”检测，得到较低的“尖尖”对于脖子高度的比率 y_neck_corner_ratio
     y_neck_corner = checkSharpCorner(neck_cut_image)
     y_neck_corner_ratio = y_neck_corner / neck_height
 
-    # 3.3 取y_neck_corner_ratio与新衣服预先设定好的neck_ratio的最大值，作为最终的neck_ratio
+    # 3.3 取 y_neck_corner_ratio 与新衣服预先设定好的 neck_ratio 的最大值，作为最终的 neck_ratio
     neck_ratio = max(neck_ratio, y_neck_corner_ratio)
 
-    # 3.4 计算在neck_ratio下的脖子左衔接点坐标neck_left_x_byRatio，neck_left_y_byRatio、宽度neck_width_byRatio
+    # 3.4 计算在 neck_ratio 下的脖子左衔接点坐标 neck_left_x_byRatio，neck_left_y_byRatio、宽度 neck_width_byRatio
     neck_coordinate1, neck_coordinate2, neck_width_byRatio = locate_neck(neck_cut_image, float(neck_ratio))
     neck_width_byRatio = neck_width_byRatio + CLOTH_WIDTH_CHANGE
     neck_left_x_byRatio = neck_x_left + neck_coordinate1[1] + CLOTH_X_CHANGE
@@ -94,28 +94,28 @@ def change_cloth(input_image:np.array,
 
 
     # ============= 4.读取新衣服图，调整大小 =============== #
-    # 4.1 得到新衣服图片的拼贴坐标x, y以及脖子最底部的坐标y_neckline
+    # 4.1 得到新衣服图片的拼贴坐标 x, y 以及脖子最底部的坐标 y_neckline
     CLOTH_HEIGHT = CLOTH_Y
     RESIZE_RATIO = neck_width_byRatio / CLOTH_WIDTH
     x, y = int(neck_left_x_byRatio - CLOTH_X * RESIZE_RATIO), neck_left_y_byRatio
     y_neckline = y + int(CLOTH_HEIGHT * RESIZE_RATIO)
 
-    # 4.2 读取新衣服,并进行缩放
+    # 4.2 读取新衣服，并进行缩放
     cloth = cv2.imread(cloth_model, -1)
     cloth_height, cloth_width = cloth.shape[0], cloth.shape[1]
     cloth = cv2.resize(cloth, (int(cloth_width * RESIZE_RATIO),
                     int(cloth_height * RESIZE_RATIO)), interpolation=cv2.INTER_AREA)
 
-    # 4.3 获得新衣服的A矩阵
+    # 4.3 获得新衣服的 A 矩阵
     _, _, _, cloth_a = cv2.split(cloth)
 
 
 
     # ============= 5. 判断头发的前后关系，以及对于长发的背景填充、判定是否为长发等 =============== #
-    # 5.1 根据hair_number, 判断是0:头发披在后面、1:左前右后、2:左后右前还是3:都在前面
+    # 5.1 根据 hair_number, 判断是 0:头发披在后面、1:左前右后、2:左后右前还是 3:都在前面
     hair_number = checkHairLOrR(cloth_image_input_cut, input_a, neck_a, cloth_image_input_top_y)
 
-    # 5.2 对于长发的背景填充-将原衣服区域的部分变成黑色，并填充到最终图片作为背景
+    # 5.2 对于长发的背景填充 - 将原衣服区域的部分变成黑色，并填充到最终图片作为背景
     cloth_image_input_save = cloth_origin_image_a[:int(y+cloth_height*RESIZE_RATIO),
                              max(0, headneck_x_left-1):min(headneck_x_right+1, input_width)]
     headneck_threshold_a_save = headneck_a[:int(y+cloth_height*RESIZE_RATIO),
@@ -134,13 +134,13 @@ def change_cloth(input_image:np.array,
 
 
     # ============= 6.第一轮服装拼贴 =============== #
-    # 6.1 创建一个空白背景background
+    # 6.1 创建一个空白背景 background
     background = np.uint8((np.zeros([input_height, input_width, 4])))
 
-    # 6.2 盖上headneck_image
+    # 6.2 盖上 headneck_image
     result_headneck_image = cover_image(headneck_image, background, 0, 0, mode=3)
 
-    # 6.3 如果space_adjust开启的话，background的底部将增加一些行数
+    # 6.3 如果 space_adjust 开启的话，background 的底部将增加一些行数
     if space_adjust is not None:
         insert_array = np.uint8(np.zeros((space_adjust, input_width, 4)))
         result_headneck_image = np.r_[result_headneck_image, insert_array]
@@ -148,7 +148,7 @@ def change_cloth(input_image:np.array,
     # 6.4 盖上新衣服
     result_cloth_image = cover_image(cloth, result_headneck_image, x, y, mode=3)
 
-    # 6.5 截出脖子与衣服交接的区域neck_cloth_image，以及它的A矩阵neck_cloth_a
+    # 6.5 截出脖子与衣服交接的区域 neck_cloth_image，以及它的 A 矩阵 neck_cloth_a
     neck_cloth_image = result_cloth_image[y:y_neckline,
                        neck_left_x_byRatio:neck_left_x_byRatio+neck_width_byRatio]
     _, _, _, neck_cloth_a = cv2.split(neck_cloth_image)
@@ -157,8 +157,8 @@ def change_cloth(input_image:np.array,
 
 
     # ============= 7.第二轮服装拼贴 =============== #
-    # 7.1 检测neck_cloth_a中是否有黑点（即镂空区域）
-    # 如果black_dots_y不为None，说明存在镂空区域——需要进行脖子拉伸；反而则不存在，不需要
+    # 7.1 检测 neck_cloth_a 中是否有黑点（即镂空区域）
+    # 如果 black_dots_y 不为 None，说明存在镂空区域——需要进行脖子拉伸；反而则不存在，不需要
     black_dots_y = find_black(neck_cloth_a)
     # cv2.imwrite(test_image_path+"neck_cloth_a.jpg", neck_cloth_a)
 
@@ -168,8 +168,8 @@ def change_cloth(input_image:np.array,
     # 7.2 如果存在镂空区域，则进行拉伸
     if black_dots_y != None:
         flag = 1
-        # cutNeckHeight：要拉伸的区域的顶部y值
-        # neckBelow：脖子底部的y值
+        # cutNeckHeight：要拉伸的区域的顶部 y 值
+        # neckBelow：脖子底部的 y 值
         # toHeight：拉伸区域的高度
         cutNeckHeight = black_dots_y + y - 6
         # if cutNeckHeight < neck_y_top+checkJaw(neck_cut_image, y_start=checkSharpCorner(neck_cut_image))[1]:
@@ -183,7 +183,7 @@ def change_cloth(input_image:np.array,
         print("neckBelow:", neckBelow)
         # cv2.imwrite(test_image_path+"neck_image.png", neck_threshold_image)
 
-        # 对原有的脖子做拉伸，得到new_neck_image
+        # 对原有的脖子做拉伸，得到 new_neck_image
         new_neck_image = transformationNeck(neck_threshold_image,
                                             cutNeckHeight=cutNeckHeight,
                                             neckBelow=neckBelow,
@@ -199,20 +199,20 @@ def change_cloth(input_image:np.array,
         _, _, _, neck_a = cv2.split(new_neck_image)
 
 
-    # 7.3 下面是对最终图的A矩阵进行处理
-    # 首先将neck_a与新衣服衔接点的左边两边区域删去，得到neck_a_leftright
+    # 7.3 下面是对最终图的 A 矩阵进行处理
+    # 首先将 neck_a 与新衣服衔接点的左边两边区域删去，得到 neck_a_leftright
     neck_a_copy = neck_a.copy()
     neck_a_copy[neck_left_y_byRatio:, :max(0, neck_left_x_byRatio-4)] = 0
     neck_a_copy[neck_left_y_byRatio:,
             min(input_width, neck_left_x_byRatio + neck_width_byRatio - CLOTH_X_CHANGE+4):] = 0
     n_a_leftright = cv2.subtract(neck_a, neck_a_copy)
 
-    # 7.4 如果存在镂空区域，则对headneck_a做进一步处理
+    # 7.4 如果存在镂空区域，则对 headneck_a 做进一步处理
     if black_dots_y != None:
         neck_a = cv2.subtract(neck_a, n_a_leftright)
-        # 得到去掉脖子两翼的新的headneck_a
+        # 得到去掉脖子两翼的新的 headneck_a
         headneck_a = cv2.subtract(headneck_a, n_a_leftright)
-        # 将headneck_a覆盖上拉伸后的脖子A矩阵
+        # 将 headneck_a 覆盖上拉伸后的脖子 A 矩阵
         headneck_a = np.uint8(cover_image(neck_a, headneck_a, 0, 0, mode=2))
     else:
         headneck_a = cv2.subtract(headneck_a, n_a_leftright)
@@ -231,7 +231,7 @@ def change_cloth(input_image:np.array,
         # 在背景中，将原本衣服区域置为黑色
         headneck_a = cover_image(cloth_image_input_save, headneck_a, max(0, headneck_x_left-1), 0, mode=2)
 
-    # 7.6 如果space_adjust开启的话，headneck_a的底部将增加一些行数
+    # 7.6 如果 space_adjust 开启的话，headneck_a 的底部将增加一些行数
     if space_adjust is not None:
         insert_array = np.uint8(np.zeros((space_adjust, input_width)))
         headneck_a = np.r_[headneck_a, insert_array]

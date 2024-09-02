@@ -6,8 +6,8 @@ import time
 
 def calTime(mark):
     """
-    一个输出函数时间的装饰器.
-    :param mark: str, 可选填, 如果填了就会在print开头加上mark标签。
+    一个输出函数时间的装饰器。
+    :param mark: str, 可选填，如果填了就会在 print 开头加上 mark 标签。
     """
     if isinstance(mark, str):
         def decorater(func):
@@ -36,7 +36,7 @@ def calTime(mark):
 
 def ChangeImageDPI(input_path, output_path, dpi=300):
     """
-    改变输入图像的dpi.
+    改变输入图像的 dpi.
     input_path: 输入图像路径
     output_path: 输出图像路径
     dpi：打印分辨率
@@ -49,9 +49,9 @@ def ChangeImageDPI(input_path, output_path, dpi=300):
 
 def IDphotos_cut(x1, y1, x2, y2, img):
     """
-    在图片上进行滑动裁剪,输入输出为
-    输入：一张图片img,和裁剪框信息(x1,x2,y1,y2)
-    输出: 裁剪好的图片,然后裁剪框超出了图像范围,那么将用0矩阵补位
+    在图片上进行滑动裁剪，输入输出为
+    输入：一张图片 img，和裁剪框信息 (x1,x2,y1,y2)
+    输出：裁剪好的图片，然后裁剪框超出了图像范围，那么将用 0 矩阵补位
     ------------------------------------
     x:裁剪框左上的横坐标
     y:裁剪框左上的纵坐标
@@ -107,10 +107,10 @@ def IDphotos_cut(x1, y1, x2, y2, img):
 def resize_image_esp(input_image, esp=2000):
     """
     输入：
-    input_path：numpy图片
+    input_path：numpy 图片
     esp：限制的最大边长
     """
-    # resize函数=>可以让原图压缩到最大边为esp的尺寸(不改变比例)
+    # resize 函数=>可以让原图压缩到最大边为 esp 的尺寸 (不改变比例)
     width = input_image.shape[0]
 
     length = input_image.shape[1]
@@ -134,8 +134,8 @@ def resize_image_esp(input_image, esp=2000):
 
 def resize_image_by_min(input_image, esp=600):
     """
-    将图像缩放为最短边至少为esp的图像。
-    :param input_image: 输入图像（OpenCV矩阵）
+    将图像缩放为最短边至少为 esp 的图像。
+    :param input_image: 输入图像（OpenCV 矩阵）
     :param esp: 缩放后的最短边长
     :return: 缩放后的图像，缩放倍率
     """
@@ -174,13 +174,13 @@ def detect_distance(value, crop_heigh, max=0.06, min=0.04):
     if min <= value <= max:
         return 0, 0
     elif value > max:
-        # 头顶往上的像素比例高于max
+        # 头顶往上的像素比例高于 max
         move_value = value - max
         move_value = int(move_value * crop_heigh)
         # print("上移{}".format(move_value))
         return 1, move_value
     else:
-        # 头顶往上的像素比例低于min
+        # 头顶往上的像素比例低于 min
         move_value = min - value
         move_value = int(move_value * crop_heigh)
         # print("下移{}".format(move_value))
@@ -190,8 +190,8 @@ def detect_distance(value, crop_heigh, max=0.06, min=0.04):
 def draw_picture_dots(image, dots, pen_size=10, pen_color=(0, 0, 255)):
     """
     给一张照片上绘制点。
-    image: Opencv图像矩阵
-    dots: 一堆点,形如[(100,100),(150,100)]
+    image: Opencv 图像矩阵
+    dots: 一堆点，形如 [(100,100),(150,100)]
     pen_size: 画笔的大小
     pen_color: 画笔的颜色
     """
@@ -257,7 +257,7 @@ def add_background(input_image, bgr=(0, 0, 0), mode="pure_color"):
     """
     本函数的功能为为透明图像加上背景。
     :param input_image: numpy.array(4 channels), 透明图像
-    :param bgr: tuple, 合成纯色底时的BGR值
+    :param bgr: tuple, 合成纯色底时的 BGR 值
     :param new_background: numpy.array(3 channels)，合成自定义图像底时的背景图
     :return: output: 合成好的输出图像
     """
@@ -303,20 +303,20 @@ def rotate_bound(image, angle):
 
 def rotate_bound_4channels(image, a, angle):
     """
-    【rotate_bound_4channels的4通道版本】
+    【rotate_bound_4channels 的 4 通道版本】
     一个旋转函数，输入一张图片和一个旋转角，可以实现不损失图像信息的旋转。
     Inputs:
         - image: numpy.array(3 channels), 输入图像
-        - a: numpy.array(1 channels), 输入图像的A矩阵
+        - a: numpy.array(1 channels), 输入图像的 A 矩阵
         - angle: 旋转角（度）
     Returns:
-        - input_image: numpy.array(3 channels), 对image进行旋转后的图像
+        - input_image: numpy.array(3 channels), 对 image 进行旋转后的图像
         - result_image: numpy.array(4 channels), 旋转且透明的图像
         - cos: float, 旋转角的余弦值
         - sin: float, 旋转角的正弦值
     """
     input_image, cos, sin = rotate_bound(image, angle)
-    new_a, _, _ = rotate_bound(a, angle)  # 对做matte旋转，以便之后merge
+    new_a, _, _ = rotate_bound(a, angle)  # 对做 matte 旋转，以便之后 merge
     b, g, r = cv2.split(input_image)
     result_image = cv2.merge((b, g, r, new_a))  # 得到抠图结果图的无损旋转结果
 

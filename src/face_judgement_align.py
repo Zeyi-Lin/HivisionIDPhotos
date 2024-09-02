@@ -77,7 +77,7 @@ def face_number_and_angle_detection(input_image):
         - landmark: list，人脸关键点信息
     """
 
-    # face++人脸检测
+    # face++ 人脸检测
     # input_image_bytes = CV2Bytes.cv2_byte(input_image, ".jpg")
     # face_num, face_rectangle, landmarks, headpose = megvii_face_detector(input_image_bytes)
     # print(face_rectangle)

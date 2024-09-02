@@ -5,7 +5,7 @@
 @description:
 瘦脸算法，用到了图像局部平移法
 先使用人脸关键点检测，然后再使用图像局部平移法
-需要注意的是，这部分不会包含dlib人脸关键点检测，因为考虑到模型载入的问题
+需要注意的是，这部分不会包含 dlib 人脸关键点检测，因为考虑到模型载入的问题
 """
 import cv2
 import math
@@ -16,8 +16,8 @@ class TranslationWarp(object):
     """
     本类包含瘦脸算法，由于瘦脸算法包含了很多个版本，所以以类的方式呈现
     前两个算法没什么好讲的，网上资料很多
-    第三个采用numpy内部的自定义函数处理，在处理速度上有一些提升
-    最后采用cv2.map算法，处理速度大幅度提升
+    第三个采用 numpy 内部的自定义函数处理，在处理速度上有一些提升
+    最后采用 cv2.map 算法，处理速度大幅度提升
     """
 
     # 瘦脸
@@ -39,14 +39,14 @@ class TranslationWarp(object):
                 return insertValue.astype(np.int8)
 
         ddradius = float(radius * radius)  # 圆的半径
-        copyImg = srcImg.copy()  # copy后的图像矩阵
+        copyImg = srcImg.copy()  # copy 后的图像矩阵
         # 计算公式中的|m-c|^2
         ddmc = (endX - startX) * (endX - startX) + (endY - startY) * (endY - startY)
         H, W, C = srcImg.shape  # 获取图像的形状
         for i in range(W):
             for j in range(H):
                 # # 计算该点是否在形变圆的范围之内
-                # # 优化，第一步，直接判断是会在（startX,startY)的矩阵框中
+                # # 优化，第一步，直接判断是会在（startX,startY) 的矩阵框中
                 if math.fabs(i - startX) > radius and math.fabs(j - startY) > radius:
                     continue
                 distance = (i - startX) * (i - startX) + (j - startY) * (j - startY)
@@ -59,15 +59,15 @@ class TranslationWarp(object):
                     UX = i - ratio * (endX - startX)
                     UY = j - ratio * (endY - startY)
 
-                    # 根据双线性插值法得到UX，UY的值
+                    # 根据双线性插值法得到 UX，UY 的值
                     # start_ = time.time()
                     value = BilinearInsert(srcImg, UX, UY)
                     # print(f"双线性插值耗时;{time.time() - start_}")
-                    # 改变当前 i ，j的值
+                    # 改变当前 i，j 的值
                     copyImg[j, i] = value
         return copyImg
 
-    # 瘦脸pro1, 限制了for循环的遍历次数
+    # 瘦脸 pro1, 限制了 for 循环的遍历次数
     @staticmethod
     def localTranslationWarpLimitFor(srcImg, startP: np.matrix, endP: np.matrix, radius: float):
         startX, startY = startP[0, 0], startP[0, 1]
@@ -89,26 +89,26 @@ class TranslationWarp(object):
                 return insertValue.astype(np.int8)
 
         ddradius = float(radius * radius)  # 圆的半径
-        copyImg = srcImg.copy()  # copy后的图像矩阵
+        copyImg = srcImg.copy()  # copy 后的图像矩阵
         # 计算公式中的|m-c|^2
         ddmc = (endX - startX) ** 2 + (endY - startY) ** 2
         # 计算正方形的左上角起始点
         startTX, startTY = (startX - math.floor(radius + 1), startY - math.floor((radius + 1)))
         # 计算正方形的右下角的结束点
         endTX, endTY = (startX + math.floor(radius + 1), startY + math.floor((radius + 1)))
-        # 剪切srcImg
+        # 剪切 srcImg
         srcImg = srcImg[startTY: endTY + 1, startTX: endTX + 1, :]
         # db.cv_show(srcImg)
-        # 裁剪后的图像相当于在x,y都减少了startX - math.floor(radius + 1)
-        # 原本的endX, endY在切后的坐标点
+        # 裁剪后的图像相当于在 x,y 都减少了 startX - math.floor(radius + 1)
+        # 原本的 endX, endY 在切后的坐标点
         endX, endY = (endX - startX + math.floor(radius + 1), endY - startY + math.floor(radius + 1))
-        # 原本的startX, startY剪切后的坐标点
+        # 原本的 startX, startY 剪切后的坐标点
         startX, startY = (math.floor(radius + 1), math.floor(radius + 1))
         H, W, C = srcImg.shape  # 获取图像的形状
         for i in range(W):
             for j in range(H):
                 # 计算该点是否在形变圆的范围之内
-                # 优化，第一步，直接判断是会在（startX,startY)的矩阵框中
+                # 优化，第一步，直接判断是会在（startX,startY) 的矩阵框中
                 # if math.fabs(i - startX) > radius and math.fabs(j - startY) > radius:
                 #     continue
                 distance = (i - startX) * (i - startX) + (j - startY) * (j - startY)
@@ -121,34 +121,34 @@ class TranslationWarp(object):
                     UX = i - ratio * (endX - startX)
                     UY = j - ratio * (endY - startY)
 
-                    # 根据双线性插值法得到UX，UY的值
+                    # 根据双线性插值法得到 UX，UY 的值
                     # start_ = time.time()
                     value = BilinearInsert(srcImg, UX, UY)
                     # print(f"双线性插值耗时;{time.time() - start_}")
-                    # 改变当前 i ，j的值
+                    # 改变当前 i，j 的值
                     copyImg[j + startTY, i + startTX] = value
         return copyImg
 
-    # # 瘦脸pro2,采用了numpy自定义函数做处理
+    # # 瘦脸 pro2，采用了 numpy 自定义函数做处理
     # def localTranslationWarpNumpy(self, srcImg, startP: np.matrix, endP: np.matrix, radius: float):
     #     startX , startY = startP[0, 0], startP[0, 1]
     #     endX, endY = endP[0, 0], endP[0, 1]
     #     ddradius = float(radius * radius)  # 圆的半径
-    #     copyImg = srcImg.copy()  # copy后的图像矩阵
+    #     copyImg = srcImg.copy()  # copy 后的图像矩阵
     #     # 计算公式中的|m-c|^2
     #     ddmc = (endX - startX)**2 + (endY - startY)**2
     #     # 计算正方形的左上角起始点
     #     startTX, startTY = (startX - math.floor(radius + 1), startY - math.floor((radius + 1)))
     #     # 计算正方形的右下角的结束点
     #     endTX, endTY = (startX + math.floor(radius + 1), startY + math.floor((radius + 1)))
-    #     # 剪切srcImg
+    #     # 剪切 srcImg
     #     self.thinImage = srcImg[startTY : endTY + 1, startTX : endTX + 1, :]
     #     # s = self.thinImage
     #     # db.cv_show(srcImg)
-    #     # 裁剪后的图像相当于在x,y都减少了startX - math.floor(radius + 1)
-    #     # 原本的endX, endY在切后的坐标点
+    #     # 裁剪后的图像相当于在 x,y 都减少了 startX - math.floor(radius + 1)
+    #     # 原本的 endX, endY 在切后的坐标点
     #     endX, endY = (endX - startX + math.floor(radius + 1), endY - startY + math.floor(radius + 1))
-    #     # 原本的startX, startY剪切后的坐标点
+    #     # 原本的 startX, startY 剪切后的坐标点
     #     startX ,startY = (math.floor(radius + 1), math.floor(radius + 1))
     #     H, W, C = self.thinImage.shape  # 获取图像的形状
     #     index_m = np.arange(H * W).reshape((H, W))
@@ -162,17 +162,17 @@ class TranslationWarp(object):
     #     # db.cv_show(copyImg)
     #     return copyImg
 
-    # 瘦脸pro3,采用opencv内置函数
+    # 瘦脸 pro3，采用 opencv 内置函数
     @staticmethod
     def localTranslationWarpFastWithStrength(srcImg, startP: np.matrix, endP: np.matrix, radius, strength: float = 100.):
         """
-        采用opencv内置函数
+        采用 opencv 内置函数
         Args:
             srcImg: 源图像
             startP: 起点位置
             endP: 终点位置
             radius: 处理半径
-            strength: 瘦脸强度，一般取100以上
+            strength: 瘦脸强度，一般取 100 以上
 
         Returns:
 
@@ -223,8 +223,8 @@ def thinFace(src, landmark, place: int = 0, strength=30.):
     Args:
         src: 原图
         landmark: 关键点信息
-        place: 选择瘦脸区域，为0-4之间的值
-        strength: 瘦脸强度，输入值在0-10之间，如果小于或者等于0，则不瘦脸
+        place: 选择瘦脸区域，为 0-4 之间的值
+        strength: 瘦脸强度，输入值在 0-10 之间，如果小于或者等于 0，则不瘦脸
 
     Returns:
         瘦脸后的图像
@@ -239,13 +239,13 @@ def thinFace(src, landmark, place: int = 0, strength=30.):
     right_landmark = landmark[13 + place]
     right_landmark_down = landmark[15 + place]
     endPt = landmark[58]
-    # 计算第4个点到第6个点的距离作为瘦脸距离
+    # 计算第 4 个点到第 6 个点的距离作为瘦脸距离
     r_left = math.sqrt(
         (left_landmark[0, 0] - left_landmark_down[0, 0]) ** 2 +
         (left_landmark[0, 1] - left_landmark_down[0, 1]) ** 2
     )
 
-    # 计算第14个点到第16个点的距离作为瘦脸距离
+    # 计算第 14 个点到第 16 个点的距离作为瘦脸距离
     r_right = math.sqrt((right_landmark[0, 0] - right_landmark_down[0, 0]) ** 2 +
                         (right_landmark[0, 1] - right_landmark_down[0, 1]) ** 2)
     # 瘦左边脸

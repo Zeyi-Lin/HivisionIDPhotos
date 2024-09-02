@@ -1,7 +1,7 @@
 """
 @author: cuny
 @fileName: error.py
-@create_time: 2022/03/10 下午3:14
+@create_time: 2022/03/10 下午 3:14
 @introduce:
 保存一些定义的错误类型
 """

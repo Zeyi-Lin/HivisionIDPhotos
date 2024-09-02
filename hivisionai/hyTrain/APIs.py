@@ -12,24 +12,24 @@ from aliyunsdkcore.client import AcsClient
 def params_of_head(photo_base64, photo_type):
     print ('测试头像抠图接口 ...')
     host = 'https://person.market.alicloudapi.com'
-    uri = '/segment/person/headrgba' # 头像抠图返回透明PNG图
-    # uri = '/segment/person/head'   # 头像抠图返回alpha图
-    # uri = '/segment/person/headborder' # 头像抠图返回带白边的透明PNG图
+    uri = '/segment/person/headrgba' # 头像抠图返回透明 PNG 图
+    # uri = '/segment/person/head'   # 头像抠图返回 alpha 图
+    # uri = '/segment/person/headborder' # 头像抠图返回带白边的透明 PNG 图
     return host, uri, {
         'photo': photo_base64,
         'type': photo_type,
-        'face_required': 0, # 可选，检测是否必须带有人脸才进行抠图处理，0为检测，1为不检测，默认为0
+        'face_required': 0, # 可选，检测是否必须带有人脸才进行抠图处理，0 为检测，1 为不检测，默认为 0
         'border_ratio': 0.3, # 可选，仅带白边接口可用，
-                             # 在头像边缘增加白边（或者其他颜色）宽度，取值为0-0.5，
+                             # 在头像边缘增加白边（或者其他颜色）宽度，取值为 0-0.5，
                              # 这个宽度是相对于图片宽度和高度最大值的比例，
-                             # 比如原图尺寸为640x480，border_ratio为0.2，
-                             # 则添加的白边的宽度为：max(640,480) * 0.2 = 96个像素
+                             # 比如原图尺寸为 640x480，border_ratio 为 0.2，
+                             # 则添加的白边的宽度为：max(640,480) * 0.2 = 96 个像素
         'margin_color': '#ff0000' # 可选，仅带白边接口可用，
                                   # 在头像边缘增加边框的颜色，默认为白色
 
     }
 
-# 头像抠图API
+# 头像抠图 API
 def wanxing_get_head_api(file_name='/home/parallels/Desktop/change_cloth/input_image/03.jpg',
                      output_path="./head.png",
                      app_key='204014294',
@@ -125,7 +125,7 @@ def wanxing_get_head_api(file_name='/home/parallels/Desktop/change_cloth/input_i
     except:
         print('failed parse:', resp)
 
-# 阿里云抠图API
+# 阿里云抠图 API
 def aliyun_human_matting_api(input_path, output_path, type="human"):
     auth = oss2.Auth('LTAI5tP2NxdzSFfpKYxZFCuJ', 'VzbGdUbRawuMAitekP3ORfrw0i3NEX')
     bucket = oss2.Bucket(auth, 'https://oss-cn-shanghai.aliyuncs.com', 'huanying-api')
@@ -167,7 +167,7 @@ def aliyun_human_matting_api(input_path, output_path, type="human"):
             local_file.write(file_object.content)
             bucket.delete_object(key)
 
-# 阿里云人脸检测API
+# 阿里云人脸检测 API
 def aliyun_face_detect_api(input_path, type="human"):
     auth = oss2.Auth('LTAI5tP2NxdzSFfpKYxZFCuJ', 'VzbGdUbRawuMAitekP3ORfrw0i3NEX')
     bucket = oss2.Bucket(auth, 'https://oss-cn-shanghai.aliyuncs.com', 'huanying-api')

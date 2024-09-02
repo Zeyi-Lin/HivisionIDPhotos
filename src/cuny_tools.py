@@ -118,7 +118,7 @@ def transformationNeck2(image:np.ndarray, per_to_side:float=0.8)->np.ndarray:
 def transformationNeck(image:np.ndarray, cutNeckHeight:int, neckBelow:int,
                        toHeight:int,per_to_side:float=0.75) -> np.ndarray:
     """
-    脖子扩充算法，其实需要输入的只是脖子扣出来的部分以及需要被扩充的高度/需要被扩充成的高度.
+    脖子扩充算法，其实需要输入的只是脖子扣出来的部分以及需要被扩充的高度/需要被扩充成的高度。
     """
     height, width, channels = image.shape
     _, _, _, a = cv2.split(image)  # 这应该是一个四通道的图像

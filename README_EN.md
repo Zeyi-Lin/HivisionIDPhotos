@@ -53,7 +53,7 @@ If HivisionIDPhoto is helpful to you, please star this repo or recommend it to y
 
 # 🔧Environment Dependencies and Installation
 
-- Python >= 3.7（The main test of the project is in Python 3.10.）
+- Python >= 3.7 (The main test of the project is in Python 3.10.)
 - onnxruntime
 - OpenCV
 - Option: Linux, Windows, MacOS

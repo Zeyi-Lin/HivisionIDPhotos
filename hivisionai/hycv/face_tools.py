@@ -51,8 +51,8 @@ def face_detect_mtcnn(input_image, color_key=None, filter=None):
     """
     Inputs:
     - input_image: OpenCV Numpy.array
-    - color_key: 当color_key等于"RGB"时,将不进行转换操作
-    - filter：当filter等于True时，将抛弃掉置信度小于0.98或人脸框面积小于3600的人脸
+    - color_key: 当 color_key 等于"RGB"时，将不进行转换操作
+    - filter：当 filter 等于 True 时，将抛弃掉置信度小于 0.98 或人脸框面积小于 3600 的人脸
     return:
     - faces: 带有人脸信息的变量
     - landmarks: face alignment
@@ -75,7 +75,7 @@ def face_detect_mtcnn(input_image, color_key=None, filter=None):
             h = y2 - y1 + 1
             measure = w * h
             if confidence >= 0.98 and measure > 3600:
-                # 如果检测到的人脸置信度小于0.98或人脸框面积小于3600,则抛弃该人脸
+                # 如果检测到的人脸置信度小于 0.98 或人脸框面积小于 3600，则抛弃该人脸
                 face_clean.append(face)
         faces = face_clean
 

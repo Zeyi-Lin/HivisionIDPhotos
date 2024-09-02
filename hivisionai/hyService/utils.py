@@ -1,11 +1,11 @@
 """
 @author: cuny
 @fileName: utils.py
-@create_time: 2021/12/29 下午1:29
+@create_time: 2021/12/29 下午 1:29
 @introduce:
-焕影服务的一些工具函数,涉及两类:
-1. 开发debug时候的工具函数
-2. 初始化COS配置时的工具函数
+焕影服务的一些工具函数，涉及两类：
+1. 开发 debug 时候的工具函数
+2. 初始化 COS 配置时的工具函数
 """
 import cv2
 from .error import WrongImageType
@@ -28,8 +28,8 @@ class Debug(object):
     @debug.setter
     def debug(self, value):
         if not isinstance(value, bool):
-            raise TypeError("你必须设定debug的值为bool的True或者False")
-        print(f"设置debug为: {value}")
+            raise TypeError("你必须设定 debug 的值为 bool 的 True 或者 False")
+        print(f"设置 debug 为：{value}")
         self.__DEBUG = value
 
     def debug_print(self, text, **kwargs):
@@ -41,10 +41,10 @@ class Debug(object):
     def resize_image_esp(input_image, esp=2000):
         """
         输入：
-        input_path：numpy图片
+        input_path：numpy 图片
         esp：限制的最大边长
         """
-        # resize函数=>可以让原图压缩到最大边为esp的尺寸(不改变比例)
+        # resize 函数=>可以让原图压缩到最大边为 esp 的尺寸 (不改变比例)
         width = input_image.shape[0]
         length = input_image.shape[1]
         max_num = max(width, length)
@@ -68,11 +68,11 @@ class Debug(object):
         def check_images(img):
             # 判断是否是矩阵类型
             if not isinstance(img, np.ndarray):
-                raise WrongImageType("输入的图像必须是 np.ndarray 类型!")
+                raise WrongImageType("输入的图像必须是 np.ndarray 类型！")
         if self.debug is True:
-            size = 500 if "size" not in kwargs else kwargs["size"]  # 默认缩放尺寸为最大边500像素点
+            size = 500 if "size" not in kwargs else kwargs["size"]  # 默认缩放尺寸为最大边 500 像素点
             if len(args) == 0:
-                raise ProcessError("你必须传入若干图像信息!")
+                raise ProcessError("你必须传入若干图像信息！")
             flag = False
             base = None
             for image in args:

@@ -100,13 +100,13 @@ def IDphotos_create(input_image, size=(413, 295), head_measure_ratio=0.2, head_h
     """
     input_path: 输入图像路径
     output_path: 输出图像路径
-    size: 裁剪尺寸,格式应该如(413,295),竖直距离在前,水平距离在后
-    head_measure_ratio: 人头面积占照片面积的head_ratio
-    head_height_ratio: 人头中心处于照片从上到下的head_height
+    size: 裁剪尺寸，格式应该如 (413,295),竖直距离在前，水平距离在后
+    head_measure_ratio: 人头面积占照片面积的 head_ratio
+    head_height_ratio: 人头中心处于照片从上到下的 head_height
     align: 是否进行人脸矫正
     """
 
-    input_image = resize_image_esp(input_image, 2000)  # 将输入图片压缩到最大边长为2000
+    input_image = resize_image_esp(input_image, 2000)  # 将输入图片压缩到最大边长为 2000
     # cv2.imwrite("./temp_input_image.jpg", input_image)
     origin_png_image = get_modnet_matting(input_image, checkpoint_path)
     # cv2.imwrite("./test_image/origin_png_image.png", origin_png_image)
@@ -119,7 +119,7 @@ def IDphotos_create(input_image, size=(413, 295), head_measure_ratio=0.2, head_h
         align=False
 
     if align:
-        print("开始align")
+        print("开始 align")
         if rotation > 0:
             rotation_flag = 0  # 逆时针旋转
         else:
@@ -141,7 +141,7 @@ def IDphotos_create(input_image, size=(413, 295), head_measure_ratio=0.2, head_h
         # ===================== 开始人脸检测 ===================== #
         faces, _ = face_detect_mtcnn(input_image, filter=True)
         face_num = len(faces)
-        print("检测到的人脸数目为:", len(faces))
+        print("检测到的人脸数目为：", len(faces))
         # ===================== 人脸检测结束 ===================== #
 
         if face_num == 1:
@@ -149,10 +149,10 @@ def IDphotos_create(input_image, size=(413, 295), head_measure_ratio=0.2, head_h
             x, y = face_rect[0], face_rect[1]
             w, h = face_rect[2] - x + 1, face_rect[3] - y + 1
         elif face_num == 0:
-            print("无人脸，返回0!!!")
+            print("无人脸，返回 0!!!")
             return 0
         else:
-            print("太多人脸，返回2!!!")
+            print("太多人脸，返回 2!!!")
             return 2
 
         d1, d2, d3, d4 = rotate_list[0], rotate_list[1], rotate_list[2], rotate_list[3]
@@ -248,7 +248,7 @@ def IDphotos_create(input_image, size=(413, 295), head_measure_ratio=0.2, head_h
     width, length = input_image.shape[0], input_image.shape[1]
     faces, _ = face_detect_mtcnn(input_image, filter=True)
     face_num = len(faces)
-    print("检测到的人脸数目为:", len(faces))
+    print("检测到的人脸数目为：", len(faces))
     # ===================== 人脸检测结束 ===================== #
 
     if face_num == 1:
@@ -257,32 +257,32 @@ def IDphotos_create(input_image, size=(413, 295), head_measure_ratio=0.2, head_h
         x, y = face_rect[0], face_rect[1]
         w, h = face_rect[2] - x + 1, face_rect[3] - y + 1
 
-        # x,y,w,h代表人脸框的左上角坐标和宽高
+        # x,y,w,h 代表人脸框的左上角坐标和宽高
 
-        # 检测头顶下方空隙,如果头顶下方空隙过小,则拒绝
+        # 检测头顶下方空隙，如果头顶下方空隙过小，则拒绝
         if y+h >= 0.85*width:
             # print("face bottom too short! y+h={} width={}".format(y+h, width))
-            print("在人脸下方的空间太少，返回值3!!!")
+            print("在人脸下方的空间太少，返回值 3!!!")
             return 3
 
         # 第一次裁剪
         # 确定裁剪的基本参数
         face_center = (x+w/2, y+h/2)  # 面部中心坐标
         face_measure = w*h  # 面部面积
-        crop_measure = face_measure/head_measure_ratio  # 裁剪框面积：为面部面积的5倍
-        resize_ratio = crop_measure/(size[0]*size[1])  # 裁剪框缩放率(以输入尺寸为标准)
+        crop_measure = face_measure/head_measure_ratio  # 裁剪框面积：为面部面积的 5 倍
+        resize_ratio = crop_measure/(size[0]*size[1])  # 裁剪框缩放率 (以输入尺寸为标准)
         resize_ratio_single = math.sqrt(resize_ratio)
         crop_size = (int(size[0]*resize_ratio_single), int(size[1]*resize_ratio_single))  # 裁剪框大小
         print("crop_size:", crop_size)
 
-        # 裁剪规则：x1和y1为裁剪的起始坐标,x2和y2为裁剪的最终坐标
-        # y的确定由人脸中心在照片的45%位置决定
+        # 裁剪规则：x1 和 y1 为裁剪的起始坐标，x2 和 y2 为裁剪的最终坐标
+        # y 的确定由人脸中心在照片的 45% 位置决定
         x1 = int(face_center[0]-crop_size[1]/2)
         y1 = int(face_center[1]-crop_size[0]*head_height_ratio)
         y2 = y1+crop_size[0]
         x2 = x1+crop_size[1]
 
-        # 对原图进行抠图,得到透明图img
+        # 对原图进行抠图，得到透明图 img
         print("开始进行抠图")
         # origin_png_image => 对原图的抠图结果
         # cut_image => 第一次裁剪后的图片
@@ -291,21 +291,21 @@ def IDphotos_create(input_image, size=(413, 295), head_measure_ratio=0.2, head_h
 
         cut_image = IDphotos_cut(x1, y1, x2, y2, origin_png_image)
         # cv2.imwrite("./temp.png", cut_image)
-        # 对裁剪得到的图片temp_path,我们将image=temp_path resize为裁剪框大小,这样方便进行后续计算
+        # 对裁剪得到的图片 temp_path，我们将 image=temp_path resize 为裁剪框大小，这样方便进行后续计算
         cut_image = cv2.resize(cut_image, (crop_size[1], crop_size[0]))
         y_top, y_bottom, x_left, x_right = get_box_pro(cut_image, model=2)  # 得到透明图中人像的上下左右距离信息
         print("y_top:{}, y_bottom:{}, x_left:{}, x_right:{}".format(y_top, y_bottom, x_left, x_right))
 
         # 判断左右是否有间隙
         if x_left > 0 or x_right > 0:
-            # 左右有空隙, 我们需要减掉它
-            print("左右有空隙!")
+            # 左右有空隙，我们需要减掉它
+            print("左右有空隙！")
             status_left_right = 1
-            cut_value_top = int(((x_left + x_right) * width_length_ratio) / 2)  # 减去左右,为了保持比例,上下也要相应减少cut_value_top
+            cut_value_top = int(((x_left + x_right) * width_length_ratio) / 2)  # 减去左右，为了保持比例，上下也要相应减少 cut_value_top
             print("cut_value_top:", cut_value_top)
 
         else:
-            # 左右没有空隙, 则不管
+            # 左右没有空隙，则不管
             status_left_right = 0
             cut_value_top = 0
             print("cut_value_top:", cut_value_top)
@@ -313,18 +313,18 @@ def IDphotos_create(input_image, size=(413, 295), head_measure_ratio=0.2, head_h
         # 检测人头顶与照片的顶部是否在合适的距离内
         print("y_top:", y_top)
         status_top, move_value = detect_distance(y_top-int((x_left+x_right)*width_length_ratio/2), crop_size[0])
-        # status=0 => 距离合适, 无需移动
-        # status=1 => 距离过大, 人像应向上移动
-        # status=2 => 距离过小, 人像应向下移动
+        # status=0 => 距离合适，无需移动
+        # status=1 => 距离过大，人像应向上移动
+        # status=2 => 距离过小，人像应向下移动
         # move_value => 上下移动的距离
         print("status_top:", status_top)
         print("move_value:", move_value)
 
         # 开始第二次裁剪
         if status_top == 0:
-        # 如果上下距离合适,则无需移动
+        # 如果上下距离合适，则无需移动
             if status_left_right:
-                # 如果左右有空隙,则需要用到cut_value_top
+                # 如果左右有空隙，则需要用到 cut_value_top
                 result_image = IDphotos_cut(x1 + x_left,
                              y1 + cut_value_top,
                              x2 - x_right,
@@ -332,13 +332,13 @@ def IDphotos_create(input_image, size=(413, 295), head_measure_ratio=0.2, head_h
                              origin_png_image)
 
             else:
-                # 如果左右没有空隙,那么则无需改动
+                # 如果左右没有空隙，那么则无需改动
                 result_image = cut_image
 
         elif status_top == 1:
-        # 如果头顶离照片顶部距离过大,需要人像向上移动,则需要用到move_value
+        # 如果头顶离照片顶部距离过大，需要人像向上移动，则需要用到 move_value
             if status_left_right:
-                # 左右存在距离,则需要cut_value_top
+                # 左右存在距离，则需要 cut_value_top
                 result_image = IDphotos_cut(x1 + x_left,
                              y1 + cut_value_top + move_value,
                              x2 - x_right,
@@ -353,9 +353,9 @@ def IDphotos_create(input_image, size=(413, 295), head_measure_ratio=0.2, head_h
                              origin_png_image)
 
         else:
-            # 如果头顶离照片顶部距离过小,则需要人像向下移动,则需要用到move_value
+            # 如果头顶离照片顶部距离过小，则需要人像向下移动，则需要用到 move_value
             if status_left_right:
-                # 左右存在距离,则需要cut_value_top
+                # 左右存在距离，则需要 cut_value_top
                 result_image = IDphotos_cut(x1 + x_left,
                              y1 + cut_value_top - move_value,
                              x2 - x_right,
@@ -378,14 +378,14 @@ def IDphotos_create(input_image, size=(413, 295), head_measure_ratio=0.2, head_h
         # 普清保存
         result_image2 = cv2.resize(result_image, (size[1], size[0]), interpolation=cv2.INTER_AREA)
         # cv2.imwrite("./output_image.png", result_image)
-        print("完成.返回1")
+        print("完成。返回 1")
         return 1, result_image, result_image2
 
     elif face_num == 0:
-        print("无人脸，返回0!!!")
+        print("无人脸，返回 0!!!")
         return 0
     else:
-        print("太多人脸，返回2!!!")
+        print("太多人脸，返回 2!!!")
         return 2
 
 
@@ -407,11 +407,11 @@ if __name__ == "__main__":
             # cv2.imwrite("./result_image.png", result_image)
 
             if status_id == 1:
-                print("处理完毕!")
+                print("处理完毕！")
             elif status_id == 0:
-                print("没有人脸！请重新上传有人脸的照片.")
+                print("没有人脸！请重新上传有人脸的照片。")
             elif status_id == 2:
-                print("人脸不只一张！请重新上传单独人脸的照片.")
+                print("人脸不只一张！请重新上传单独人脸的照片。")
             elif status_id == 3:
                 print("人头下方空隙不足！")
             elif status_id == 4:

@@ -1,9 +1,9 @@
 """
 @author: cuny
 @fileName: faceDetection68.py
-@create_time: 2022/01/03 下午10:20
+@create_time: 2022/01/03 下午 10:20
 @introduce:
-人脸68关键点检测主文件,以类的形式封装
+人脸 68 关键点检测主文件，以类的形式封装
 """
 from hivisionai.hyService.cloudService import GetConfig
 import os
@@ -12,7 +12,7 @@ import dlib
 import numpy as np
 local_file = os.path.dirname(__file__)
 PREDICTOR_PATH = f"{local_file}/weights/shape_predictor_68_face_landmarks.dat"  # 关键点检测模型路径
-MODULE3D_PATH = f"{local_file}/weights/68_points_3D_model.txt"  # 3d的68点配置文件路径
+MODULE3D_PATH = f"{local_file}/weights/68_points_3D_model.txt"  # 3d 的 68 点配置文件路径
 
 # 定义一个人脸检测错误的错误类
 class FaceError(Exception):
@@ -23,7 +23,7 @@ class FaceError(Exception):
         return self.err
 
 class FaceConfig68(object):
-    face_area:list = None  # 一些其他的参数,在本类中实际没啥用
+    face_area:list = None  # 一些其他的参数，在本类中实际没啥用
     FACE_POINTS = list(range(17, 68))  # 人脸轮廓点索引
     MOUTH_POINTS = list(range(48, 61))  # 嘴巴点索引
     RIGHT_BROW_POINTS = list(range(17, 22))  # 右眉毛索引
@@ -37,7 +37,7 @@ class FaceConfig68(object):
     JAW_END = 17  # 下巴结束点
     FACE_START = 0  # 人脸识别开始
     FACE_END = 68  # 人脸识别结束
-    # 下面这个是整张脸的mark点,可以用:
+    # 下面这个是整张脸的 mark 点，可以用：
     # for group in self.OVERLAY_POINTS:
     #     cv2.fillConvexPoly(face_mask, cv2.convexHull(dst_matrix[group]), (255, 255, 255))
     # 来形成人脸蒙版
@@ -49,10 +49,10 @@ class FaceConfig68(object):
 
 class FaceDetection68(FaceConfig68):
     """
-    人脸68关键点检测主类,当然使用的是dlib开源包
+    人脸 68 关键点检测主类，当然使用的是 dlib 开源包
     """
     def __init__(self, model_path:str=None, default_download:bool=False, *args, **kwargs):
-        # 初始化,检查并下载模型
+        # 初始化，检查并下载模型
         self.model_path = PREDICTOR_PATH if model_path is None else model_path
         if not os.path.exists(self.model_path) or default_download:  # 下载配置
             gc = GetConfig()
@@ -69,15 +69,15 @@ class FaceDetection68(FaceConfig68):
     @property
     def predictor(self):
         if self.__predictor is None:
-            self.__predictor = dlib.shape_predictor(self.model_path)  # 输入模型,构建特征提取器
+            self.__predictor = dlib.shape_predictor(self.model_path)  # 输入模型，构建特征提取器
         return self.__predictor
 
     @staticmethod
     def draw_face(img:np.ndarray, dets:dlib.rectangles, *args, **kwargs):
-        # 画人脸检测框, 为了一些兼容操作我没有设置默认显示,可以在运行完本函数后将返回值进行self.cv_show()
+        # 画人脸检测框，为了一些兼容操作我没有设置默认显示，可以在运行完本函数后将返回值进行 self.cv_show()
         tmp = img.copy()
         for face in dets:
-            # 左上角(x1,y1)，右下角(x2,y2)
+            # 左上角 (x1,y1)，右下角 (x2,y2)
             x1, y1, x2, y2 = face.left(), face.top(), face.right(), face.bottom()
             # print(x1, y1, x2, y2)
             cv2.rectangle(tmp, (x1, y1), (x2, y2), (0, 255, 0), 2)
@@ -86,8 +86,8 @@ class FaceDetection68(FaceConfig68):
     @staticmethod
     def draw_points(img:np.ndarray, landmarks:np.matrix, if_num:int=False, *args, **kwargs):
         """
-        画人脸关键点, 为了一些兼容操作我没有设置默认显示,可以在运行完本函数后将返回值进行self.cv_show()
-        :param img: 输入的是人脸检测的图,必须是3通道或者灰度图
+        画人脸关键点，为了一些兼容操作我没有设置默认显示，可以在运行完本函数后将返回值进行 self.cv_show()
+        :param img: 输入的是人脸检测的图，必须是 3 通道或者灰度图
         :param if_num: 是否在画关键点的同时画上编号
         :param landmarks: 输入的关键点矩阵信息
         """
@@ -95,12 +95,12 @@ class FaceDetection68(FaceConfig68):
         h, w, c = tmp.shape
         r = int(h / 100) - 2 if h > w else int(w / 100) - 2
         for idx, point in enumerate(landmarks):
-            # 68点的坐标
+            # 68 点的坐标
             pos = (point[0, 0], point[0, 1])
-            # 利用cv2.circle给每个特征点画一个圈，共68个
+            # 利用 cv2.circle 给每个特征点画一个圈，共 68 个
             cv2.circle(tmp, pos, r, color=(0, 0, 255), thickness=-1)  # bgr
             if if_num is True:
-                # 利用cv2.putText输出1-68
+                # 利用 cv2.putText 输出 1-68
                 font = cv2.FONT_HERSHEY_SIMPLEX
                 cv2.putText(tmp, str(idx + 1), pos, font, 0.8, (0, 0, 255), 1, cv2.LINE_AA)
         return tmp
@@ -109,10 +109,10 @@ class FaceDetection68(FaceConfig68):
     def resize_image_esp(input_image_, esp=2000):
         """
         输入：
-        input_path：numpy图片
+        input_path：numpy 图片
         esp：限制的最大边长
         """
-        # resize函数=>可以让原图压缩到最大边为esp的尺寸(不改变比例)
+        # resize 函数=>可以让原图压缩到最大边为 esp 的尺寸 (不改变比例)
         width = input_image_.shape[0]
 
         length = input_image_.shape[1]
@@ -135,16 +135,16 @@ class FaceDetection68(FaceConfig68):
 
     def facesPoints(self, img:np.ndarray, esp:int=None, det_num:int=1,*args, **kwargs):
         """
-        :param img: 输入的是人脸检测的图,必须是3通道或者灰度图
-        :param esp: 如果输入了具体数值,会将图片的最大边长缩放至esp,另一边等比例缩放
-        :param det_num: 人脸检测的迭代次数, 采样次数越多,越有利于检测到更多的人脸
+        :param img: 输入的是人脸检测的图，必须是 3 通道或者灰度图
+        :param esp: 如果输入了具体数值，会将图片的最大边长缩放至 esp，另一边等比例缩放
+        :param det_num: 人脸检测的迭代次数，采样次数越多，越有利于检测到更多的人脸
         :return
-        返回人脸检测框对象dets, 人脸关键点矩阵列表(列表中每个元素为一个人脸的关键点矩阵), 人脸关键点元组列表(列表中每个元素为一个人脸的关键点列表)
+        返回人脸检测框对象 dets, 人脸关键点矩阵列表 (列表中每个元素为一个人脸的关键点矩阵), 人脸关键点元组列表 (列表中每个元素为一个人脸的关键点列表)
         """
         # win = dlib.image_window()
         # win.clear_overlay()
         # win.set_image(img)
-        # dlib的人脸检测装置
+        # dlib 的人脸检测装置
         if esp is not None:
             img = self.resize_image_esp(input_image_=img, esp=esp)
         dets = self.detector(img, det_num)
@@ -166,12 +166,12 @@ class FaceDetection68(FaceConfig68):
 
     def facePoints(self, img:np.ndarray, esp:int=None, det_num:int=1, *args, **kwargs):
         """
-        本函数与facesPoints大致类似,主要区别在于本函数默认只能返回一个人脸关键点参数
+        本函数与 facesPoints 大致类似，主要区别在于本函数默认只能返回一个人脸关键点参数
         """
         # win = dlib.image_window()
         # win.clear_overlay()
         # win.set_image(img)
-        # dlib的人脸检测装置, 参数1表示对图片进行上采样一次，采样次数越多,越有利于检测到更多的人脸
+        # dlib 的人脸检测装置，参数 1 表示对图片进行上采样一次，采样次数越多，越有利于检测到更多的人脸
         if esp is not None:
             img = self.resize_image_esp(input_image_=img, esp=esp)
         dets = self.detector(img, det_num)
@@ -187,7 +187,7 @@ class FaceDetection68(FaceConfig68):
         # print("face_landmark:", landmark)  # 打印关键点矩阵
         # shape = predictor(img, )
         # dlib.hit_enter_to_continue()
-        # 返回关键点矩阵,关键点,
+        # 返回关键点矩阵，关键点，
         point_list = []
         for p in landmark.tolist():
             point_list.append((p[0], p[1]))
@@ -376,13 +376,13 @@ class PoseEstimator68(object):
     @staticmethod
     def rot_params_rm(R):
         from math import pi,atan2,asin, fabs
-        # x轴
+        # x 轴
         pitch  = (180 * atan2(-R[2][1], R[2][2]) / pi)
         f = (0 > pitch) - (0 < pitch)
         pitch = f * (180 - fabs(pitch))
-        # y轴
+        # y 轴
         yaw = -(180 * asin(R[2][0]) / pi)
-        # z轴
+        # z 轴
         roll = (180 * atan2(-R[1][0], R[0][0]) / pi)
         f = (0 > roll) - (0 < roll)
         roll = f * (180 - fabs(roll))
@@ -395,13 +395,13 @@ class PoseEstimator68(object):
     def rot_params_rv(rvec_):
         from math import pi, atan2, asin, fabs
         R = cv2.Rodrigues(rvec_)[0]
-        # x轴
+        # x 轴
         pitch  = (180 * atan2(-R[2][1], R[2][2]) / pi)
         f = (0 > pitch) - (0 < pitch)
         pitch = f * (180 - fabs(pitch))
-        # y轴
+        # y 轴
         yaw = -(180 * asin(R[2][0]) / pi)
-        # z轴
+        # z 轴
         roll = (180 * atan2(-R[1][0], R[0][0]) / pi)
         f = (0 > roll) - (0 < roll)
         roll = f * (180 - fabs(roll))
@@ -409,9 +409,9 @@ class PoseEstimator68(object):
         return rot_params
 
     def imageEulerAngle(self, img_points):
-        # 这里的img_points对应的是facePoints的第三个返回值,注意是facePoints而非facesPoints
-        # 对于facesPoints而言,需要把第三个返回值逐一取出再输入
-        # 把列表转为矩阵,且编码形式为float64
+        # 这里的 img_points 对应的是 facePoints 的第三个返回值，注意是 facePoints 而非 facesPoints
+        # 对于 facesPoints 而言，需要把第三个返回值逐一取出再输入
+        # 把列表转为矩阵，且编码形式为 float64
         img_points = np.array(img_points, dtype=np.float64)
         rvec, tvec = self.solve_pose_by_68_points(img_points)
         # 旋转向量转旋转矩阵
@@ -432,12 +432,12 @@ class PoseEstimator68(object):
 #     # 示例
 #     from hyService.utils import Debug
 #     dg = Debug()
-#     image_input = cv2.imread("./test.jpg")  # 读取一张图片, 必须是三通道或者灰度图
+#     image_input = cv2.imread("./test.jpg")  # 读取一张图片，必须是三通道或者灰度图
 #     fd68 = FaceDetection68()  # 初始化人脸关键点检测类
-#     dets_, landmark_, point_list_ = fd68.facePoints(image_input)  # 输入图片. 检测单张人脸
-#     # dets_, landmark_, point_list_ = fd68.facesPoints(input_image)  # 输入图片. 检测多张人脸
+#     dets_, landmark_, point_list_ = fd68.facePoints(image_input)  # 输入图片。检测单张人脸
+#     # dets_, landmark_, point_list_ = fd68.facesPoints(input_image)  # 输入图片。检测多张人脸
 #     img = fd68.draw_points(image_input, landmark_)
 #     dg.cv_show(img)
 #     pe = PoseEstimator68(image_input)
-#     _, ea = pe.imageEulerAngle(point_list_)  # 输入关键点列表, 如果要使用facesPoints,则输入的是point_list_[i]
+#     _, ea = pe.imageEulerAngle(point_list_)  # 输入关键点列表，如果要使用 facesPoints，则输入的是 point_list_[i]
 #     print(ea)  # 结果

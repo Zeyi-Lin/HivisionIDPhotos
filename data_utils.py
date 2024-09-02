@@ -5,7 +5,7 @@ def csv_to_size_list(csv_file: str) -> dict:
     # 初始化一个空字典
     size_list_dict = {}
 
-    # 打开CSV文件并读取数据
+    # 打开 CSV 文件并读取数据
     with open(csv_file, mode="r") as file:
         reader = csv.reader(file)
         # 跳过表头

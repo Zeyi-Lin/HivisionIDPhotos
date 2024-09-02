@@ -1,7 +1,7 @@
 """
-焕影小程序功能服务端的基本工具函数,以类的形式封装
+焕影小程序功能服务端的基本工具函数，以类的形式封装
 """
-try:  # 加上这个try的原因在于本地环境和云函数端的import形式有所不同
+try:  # 加上这个 try 的原因在于本地环境和云函数端的 import 形式有所不同
     from qcloud_cos import CosConfig
     from qcloud_cos import CosS3Client
 except ImportError:
@@ -9,7 +9,7 @@ except ImportError:
         from qcloud_cos_v5 import CosConfig
         from qcloud_cos_v5 import CosS3Client
     except ImportError:
-        raise ImportError("请下载腾讯云COS相关代码包:pip install cos-python-sdk-v5")
+        raise ImportError("请下载腾讯云 COS 相关代码包:pip install cos-python-sdk-v5")
 import requests
 import datetime
 import json
@@ -21,7 +21,7 @@ local_path_ = os.path.dirname(__file__)
 class GetConfig(object):
     @staticmethod
     def hy_sdk_client(Id:str, Key:str):
-        # 从cos中寻找文件
+        # 从 cos 中寻找文件
         REGION: str = 'ap-beijing'
         TOKEN = None
         SCHEME: str = 'https'
@@ -36,7 +36,7 @@ class GetConfig(object):
     def load_json(self, path:str, default_download=False):
         try:
             if os.path.isdir(path):
-                raise ProcessError("请输入具体的配置文件路径,而非文件夹!")
+                raise ProcessError("请输入具体的配置文件路径，而非文件夹！")
             if default_download is True:
                 print(f"\033[34m 默认强制重新下载配置文件...\033[0m")
                 raise FileNotFoundError
@@ -50,10 +50,10 @@ class GetConfig(object):
             except FileExistsError:
                 pass
             base_name = os.path.basename(path)
-            print(f"\033[34m 正在从COS中下载配置文件...\033[0m")
-            print(f"\033[31m 请注意,接下来会在{dir_name}路径下生成文件{base_name}...\033[0m")
-            Id = input("请输入SecretId:")
-            Key = input("请输入SecretKey:")
+            print(f"\033[34m 正在从 COS 中下载配置文件...\033[0m")
+            print(f"\033[31m 请注意，接下来会在{dir_name}路径下生成文件{base_name}...\033[0m")
+            Id = input("请输入 SecretId:")
+            Key = input("请输入 SecretKey:")
             client, bucket = self.hy_sdk_client(Id, Key)
             data_bytes = client.get_object(Bucket=bucket,Key=base_name)["Body"].get_raw_stream().read()
             data = json.loads(data_bytes.decode("utf-8"))
@@ -73,14 +73,14 @@ class GetConfig(object):
 
     def load_file(self, cloud_path:str, local_path:str):
         """
-        从COS中下载文件到本地,本函数将会被默认执行的,在使用的时候建议加一些限制.
+        从 COS 中下载文件到本地，本函数将会被默认执行的，在使用的时候建议加一些限制。
         :param cloud_path: 云端的文件路径
         :param local_path: 将云端文件保存在本地的路径
         """
         if os.path.isdir(cloud_path):
-            raise ProcessError("请输入具体的云端文件路径,而非文件夹!")
+            raise ProcessError("请输入具体的云端文件路径，而非文件夹！")
         if os.path.isdir(local_path):
-            raise ProcessError("请输入具体的本地文件路径,而非文件夹!")
+            raise ProcessError("请输入具体的本地文件路径，而非文件夹！")
         dir_name = os.path.dirname(local_path)
         base_name = os.path.basename(local_path)
         try:
@@ -88,11 +88,11 @@ class GetConfig(object):
         except FileExistsError:
             pass
         cloud_name = os.path.basename(cloud_path)
-        print(f"\033[31m 请注意,接下来会在{dir_name}路径下生成文件{base_name}\033[0m")
-        Id = input("请输入SecretId:")
-        Key = input("请输入SecretKey:")
+        print(f"\033[31m 请注意，接下来会在{dir_name}路径下生成文件{base_name}\033[0m")
+        Id = input("请输入 SecretId:")
+        Key = input("请输入 SecretKey:")
         client, bucket = self.hy_sdk_client(Id, Key)
-        print(f"\033[34m 正在从COS中下载文件: {cloud_name}, 此过程可能耗费一些时间...\033[0m")
+        print(f"\033[34m 正在从 COS 中下载文件：{cloud_name}, 此过程可能耗费一些时间...\033[0m")
         data_bytes = client.get_object(Bucket=bucket,Key=cloud_path)["Body"].get_raw_stream().read()
         # data["SecretId"] = Id  # 未来可以把这个加上
         # data["SecretKey"] = Key
@@ -106,24 +106,24 @@ class GetConfig(object):
 
 class CosConf(GetConfig):
     """
-    从安全的角度出发,将一些默认配置文件上传至COS中,接下来使用COS和它的子类的时候,在第一次使用时需要输入Cuny给的id和key
-    用于连接cos存储桶,下载配置文件.
-    当然,在service_default_download = False的时候,如果在运行路径下已经有conf/service_config.json文件了,
-    那么就不用再次下载了,也不用输入id和key
-    事实上这只需要运行一次,因为配置文件将会被下载至源码文件夹中
-    如果要自定义路径,请在继承的子类中编写__init__函数,将service_path定向到指定路径
+    从安全的角度出发，将一些默认配置文件上传至 COS 中，接下来使用 COS 和它的子类的时候，在第一次使用时需要输入 Cuny 给的 id 和 key
+    用于连接 cos 存储桶，下载配置文件。
+    当然，在 service_default_download = False 的时候，如果在运行路径下已经有 conf/service_config.json 文件了，
+    那么就不用再次下载了，也不用输入 id 和 key
+    事实上这只需要运行一次，因为配置文件将会被下载至源码文件夹中
+    如果要自定义路径，请在继承的子类中编写__init__函数，将 service_path 定向到指定路径
     """
     def __init__(self) -> None:
         # 下面这些参数是类的共享参数
-        self.__SECRET_ID: str = None  # 服务的id
-        self.__SECRET_KEY: str = None  # 服务的key
+        self.__SECRET_ID: str = None  # 服务的 id
+        self.__SECRET_KEY: str = None  # 服务的 key
         self.__REGION: str = None  # 服务的存储桶地区
-        self.__TOKEN: str = None  # 服务的token,目前一直是None
-        self.__SCHEME: str = None  # 服务的访问协议,默认实际上是https
+        self.__TOKEN: str = None  # 服务的 token，目前一直是 None
+        self.__SCHEME: str = None  # 服务的访问协议，默认实际上是 https
         self.__BUCKET: str = None  # 服务的存储桶
         self.__SERVICE_CONFIG: dict = None  # 服务的配置文件
         self.service_path: str = f"{local_path_}/conf/service_config.json"
-        # 配置文件路径,默认是函数运行的路径下的conf文件夹
+        # 配置文件路径，默认是函数运行的路径下的 conf 文件夹
         self.service_default_download = False  # 是否在每次访问配置的时候都重新下载文件
 
     @property
@@ -149,7 +149,7 @@ class CosConf(GetConfig):
             else:
                 return data
         except KeyError:
-            print(f"\033[31m没有对应键值{key},默认返回None\033[0m")
+            print(f"\033[31m 没有对应键值{key},默认返回 None\033[0m")
             return None
 
     @property
@@ -215,11 +215,11 @@ class CosConf(GetConfig):
 
     def downloadFile_COS(self, key, bucket:str=None, if_read:bool=False):
         """
-        从COS下载对象(二进制数据), 如果下载失败就返回None
+        从 COS 下载对象 (二进制数据), 如果下载失败就返回 None
         """
         CosBucket = self.bucket if bucket is None else bucket
         try:
-            # 将本类的Debug继承给抛弃了
+            # 将本类的 Debug 继承给抛弃了
             # self.debug_print(f"Download from {CosBucket}", font_color="blue")
             obj = self.client.get_object(
                 Bucket=CosBucket,
@@ -231,17 +231,17 @@ class CosConf(GetConfig):
             else:
                 return obj
         except Exception as e:
-            print(f"\033[31m下载失败! 错误描述:{e}\033[0m")
+            print(f"\033[31m 下载失败！错误描述:{e}\033[0m")
             return None
 
     def showFileList_COS_base(self, key, bucket, marker:str=""):
         """
-        返回cos存储桶内部的某个文件夹的内部名称
-        :param key: cos云端的存储路径
-        :param bucket: cos存储桶名称，如果没指定名称（None）就会寻找默认的存储桶
-        :param marker: 标记,用于记录上次查询到哪里了
-        ps:如果需要修改默认的存储桶配置，请在代码运行的时候加入代码 s.bucket = 存储桶名称 （s是对象实例）
-        返回的内容存储在response["Content"]，不过返回的数据大小是有限制的，具体内容还是请看官方文档。
+        返回 cos 存储桶内部的某个文件夹的内部名称
+        :param key: cos 云端的存储路径
+        :param bucket: cos 存储桶名称，如果没指定名称（None）就会寻找默认的存储桶
+        :param marker: 标记，用于记录上次查询到哪里了
+        ps:如果需要修改默认的存储桶配置，请在代码运行的时候加入代码 s.bucket = 存储桶名称（s 是对象实例）
+        返回的内容存储在 response["Content"]，不过返回的数据大小是有限制的，具体内容还是请看官方文档。
         """
         response = self.client.list_objects(
             Bucket=bucket,
@@ -252,7 +252,7 @@ class CosConf(GetConfig):
 
     def showFileList_COS(self, key, bucket:str=None)->list:
         """
-        实现查询存储桶中所有对象的操作，因为cos的sdk有返回数据包大小的限制，所以我们需要进行一定的改动
+        实现查询存储桶中所有对象的操作，因为 cos 的 sdk 有返回数据包大小的限制，所以我们需要进行一定的改动
         """
         marker = ""
         file_list = []
@@ -264,14 +264,14 @@ class CosConf(GetConfig):
             except KeyError as e:
                 print(e)
                 raise
-            if response['IsTruncated'] == 'false':  # 接下来没有数据了,就退出
+            if response['IsTruncated'] == 'false':  # 接下来没有数据了，就退出
                 break
             marker = response['NextMarker']
         return file_list
 
     def uploadFile_COS(self, buffer, key, bucket:str=None):
         """
-        从COS上传数据,需要注意的是必须得是二进制文件
+        从 COS 上传数据，需要注意的是必须得是二进制文件
         """
         CosBucket = self.bucket if bucket is None else bucket
         try:
@@ -289,7 +289,7 @@ class CosConf(GetConfig):
 class FuncDiary(CosConf):
     filter_dict = {"60a5e13da00e6e0001fd53c8": "Cuny",
                    "612c290f3a9af4000170faad": "守望平凡",
-                   "614de96e1259260001506d6c": "林泽毅-焕影一新"}
+                   "614de96e1259260001506d6c": "林泽毅 - 焕影一新"}
 
     def __init__(self, func_name: str, uid: str, error_conf_path: str = f"{local_path_}/conf/func_error_conf.json"):
         """
@@ -298,7 +298,7 @@ class FuncDiary(CosConf):
             func_name: 功能名称，影响了日志投递的路径
         """
         super().__init__()
-        # 配置文件路径,默认是函数运行的路径下的conf文件夹
+        # 配置文件路径，默认是函数运行的路径下的 conf 文件夹
         self.service_path: str = os.path.join(os.path.dirname(error_conf_path), "service_config.json")
         self.error_dict = self.load_json(path=error_conf_path)
         self.__up: str = f"wx/invokeFunction_c/{datetime.datetime.now().strftime('%Y/%m/%d/%H')}/{func_name}/"
@@ -323,7 +323,7 @@ class FuncDiary(CosConf):
         if not isinstance(value, dict):
             raise TypeError("content 只能是字典！")
         if "status" in value:
-            raise KeyError("status字段已被默认占用，请在日志信息中更换字段名称!")
+            raise KeyError("status 字段已被默认占用，请在日志信息中更换字段名称！")
         if self.__diary is None:
             self.__diary = value
         else:
@@ -341,7 +341,7 @@ class FuncDiary(CosConf):
         self.__diary["status"] = self.error_dict[status_id]
         name = prefix + "_" + suffix if len(suffix) != 0 else prefix
         self.uploadFile_COS(buffer=json.dumps(self.__diary), key=self.__up + name, bucket=bucket)
-        print(f"{self}上传成功.")
+        print(f"{self}上传成功。")
 
 
 class ResponseWebSocket(CosConf):
@@ -372,13 +372,13 @@ class ResponseWebSocket(CosConf):
     @staticmethod
     def create_Msg(status, msg):
         """
-        本方法用于创建一个用于发送到WebSocket客户端的数据
-        输入的信息部分,需要有如下几个参数:
-        1. id,固定为"return-result"
-        2. status,如果输入为1则status=true, 如果输入为-1则status=false
-        3. obj_key, 图片的云端路径, 这是输入的msg本身自带的
+        本方法用于创建一个用于发送到 WebSocket 客户端的数据
+        输入的信息部分，需要有如下几个参数：
+        1. id，固定为"return-result"
+        2. status，如果输入为 1 则 status=true, 如果输入为 -1 则 status=false
+        3. obj_key, 图片的云端路径，这是输入的 msg 本身自带的
         """
-        msg['status'] = "false" if status == -1 else 'true'  # 其实最好还是用bool
+        msg['status'] = "false" if status == -1 else 'true'  # 其实最好还是用 bool
         msg['id'] = "async-back-msg"
         msg['type'] = "funcType"
         msg["format"] = "imageType"
@@ -388,14 +388,14 @@ class ResponseWebSocket(CosConf):
 # 功能服务类
 class Service(ResponseWebSocket):
     """
-    服务的主函数,封装了cos上传/下载功能以及与api网关的一键通讯
-    将类的实例变成一个可被调用的对象,在服务运行的时候,只需要运行该对象即可
-    当然,因为是类,所以支持继承和修改
+    服务的主函数，封装了 cos 上传/下载功能以及与 api 网关的一键通讯
+    将类的实例变成一个可被调用的对象，在服务运行的时候，只需要运行该对象即可
+    当然，因为是类，所以支持继承和修改
     """
     @classmethod
     def process(cls, *args, **kwargs):
         """
-        处理函数,在使用的时候请将之重构
+        处理函数，在使用的时候请将之重构
         """
         pass
 

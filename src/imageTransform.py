@@ -33,7 +33,7 @@ def calTime(mark):
 
 def standard_photo_resize(input_image: np.array, size):
     """
-    input_image: 输入图像,即高清照
+    input_image: 输入图像，即高清照
     size: 标准照的尺寸
     """
     resize_ratio = input_image.shape[0] / size[0]
@@ -72,7 +72,7 @@ def hollowOutFix(src: np.ndarray) -> np.ndarray:
     a_contour = cv2.drawContours(np.zeros(a.shape, np.uint8), contours[0], -1, 255, 2)
     # a_base = a_contour[1:-1, 1:-1]
     h, w = a.shape[:2]
-    mask = np.zeros([h + 2, w + 2], np.uint8)  # mask必须行和列都加2，且必须为uint8单通道阵列
+    mask = np.zeros([h + 2, w + 2], np.uint8)  # mask 必须行和列都加 2，且必须为 uint8 单通道阵列
     cv2.floodFill(a_contour, mask=mask, seedPoint=(0, 0), newVal=255)
     a = cv2.add(a, 255 - a_contour)
     return cv2.merge((src_bgr, a[10:-10, 10:-10]))
@@ -80,8 +80,8 @@ def hollowOutFix(src: np.ndarray) -> np.ndarray:
 
 def resize_image_by_min(input_image, esp=600):
     """
-    将图像缩放为最短边至少为600的图像。
-    :param input_image: 输入图像（OpenCV矩阵）
+    将图像缩放为最短边至少为 600 的图像。
+    :param input_image: 输入图像（OpenCV 矩阵）
     :param esp: 缩放后的最短边长
     :return: 缩放后的图像，缩放倍率
     """
@@ -134,7 +134,7 @@ def rotate_bound_4channels(image, a, angle):
     一个旋转函数，输入一张图片和一个旋转角，可以实现不损失图像信息的旋转。
     """
     input_image, cos, sin = rotate_bound(image, angle)
-    new_a, _, _ = rotate_bound(a, angle)  # 对做matte旋转，以便之后merge
+    new_a, _, _ = rotate_bound(a, angle)  # 对做 matte 旋转，以便之后 merge
     b, g, r = cv2.split(input_image)
     result_image = cv2.merge((b, g, r, new_a))  # 得到抠图结果图的无损旋转结果
 
@@ -145,8 +145,8 @@ def rotate_bound_4channels(image, a, angle):
 def draw_picture_dots(image, dots, pen_size=10, pen_color=(0, 0, 255)):
     """
     给一张照片上绘制点。
-    image: Opencv图像矩阵
-    dots: 一堆点,形如[(100,100),(150,100)]
+    image: Opencv 图像矩阵
+    dots: 一堆点，形如 [(100,100),(150,100)]
     pen_size: 画笔的大小
     pen_color: 画笔的颜色
     """
@@ -164,9 +164,9 @@ def draw_picture_dots(image, dots, pen_size=10, pen_color=(0, 0, 255)):
 
 def get_modnet_matting(input_image, sess, ref_size=512):
     """
-    使用modnet模型对图像进行抠图处理。
-    :param input_image: 输入图像（opencv矩阵）
-    :param sess: onnxruntime推理主体
+    使用 modnet 模型对图像进行抠图处理。
+    :param input_image: 输入图像（opencv 矩阵）
+    :param sess: onnxruntime 推理主体
     :param ref_size: 缩放参数
     :return: 抠图后的图像
     """
@@ -205,13 +205,13 @@ def detect_distance(value, crop_heigh, max=0.06, min=0.04):
     if min <= value <= max:
         return 0, 0
     elif value > max:
-        # 头顶往上的像素比例高于max
+        # 头顶往上的像素比例高于 max
         move_value = value - max
         move_value = int(move_value * crop_heigh)
         # print("上移{}".format(move_value))
         return 1, move_value
     else:
-        # 头顶往上的像素比例低于min
+        # 头顶往上的像素比例低于 min
         move_value = min - value
         move_value = int(move_value * crop_heigh)
         # print("下移{}".format(move_value))
