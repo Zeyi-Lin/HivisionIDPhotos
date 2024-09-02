@@ -79,7 +79,7 @@ Download the weight file `hivision_modnet.onnx` from our [Release](https://githu
 
 <br>
 
-# Gradio Demo
+# 🚀 Gradio Demo
 
 ```bash
 python app.py
@@ -89,7 +89,7 @@ Running the program will generate a local web page, where operations and interac
 
 <br>
 
-# Deploy API service
+# ⚡️ Deploy API service
 
 ```
 python deploy_api.py
@@ -119,7 +119,9 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 <br>
 
-# 🐳Docker deployment
+# 🐳 Docker deployment
+
+## 1. Build
 
 After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
 
@@ -127,15 +129,25 @@ After ensuring that the model weight file [hivision_modnet.onnx](https://github.
 docker build -t hivision_idphotos .
 ```
 
-After the image is packaged, run the following command to start the API service:
+## 2. Run the Gradio Demo
+
+After the image packaging is completed, run the following command to start the Gradio Demo service:
 
 ```bash
-docker run -p 8080:8080 hivision_idphotos
+docker run -p 7860:7860 hivision_idphotos
+```
+
+You can access it locally at [http://127.0.0.1:7860](http://127.0.0.1:7860/).
+
+## 3. Run API backend service
+
+```bash
+docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 ```
 
 <br>
 
-# Reference Projects
+# 📖 Reference Projects
 
 1. MTCNN: https://github.com/ipazc/mtcnn
 2. ModNet: https://github.com/ZHKKKe/MODNet
@@ -150,7 +162,7 @@ After modifying [size_list_CN.csv](size_list_CN.csv), run app.py again, where th
 
 <br>
 
-# 📧Contact
+# 📧 Contact
 
 If you have any questions, please email Zeyi.lin@swanhub.co
 

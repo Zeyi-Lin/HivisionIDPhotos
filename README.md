@@ -83,7 +83,7 @@ pip install -r requirements.txt
 
 <br>
 
-# 运行 Gradio Demo
+# 🚀 运行 Gradio Demo
 
 ```bash
 python app.py
@@ -93,7 +93,7 @@ python app.py
 
 <br>
 
-# 部署 API 服务
+# ⚡️ 部署 API 服务
 
 ```
 python deploy_api.py
@@ -123,7 +123,7 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 <br>
 
-# 🐳Docker 部署
+# 🐳 Docker 部署
 
 ## 1. 构建镜像
 
@@ -151,7 +151,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
 <br>
 
-# 引用项目
+# 📖 引用项目
 
 1. MTCNN: https://github.com/ipazc/mtcnn
 2. ModNet: https://github.com/ZHKKKe/MODNet

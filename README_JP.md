@@ -83,7 +83,7 @@ pip install -r requirements.txt
 
 <br>
 
-# Gradio デモの実行
+# 🚀 Gradio デモの実行
 
 ```bash
 python app.py
@@ -93,7 +93,7 @@ python app.py
 
 <br>
 
-# API サービスのデプロイ
+# ⚡️ API サービスのデプロイ
 
 ```
 python deploy_api.py
@@ -123,23 +123,41 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 <br>
 
-# 🐳Docker デプロイ
+＃🐳 Docker デプロイメント
 
-モデルの重みファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)をルートディレクトリに配置したことを確認した後、ルートディレクトリで次のコマンドを実行します：
+## 1. ビルド
+
+[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)というモデルの重みファイルがルートディレクトリに配置されていることを確認した後、次のコマンドを実行します。
 
 ```bash
+
 docker build -t hivision_idphotos .
+
 ```
 
-イメージのパッケージ化が完了したら、次のコマンドを実行して API サービスを開始します：
+## 2. Gradio Demo の実行
+
+画像パッケージングが完了したら、次のコマンドを実行して Gradio Demo サービスを開始します。
 
 ```bash
-docker run -p 8080:8080 hivision_idphotos
+
+docker run -p 7860:7860 hivision_idphotos
+
+```
+
+[http://127.0.0.1:7860](http://127.0.0.1:7860/)でローカルからアクセスできます。
+
+## 3.API バックエンドサービスの実行
+
+```bash
+
+docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
+
 ```
 
 <br>
 
-# 参考プロジェクト
+# 📖 参考プロジェクト
 
 1. MTCNN: https://github.com/ipazc/mtcnn
 2. ModNet: https://github.com/ZHKKKe/MODNet
