@@ -121,7 +121,15 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 # 🐳 Docker deployment
 
-## 1. Build
+## 1. Pull or Build Image
+
+**Pull Image from DockerHub**
+
+```bash
+docker pull linzeyi/hivision_idphotos:v1
+```
+
+**Build Image**
 
 After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
 

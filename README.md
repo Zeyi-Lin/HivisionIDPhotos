@@ -125,7 +125,15 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 # 🐳 Docker 部署
 
-## 1. 构建镜像
+## 1. 拉取或构建镜像
+
+**拉取镜像：**
+
+```bash
+docker pull linzeyi/hivision_idphotos:v1
+```
+
+**Dockrfile 构建镜像：**
 
 在确保将模型权重文件[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)放到根目录下后，在根目录执行：
 

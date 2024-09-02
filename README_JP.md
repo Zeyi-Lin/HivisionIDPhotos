@@ -125,14 +125,20 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 ＃🐳 Docker デプロイメント
 
-## 1. ビルド
+## 1. イメージの取得またはビルド
+
+**イメージの取得：**
+
+```bash
+docker pull linzeyi/hivision_idphotos:v1
+```
+
+**Dockrfile によるイメージの構築：**
 
 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)というモデルの重みファイルがルートディレクトリに配置されていることを確認した後、次のコマンドを実行します。
 
 ```bash
-
 docker build -t hivision_idphotos .
-
 ```
 
 ## 2. Gradio Demo の実行
