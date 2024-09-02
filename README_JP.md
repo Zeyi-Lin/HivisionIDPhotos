@@ -146,6 +146,14 @@ docker run -p 8080:8080 hivision_idphotos
 
 <br>
 
+# 💻 開発のヒント
+
+**1. デフォルトサイズを変更する方法**
+
+[size_list_CN.csv](size_list_CN.csv) を変更してから、app.py を再実行します。最初の列はサイズ名であり、2 番目の列は高さ、3 番目の列は幅です。
+
+<br>
+
 # 📧 お問い合わせ
 
 ご質問がある場合は、zeyi.lin@swanhub.coまでメールでお問い合わせください。
