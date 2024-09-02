@@ -125,16 +125,28 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 # 🐳Docker 部署
 
+## 1. 构建镜像
+
 在确保将模型权重文件[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)放到根目录下后，在根目录执行：
 
 ```bash
 docker build -t hivision_idphotos .
 ```
 
-等待镜像封装完毕后，运行以下指令，即可开启 API 服务：
+## 2. 运行 Gradio Demo
+
+等待镜像封装完毕后，运行以下指令，即可开启 Gradio Demo 服务：
 
 ```bash
-docker run -p 8080:8080 hivision_idphotos
+docker run -p 7860:7860 hivision_idphotos
+```
+
+在你的本地访问[http://127.0.0.1:7860](http://127.0.0.1:7860/)即可使用。
+
+## 3. 运行 API 后端服务
+
+```bash
+docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 ```
 
 <br>

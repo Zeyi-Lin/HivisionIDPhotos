@@ -7,6 +7,8 @@ import pathlib
 import numpy as np
 from image_utils import resize_image_to_kb
 from data_utils import csv_to_size_list
+import argparse
+
 
 # 获取尺寸列表
 size_list_dict = csv_to_size_list("size_list_CN.csv")
@@ -35,22 +37,22 @@ def range_check(value, min_value=0, max_value=255):
 
 
 def idphoto_inference(
-        input_image,
-        mode_option,
-        size_list_option,
-        color_option,
-        render_option,
-        image_kb_options,
-        custom_color_R,
-        custom_color_G,
-        custom_color_B,
-        custom_size_height,
-        custom_size_width,
-        custom_image_kb,
-        head_measure_ratio=0.2,
-        head_height_ratio=0.45,
-        top_distance_max=0.12,
-        top_distance_min=0.10,
+    input_image,
+    mode_option,
+    size_list_option,
+    color_option,
+    render_option,
+    image_kb_options,
+    custom_color_R,
+    custom_color_G,
+    custom_color_B,
+    custom_size_height,
+    custom_size_width,
+    custom_image_kb,
+    head_measure_ratio=0.2,
+    head_height_ratio=0.45,
+    top_distance_max=0.12,
+    top_distance_min=0.10,
 ):
     idphoto_json = {
         "size_mode": mode_option,
@@ -67,15 +69,15 @@ def idphoto_inference(
         id_height = int(custom_size_height)
         id_width = int(custom_size_width)
         if (
-                id_height < id_width
-                or min(id_height, id_width) < 100
-                or max(id_height, id_width) > 1800
+            id_height < id_width
+            or min(id_height, id_width) < 100
+            or max(id_height, id_width) > 1800
         ):
             return {
                 img_output_standard: gr.update(value=None),
                 img_output_standard_hd: gr.update(value=None),
                 notification: gr.update(
-                    value='宽度应不大于长度；长宽不应小于 100，大于 1800', visible=True
+                    value="宽度应不大于长度；长宽不应小于 100，大于 1800", visible=True
                 ),
             }
         idphoto_json["size"] = (id_height, id_width)
@@ -332,14 +334,12 @@ if __name__ == "__main__":
                 img_output_layout = gr.Image(label="六寸排版照").style(height=350)
                 file_download = gr.File(label="下载调整 KB 大小后的照片", visible=False)
 
-
             # ---------------- 设置隐藏/显示组件 ----------------
             def change_color(colors):
                 if colors == "自定义底色":
                     return {custom_color: gr.update(visible=True)}
                 else:
                     return {custom_color: gr.update(visible=False)}
-
 
             def change_size_mode(size_option_item):
                 if size_option_item == "自定义尺寸":
@@ -357,7 +357,6 @@ if __name__ == "__main__":
                         custom_size: gr.update(visible=False),
                         size_list_row: gr.update(visible=True),
                     }
-
 
             def change_image_kb(image_kb_option):
                 if image_kb_option == "自定义":
@@ -409,4 +408,13 @@ if __name__ == "__main__":
             fn=set_example_image, inputs=[example_images], outputs=[img_input]
         )
 
-    demo.launch()
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument(
+        "--port", type=int, default=7860, help="The port number of the server"
+    )
+    argparser.add_argument(
+        "--host", type=str, default="127.0.0.1", help="The host of the server"
+    )
+    args = argparser.parse_args()
+
+    demo.launch(server_name=args.host, server_port=args.port)
