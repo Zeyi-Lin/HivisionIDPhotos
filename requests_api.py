@@ -5,6 +5,7 @@ from io import BytesIO
 import argparse
 import os
 
+
 def base64_save(base64_image_data, save_path):
     # 解码Base64数据并保存为PNG文件
     img_data = base64.b64decode(base64_image_data)
@@ -16,9 +17,15 @@ def base64_save(base64_image_data, save_path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="HivisionIDPhotos证件照制作推理程序。")
 
-    parser.add_argument("-u", "--url", help="API服务的URL", default="http://127.0.0.1:8080")
-    parser.add_argument("-t", "--type", help="请求API的种类，有idphoto、add_background和generate_layout_photos可选",
-                        default="idphoto")
+    parser.add_argument(
+        "-u", "--url", help="API服务的URL", default="http://127.0.0.1:8080"
+    )
+    parser.add_argument(
+        "-t",
+        "--type",
+        help="请求API的种类，有idphoto、add_background和generate_layout_photos可选",
+        default="idphoto",
+    )
     parser.add_argument("-i", "--input_image_dir", help="输入图像路径", required=True)
     parser.add_argument("-o", "--output_image_dir", help="保存图像路径", required=True)
     parser.add_argument("-s", "--size", help="证件照尺寸", default="(413,295)")
@@ -27,7 +34,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     url = f"{args.url}/{args.type}"  # 替换为实际的接口URL
-    files = {'input_image': (open(args.input_image_dir, 'rb'))}  # 替换为实际的文件路径和文件名
+    files = {
+        "input_image": (open(args.input_image_dir, "rb"))
+    }  # 替换为实际的文件路径和文件名
     data = {"size": args.size, "color": args.color}
 
     response = requests.post(url, data=data, files=files)
@@ -52,11 +61,12 @@ if __name__ == "__main__":
 
                 base64_save(base64_image_data_standard_hd, new_file_name)
 
-
-                print(f"标准照保存至'{args.output_image_dir}'，高清照保存至'{new_file_name}'")
+                print(
+                    f"标准照保存至'{args.output_image_dir}'，高清照保存至'{new_file_name}'"
+                )
 
             else:
-                print('人脸数量不等于1，请上传单张人脸的图像。')
+                print("人脸数量不等于1，请上传单张人脸的图像。")
 
         elif args.type == "add_background":
             response_json = response.json()
