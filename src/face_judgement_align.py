@@ -67,12 +67,12 @@ class Coordinate(object):
 def face_number_and_angle_detection(input_image):
     """
     本函数的功能是利用机器学习算法计算图像中人脸的数目与关键点，并通过关键点信息来计算人脸在平面上的旋转角度。
-    当前人脸数目!=1时，将raise一个错误信息并终止全部程序。
+    当前人脸数目!=1 时，将 raise 一个错误信息并终止全部程序。
     Args:
-        input_image: numpy.array(3 channels)，用户上传的原图（经过了一些简单的resize）
+        input_image: numpy.array(3 channels)，用户上传的原图（经过了一些简单的 resize）
 
     Returns:
-        - dets: list，人脸定位信息(x1, y1, x2, y2)
+        - dets: list，人脸定位信息 (x1, y1, x2, y2)
         - rotation: int，旋转角度，正数代表逆时针偏离，负数代表顺时针偏离
         - landmark: list，人脸关键点信息
     """
@@ -85,7 +85,7 @@ def face_number_and_angle_detection(input_image):
     faces, landmarks = face_detect_mtcnn(input_image)
     face_num = len(faces)
 
-    # 排除不合人脸数目要求（必须是1）的照片
+    # 排除不合人脸数目要求（必须是 1）的照片
     if face_num == 0 or face_num >= 2:
         if face_num == 0:
             status_id_ = "1101"
@@ -116,7 +116,7 @@ def image_matting(input_image, params):
         - input_image: numpy.array(3 channels)，用户原图
 
     Returns:
-        - origin_png_image: numpy.array(4 channels)， 抠好的图
+        - origin_png_image: numpy.array(4 channels)，抠好的图
     """
 
     print("抠图采用本地模型")
@@ -131,23 +131,23 @@ def rotation_ajust(input_image, rotation, a, IS_DEBUG=False):
     """
     本函数的功能是根据旋转角对原图进行无损旋转，并返回结果图与附带信息。
     Args:
-        - input_image: numpy.array(3 channels), 用户上传的原图（经过了一些简单的resize、美颜）
+        - input_image: numpy.array(3 channels), 用户上传的原图（经过了一些简单的 resize、美颜）
         - rotation: float, 人的五官偏离"端正"形态的旋转角
-        - a: numpy.array(1 channel), matting图的matte
-        - IS_DEBUG: DEBUG模式开关
+        - a: numpy.array(1 channel), matting 图的 matte
+        - IS_DEBUG: DEBUG 模式开关
 
     Returns:
         - result_jpg_image: numpy.array(3 channels), 原图旋转的结果图
-        - result_png_image: numpy.array(4 channels), matting图旋转的结果图
+        - result_png_image: numpy.array(4 channels), matting 图旋转的结果图
         - L1: CLassObject, 根据旋转点连线所构造函数
         - L2: ClassObject, 根据旋转点连线所构造函数
         - dotL3: ClassObject, 一个特殊裁切点的坐标
         - clockwise: int, 表示照片是顺时针偏离还是逆时针偏离
-        - drawed_dots_image: numpy.array(3 channels), 在result_jpg_image上标定了4个旋转点的结果图，用于DEBUG模式
+        - drawed_dots_image: numpy.array(3 channels), 在 result_jpg_image 上标定了 4 个旋转点的结果图，用于 DEBUG 模式
     """
 
     # Step1. 数据准备
-    rotation = -1 * rotation  # rotation为正数->原图顺时针偏离，为负数->逆时针偏离
+    rotation = -1 * rotation  # rotation 为正数->原图顺时针偏离，为负数->逆时针偏离
     h, w = input_image.copy().shape[:2]
 
     # Step2. 无损旋转
@@ -155,7 +155,7 @@ def rotation_ajust(input_image, rotation, a, IS_DEBUG=False):
 
     # Step3. 附带信息计算
     nh, nw = result_jpg_image.shape[:2]  # 旋转后的新的长宽
-    clockwise = -1 if rotation < 0 else 1  # clockwise代表时针，即1为顺时针，-1为逆时针
+    clockwise = -1 if rotation < 0 else 1  # clockwise 代表时针，即 1 为顺时针，-1 为逆时针
     # 如果逆时针偏离：
     if rotation < 0:
         p1 = Coordinate(0, int(w * sin))
@@ -176,7 +176,7 @@ def rotation_ajust(input_image, rotation, a, IS_DEBUG=False):
         L2 = LinearFunction_TwoDots(p3, p2)
         dotL3 = Coordinate(int(0.75 * p4.x + 0.25 * p1.x), int(0.75 * p4.y + 0.25 * p1.y))
 
-    # Step4. 根据附带信息进行图像绘制（4个旋转点），便于DEBUG模式验证
+    # Step4. 根据附带信息进行图像绘制（4 个旋转点），便于 DEBUG 模式验证
     drawed_dots_image = draw_picture_dots(result_jpg_image, [(p1.x, p1.y), (p2.x, p2.y), (p3.x, p3.y),
                                                              (p4.x, p4.y), (dotL3.x, dotL3.y)])
     if IS_DEBUG:
@@ -188,27 +188,27 @@ def rotation_ajust(input_image, rotation, a, IS_DEBUG=False):
 @calTime
 def face_number_detection_mtcnn(input_image):
     """
-    本函数的功能是对旋转矫正的结果图进行基于MTCNN模型的人脸检测。
+    本函数的功能是对旋转矫正的结果图进行基于 MTCNN 模型的人脸检测。
     Args:
-        - input_image: numpy.array(3 channels), 旋转矫正(rotation_adjust)的3通道结果图
+        - input_image: numpy.array(3 channels), 旋转矫正 (rotation_adjust) 的 3 通道结果图
 
     Returns:
         - faces: list, 人脸检测的结果，包含人脸位置信息
     """
-    # 如果图像的长或宽>1500px，则对图像进行1/2的resize再做MTCNN人脸检测，以加快处理速度
+    # 如果图像的长或宽>1500px，则对图像进行 1/2 的 resize 再做 MTCNN 人脸检测，以加快处理速度
     if max(input_image.shape[0], input_image.shape[1]) >= 1500:
         input_image_resize = cv2.resize(input_image,
                                         (input_image.shape[1] // 2, input_image.shape[0] // 2),
                                         interpolation=cv2.INTER_AREA)
-        faces, _ = face_detect_mtcnn(input_image_resize, filter=True)  # MTCNN人脸检测
-        # 如果缩放后图像的MTCNN人脸数目检测结果等于1->两次人脸检测结果没有偏差，则对定位数据x2
+        faces, _ = face_detect_mtcnn(input_image_resize, filter=True)  # MTCNN 人脸检测
+        # 如果缩放后图像的 MTCNN 人脸数目检测结果等于 1->两次人脸检测结果没有偏差，则对定位数据 x2
         if len(faces) == 1:
             for item, param in enumerate(faces[0]):
                 faces[0][item] = param * 2
-        # 如果两次人脸检测结果有偏差，则默认缩放后图像的MTCNN检测存在误差，则将原图输入再做一次MTCNN（保险措施）
+        # 如果两次人脸检测结果有偏差，则默认缩放后图像的 MTCNN 检测存在误差，则将原图输入再做一次 MTCNN（保险措施）
         else:
             faces, _ = face_detect_mtcnn(input_image, filter=True)
-    # 如果图像的长或宽<1500px，则直接进行MTCNN检测
+    # 如果图像的长或宽<1500px，则直接进行 MTCNN 检测
     else:
         faces, _ = face_detect_mtcnn(input_image, filter=True)
 
@@ -240,13 +240,13 @@ def cutting_rect_pan(x1, y1, x2, y2, width, height, L1, L2, L3, clockwise, stand
         - x_bias: int, 裁剪框横坐标方向上的计算偏置量
         - y_bias: int, 裁剪框纵坐标方向上的计算偏置量
     """
-    # 用于计算的裁剪框坐标x1_cal,x2_cal,y1_cal,y2_cal(如果裁剪框超出了图像范围，则缩小直至在范围内)
+    # 用于计算的裁剪框坐标 x1_cal,x2_cal,y1_cal,y2_cal(如果裁剪框超出了图像范围，则缩小直至在范围内)
     x1_std = x1 if x1 > 0 else 0
     x2_std = x2 if x2 < width else width
     # y1_std = y1 if y1 > 0 else 0
     y2_std = y2 if y2 < height else height
 
-    # 初始化x和y的计算偏置项x_bias和y_bias
+    # 初始化 x 和 y 的计算偏置项 x_bias 和 y_bias
     x_bias = 0
     y_bias = 0
 
@@ -269,7 +269,7 @@ def cutting_rect_pan(x1, y1, x2, y2, width, height, L1, L2, L3, clockwise, stand
         if x2 > L3.x:
             x2 = L3.x
 
-    # 计算裁剪框的y的变化
+    # 计算裁剪框的 y 的变化
     y2 = int(y2_std + y_bias)
     new_cut_width = x2 - x1
     new_cut_height = int(new_cut_width / standard_size[1] * standard_size[0])
@@ -282,22 +282,22 @@ def cutting_rect_pan(x1, y1, x2, y2, width, height, L1, L2, L3, clockwise, stand
 def idphoto_cutting(faces, head_measure_ratio, standard_size, head_height_ratio, origin_png_image, origin_png_image_pre,
                     rotation_params, align=False, IS_DEBUG=False, top_distance_max=0.12, top_distance_min=0.10):
     """
-    本函数的功能为进行证件照的自适应裁剪，自适应依据Setting.json的控制参数，以及输入图像的自身情况。
+    本函数的功能为进行证件照的自适应裁剪，自适应依据 Setting.json 的控制参数，以及输入图像的自身情况。
     Args:
         - faces: list, 人脸位置信息
         - head_measure_ratio: float, 人脸面积与全图面积的期望比值
-        - standard_size: tuple, 标准照尺寸, 如(413, 295)
+        - standard_size: tuple, 标准照尺寸，如 (413, 295)
         - head_height_ratio: float, 人脸中心处在全图高度的比例期望值
         - origin_png_image: numpy.array(4 channels), 经过一系列转换后的用户输入图
         - origin_png_image_pre：numpy.array(4 channels)，经过一系列转换（但没有做旋转矫正）的用户输入图
         - rotation_params：旋转参数字典
-            - L1: classObject, 来自rotation_ajust的L1线性函数
-            - L2: classObject, 来自rotation_ajust的L2线性函数
-            - L3: classObject, 来自rotation_ajust的dotL3点
-            - clockwise: int, (顺/逆)时针偏差
-            - drawed_image: numpy.array, 红点标定4个旋转点的图像
+            - L1: classObject, 来自 rotation_ajust 的 L1 线性函数
+            - L2: classObject, 来自 rotation_ajust 的 L2 线性函数
+            - L3: classObject, 来自 rotation_ajust 的 dotL3 点
+            - clockwise: int, (顺/逆) 时针偏差
+            - drawed_image: numpy.array, 红点标定 4 个旋转点的图像
         - align: bool, 是否图像做过旋转矫正
-        - IS_DEBUG: DEBUG模式开关
+        - IS_DEBUG: DEBUG 模式开关
         - top_distance_max: float, 头距离顶部的最大比例
         - top_distance_min: float, 头距离顶部的最小比例
 
@@ -324,9 +324,9 @@ def idphoto_cutting(faces, head_measure_ratio, standard_size, head_height_ratio,
     # Step2. 计算高级参数
     face_center = (x + w / 2, y + h / 2)  # 面部中心坐标
     face_measure = w * h  # 面部面积
-    crop_measure = face_measure / head_measure_ratio  # 裁剪框面积：为面部面积的5倍
+    crop_measure = face_measure / head_measure_ratio  # 裁剪框面积：为面部面积的 5 倍
     resize_ratio = crop_measure / (standard_size[0] * standard_size[1])  # 裁剪框缩放率
-    resize_ratio_single = math.sqrt(resize_ratio)  # 长和宽的缩放率（resize_ratio的开方）
+    resize_ratio_single = math.sqrt(resize_ratio)  # 长和宽的缩放率（resize_ratio 的开方）
     crop_size = (int(standard_size[0] * resize_ratio_single),
                  int(standard_size[1] * resize_ratio_single))  # 裁剪框大小
 
@@ -339,7 +339,7 @@ def idphoto_cutting(faces, head_measure_ratio, standard_size, head_height_ratio,
     # Step3. 对于旋转矫正图片的裁切处理
     # if align:
     #     y_top_pre, _, _, _ = get_box_pro(origin_png_image.astype(np.uint8), model=2,
-    #                                      correction_factor=0)  # 获取matting结果图的顶距
+    #                                      correction_factor=0)  # 获取 matting 结果图的顶距
     #     # 裁剪参数重新计算，目标是以最小的图像损失来消除"旋转三角形"
     #     x1, y1, x2, y2, x_bias, y_bias = cutting_rect_pan(x1, y1, x2, y2, width, height, L1, L2, L3, clockwise,
     #                                                       standard_size)
@@ -375,24 +375,24 @@ def idphoto_cutting(faces, head_measure_ratio, standard_size, head_height_ratio,
     cut_image = IDphotos_cut(x1, y1, x2, y2, origin_png_image)
     cut_image = cv2.resize(cut_image, (crop_size[1], crop_size[0]))
     y_top, y_bottom, x_left, x_right = get_box_pro(cut_image.astype(np.uint8), model=2,
-                                                   correction_factor=0)  # 得到cut_image中人像的上下左右距离信息
+                                                   correction_factor=0)  # 得到 cut_image 中人像的上下左右距离信息
     if IS_DEBUG:
         testImages.append(["firstCut", cut_image])
 
-    # Step5. 判定cut_image中的人像是否处于合理的位置，若不合理，则处理数据以便之后调整位置
+    # Step5. 判定 cut_image 中的人像是否处于合理的位置，若不合理，则处理数据以便之后调整位置
     # 检测人像与裁剪框左边或右边是否存在空隙
     if x_left > 0 or x_right > 0:
         status_left_right = 1
-        cut_value_top = int(((x_left + x_right) * width_height_ratio) / 2)  # 减去左右,为了保持比例,上下也要相应减少cut_value_top
+        cut_value_top = int(((x_left + x_right) * width_height_ratio) / 2)  # 减去左右，为了保持比例，上下也要相应减少 cut_value_top
     else:
         status_left_right = 0
         cut_value_top = 0
 
     """
         检测人头顶与照片的顶部是否在合适的距离内：
-        - status==0: 距离合适, 无需移动
-        - status=1: 距离过大, 人像应向上移动
-        - status=2: 距离过小, 人像应向下移动
+        - status==0: 距离合适，无需移动
+        - status=1: 距离过大，人像应向上移动
+        - status=2: 距离过小，人像应向下移动
     """
     status_top, move_value = detect_distance(y_top - cut_value_top, crop_size[0], max=top_distance_max,
                                              min=top_distance_min)
@@ -423,7 +423,7 @@ def idphoto_cutting(faces, head_measure_ratio, standard_size, head_height_ratio,
     result_image_standard = standard_photo_resize(result_image, standard_size)
     result_image_hd, resize_ratio_max = resize_image_by_min(result_image, esp=max(600, standard_size[1]))
 
-    # Step9. 参数准备-为换装服务
+    # Step9. 参数准备 - 为换装服务
     clothing_params = {
         "relative_x": relative_x * resize_ratio_max,
         "relative_y": relative_y * resize_ratio_max,
@@ -476,26 +476,26 @@ def IDphotos_create(input_image,
         size: (h, w)
         head_measure_ratio: 头部占比？
         head_height_ratio: 头部高度占比？
-        align: 是否进行人脸矫正（roll），默认为True（是）
-        fd68: 人脸68关键点检测类，详情参见hycv.FaceDetection68.faceDetection68
-        human_sess: 人像抠图模型类，由onnx载入（不与下面两个参数连用）
-        oss_image_name: 阿里云api需要的参数，实际上是上传到oss的路径
-        user: 阿里云api的accessKey配置对象
+        align: 是否进行人脸矫正（roll），默认为 True（是）
+        fd68: 人脸 68 关键点检测类，详情参见 hycv.FaceDetection68.faceDetection688
+        human_sess: 人像抠图模型类，由 onnx 载入（不与下面两个参数连用）连用）
+        oss_image_name: 阿里云 api 需要的参数，实际上是上传到 oss 的路径
+        user: 阿里云 api 的 accessKey 配置对象
         top_distance_max: float, 头距离顶部的最大比例
         top_distance_min: float, 头距离顶部的最小比例
     Returns:
-        result_image(高清版), result_image(普清版), api请求日志，
-    排版照参数(list)，排版照是否旋转参数，照片尺寸（x， y）
+        result_image(高清版), result_image(普清版), api 请求日志，
+        排版照参数 (list)，排版照是否旋转参数，照片尺寸（x，y）
         在函数不出错的情况下，函数会因为一些原因主动抛出异常：
-        1. 无人脸（或者只有半张，dlib无法检测出来），抛出IDError异常，内部参数face_num为0
-        2. 人脸数量超过1，抛出IDError异常，内部参数face_num为2
-        3. 抠图api请求失败，抛出IDError异常，内部参数face_num为-1
+        1. 无人脸（或者只有半张，dlib 无法检测出来），抛出 IDError 异常，内部参数 face_num 为 0
+        2. 人脸数量超过 1，抛出 IDError 异常，内部参数 face_num 为 2
+        3. 抠图 api 请求失败，抛出 IDError 异常，内部参数 face_num 为 -1num 为 -1
     """
 
     # Step0. 数据准备/图像预处理
     matting_params = {"modnet": {"human_sess": human_sess}}
     rotation_params = {"L1": None, "L2": None, "L3": None, "clockwise": None, "drawed_image": None}
-    input_image = resize_image_esp(input_image, 2000)  # 将输入图片resize到最大边长为2000
+    input_image = resize_image_esp(input_image, 2000)  # 将输入图片 resize 到最大边长为 2000
 
     # Step1. 人脸检测
     # dets, rotation, landmark = face_number_and_angle_detection(input_image)
@@ -510,10 +510,10 @@ def IDphotos_create(input_image,
     if mode == "只换底":
         return origin_png_image, origin_png_image, None, None, None, None, None, None, 1
 
-    origin_png_image_pre = origin_png_image.copy()  # 备份一下现在抠图结果图，之后在iphoto_cutting函数有用
+    origin_png_image_pre = origin_png_image.copy()  # 备份一下现在抠图结果图，之后在 iphoto_cutting 函数有用
 
     # Step4. 旋转矫正
-    # 如果旋转角不大于2, 则不做旋转
+    # 如果旋转角不大于 2, 则不做旋转
     # if abs(rotation) <= 2:
     #     align = False
     # # 否则，进行旋转矫正
@@ -531,12 +531,12 @@ def IDphotos_create(input_image,
     #     rotation_params["clockwise"] = clockwise
     #     rotation_params["drawed_image"] = drawed_image
 
-    # Step5. MTCNN人脸检测
+    # Step5. MTCNN 人脸检测
     faces = face_number_detection_mtcnn(input_image)
 
     # Step6. 证件照自适应裁剪
     face_num = len(faces)
-    # 报错MTCNN检测结果不等于1的图片
+    # 报错 MTCNN 检测结果不等于 1 的图片
     if face_num != 1:
         return None, None, None, None, None, None, None, None, 0
     # 符合条件的进入下一环

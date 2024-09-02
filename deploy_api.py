@@ -11,7 +11,7 @@ import ast
 app = FastAPI()
 
 
-# 将图像转换为Base64编码
+# 将图像转换为 Base64 编码
 
 def numpy_2_base64(img: np.ndarray):
     retval, buffer = cv2.imencode('.png', img)
@@ -48,13 +48,13 @@ async def idphoto_inference(input_image: UploadFile,
                                              top_distance_max=top_distance_max,
                                              top_distance_min=top_distance_min)
 
-    # 如果检测到人脸数量不等于1（照片无人脸 or 多人脸）
+    # 如果检测到人脸数量不等于 1（照片无人脸 or 多人脸）
     if status == 0:
         result_messgae = {
             "status": False
         }
 
-    # 如果检测到人脸数量等于1, 则返回标准证和高清照结果（png 4通道图像）
+    # 如果检测到人脸数量等于 1, 则返回标准证和高清照结果（png 4 通道图像）
     else:
         result_messgae = {
             "status": True,
@@ -77,7 +77,7 @@ async def photo_add_background(input_image: UploadFile,
 
     # 将字符串转为元组
     color = ast.literal_eval(color)
-    # 将元祖的0和2号数字交换
+    # 将元祖的 0 和 2 号数字交换
     color = (color[2], color[1], color[0])
 
     # try:
@@ -134,5 +134,5 @@ if __name__ == "__main__":
     HY_HUMAN_MATTING_WEIGHTS_PATH = "./hivision_modnet.onnx"
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
 
-    # 在8080端口运行推理服务
+    # 在 8080 端口运行推理服务
     uvicorn.run(app, host="0.0.0.0", port=8080)
