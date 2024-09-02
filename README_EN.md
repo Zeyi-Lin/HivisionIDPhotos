@@ -108,7 +108,7 @@ python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.
 Add background color (input 1 4-channel transparent png, get 1 image with added background color):
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg -c '(0,0,0)'
+python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg -c '(0,0,0)' -k 30
 ```
 
 Get a six-inch layout photo (input a 3-channel photo, get a six-inch layout photo):
