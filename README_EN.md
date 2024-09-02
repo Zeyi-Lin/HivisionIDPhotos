@@ -1,7 +1,6 @@
 <div align="center">
 <h1>HivisionIDPhoto</h1>
 
-
 English / [中文](README.md) / [日本語](README_JP.md)
 
 [![GitHub](https://img.shields.io/static/v1?label=Github&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
@@ -9,16 +8,15 @@ English / [中文](README.md) / [日本語](README_JP.md)
 [![zhihu](https://img.shields.io/static/v1?label=知乎&message=zhihu&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 [![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
-
 <img src="assets/demoImage.png" width=900>
 </div>
 
 </div>
 
-
 # 🤩Project Update
 
 - Online Demo: [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+- 2024.9.2: Update **Adjusted photo KB size**
 - 2023.12.1: Update **API deployment (based on fastapi)**
 - 2023.6.20: Update **Preset size menu**
 - 2023.6.19: Update **Layout photos**
@@ -28,14 +26,13 @@ English / [中文](README.md) / [日本語](README_JP.md)
 - 2023.6.4: Update **Custom background color, face detection bug notification**
 - 2023.5.10: Update **Change the background without changing the size**
 
-
 <br>
 
 # Overview
 
 > 🚀Thank you for your interest in our work. You may also want to check out our other achievements in the field of image processing. Please feel free to contact us at zeyi.lin@swanhub.co.
 
-HivisionIDPhoto aims to develop a practical intelligent algorithm for producing ID photos. It uses a complete set of model workflows to recognize various user photo scenarios, perform image segmentation, and generate ID photos. 
+HivisionIDPhoto aims to develop a practical intelligent algorithm for producing ID photos. It uses a complete set of model workflows to recognize various user photo scenarios, perform image segmentation, and generate ID photos.
 
 **HivisionIDPhoto can:**
 
@@ -47,7 +44,6 @@ HivisionIDPhoto aims to develop a practical intelligent algorithm for producing 
 <div align="center">
 <img src="assets/gradio-image.jpeg" width=900>
 </div>
-
 
 ---
 
@@ -144,16 +140,13 @@ docker run -p 8080:8080 hivision_idphotos
 1. MTCNN: https://github.com/ipazc/mtcnn
 2. ModNet: https://github.com/ZHKKKe/MODNet
 
-
 <br>
 
-# 📧Contact 
+# 📧Contact
 
 If you have any questions, please email Zeyi.lin@swanhub.co
 
-
 Copyright © 2023, ZeYiLin. All Rights Reserved.
-
 
 # Contributor
 
