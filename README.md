@@ -106,7 +106,7 @@ python deploy_api.py
 证件照制作（输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png）：
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -i test.jpg -o ./idphoto.png -s '(413,295)'
+python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.png -s '(413,295)'
 ```
 
 增加底色（输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像）：

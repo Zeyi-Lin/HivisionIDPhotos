@@ -3,7 +3,7 @@ import io
 import numpy as np
 
 
-def resize_image_to_kb(input_image: np.ndarray, output_image_path, target_size_kb):
+def resize_image_to_kb(input_image, output_image_path, target_size_kb):
     """
     Resize an image to a target size in KB.
     将图像调整大小至目标文件大小（KB）。
@@ -16,43 +16,48 @@ def resize_image_to_kb(input_image: np.ndarray, output_image_path, target_size_k
     resize_image_to_kb('input_image.jpg', 'output_image.jpg', 50)
     """
 
-    # Open an image file
-    with Image.fromarray(input_image) as img:
-        # Convert image to RGB mode if it's not
-        if img.mode != "RGB":
-            img = img.convert("RGB")
+    if isinstance(input_image, np.ndarray):
+        img = Image.fromarray(input_image)
+    elif isinstance(input_image, Image.Image):
+        img = input_image
+    else:
+        raise ValueError("input_image must be a NumPy array or PIL Image.")
 
-        # Initial quality value
-        quality = 95
+    # Convert image to RGB mode if it's not
+    if img.mode != "RGB":
+        img = img.convert("RGB")
 
-        while True:
-            # Create a BytesIO object to hold the image data in memory
-            img_byte_arr = io.BytesIO()
+    # Initial quality value
+    quality = 95
 
-            # Save the image to the BytesIO object with the current quality
-            img.save(img_byte_arr, format="JPEG", quality=quality)
+    while True:
+        # Create a BytesIO object to hold the image data in memory
+        img_byte_arr = io.BytesIO()
 
-            # Get the size of the image in KB
-            img_size_kb = len(img_byte_arr.getvalue()) / 1024
+        # Save the image to the BytesIO object with the current quality
+        img.save(img_byte_arr, format="JPEG", quality=quality)
 
-            # Check if the image size is within the target size
-            if img_size_kb <= target_size_kb:
-                # If the image is smaller than the target size, add padding
-                if img_size_kb < target_size_kb:
-                    padding_size = int(
-                        (target_size_kb * 1024) - len(img_byte_arr.getvalue())
-                    )
-                    padding = b"\x00" * padding_size
-                    img_byte_arr.write(padding)
+        # Get the size of the image in KB
+        img_size_kb = len(img_byte_arr.getvalue()) / 1024
 
-                # Save the image to the output path
-                with open(output_image_path, "wb") as f:
-                    f.write(img_byte_arr.getvalue())
-                break
+        # Check if the image size is within the target size
+        if img_size_kb <= target_size_kb or quality == 1:
+            # If the image is smaller than the target size, add padding
+            if img_size_kb < target_size_kb:
+                padding_size = int(
+                    (target_size_kb * 1024) - len(img_byte_arr.getvalue())
+                )
+                padding = b"\x00" * padding_size
+                img_byte_arr.write(padding)
 
-            # Reduce the quality if the image is still too large
-            quality -= 5
+            # Save the image to the output path
+            with open(output_image_path, "wb") as f:
+                f.write(img_byte_arr.getvalue())
+            break
 
-            # Ensure quality does not go below 1
-            if quality < 1:
-                quality = 1
+        # Reduce the quality if the image is still too large
+        quality -= 5
+
+        # Ensure quality does not go below 1
+        if quality < 1:
+            quality = 1

@@ -102,7 +102,7 @@ Use Python to send a request to the service:
 ID photo production (input 1 photo, get 1 standard ID photo and 1 high-definition ID photo 4-channel transparent png):
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -i test.jpg -o ./idphoto.png -s '(413,295)'
+python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.png -s '(413,295)'
 ```
 
 Add background color (input 1 4-channel transparent png, get 1 image with added background color):
@@ -114,7 +114,7 @@ python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.p
 Get a six-inch layout photo (input a 3-channel photo, get a six-inch layout photo):
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)'
+python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)' -k 30
 ```
 
 <br>
