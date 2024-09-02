@@ -13,21 +13,24 @@ app = FastAPI()
 
 # 将图像转换为 Base64 编码
 
+
 def numpy_2_base64(img: np.ndarray):
-    retval, buffer = cv2.imencode('.png', img)
-    base64_image = base64.b64encode(buffer).decode('utf-8')
+    retval, buffer = cv2.imencode(".png", img)
+    base64_image = base64.b64encode(buffer).decode("utf-8")
 
     return base64_image
 
 
 # 证件照智能制作接口
 @app.post("/idphoto")
-async def idphoto_inference(input_image: UploadFile,
-                            size: str = Form(...),
-                            head_measure_ratio=0.2,
-                            head_height_ratio=0.45,
-                            top_distance_max=0.12,
-                            top_distance_min=0.10):
+async def idphoto_inference(
+    input_image: UploadFile,
+    size: str = Form(...),
+    head_measure_ratio=0.2,
+    head_height_ratio=0.45,
+    top_distance_max=0.12,
+    top_distance_min=0.10,
+):
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -35,24 +38,33 @@ async def idphoto_inference(input_image: UploadFile,
     # 将字符串转为元组
     size = ast.literal_eval(size)
 
-    result_image_hd, result_image_standard, typography_arr, typography_rotate, \
-        _, _, _, _, status = IDphotos_create(img,
-                                             size=size,
-                                             head_measure_ratio=head_measure_ratio,
-                                             head_height_ratio=head_height_ratio,
-                                             align=False,
-                                             beauty=False,
-                                             fd68=None,
-                                             human_sess=sess,
-                                             IS_DEBUG=False,
-                                             top_distance_max=top_distance_max,
-                                             top_distance_min=top_distance_min)
+    (
+        result_image_hd,
+        result_image_standard,
+        typography_arr,
+        typography_rotate,
+        _,
+        _,
+        _,
+        _,
+        status,
+    ) = IDphotos_create(
+        img,
+        size=size,
+        head_measure_ratio=head_measure_ratio,
+        head_height_ratio=head_height_ratio,
+        align=False,
+        beauty=False,
+        fd68=None,
+        human_sess=sess,
+        IS_DEBUG=False,
+        top_distance_max=top_distance_max,
+        top_distance_min=top_distance_min,
+    )
 
     # 如果检测到人脸数量不等于 1（照片无人脸 or 多人脸）
     if status == 0:
-        result_messgae = {
-            "status": False
-        }
+        result_messgae = {"status": False}
 
     # 如果检测到人脸数量等于 1, 则返回标准证和高清照结果（png 4 通道图像）
     else:
@@ -67,9 +79,8 @@ async def idphoto_inference(input_image: UploadFile,
 
 # 透明图像添加纯色背景接口
 @app.post("/add_background")
-async def photo_add_background(input_image: UploadFile,
-                               color: str = Form(...)):
-    
+async def photo_add_background(input_image: UploadFile, color: str = Form(...)):
+
     # 读取图像
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
@@ -106,13 +117,13 @@ async def generate_layout_photos(input_image: UploadFile, size: str = Form(...))
 
         size = ast.literal_eval(size)
 
-        typography_arr, typography_rotate = generate_layout_photo(input_height=size[0],
-                                                                  input_width=size[1])
+        typography_arr, typography_rotate = generate_layout_photo(
+            input_height=size[0], input_width=size[1]
+        )
 
-        result_layout_image = generate_layout_image(img, typography_arr,
-                                                    typography_rotate,
-                                                    height=size[0],
-                                                    width=size[1])
+        result_layout_image = generate_layout_image(
+            img, typography_arr, typography_rotate, height=size[0], width=size[1]
+        )
 
         result_messgae = {
             "status": True,
