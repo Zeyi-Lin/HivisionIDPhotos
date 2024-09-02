@@ -146,6 +146,14 @@ docker run -p 8080:8080 hivision_idphotos
 
 <br>
 
+# 💻 开发小贴士
+
+**1. 如何修改预设尺寸？**
+
+修改[size_list_CN.csv](size_list_CN.csv)后再次运行 app.py 即可，其中第一列为尺寸名，第二列为高度，第三列为宽度。
+
+<br>
+
 # 📧 联系我们
 
 如果您有任何问题，请发邮件至 zeyi.lin@swanhub.co
