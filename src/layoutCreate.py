@@ -2,8 +2,8 @@ import cv2.detail
 import numpy as np
 
 def judge_layout(input_width, input_height, PHOTO_INTERVAL_W, PHOTO_INTERVAL_H, LIMIT_BLOCK_W, LIMIT_BLOCK_H):
-    centerBlockHeight_1, centerBlockWidth_1 = input_height, input_width  # 由证件照们组成的一个中心区块（1代表不转置排列）
-    centerBlockHeight_2, centerBlockWidth_2 = input_width, input_height  # 由证件照们组成的一个中心区块（2代表转置排列）
+    centerBlockHeight_1, centerBlockWidth_1 = input_height, input_width  # 由证件照们组成的一个中心区块（1 代表不转置排列）
+    centerBlockHeight_2, centerBlockWidth_2 = input_width, input_height  # 由证件照们组成的一个中心区块（2 代表转置排列）
 
     # 1.不转置排列的情况下：
     layout_col_no_transpose = 0  # 行
@@ -62,11 +62,11 @@ def generate_layout_photo(input_height, input_width):
     LIMIT_BLOCK_W = LAYOUT_WIDTH - 2*SIDES_INTERVAL_W
     LIMIT_BLOCK_H = LAYOUT_HEIGHT - 2*SIDES_INTERVAL_H
 
-    # 2.创建一个1180x1746的空白画布
+    # 2.创建一个 1180x1746 的空白画布
     white_background = np.zeros([LAYOUT_HEIGHT, LAYOUT_WIDTH, 3], np.uint8)
     white_background.fill(255)
 
-    # 3.计算照片的layout（列、行、横竖朝向）,证件照组成的中心区块的分辨率
+    # 3.计算照片的 layout（列、行、横竖朝向）,证件照组成的中心区块的分辨率
     layout_mode, centerBlockWidth, centerBlockHeight = judge_layout(input_width, input_height, PHOTO_INTERVAL_W,
                                                                     PHOTO_INTERVAL_H, LIMIT_BLOCK_W, LIMIT_BLOCK_H)
     # 4.开始排列组合

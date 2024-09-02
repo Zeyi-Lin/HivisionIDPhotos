@@ -21,7 +21,7 @@
 
 # 🤩 プロジェクトの更新
 
-- オンラインデモ: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+- オンラインデモ： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 - 2024.9.2: **写真の KB サイズを調整して**を更新
 - 2023.12.1: **API デプロイメント（fastapi ベース）**を更新
 - 2023.6.20: **プリセットサイズメニュー**
@@ -34,13 +34,13 @@
 
 # 概要
 
-> 🚀 私たちの仕事に興味を持っていただきありがとうございます。画像処理分野での他の成果もご覧いただけます。お気軽にzeyi.lin@swanhub.coまでご連絡ください。
+> 🚀 私たちの仕事に興味を持っていただきありがとうございます。画像処理分野での他の成果もご覧いただけます。お気軽に zeyi.lin@swanhub.co までご連絡ください。
 
 HivisionIDPhoto は、実用的な証明写真のインテリジェント作成アルゴリズムを開発することを目的としています。
 
 このアルゴリズムは、完全なモデルワークフローを使用して、さまざまなユーザーの写真シナリオを認識し、画像をセグメント化し、証明写真を生成します。
 
-**HivisionIDPhoto は以下のことができます:**
+**HivisionIDPhoto は以下のことができます：**
 
 1. 軽量な画像セグメンテーション
 2. 異なるサイズ仕様に基づいて標準的な証明写真や 6 インチのレイアウト写真を生成
@@ -62,7 +62,7 @@ HivisionIDPhoto が役に立つ場合は、このリポジトリにスターを�
 - Python >= 3.7（プロジェクトの主なテストは Python 3.10 で行われています）
 - onnxruntime
 - OpenCV
-- オプション: Linux, Windows, MacOS
+- オプション：Linux, Windows, MacOS
 
 **1. プロジェクトをクローン**
 
@@ -156,7 +156,7 @@ docker run -p 8080:8080 hivision_idphotos
 
 # 📧 お問い合わせ
 
-ご質問がある場合は、zeyi.lin@swanhub.coまでメールでお問い合わせください。
+ご質問がある場合は、zeyi.lin@swanhub.co までメールでお問い合わせください。
 
 # 貢献者
 

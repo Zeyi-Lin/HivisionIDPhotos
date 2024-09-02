@@ -3,9 +3,9 @@
 @file: EulerX.py
 @time: 2022/4/1 13:54
 @description: 
-寻找三维z轴旋转角roll,实现：
+寻找三维 z 轴旋转角 roll，实现：
 1. 输入一张三通道图片（四通道、单通道将默认转为三通道）
-2. 输出人脸在x轴的转角roll，顺时针为正方向，角度制
+2. 输出人脸在 x 轴的转角 roll，顺时针为正方向，角度制
 """
 import cv2
 import numpy as np
@@ -39,9 +39,9 @@ def eulerZ(landmark: np.matrix):
     orbit_points = np.array([[landmark[21, 0], landmark[21, 1]], [landmark[71, 0], landmark[71, 1]],
                                    [landmark[25, 0], landmark[25, 1]], [landmark[67, 0], landmark[67, 1]]])
     # [[cos  a],[sin a],[point_x],[point_y]]
-    # 前面两项是有关直线与Y正半轴夹角a的三角函数，所以对于眼睛部分来讲sin a应该接近1
-    # "我可以认为"cv2.fitLine的y轴正方向为竖直向下，且生成的拟合直线的方向为从起点指向终点
-    # 与y轴的夹角为y轴夹角与直线方向的夹角，方向从y指向直线，逆时针为正方向
+    # 前面两项是有关直线与 Y 正半轴夹角 a 的三角函数，所以对于眼睛部分来讲 sin a 应该接近 1
+    # "我可以认为"cv2.fitLine 的 y 轴正方向为竖直向下，且生成的拟合直线的方向为从起点指向终点
+    # 与 y 轴的夹角为 y 轴夹角与直线方向的夹角，方向从 y 指向直线，逆时针为正方向
     # 所以最后对于鼻梁的计算结果需要取个负号
     orbit_line = cv2.fitLine(orbit_points, cv2.DIST_L2, 0, 0.01, 0.01)
     orbit_a = asin(orbit_line[1][0])

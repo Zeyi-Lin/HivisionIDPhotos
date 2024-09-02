@@ -60,8 +60,8 @@ class MakeWhiter(object):
         """
         用于生成一张初始的查找表
         Args:
-            size: 查找表尺寸，默认为512
-            channel: 查找表通道数，默认为3
+            size: 查找表尺寸，默认为 512
+            channel: 查找表通道数，默认为 3
 
         Returns:
             返回生成的查找表图像

@@ -21,7 +21,7 @@
 
 # 🤩 项目更新
 
-- 在线体验: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+- 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 - 2024.9.2: 更新**调整照片 KB 大小**
 - 2023.12.1: 更新**API 部署（基于 fastapi）**
 - 2023.6.20: 更新**预设尺寸菜单**
@@ -40,7 +40,7 @@ HivisionIDPhoto 旨在开发一种实用的证件照智能制作算法。
 
 它利用一套完善的模型工作流程，实现对多种用户拍照场景的识别、抠图与证件照生成。
 
-**HivisionIDPhoto 可以做到:**
+**HivisionIDPhoto 可以做到：**
 
 1. 轻量级抠图
 2. 根据不同尺寸规格生成不同的标准证件照、六寸排版照

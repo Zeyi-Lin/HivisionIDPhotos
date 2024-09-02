@@ -8,12 +8,12 @@ local_path = os.path.dirname(__file__)
 
 class DBUtils(GetConfig):
     """
-    从安全的角度出发,将一些默认配置文件上传至COS中,接下来使用COS和它的子类的时候,在第一次使用时需要输入Cuny给的id和key
+    从安全的角度出发，将一些默认配置文件上传至 COS 中，接下来使用 COS 和它的子类的时候，在第一次使用时需要输入 Cuny 给的 id 和 key
     用于连接数据库等对象
-    当然,在db_default_download = False的时候,如果在运行路径下已经有配置文件了,
-    那么就不用再次下载了,也不用输入id和key
-    事实上这只需要运行一次,因为配置文件将会被下载至源码文件夹中
-    如果要自定义路径,请在继承的子类中编写__init__函数,将service_path定向到指定路径
+    当然，在 db_default_download = False 的时候，如果在运行路径下已经有配置文件了，
+    那么就不用再次下载了，也不用输入 id 和 key
+    事实上这只需要运行一次，因为配置文件将会被下载至源码文件夹中
+    如果要自定义路径，请在继承的子类中编写__init__函数，将 service_path 定向到指定路径
     """
     __BASE_DIR: dict = None
     __PARAMS_DIR: dict = None
@@ -56,14 +56,14 @@ class DBUtils(GetConfig):
     def get_time(yyyymmdd=None, delta_date=0):
         """
         给出当前的时间
-        :param yyyymmdd: 以yyyymmdd给出的日期时间
-        :param delta_date: 获取减去delta_day后的时间，默认为0就是当天
+        :param yyyymmdd: 以 yyyymmdd 给出的日期时间
+        :param delta_date: 获取减去 delta_day 后的时间，默认为 0 就是当天
         时间格式:yyyy_mm_dd
         """
         if yyyymmdd is None:
             now_time = (datetime.datetime.now() - datetime.timedelta(delta_date)).strftime("%Y-%m-%d")
             return now_time
-        # 输入了yyyymmdd的数据和delta_date,通过这两个数据返回距离yyyymmdd   delta_date天的时间
+        # 输入了 yyyymmdd 的数据和 delta_date，通过这两个数据返回距离 yyyymmdd   delta_date 天的时间
         pre_time = datetime.datetime(int(yyyymmdd[0:4]), int(yyyymmdd[4:6]), int(yyyymmdd[6:8]))
         return (pre_time - datetime.timedelta(delta_date)).strftime("%Y-%m-%d")
 
@@ -71,21 +71,21 @@ class DBUtils(GetConfig):
     def get_timestamp(self, date_time:str=None) -> int:
         """
         输入的日期形式为:"2021-11-29 16:39:45.999"
-        真正必须输入的是前十个字符,及精确到日期,后面的时间可以不输入,不输入则默认置零
+        真正必须输入的是前十个字符，及精确到日期，后面的时间可以不输入，不输入则默认置零
         """
         def standardDateTime(dt:str) -> str:
             """
             规范化时间字符串
             """
             if len(dt) < 10:
-                raise ValueError("你必须至少输入准确到天的日期!比如:2021-11-29")
+                raise ValueError("你必须至少输入准确到天的日期！比如:2021-11-29")
             elif len(dt) == 10:
                 return dt + " 00:00:00.0"
             else:
                 try:
                     date, time = dt.split(" ")
                 except ValueError:
-                    raise ValueError("你只能也必须在日期与具体时间之间增加一个空格,其他地方不能出现空格!")
+                    raise ValueError("你只能也必须在日期与具体时间之间增加一个空格，其他地方不能出现空格！")
                 while len(time) < 10:
                     if len(time) in (2, 5):
                         time += ":"
@@ -95,7 +95,7 @@ class DBUtils(GetConfig):
                         time += "0"
                 return date + " " + time
         if date_time is None:
-            # 默认返回当前时间(str), date_time精确到毫秒
+            # 默认返回当前时间 (str), date_time 精确到毫秒
             date_time = datetime.datetime.now()
         # 转换成时间戳
         else:
@@ -110,11 +110,11 @@ class DBUtils(GetConfig):
 
     def find_oneDay_data(self, db_name: str, collection_name: str, date: str = None) -> dict:
         """
-        获取指定天数的数据，如果date is None，就自动寻找距今最近的有数据的那一天的数据
+        获取指定天数的数据，如果 date is None，就自动寻找距今最近的有数据的那一天的数据
         """
         df = None  # 应该被返回的数据
         collection = self.get_dbClient()[db_name][collection_name]
-        if date is None:  # 自动寻找前几天的数据,最多三十天
+        if date is None:  # 自动寻找前几天的数据，最多三十天
             for delta_date in range(1, 31):
                 date_yyyymmdd = self.get_standardTime(self.get_time(delta_date=delta_date))
                 filter_ = {"date": date_yyyymmdd}
@@ -130,10 +130,10 @@ class DBUtils(GetConfig):
         return df
 
     def find_daysData_byPeriod(self, date_period: tuple, db_name: str, col_name: str):
-        # 给出一个指定的范围日期，返回相应的数据(日期的两头都会被寻找)
+        # 给出一个指定的范围日期，返回相应的数据 (日期的两头都会被寻找)
         # 这个函数我们默认数据库中的数据是连续的，即不会出现在 20211221 到 20211229 之间有一天没有数据的情况
         if len(date_period) != 2:
-            raise ValueError("date_period数据结构：(开始日期，截止日期)")
+            raise ValueError("date_period 数据结构：(开始日期，截止日期)")
         start, end = date_period  # yyyymmdd
         delta_date = int(end) - int(start)
         if delta_date < 0:
@@ -173,8 +173,8 @@ class DBUtils(GetConfig):
     @staticmethod
     def compare_data(dict1: dict, dict2: dict, suffix: str, save: int, **kwargs):
         """
-        有两个字典,并且通过kwargs会传输一个新的字典,根据字典中的键值我们进行比对,处理成相应的数据格式
-        并且在dict1中,生成一个新的键值,为kwargs中的元素+suffix
+        有两个字典，并且通过 kwargs 会传输一个新的字典，根据字典中的键值我们进行比对，处理成相应的数据格式
+        并且在 dict1 中，生成一个新的键值，为 kwargs 中的元素+suffix
         save:保留几位小数
         """
         new_dict = dict1.copy()
@@ -194,15 +194,15 @@ class DBUtils(GetConfig):
                         data_new = 0
             except TypeError as e:
                 print(e)
-                data_new = 5002  # 如果没有之前的数据,默认返回0
+                data_new = 5002  # 如果没有之前的数据，默认返回 0
             new_dict[kwargs[key] + suffix] = data_new
         return new_dict
 
     @staticmethod
     def sum_dictList_byKey(dictList: list, **kwargs) -> dict:
         """
-        有一个列表,列表中的元素为字典,并且所有字典都有一个键值为key的字段,字段值为数字
-        我们将每一个字典的key字段提取后相加,得到该字段值之和.
+        有一个列表，列表中的元素为字典，并且所有字典都有一个键值为 key 的字段，字段值为数字
+        我们将每一个字典的 key 字段提取后相加，得到该字段值之和。
         """
         sum_num = {}
         if kwargs is None:
@@ -219,9 +219,9 @@ class DBUtils(GetConfig):
     @staticmethod
     def sum_2ListDict(list_dict1: list, list_dict2: list, key_name, data_name):
         """
-        有两个列表,列表内的元素为字典,我们根据key所对应的键值寻找列表中键值相同的两个元素,将他们的data对应的键值相加
-        生成新的列表字典(其余键值被删除)
-        key仅在一个列表中存在,则直接加入新的列表字典
+        有两个列表，列表内的元素为字典，我们根据 key 所对应的键值寻找列表中键值相同的两个元素，将他们的 data 对应的键值相加
+        生成新的列表字典 (其余键值被删除)
+        key 仅在一个列表中存在，则直接加入新的列表字典
         """
         sum_list = []
 
@@ -234,7 +234,7 @@ class DBUtils(GetConfig):
 
         for dic in list_dict1:
             key = dic[key_name]  # 键名
-            post = find_sameKey(key_name, key, list_dict2)  # 在list2中寻找相同的位置
+            post = find_sameKey(key_name, key, list_dict2)  # 在 list2 中寻找相同的位置
             data = dic[data_name] + list_dict2[post][data_name] if post != -1 else dic[data_name]
             sum_list.append({key_name: key, data_name: data})
         return sum_list
@@ -243,8 +243,8 @@ class DBUtils(GetConfig):
     def find_biggest_dictList(dictList: list, key: str = "key", data: str = "value"):
         """
         有一个列表，里面每一个元素都是一个字典
-        这些字典有一些共通性质，那就是里面都有一个key键名和一个data键名，后者的键值必须是数字
-        我们根据data键值的大小进行生成，每一次返回列表中data键值最大的数和它的key键值
+        这些字典有一些共通性质，那就是里面都有一个 key 键名和一个 data 键名，后者的键值必须是数字
+        我们根据 data 键值的大小进行生成，每一次返回列表中 data 键值最大的数和它的 key 键值
         """
         while len(dictList) > 0:
             point = 0
@@ -265,25 +265,25 @@ class DBUtils(GetConfig):
                                           db_name="cuny-user-analysis",
                                           collection_name="daily-userVisitPage")
         if visitPage is not None:
-            # 这一部分没有得到数据是可以容忍的.不用抛出模态框错误
+            # 这一部分没有得到数据是可以容忍的。不用抛出模态框错误
             # 获得昨日用户分享情况
             sum_num = self.sum_dictList_byKey(dictList=visitPage["data_list"],
                                               key1="page_share_pv",
                                               key2="page_share_uv")
         else:
-            # 此时将分享次数等置为-1
+            # 此时将分享次数等置为 -1
             sum_num = {"page_share_pv": -1, "page_share_uv": -1}
         return sum_num
 
     @staticmethod
     def compare_date(date1_yyyymmdd: str, date2_yyyymmdd: str):
-        # 如果date1是date2的昨天，那么就返回True
+        # 如果 date1 是 date2 的昨天，那么就返回 True
         date1 = int(date1_yyyymmdd)
         date2 = int(date2_yyyymmdd)
         return True if date2 - date1 == 1 else False
 
     def change_time(self, date_yyyymmdd: str, mode: int):
-        # 将yyyymmdd的数据分开为相应的数据形式
+        # 将 yyyymmdd 的数据分开为相应的数据形式
         if mode == 1:
             if self.compare_date(date_yyyymmdd, self.get_standardTime(self.get_time(delta_date=0))) is False:
                 return date_yyyymmdd[0:4] + "年" + date_yyyymmdd[4:6] + "月" + date_yyyymmdd[6:8] + "日"
@@ -299,11 +299,11 @@ class DBUtils(GetConfig):
     @staticmethod
     def changeList_dict2List_list(dl: list, order: list):
         """
-        列表内是一个个字典,本函数将字典拆解,以order的形式排列键值为列表
-        考虑到一些格式的问题,这里我采用生成器的形式封装
+        列表内是一个个字典，本函数将字典拆解，以 order 的形式排列键值为列表
+        考虑到一些格式的问题，这里我采用生成器的形式封装
         """
         for dic in dl:
-            # dic是列表内的字典元素
+            # dic 是列表内的字典元素
             tmp = []
             for key_name in order:
                 key = dic[key_name]

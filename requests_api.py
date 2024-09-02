@@ -7,28 +7,29 @@ import os
 from image_utils import resize_image_to_kb
 
 
+
 def base64_save(base64_image_data, save_path, kb=None):
-    # 解码Base64数据并保存为PNG文件
+    # 解码 Base64 数据并保存为 PNG 文件
     img_data = base64.b64decode(base64_image_data)
     img = Image.open(BytesIO(img_data))
 
     if kb:
         img = resize_image_to_kb(img, save_path, float(kb))
     else:
-        # 保存为本地PNG文件
+        # 保存为本地 PNG 文件
         img.save(save_path, "PNG")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="HivisionIDPhotos证件照制作推理程序。")
+    parser = argparse.ArgumentParser(description="HivisionIDPhotos 证件照制作推理程序。")
 
     parser.add_argument(
-        "-u", "--url", help="API服务的URL", default="http://127.0.0.1:8080"
+        "-u", "--url", help="API 服务的 URL", default="http://127.0.0.1:8080"
     )
     parser.add_argument(
         "-t",
         "--type",
-        help="请求API的种类，有idphoto、add_background和generate_layout_photos可选",
+        help="请求 API 的种类，有 idphoto、add_background 和 generate_layout_photos 可选",
         default="idphoto",
     )
     parser.add_argument("-i", "--input_image_dir", help="输入图像路径", required=True)
@@ -36,12 +37,12 @@ if __name__ == "__main__":
     parser.add_argument("-s", "--size", help="证件照尺寸", default="(413,295)")
     parser.add_argument("-c", "--color", help="证件照背景色", default="(255,255,255)")
     parser.add_argument(
-        "-k", "--kb", help="输出照片的KB值, 仅对换底和制作排版照生效", default=None
+        "-k", "--kb", help="输出照片的 KB 值，仅对换底和制作排版照生效", default=None
     )
 
     args = parser.parse_args()
 
-    url = f"{args.url}/{args.type}"  # 替换为实际的接口URL
+    url = f"{args.url}/{args.type}"  # 替换为实际的接口 URL
     files = {
         "input_image": (open(args.input_image_dir, "rb"))
     }  # 替换为实际的文件路径和文件名
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     response = requests.post(url, data=data, files=files)
 
     if response.status_code == 200:
-        # 获取Base64编码的图像数据
+        # 获取 Base64 编码的图像数据
         if args.type == "idphoto":
             response_json = response.json()
 
@@ -63,7 +64,7 @@ if __name__ == "__main__":
                 base64_image_data_standard = response_json["img_output_standard"]
                 base64_image_data_standard_hd = response_json["img_output_standard_hd"]
 
-                # 解码Base64数据并保存为PNG文件
+                # 解码 Base64 数据并保存为 PNG 文件
                 base64_save(base64_image_data_standard, args.output_image_dir)
 
                 file_name, file_extension = os.path.splitext(args.output_image_dir)
@@ -77,7 +78,7 @@ if __name__ == "__main__":
                 )
 
             else:
-                print("人脸数量不等于1，请上传单张人脸的图像。")
+                print("人脸数量不等于 1，请上传单张人脸的图像。")
 
         elif args.type == "add_background":
             response_json = response.json()
