@@ -1,3 +1,4 @@
+import os
 import gradio as gr
 import onnxruntime
 from src.face_judgement_align import IDphotos_create
@@ -11,7 +12,8 @@ import argparse
 
 
 # 获取尺寸列表
-size_list_dict = csv_to_size_list("size_list_CN.csv")
+root_dir = os.path.dirname(os.path.abspath(__file__))
+size_list_dict = csv_to_size_list(os.path.join(root_dir, "size_list_CN.csv"))
 print(size_list_dict)
 
 color_list_dict = {
@@ -228,7 +230,7 @@ def idphoto_inference(
 
 if __name__ == "__main__":
     # 预加载 ONNX 模型
-    HY_HUMAN_MATTING_WEIGHTS_PATH = "./hivision_modnet.onnx"
+    HY_HUMAN_MATTING_WEIGHTS_PATH = os.path.join(root_dir, "hivision_modnet.onnx")
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
 
     size_mode = ["尺寸列表", "只换底", "自定义尺寸"]
@@ -321,7 +323,7 @@ if __name__ == "__main__":
                     components=[img_input],
                     samples=[
                         [path.as_posix()]
-                        for path in sorted(pathlib.Path("images").rglob("*.jpg"))
+                        for path in sorted(pathlib.Path(os.path.join(root_dir, "images")).rglob("*.jpg"))
                     ],
                 )
 
