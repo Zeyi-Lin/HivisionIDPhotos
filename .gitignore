@@ -4,3 +4,6 @@
 .DS_Store
 hivision_modnet.onnx
 output/*.jpg
+# build outputs
+dist
+build
