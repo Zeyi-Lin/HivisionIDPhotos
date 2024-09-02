@@ -3,11 +3,23 @@ import cv2
 import numpy as np
 from hivisionai.hycv.face_tools import face_detect_mtcnn
 from hivisionai.hycv.utils import get_box_pro
-from hivisionai.hycv.vision import resize_image_esp, IDphotos_cut, add_background, calTime, resize_image_by_min, \
-    rotate_bound_4channels
+from hivisionai.hycv.vision import (
+    resize_image_esp,
+    IDphotos_cut,
+    add_background,
+    calTime,
+    resize_image_by_min,
+    rotate_bound_4channels,
+)
 import onnxruntime
 from src.error import IDError
-from src.imageTransform import standard_photo_resize, hollowOutFix, get_modnet_matting, draw_picture_dots, detect_distance
+from src.imageTransform import (
+    standard_photo_resize,
+    hollowOutFix,
+    get_modnet_matting,
+    draw_picture_dots,
+    detect_distance,
+)
 from src.layoutCreate import generate_layout_photo
 from src.move_image import move
 
@@ -91,13 +103,19 @@ def face_number_and_angle_detection(input_image):
             status_id_ = "1101"
         else:
             status_id_ = "1102"
-        raise IDError(f"人脸检测出错！检测出了{face_num}张人脸", face_num=face_num, status_id=status_id_)
+        raise IDError(
+            f"人脸检测出错！检测出了{face_num}张人脸",
+            face_num=face_num,
+            status_id=status_id_,
+        )
 
     # 获得人脸定位坐标
     face_rectangle = []
     for iter, (x1, y1, x2, y2, _) in enumerate(faces):
         x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-        face_rectangle.append({'top': x1, 'left': y1, 'width': x2 - x1, 'height': y2 - y1})
+        face_rectangle.append(
+            {"top": x1, "left": y1, "width": x2 - x1, "height": y2 - y1}
+        )
 
     # 获取人脸定位坐标与关键点信息
     dets = face_rectangle[0]
@@ -107,6 +125,7 @@ def face_number_and_angle_detection(input_image):
     # rotation = eulerZ(landmark)
     # return dets, rotation, landmark
     return dets
+
 
 @calTime
 def image_matting(input_image, params):
@@ -120,7 +139,9 @@ def image_matting(input_image, params):
     """
 
     print("抠图采用本地模型")
-    origin_png_image = get_modnet_matting(input_image, sess=params["modnet"]["human_sess"])
+    origin_png_image = get_modnet_matting(
+        input_image, sess=params["modnet"]["human_sess"]
+    )
 
     origin_png_image = hollowOutFix(origin_png_image)  # 抠图洞洞修补
     return origin_png_image
@@ -151,11 +172,15 @@ def rotation_ajust(input_image, rotation, a, IS_DEBUG=False):
     h, w = input_image.copy().shape[:2]
 
     # Step2. 无损旋转
-    result_jpg_image, result_png_image, cos, sin = rotate_bound_4channels(input_image, a, rotation)
+    result_jpg_image, result_png_image, cos, sin = rotate_bound_4channels(
+        input_image, a, rotation
+    )
 
     # Step3. 附带信息计算
     nh, nw = result_jpg_image.shape[:2]  # 旋转后的新的长宽
-    clockwise = -1 if rotation < 0 else 1  # clockwise 代表时针，即 1 为顺时针，-1 为逆时针
+    clockwise = (
+        -1 if rotation < 0 else 1
+    )  # clockwise 代表时针，即 1 为顺时针，-1 为逆时针
     # 如果逆时针偏离：
     if rotation < 0:
         p1 = Coordinate(0, int(w * sin))
@@ -164,7 +189,9 @@ def rotation_ajust(input_image, rotation, a, IS_DEBUG=False):
         p4 = Coordinate(int(h * sin), nh)
         L1 = LinearFunction_TwoDots(p1, p4)
         L2 = LinearFunction_TwoDots(p4, p3)
-        dotL3 = Coordinate(int(0.25 * p2.x + 0.75 * p3.x), int(0.25 * p2.y + 0.75 * p3.y))
+        dotL3 = Coordinate(
+            int(0.25 * p2.x + 0.75 * p3.x), int(0.25 * p2.y + 0.75 * p3.y)
+        )
 
     # 如果顺时针偏离：
     else:
@@ -174,15 +201,27 @@ def rotation_ajust(input_image, rotation, a, IS_DEBUG=False):
         p4 = Coordinate(0, int(h * cos))
         L1 = LinearFunction_TwoDots(p4, p3)
         L2 = LinearFunction_TwoDots(p3, p2)
-        dotL3 = Coordinate(int(0.75 * p4.x + 0.25 * p1.x), int(0.75 * p4.y + 0.25 * p1.y))
+        dotL3 = Coordinate(
+            int(0.75 * p4.x + 0.25 * p1.x), int(0.75 * p4.y + 0.25 * p1.y)
+        )
 
     # Step4. 根据附带信息进行图像绘制（4 个旋转点），便于 DEBUG 模式验证
-    drawed_dots_image = draw_picture_dots(result_jpg_image, [(p1.x, p1.y), (p2.x, p2.y), (p3.x, p3.y),
-                                                             (p4.x, p4.y), (dotL3.x, dotL3.y)])
+    drawed_dots_image = draw_picture_dots(
+        result_jpg_image,
+        [(p1.x, p1.y), (p2.x, p2.y), (p3.x, p3.y), (p4.x, p4.y), (dotL3.x, dotL3.y)],
+    )
     if IS_DEBUG:
         testImages.append(["drawed_dots_image", drawed_dots_image])
 
-    return result_jpg_image, result_png_image, L1, L2, dotL3, clockwise, drawed_dots_image
+    return (
+        result_jpg_image,
+        result_png_image,
+        L1,
+        L2,
+        dotL3,
+        clockwise,
+        drawed_dots_image,
+    )
 
 
 @calTime
@@ -197,9 +236,11 @@ def face_number_detection_mtcnn(input_image):
     """
     # 如果图像的长或宽>1500px，则对图像进行 1/2 的 resize 再做 MTCNN 人脸检测，以加快处理速度
     if max(input_image.shape[0], input_image.shape[1]) >= 1500:
-        input_image_resize = cv2.resize(input_image,
-                                        (input_image.shape[1] // 2, input_image.shape[0] // 2),
-                                        interpolation=cv2.INTER_AREA)
+        input_image_resize = cv2.resize(
+            input_image,
+            (input_image.shape[1] // 2, input_image.shape[0] // 2),
+            interpolation=cv2.INTER_AREA,
+        )
         faces, _ = face_detect_mtcnn(input_image_resize, filter=True)  # MTCNN 人脸检测
         # 如果缩放后图像的 MTCNN 人脸数目检测结果等于 1->两次人脸检测结果没有偏差，则对定位数据 x2
         if len(faces) == 1:
@@ -216,7 +257,9 @@ def face_number_detection_mtcnn(input_image):
 
 
 @calTime
-def cutting_rect_pan(x1, y1, x2, y2, width, height, L1, L2, L3, clockwise, standard_size):
+def cutting_rect_pan(
+    x1, y1, x2, y2, width, height, L1, L2, L3, clockwise, standard_size
+):
     """
     本函数的功能是对旋转矫正结果图的裁剪框进行修正 ———— 解决"旋转三角形"现象。
     Args:
@@ -279,8 +322,19 @@ def cutting_rect_pan(x1, y1, x2, y2, width, height, L1, L2, L3, clockwise, stand
 
 
 @calTime
-def idphoto_cutting(faces, head_measure_ratio, standard_size, head_height_ratio, origin_png_image, origin_png_image_pre,
-                    rotation_params, align=False, IS_DEBUG=False, top_distance_max=0.12, top_distance_min=0.10):
+def idphoto_cutting(
+    faces,
+    head_measure_ratio,
+    standard_size,
+    head_height_ratio,
+    origin_png_image,
+    origin_png_image_pre,
+    rotation_params,
+    align=False,
+    IS_DEBUG=False,
+    top_distance_max=0.12,
+    top_distance_min=0.10,
+):
     """
     本函数的功能为进行证件照的自适应裁剪，自适应依据 Setting.json 的控制参数，以及输入图像的自身情况。
     Args:
@@ -326,9 +380,13 @@ def idphoto_cutting(faces, head_measure_ratio, standard_size, head_height_ratio,
     face_measure = w * h  # 面部面积
     crop_measure = face_measure / head_measure_ratio  # 裁剪框面积：为面部面积的 5 倍
     resize_ratio = crop_measure / (standard_size[0] * standard_size[1])  # 裁剪框缩放率
-    resize_ratio_single = math.sqrt(resize_ratio)  # 长和宽的缩放率（resize_ratio 的开方）
-    crop_size = (int(standard_size[0] * resize_ratio_single),
-                 int(standard_size[1] * resize_ratio_single))  # 裁剪框大小
+    resize_ratio_single = math.sqrt(
+        resize_ratio
+    )  # 长和宽的缩放率（resize_ratio 的开方）
+    crop_size = (
+        int(standard_size[0] * resize_ratio_single),
+        int(standard_size[1] * resize_ratio_single),
+    )  # 裁剪框大小
 
     # 裁剪框的定位信息
     x1 = int(face_center[0] - crop_size[1] / 2)
@@ -374,8 +432,9 @@ def idphoto_cutting(faces, head_measure_ratio, standard_size, head_height_ratio,
     # Step4. 对照片的第一轮裁剪
     cut_image = IDphotos_cut(x1, y1, x2, y2, origin_png_image)
     cut_image = cv2.resize(cut_image, (crop_size[1], crop_size[0]))
-    y_top, y_bottom, x_left, x_right = get_box_pro(cut_image.astype(np.uint8), model=2,
-                                                   correction_factor=0)  # 得到 cut_image 中人像的上下左右距离信息
+    y_top, y_bottom, x_left, x_right = get_box_pro(
+        cut_image.astype(np.uint8), model=2, correction_factor=0
+    )  # 得到 cut_image 中人像的上下左右距离信息
     if IS_DEBUG:
         testImages.append(["firstCut", cut_image])
 
@@ -383,7 +442,9 @@ def idphoto_cutting(faces, head_measure_ratio, standard_size, head_height_ratio,
     # 检测人像与裁剪框左边或右边是否存在空隙
     if x_left > 0 or x_right > 0:
         status_left_right = 1
-        cut_value_top = int(((x_left + x_right) * width_height_ratio) / 2)  # 减去左右，为了保持比例，上下也要相应减少 cut_value_top
+        cut_value_top = int(
+            ((x_left + x_right) * width_height_ratio) / 2
+        )  # 减去左右，为了保持比例，上下也要相应减少 cut_value_top
     else:
         status_left_right = 0
         cut_value_top = 0
@@ -394,18 +455,21 @@ def idphoto_cutting(faces, head_measure_ratio, standard_size, head_height_ratio,
         - status=1: 距离过大，人像应向上移动
         - status=2: 距离过小，人像应向下移动
     """
-    status_top, move_value = detect_distance(y_top - cut_value_top, crop_size[0], max=top_distance_max,
-                                             min=top_distance_min)
+    status_top, move_value = detect_distance(
+        y_top - cut_value_top, crop_size[0], max=top_distance_max, min=top_distance_min
+    )
 
     # Step6. 对照片的第二轮裁剪
     if status_left_right == 0 and status_top == 0:
         result_image = cut_image
     else:
-        result_image = IDphotos_cut(x1 + x_left,
-                                    y1 + cut_value_top + status_top * move_value,
-                                    x2 - x_right,
-                                    y2 - cut_value_top + status_top * move_value,
-                                    origin_png_image)
+        result_image = IDphotos_cut(
+            x1 + x_left,
+            y1 + cut_value_top + status_top * move_value,
+            x2 - x_right,
+            y2 - cut_value_top + status_top * move_value,
+            origin_png_image,
+        )
     if IS_DEBUG:
         testImages.append(["result_image_pre", result_image])
 
@@ -421,14 +485,16 @@ def idphoto_cutting(faces, head_measure_ratio, standard_size, head_height_ratio,
 
     # Step8. 标准照与高清照转换
     result_image_standard = standard_photo_resize(result_image, standard_size)
-    result_image_hd, resize_ratio_max = resize_image_by_min(result_image, esp=max(600, standard_size[1]))
+    result_image_hd, resize_ratio_max = resize_image_by_min(
+        result_image, esp=max(600, standard_size[1])
+    )
 
     # Step9. 参数准备 - 为换装服务
     clothing_params = {
         "relative_x": relative_x * resize_ratio_max,
         "relative_y": relative_y * resize_ratio_max,
         "w": w * resize_ratio_max,
-        "h": h * resize_ratio_max
+        "h": h * resize_ratio_max,
     }
 
     return result_image_hd, result_image_standard, clothing_params
@@ -445,30 +511,48 @@ def debug_mode_process(testImages):
         if item == 0:
             testHeight = height
             result_image_test = imageItem
-            result_image_test = cv2.putText(result_image_test, text, (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1.0,
-                                            (200, 100, 100), 3)
+            result_image_test = cv2.putText(
+                result_image_test,
+                text,
+                (50, 50),
+                cv2.FONT_HERSHEY_COMPLEX,
+                1.0,
+                (200, 100, 100),
+                3,
+            )
         else:
-            imageItem = cv2.resize(imageItem, (int(width * testHeight / height), testHeight))
-            imageItem = cv2.putText(imageItem, text, (50, 50), cv2.FONT_HERSHEY_COMPLEX, 1.0, (200, 100, 100),
-                                    3)
+            imageItem = cv2.resize(
+                imageItem, (int(width * testHeight / height), testHeight)
+            )
+            imageItem = cv2.putText(
+                imageItem,
+                text,
+                (50, 50),
+                cv2.FONT_HERSHEY_COMPLEX,
+                1.0,
+                (200, 100, 100),
+                3,
+            )
             result_image_test = cv2.hconcat([result_image_test, imageItem])
         if item == len(testImages) - 1:
             return result_image_test
 
 
 @calTime("主函数")
-def IDphotos_create(input_image,
-                    mode="ID",
-                    size=(413, 295),
-                    head_measure_ratio=0.2,
-                    head_height_ratio=0.45,
-                    align=False,
-                    beauty=True,
-                    fd68=None,
-                    human_sess=None,
-                    IS_DEBUG=False,
-                    top_distance_max=0.12,
-                    top_distance_min=0.10):
+def IDphotos_create(
+    input_image,
+    mode="ID",
+    size=(413, 295),
+    head_measure_ratio=0.2,
+    head_height_ratio=0.45,
+    align=False,
+    beauty=True,
+    fd68=None,
+    human_sess=None,
+    IS_DEBUG=False,
+    top_distance_max=0.12,
+    top_distance_min=0.10,
+):
     """
     证件照制作主函数
     Args:
@@ -494,8 +578,16 @@ def IDphotos_create(input_image,
 
     # Step0. 数据准备/图像预处理
     matting_params = {"modnet": {"human_sess": human_sess}}
-    rotation_params = {"L1": None, "L2": None, "L3": None, "clockwise": None, "drawed_image": None}
-    input_image = resize_image_esp(input_image, 2000)  # 将输入图片 resize 到最大边长为 2000
+    rotation_params = {
+        "L1": None,
+        "L2": None,
+        "L3": None,
+        "clockwise": None,
+        "drawed_image": None,
+    }
+    input_image = resize_image_esp(
+        input_image, 2000
+    )  # 将输入图片 resize 到最大边长为 2000
 
     # Step1. 人脸检测
     # dets, rotation, landmark = face_number_and_angle_detection(input_image)
@@ -507,10 +599,12 @@ def IDphotos_create(input_image,
 
     # Step3. 抠图
     origin_png_image = image_matting(input_image, matting_params)
-    if mode == "只换底":
+    if mode == "只换底" or mode == "Only Change Background":
         return origin_png_image, origin_png_image, None, None, None, None, None, None, 1
 
-    origin_png_image_pre = origin_png_image.copy()  # 备份一下现在抠图结果图，之后在 iphoto_cutting 函数有用
+    origin_png_image_pre = (
+        origin_png_image.copy()
+    )  # 备份一下现在抠图结果图，之后在 iphoto_cutting 函数有用
 
     # Step4. 旋转矫正
     # 如果旋转角不大于 2, 则不做旋转
@@ -541,16 +635,36 @@ def IDphotos_create(input_image,
         return None, None, None, None, None, None, None, None, 0
     # 符合条件的进入下一环
     else:
-        result_image_hd, result_image_standard, clothing_params = \
-            idphoto_cutting(faces, head_measure_ratio, size, head_height_ratio, origin_png_image,
-                            origin_png_image_pre, rotation_params, align=align, IS_DEBUG=IS_DEBUG,
-                            top_distance_max=top_distance_max, top_distance_min=top_distance_min)
+        result_image_hd, result_image_standard, clothing_params = idphoto_cutting(
+            faces,
+            head_measure_ratio,
+            size,
+            head_height_ratio,
+            origin_png_image,
+            origin_png_image_pre,
+            rotation_params,
+            align=align,
+            IS_DEBUG=IS_DEBUG,
+            top_distance_max=top_distance_max,
+            top_distance_min=top_distance_min,
+        )
 
     # Step7. 排版照参数获取
-    typography_arr, typography_rotate = generate_layout_photo(input_height=size[0], input_width=size[1])
+    typography_arr, typography_rotate = generate_layout_photo(
+        input_height=size[0], input_width=size[1]
+    )
 
-    return result_image_hd, result_image_standard, typography_arr, typography_rotate, \
-           clothing_params["relative_x"], clothing_params["relative_y"], clothing_params["w"], clothing_params["h"], 1
+    return (
+        result_image_hd,
+        result_image_standard,
+        typography_arr,
+        typography_rotate,
+        clothing_params["relative_x"],
+        clothing_params["relative_y"],
+        clothing_params["w"],
+        clothing_params["h"],
+        1,
+    )
 
 
 if __name__ == "__main__":
@@ -559,18 +673,29 @@ if __name__ == "__main__":
 
     input_image = cv2.imread("test.jpg")
 
-    result_image_hd, result_image_standard, typography_arr, typography_rotate, \
-    _, _, _, _, _ = IDphotos_create(input_image,
-                                               size=(413, 295),
-                                               head_measure_ratio=0.2,
-                                               head_height_ratio=0.45,
-                                               align=True,
-                                               beauty=True,
-                                               fd68=None,
-                                               human_sess=sess,
-                                               oss_image_name="test_tmping.jpg",
-                                               user=None,
-                                               IS_DEBUG=False,
-                                               top_distance_max=0.12,
-                                               top_distance_min=0.10)
+    (
+        result_image_hd,
+        result_image_standard,
+        typography_arr,
+        typography_rotate,
+        _,
+        _,
+        _,
+        _,
+        _,
+    ) = IDphotos_create(
+        input_image,
+        size=(413, 295),
+        head_measure_ratio=0.2,
+        head_height_ratio=0.45,
+        align=True,
+        beauty=True,
+        fd68=None,
+        human_sess=sess,
+        oss_image_name="test_tmping.jpg",
+        user=None,
+        IS_DEBUG=False,
+        top_distance_max=0.12,
+        top_distance_min=0.10,
+    )
     cv2.imwrite("result_image_hd.png", result_image_hd)
