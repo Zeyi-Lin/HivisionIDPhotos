@@ -5,6 +5,7 @@ from hivisionai.hycv.vision import add_background
 from src.layoutCreate import generate_layout_photo, generate_layout_image
 import pathlib
 import numpy as np
+from image_utils import resize_image_to_kb
 
 size_list_dict = {
     "一寸": (413, 295),
@@ -41,11 +42,13 @@ def idphoto_inference(
     size_list_option,
     color_option,
     render_option,
+    image_kb_options,
     custom_color_R,
     custom_color_G,
     custom_color_B,
     custom_size_height,
     custom_size_width,
+    custom_image_kb,
     head_measure_ratio=0.2,
     head_height_ratio=0.45,
     top_distance_max=0.12,
@@ -56,6 +59,7 @@ def idphoto_inference(
         "size_mode": mode_option,
         "color_mode": color_option,
         "render_mode": render_option,
+        "image_kb_mode": image_kb_options,
     }
 
     # 如果尺寸模式选择的是尺寸列表
@@ -91,6 +95,13 @@ def idphoto_inference(
     else:
         idphoto_json["color_bgr"] = color_list_dict[color_option]
 
+    # 如果输出KB大小选择的是自定义
+    if idphoto_json["image_kb_mode"] == "自定义":
+        idphoto_json["custom_image_kb"] = custom_image_kb
+    else:
+        idphoto_json["custom_image_kb"] = None
+
+    # 生成证件照
     (
         result_image_hd,
         result_image_standard,
@@ -180,26 +191,55 @@ def idphoto_inference(
                 width=idphoto_json["size"][1],
             )
 
-        result_messgae = {
-            img_output_standard: result_image_standard,
-            img_output_standard_hd: result_image_hd,
-            img_output_layout: result_layout_image,
-            notification: gr.update(visible=False),
-        }
+        # 如果输出KB大小选择的是自定义
+        if idphoto_json["custom_image_kb"]:
+            # 将标准照大小调整至目标大小
+            print("调整kb大小到", idphoto_json["custom_image_kb"], "kb")
+            # 输出路径为一个根据时间戳+哈希值生成的随机文件名
+            import time
+
+            output_image_path = f"./output/{int(time.time())}.jpg"
+            resize_image_to_kb(
+                result_image_standard,
+                output_image_path,
+                idphoto_json["custom_image_kb"],
+            )
+        else:
+            output_image_path = None
+
+        if output_image_path:
+            result_messgae = {
+                img_output_standard: result_image_standard,
+                img_output_standard_hd: result_image_hd,
+                img_output_layout: result_layout_image,
+                notification: gr.update(visible=False),
+                file_download: gr.update(visible=True, value=output_image_path),
+            }
+        else:
+            result_messgae = {
+                img_output_standard: result_image_standard,
+                img_output_standard_hd: result_image_hd,
+                img_output_layout: result_layout_image,
+                notification: gr.update(visible=False),
+                file_download: gr.update(visible=False),
+            }
 
     return result_messgae
 
 
 if __name__ == "__main__":
+    # 预加载ONNX模型
     HY_HUMAN_MATTING_WEIGHTS_PATH = "./hivision_modnet.onnx"
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
+
     size_mode = ["尺寸列表", "只换底", "自定义尺寸"]
     size_list = ["一寸", "二寸", "教师资格证", "国家公务员考试", "初级会计考试"]
     colors = ["蓝色", "白色", "红色", "自定义底色"]
     render = ["纯色", "上下渐变(白)", "中心渐变(白)"]
+    image_kb = ["不设置", "自定义"]
 
     title = "<h1 id='title'>HivisionIDPhotos</h1>"
-    description = "<h3>😎6.20更新：新增尺寸选择列表</h3>"
+    description = "<h3>😎9.2更新：新增照片大小KB调整</h3>"
     css = """
     h1#title, h3 {
       text-align: center;
@@ -212,6 +252,7 @@ if __name__ == "__main__":
         gr.Markdown(title)
         gr.Markdown(description)
         with gr.Row():
+            # ------------ 左半边UI ----------------
             with gr.Column():
                 img_input = gr.Image().style(height=350)
                 mode_options = gr.Radio(
@@ -237,19 +278,45 @@ if __name__ == "__main__":
                         value=295, label="width", interactive=True
                     )
 
+                # 左：背景色选项
                 color_options = gr.Radio(
                     choices=colors, label="背景色", value="蓝色", elem_id="color"
                 )
+
+                # 左：如果选择「自定义底色」，显示RGB输入框
                 with gr.Row(visible=False) as custom_color:
                     custom_color_R = gr.Number(value=0, label="R", interactive=True)
                     custom_color_G = gr.Number(value=0, label="G", interactive=True)
                     custom_color_B = gr.Number(value=0, label="B", interactive=True)
 
+                # 左：渲染方式选项
                 render_options = gr.Radio(
-                    choices=render, label="渲染方式", value="纯色", elem_id="render"
+                    choices=render,
+                    label="渲染方式",
+                    value="纯色",
+                    elem_id="render",
                 )
 
+                # 左：输出KB大小选项
+                image_kb_options = gr.Radio(
+                    choices=image_kb,
+                    label="设置KB大小（结果在右边最底的组件下载）",
+                    value="不设置",
+                    elem_id="image_kb",
+                )
+
+                # 自定义KB大小, 滑动条，最小10KB，最大200KB
+                with gr.Row(visible=False) as custom_image_kb:
+                    custom_image_kb_size = gr.Slider(
+                        minimum=10,
+                        maximum=1000,
+                        value=50,
+                        label="KB大小",
+                        interactive=True,
+                    )
+
                 img_but = gr.Button("开始制作")
+
                 # 案例图片
                 example_images = gr.Dataset(
                     components=[img_input],
@@ -259,13 +326,16 @@ if __name__ == "__main__":
                     ],
                 )
 
+            # ---------------- 右半边UI ----------------
             with gr.Column():
                 notification = gr.Text(label="状态", visible=False)
                 with gr.Row():
                     img_output_standard = gr.Image(label="标准照").style(height=350)
                     img_output_standard_hd = gr.Image(label="高清照").style(height=350)
                 img_output_layout = gr.Image(label="六寸排版照").style(height=350)
+                file_download = gr.File(label="下载调整KB大小后的照片", visible=False)
 
+            # ---------------- 设置隐藏/显示组件 ----------------
             def change_color(colors):
                 if colors == "自定义底色":
                     return {custom_color: gr.update(visible=True)}
@@ -289,13 +359,25 @@ if __name__ == "__main__":
                         size_list_row: gr.update(visible=True),
                     }
 
+            def change_image_kb(image_kb_option):
+                if image_kb_option == "自定义":
+                    return {custom_image_kb: gr.update(visible=True)}
+                else:
+                    return {custom_image_kb: gr.update(visible=False)}
+
+        # ---------------- 绑定事件 ----------------
         color_options.input(
             change_color, inputs=[color_options], outputs=[custom_color]
         )
+
         mode_options.input(
             change_size_mode,
             inputs=[mode_options],
             outputs=[custom_size, size_list_row],
+        )
+
+        image_kb_options.input(
+            change_image_kb, inputs=[image_kb_options], outputs=[custom_image_kb]
         )
 
         img_but.click(
@@ -306,19 +388,23 @@ if __name__ == "__main__":
                 size_list_options,
                 color_options,
                 render_options,
+                image_kb_options,
                 custom_color_R,
                 custom_color_G,
                 custom_color_B,
                 custom_size_height,
                 custom_size_wdith,
+                custom_image_kb_size,
             ],
             outputs=[
                 img_output_standard,
                 img_output_standard_hd,
                 img_output_layout,
                 notification,
+                file_download,
             ],
         )
+
         example_images.click(
             fn=set_example_image, inputs=[example_images], outputs=[img_input]
         )
