@@ -86,12 +86,12 @@ python requests_api.py  \
 `添加背景色`接口的逻辑是发送一张 RGBA 图像，根据`color`添加背景色，合成一张 JPG 图像。
 
 ```bash
-python requests_api.py
+python requests_api.py  \
     -u http://127.0.0.1:8080  \
     -t add_background  \
     -i ./idphoto.png  \
-    -o ./idphoto_with_background.jpg \
-    -c '(0,0,255)'  \
+    -o ./idphoto_with_background.jpg  \
+    -c '(99,126,194)'  \
     -k 50
 ```
 
@@ -100,7 +100,7 @@ python requests_api.py
 `生成六寸排版照`接口的逻辑是发送一张 RGB 图像（一般为添加背景色之后的证件照），根据`size`进行照片排布，然后生成一张六寸排版照。
 
 ```bash
-python requests_api.py
+python requests_api.py  \
     -u http://127.0.0.1:8080  \
     -t generate_layout_photos  \
     -i ./idphoto_with_background.jpg  \
