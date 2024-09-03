@@ -36,7 +36,7 @@ HivisionIDPhoto aims to develop a practical intelligent algorithm for producing 
 
 **HivisionIDPhoto can:**
 
-1. Perform lightweight image segmentation
+1. Perform lightweight image segmentation (Only CPU is needed for fast inference.)
 2. Generate standard ID photos and six-inch layout photos according to different size specifications
 3. Provide beauty features (waiting)
 4. Provide intelligent formal wear replacement (waiting)
@@ -124,6 +124,8 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 ## 1. Pull or Build Image
 
 **Pull Image from DockerHub**
+
+> This image is built on a machine with ARM architecture (e.g. Mac M1). If you want to use it on a machine with x86 architecture, please use Dockerfile.
 
 ```bash
 docker pull linzeyi/hivision_idphotos:v1

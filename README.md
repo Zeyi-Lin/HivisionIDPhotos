@@ -42,7 +42,7 @@ HivisionIDPhoto 旨在开发一种实用的证件照智能制作算法。
 
 **HivisionIDPhoto 可以做到：**
 
-1. 轻量级抠图
+1. 轻量级抠图（仅需 CPU 即可快速推理）
 2. 根据不同尺寸规格生成不同的标准证件照、六寸排版照
 3. 美颜（waiting）
 4. 智能换正装（waiting）
@@ -128,6 +128,8 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 ## 1. 拉取或构建镜像
 
 **拉取镜像：**
+
+> 该镜像构建于 ARM 架构机器（如 Mac M1），x86 架构机器使用请用 Dockerfile 构建
 
 ```bash
 docker pull linzeyi/hivision_idphotos:v1
