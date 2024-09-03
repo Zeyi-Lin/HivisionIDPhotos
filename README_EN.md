@@ -137,6 +137,20 @@ After the image is packaged, run the following command to start the API service:
 docker run -p 8080:8080 hivision_idphotos
 ```
 
+for docker compose:
+
+After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
+
+```bash
+docker compose build
+```
+
+After the image is packaged, run the following command to start the API service:
+
+```bash
+docker compose up -d
+```
+
 <br>
 
 # Reference Projects
