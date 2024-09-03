@@ -125,8 +125,6 @@ python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.p
 python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  -s '(413,295)' -k 200
 ```
 
-**请求 API 服务 - RESTAPI**
-
 <br>
 
 # 🐳 Docker 部署
