@@ -1,6 +1,3 @@
-以下是韩文版 README:
-
-````markdown
 <div align="center">
 <h1>HivisionIDPhoto</h1>
 
@@ -10,6 +7,8 @@
 [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 [![zhihu](https://img.shields.io/static/v1?label=知乎&message=知乎&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 [![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
+
+<a href="https://trendshift.io/repositories/11622" target="_blank"><img src="https://trendshift.io/api/badge/repositories/11622" alt="Zeyi-Lin%2FHivisionIDPhotos | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
 <img src="assets/demoImage.png" width=900>
 </div>
@@ -73,6 +72,7 @@ HivisionIDPhoto가 유용하셨다면, 이 저장소에 별을 달거나 친구�
 git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
+
 ````
 
 **2. 의존성 설치**
@@ -189,3 +189,4 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 # 기여자
 
 [Zeyi-Lin](https://github.com/Zeyi-Lin)、[SAKURA-CAT](https://github.com/SAKURA-CAT)、[Feudalman](https://github.com/Feudalman)、[swpfY](https://github.com/swpfY)、[Kaikaikaifang](https://github.com/Kaikaikaifang)、[ShaohonChen](https://github.com/ShaohonChen)、[KashiwaByte](https://github.com/KashiwaByte)
+````
