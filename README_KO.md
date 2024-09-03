@@ -73,8 +73,6 @@ git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
-````
-
 **2. 의존성 설치**
 
 ```bash
@@ -176,17 +174,16 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
 **1. 미리 설정된 사이즈를 어떻게 수정하나요?**
 
-[size_list_CN.csv](size_list_CN.csv)을 수정한 후 app.py를 다시 실행하세요. 첫 번째 열은 사이즈 이름, 두 번째 열은 높이, 세 번째 열은 너비입니다.
+[size_list_CN.csv](size_list_CN.csv)을 수정한 후 app.py 를 다시 실행하세요. 첫 번째 열은 사이즈 이름, 두 번째 열은 높이, 세 번째 열은 너비입니다.
 
 <br>
 
 # 📧 문의하기
 
-문의사항이 있으시면 zeyi.lin@swanhub.co로 이메일을 보내주세요.
+문의사항이 있으시면 zeyi.lin@swanhub.co 로 이메일을 보내주세요.
 
 <br>
 
 # 기여자
 
 [Zeyi-Lin](https://github.com/Zeyi-Lin)、[SAKURA-CAT](https://github.com/SAKURA-CAT)、[Feudalman](https://github.com/Feudalman)、[swpfY](https://github.com/swpfY)、[Kaikaikaifang](https://github.com/Kaikaikaifang)、[ShaohonChen](https://github.com/ShaohonChen)、[KashiwaByte](https://github.com/KashiwaByte)
-````
