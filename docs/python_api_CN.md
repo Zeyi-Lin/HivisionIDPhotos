@@ -78,7 +78,7 @@ python requests_api.py  \
     -t idphoto \
     -i ./photo.jpg \
     -o ./idphoto.png \
-    -s (413,295)
+    -s '(413,295)'
 ```
 
 ### 2.添加背景色
@@ -91,7 +91,7 @@ python requests_api.py
     -t add_background  \
     -i ./idphoto.png  \
     -o ./idphoto_with_background.jpg \
-    -c (0,0,255)  \
+    -c '(0,0,255)'  \
     -k 50
 ```
 
@@ -105,7 +105,7 @@ python requests_api.py
     -t generate_layout_photos  \
     -i ./idphoto_with_background.jpg  \
     -o ./layout_photo.jpg  \
-    -s (413,295)  \
+    -s '(413,295)'  \
     -k 200
 ```
 
