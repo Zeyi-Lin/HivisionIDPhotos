@@ -82,7 +82,7 @@ pip install -r requirements.txt
 
 **3. 下载权重文件**
 
-在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx`，存到根目录下。
+在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx` (24.7MB)，存到根目录下。
 
 <br>
 
