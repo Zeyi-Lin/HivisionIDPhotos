@@ -21,7 +21,8 @@
 
 # 🤩 プロジェクトの更新
 
-- オンラインデモ： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
+- オンラインデモ： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
+- 2024.9.2: 更新**调整照片 KB 大小**
 - 2024.9.2: **写真の KB サイズを調整して**を更新
 - 2023.12.1: **API デプロイメント（fastapi ベース）**を更新
 - 2023.6.20: **プリセットサイズメニュー**
