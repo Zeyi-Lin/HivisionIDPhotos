@@ -12,8 +12,6 @@ app = FastAPI()
 
 
 # 将图像转换为 Base64 编码
-
-
 def numpy_2_base64(img: np.ndarray):
     retval, buffer = cv2.imencode(".png", img)
     base64_image = base64.b64encode(buffer).decode("utf-8")
