@@ -120,7 +120,7 @@ Input 1 photo with 3 channels, obtain one six-inch layout photo.
 
 ```python
 
-python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)'-k200
+python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)' -k 200
 
 ```
 
