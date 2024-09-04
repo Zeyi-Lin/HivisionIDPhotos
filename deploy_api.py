@@ -79,7 +79,7 @@ async def idphoto_inference(
 # 透明图像添加纯色背景接口
 @app.post("/add_background")
 async def photo_add_background(
-    input_image: UploadFile, color: str = Form(...), kb: str = Form(...)
+    input_image: UploadFile, color: str = Form(...), kb: str = Form(None)
 ):
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
@@ -114,40 +114,40 @@ async def photo_add_background(
 # 六寸排版照生成接口
 @app.post("/generate_layout_photos")
 async def generate_layout_photos(
-    input_image: UploadFile, size: str = Form(...), kb: int = Form(...)
+    input_image: UploadFile, size: str = Form(...), kb: str = Form(None)
 ):
-    try:
-        image_bytes = await input_image.read()
-        nparr = np.frombuffer(image_bytes, np.uint8)
-        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    # try:
+    image_bytes = await input_image.read()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-        size = ast.literal_eval(size)
+    size = ast.literal_eval(size)
 
-        typography_arr, typography_rotate = generate_layout_photo(
-            input_height=size[0], input_width=size[1]
+    typography_arr, typography_rotate = generate_layout_photo(
+        input_height=size[0], input_width=size[1]
+    )
+
+    result_layout_image = generate_layout_image(
+        img, typography_arr, typography_rotate, height=size[0], width=size[1]
+    ).astype(np.uint8)
+
+    if kb:
+        result_layout_image = cv2.cvtColor(result_layout_image, cv2.COLOR_RGB2BGR)
+        result_layout_image_base64 = resize_image_to_kb_base64(
+            result_layout_image, int(kb)
         )
+    else:
+        result_layout_image_base64 = numpy_2_base64(result_layout_image)
 
-        result_layout_image = generate_layout_image(
-            img, typography_arr, typography_rotate, height=size[0], width=size[1]
-        )
+    result_messgae = {
+        "status": True,
+        "image": result_layout_image_base64,
+    }
 
-        if kb:
-            result_layout_image = cv2.cvtColor(result_layout_image, cv2.COLOR_RGB2BGR)
-            result_layout_image_base64 = resize_image_to_kb_base64(
-                result_layout_image, int(kb)
-            )
-        else:
-            result_layout_image_base64 = numpy_2_base64(result_layout_image)
-
-        result_messgae = {
-            "status": True,
-            "image": numpy_2_base64(result_layout_image_base64),
-        }
-
-    except Exception as e:
-        result_messgae = {
-            "status": False,
-        }
+    # except Exception as e:
+    #     result_messgae = {
+    #         "status": False,
+    #     }
 
     return result_messgae
 

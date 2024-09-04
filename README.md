@@ -130,7 +130,7 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 
 # ⚡️ 部署 API 服务
 
-API 文档：[Python](docs/python_api_CN.md) | RestAPI（waiting）
+详细请参考 [API 文档](docs/api_CN.md)
 
 ## 启动后端
 
@@ -140,7 +140,7 @@ python deploy_api.py
 
 ```
 
-## 请求 API 服务 - Python
+## 请求 API 服务 - Python 脚本
 
 ### 1. 证件照制作
 
