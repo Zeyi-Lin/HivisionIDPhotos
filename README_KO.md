@@ -179,7 +179,8 @@ docker compose up -d
 
 # 📖 프로젝트 인용
 
-1. MTCNN: 
+1. MTCNN:
+
 ```bibtex
 @software{ipazc_mtcnn_2021,
     author = {ipazc},
@@ -189,7 +190,9 @@ docker compose up -d
     publisher = {GitHub}
 }
 ```
-2. ModNet: 
+
+2. ModNet:
+
 ```bibtex
 @software{zhkkke_modnet_2021,
     author = {ZHKKKe},
@@ -219,6 +222,8 @@ docker compose up -d
 # 기여자
 
 [Zeyi-Lin](https://github.com/Zeyi-Lin)、[SAKURA-CAT](https://github.com/SAKURA-CAT)、[Feudalman](https://github.com/Feudalman)、[swpfY](https://github.com/swpfY)、[Kaikaikaifang](https://github.com/Kaikaikaifang)、[ShaohonChen](https://github.com/ShaohonChen)、[KashiwaByte](https://github.com/KashiwaByte)
+
+<br>
 
 # StarHistory
 

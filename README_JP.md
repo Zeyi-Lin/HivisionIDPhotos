@@ -174,7 +174,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 docker compose build
 ```
 
-イメージがパッケージ化されたら、以下のコマンドを実行してAPIサービスを起動する：
+イメージがパッケージ化されたら、以下のコマンドを実行して API サービスを起動する：
 
 ```bash
 docker compose up -d
@@ -184,7 +184,8 @@ docker compose up -d
 
 # 📖 参考プロジェクト
 
-1. MTCNN: 
+1. MTCNN:
+
 ```bibtex
 @software{ipazc_mtcnn_2021,
     author = {ipazc},
@@ -194,7 +195,9 @@ docker compose up -d
     publisher = {GitHub}
 }
 ```
-2. ModNet: 
+
+2. ModNet:
+
 ```bibtex
 @software{zhkkke_modnet_2021,
     author = {ZHKKKe},
@@ -219,9 +222,13 @@ docker compose up -d
 
 ご質問がある場合は、zeyi.lin@swanhub.co までメールでお問い合わせください。
 
+<br>
+
 # 貢献者
 
 [Zeyi-Lin](https://github.com/Zeyi-Lin)、[SAKURA-CAT](https://github.com/SAKURA-CAT)、[Feudalman](https://github.com/Feudalman)、[swpfY](https://github.com/swpfY)、[Kaikaikaifang](https://github.com/Kaikaikaifang)、[ShaohonChen](https://github.com/ShaohonChen)、[KashiwaByte](https://github.com/KashiwaByte)
+
+<br>
 
 # StarHistory
 
