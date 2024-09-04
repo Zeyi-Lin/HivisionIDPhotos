@@ -174,6 +174,10 @@ docker compose up -d
 
 <br>
 
+# 🌲 Friendship link
+
+- [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)
+
 # 📖 Reference Projects
 
 1. MTCNN: https://github.com/ipazc/mtcnn

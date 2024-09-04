@@ -168,6 +168,12 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
 <br>
 
+# 🌲 友情链接
+
+- [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)
+
+<br>
+
 # 📖 引用项目
 
 1. MTCNN: https://github.com/ipazc/mtcnn
