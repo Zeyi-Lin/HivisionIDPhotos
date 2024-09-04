@@ -128,7 +128,7 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 
 API 文档：[Python](docs/python_api_CN.md) | RestAPI（waiting）
 
-**启动后端**
+## 启动后端
 
 ```
 
@@ -136,23 +136,27 @@ python deploy_api.py
 
 ```
 
-**请求 API 服务 - Python**
+## 请求 API 服务 - Python
 
-用 Python 给服务发送请求：
+### 1. 证件照制作
 
-证件照制作（输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png）：
+输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
 
 ```bash
 python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.png -s '(413,295)'
 ```
 
-增加底色（输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像）：
+### 2. 增加底色
+
+输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像
 
 ```bash
 python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c '(0,0,0)' -k 30
 ```
 
-得到六寸排版照（输入 1 张 3 通道照片，获得 1 张六寸排版照）：
+### 3. 得到六寸排版照
+
+输入 1 张 3 通道照片，获得 1 张六寸排版照
 
 ```bash
 python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  -s '(413,295)' -k 200
