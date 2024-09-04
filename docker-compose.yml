@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   hivision_idphotos:
@@ -8,4 +8,13 @@ services:
     image: hivision_idphotos
     command: python3 app.py --host 0.0.0.0 --port 7860
     ports:
-      - "7860:7860"
+      - '7860:7860'
+
+  hivision_idphotos_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hivision_idphotos
+    command: python3 deploy_api.py
+    ports:
+      - '8080:8080'
