@@ -164,16 +164,14 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 > Choose one of the following three methods
 
-**Pull Image from DockerHub:**
-
-> This image is built on a machine with ARM architecture (e.g. Mac M1). If you want to use it on a machine with x86 architecture, please use Dockerfile.
-> In this way, starting from step 2, change the image name `hivision_idphotos` to `linzeyi/hivision_idphotos`.
+**Method 1 - Pull Image from DockerHub:**
 
 ```bash
 docker pull linzeyi/hivision_idphotos:v1
+docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
 ```
 
-**Build Image:**
+**Method 2 - Build Image:**
 
 After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
 
@@ -181,7 +179,7 @@ After ensuring that the model weight file [hivision_modnet.onnx](https://github.
 docker build -t hivision_idphotos .
 ```
 
-**Docker Compose:**
+**Method 3 - Docker Compose:**
 
 After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
 

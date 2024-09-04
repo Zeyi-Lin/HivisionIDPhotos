@@ -172,16 +172,14 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 > 以下方式三选一
 
-**拉取镜像：**
-
-> 该镜像构建于 ARM 架构机器（如 Mac M1），x86 架构机器使用请用 Dockerfile 构建
-> 用这种方式的，在第 2 步开始把镜像名`hivision_idphotos`改为`linzeyi/hivision_idphotos`
+**方式一：拉取镜像：**
 
 ```bash
 docker pull linzeyi/hivision_idphotos:v1
+docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
 ```
 
-**Dockrfile 构建镜像：**
+**方式二：Dockrfile 直接构建镜像：**
 
 在确保将模型权重文件[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)放到根目录下后，在根目录执行：
 
@@ -189,7 +187,7 @@ docker pull linzeyi/hivision_idphotos:v1
 docker build -t hivision_idphotos .
 ```
 
-**Docker compose：**
+**方式三：Docker compose 构建：**
 
 确保将模型权重文件 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) 放在根目录下后，在根目录下执行：
 

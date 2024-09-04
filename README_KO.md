@@ -133,15 +133,14 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 > 다음 3가지 방법 중 하나를 선택하십시오.
 
-**이미지 가져오기:**
-
-> 이 이미지는 ARM 아키텍처 머신(Mac M1 등)에서 빌드되었습니다. x86 아키텍처 머신에서 사용할 경우 Dockerfile을 사용하여 빌드하세요.
+**방법 1：이미지 가져오기:**
 
 ```bash
 docker pull linzeyi/hivision_idphotos:v1
+docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
 ```
 
-**Dockerfile로 이미지 빌드:**
+**방법 2：Dockerfile로 이미지 빌드:**
 
 모델 가중치 파일 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)을 루트 디렉토리에 놓고, 루트 디렉토리에서 다음 명령어를 실행하세요:
 
@@ -149,7 +148,7 @@ docker pull linzeyi/hivision_idphotos:v1
 docker build -t hivision_idphotos .
 ```
 
-**Docker Compose:**
+**방법 3：Docker Compose:**
 
 모델 가중치 파일 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)가 루트 디렉터리에 있는지 확인한 후 루트 디렉터리에서 실행합니다:
 

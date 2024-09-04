@@ -132,15 +132,16 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 ## 1. イメージの取得またはビルド
 
-**イメージの取得：**
+> 以下の方法から 1 つを選択してください
 
-> このイメージは ARM アーキテクチャマシン（例：Mac M1）で構築されており、x86 アーキテクチャマシンを使用する場合は Dockerfile を使用してください。
+**方法その 1 です：イメージの取得：**
 
 ```bash
 docker pull linzeyi/hivision_idphotos:v1
+docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
 ```
 
-**Dockrfile によるイメージの構築：**
+**方法その 2 です：Dockrfile によるイメージの構築：**
 
 > 次の 3 つの方法から 1 つを選択してください
 
@@ -150,7 +151,7 @@ docker pull linzeyi/hivision_idphotos:v1
 docker build -t hivision_idphotos .
 ```
 
-**Docker Compose:**
+**方法その 3 です：Docker Compose:**
 
 モデルのウェイトファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)がルートディレクトリに置かれていることを確認したら、ルートディレクトリで実行します：
 
