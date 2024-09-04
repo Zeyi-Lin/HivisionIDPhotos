@@ -166,12 +166,44 @@ docker run -p 7860:7860 hivision_idphotos
 docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 ```
 
+用于 docker compose：
+
+确保将模型权重文件 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) 放在根目录下后，在根目录下执行：
+
+```bash
+docker compose build
+```
+
+镜像打包完成后，运行以下命令启动 API 服务：
+
+```bash
+docker compose up -d
+```
+
 <br>
 
 # 📖 引用项目
 
-1. MTCNN: https://github.com/ipazc/mtcnn
-2. ModNet: https://github.com/ZHKKKe/MODNet
+1. MTCNN: 
+```bibtex
+@software{ipazc_mtcnn_2021,
+    author = {ipazc},
+    title = {{MTCNN}},
+    url = {https://github.com/ipazc/mtcnn},
+    year = {2021},
+    publisher = {GitHub}
+}
+```
+2. ModNet: 
+```bibtex
+@software{zhkkke_modnet_2021,
+    author = {ZHKKKe},
+    title = {{ModNet}},
+    url = {https://github.com/ZHKKKe/MODNet},
+    year = {2021},
+    publisher = {GitHub}
+}
+```
 
 <br>
 
@@ -192,3 +224,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 # 贡献者
 
 [Zeyi-Lin](https://github.com/Zeyi-Lin)、[SAKURA-CAT](https://github.com/SAKURA-CAT)、[Feudalman](https://github.com/Feudalman)、[swpfY](https://github.com/swpfY)、[Kaikaikaifang](https://github.com/Kaikaikaifang)、[ShaohonChen](https://github.com/ShaohonChen)、[KashiwaByte](https://github.com/KashiwaByte)
+
+# StarHistory
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
