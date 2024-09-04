@@ -2,8 +2,6 @@ import requests
 import base64
 import argparse
 import ast
-from PIL import Image
-from io import BytesIO
 import os
 
 
