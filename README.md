@@ -134,9 +134,12 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 ## 1. 拉取或构建镜像
 
+> 以下两种方式二选一
+
 **拉取镜像：**
 
 > 该镜像构建于 ARM 架构机器（如 Mac M1），x86 架构机器使用请用 Dockerfile 构建
+> 用这种方式的，在第 2 步开始把镜像名`hivision_idphotos`改为`linzeyi/hivision_idphotos`
 
 ```bash
 docker pull linzeyi/hivision_idphotos:v1
