@@ -130,7 +130,7 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 
 # ⚡️ 部署 API 服务
 
-详细请参考 [API 文档](docs/api_CN.md)
+详细请参考 [API 文档](docs/api_CN.md)，含 [RestAPI 请求方式](https://github.com/Zeyi-Lin/HivisionIDPhotos/blob/master/docs/api_CN.md#1%EF%B8%8F%E2%83%A3-python-requests-%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95)
 
 ## 启动后端
 
