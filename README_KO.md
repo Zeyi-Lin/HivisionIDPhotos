@@ -161,12 +161,44 @@ docker run -p 7860:7860 hivision_idphotos
 docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 ```
 
+를 사용합니다:
+
+모델 가중치 파일 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)가 루트 디렉터리에 있는지 확인한 후 루트 디렉터리에서 실행합니다:
+
+```bash
+도커 컴포즈 빌드
+```
+
+이미지 패키징이 완료되면 다음 명령어를 실행하여 API 서비스를 시작합니다:
+
+```bash
+docker compose up -d
+```
+
 <br>
 
 # 📖 프로젝트 인용
 
-1. MTCNN: https://github.com/ipazc/mtcnn
-2. ModNet: https://github.com/ZHKKKe/MODNet
+1. MTCNN: 
+```bibtex
+@software{ipazc_mtcnn_2021,
+    author = {ipazc},
+    title = {{MTCNN}},
+    url = {https://github.com/ipazc/mtcnn},
+    year = {2021},
+    publisher = {GitHub}
+}
+```
+2. ModNet: 
+```bibtex
+@software{zhkkke_modnet_2021,
+    author = {ZHKKKe},
+    title = {{ModNet}},
+    url = {https://github.com/ZHKKKe/MODNet},
+    year = {2021},
+    publisher = {GitHub}
+}
+```
 
 <br>
 
@@ -187,3 +219,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 # 기여자
 
 [Zeyi-Lin](https://github.com/Zeyi-Lin)、[SAKURA-CAT](https://github.com/SAKURA-CAT)、[Feudalman](https://github.com/Feudalman)、[swpfY](https://github.com/swpfY)、[Kaikaikaifang](https://github.com/Kaikaikaifang)、[ShaohonChen](https://github.com/ShaohonChen)、[KashiwaByte](https://github.com/KashiwaByte)
+
+# StarHistory
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
