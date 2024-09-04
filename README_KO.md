@@ -24,7 +24,7 @@
 # 🤩 프로젝트 업데이트
 
 - 온라인 체험: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
-- 2024.9.2: **사진 KB 크기 조정** 업데이트
+- 2024.9.2: **사진 KB 크기 조정** 업데이트，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
 - 2023.12.1: **API 배포(fastapi 기반)** 업데이트
 - 2023.6.20: **미리 설정된 사이즈 메뉴** 업데이트
 - 2023.6.19: **레이아웃 사진** 업데이트

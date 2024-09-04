@@ -25,7 +25,7 @@
 # 🤩 项目更新
 
 - 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
-- 2024.9.2: 更新**调整照片 KB 大小**
+- 2024.9.2: 更新**调整照片 KB 大小**，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
 - 2023.12.1: 更新**API 部署（基于 fastapi）**
 - 2023.6.20: 更新**预设尺寸菜单**
 - 2023.6.19: 更新**排版照**
@@ -45,7 +45,7 @@ HivisionIDPhoto 旨在开发一种实用的证件照智能制作算法。
 
 **HivisionIDPhoto 可以做到：**
 
-1. 轻量级抠图（仅需 CPU 即可快速推理）
+1. 轻量级抠图（仅需 **CPU** 即可快速推理）
 2. 根据不同尺寸规格生成不同的标准证件照、六寸排版照
 3. 美颜（waiting）
 4. 智能换正装（waiting）
@@ -84,7 +84,7 @@ pip install -r requirements.txt
 
 **3. 下载权重文件**
 
-在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx` (24.7MB)，存到根目录下。
+在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx` (24.7MB)，存到项目根目录下。
 
 <br>
 
