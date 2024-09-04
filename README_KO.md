@@ -73,7 +73,9 @@ git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
-**2. 의존성 설치**
+**2. (중요함) 의존성 설치**
+
+> conda를 사용하여 Python 3.10 가상 환경을 만든 다음 다음 명령을 실행하는 것이 좋습니다.
 
 ```bash
 pip install -r requirements.txt

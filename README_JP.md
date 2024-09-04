@@ -74,7 +74,9 @@ git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
-**2. 依存パッケージをインストール**
+**2. (大切です) 依存パッケージをインストール**
+
+> conda を使用して Python 3.10 仮想環境を作成した後、次のコマンドを実行することがお勧めです。
 
 ```bash
 pip install -r requirements.txt

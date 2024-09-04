@@ -70,7 +70,9 @@ git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
-2. Install dependent packages
+2. (Important) Install dependent packages
+
+> It is recommended to create a Python 3.10 virtual environment with conda and then execute the following command.
 
 ```
 pip install -r requirements.txt
