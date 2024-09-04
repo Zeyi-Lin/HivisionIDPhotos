@@ -129,6 +129,8 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 ## 1. 이미지 가져오기 또는 빌드
 
+> 다음 3가지 방법 중 하나를 선택하십시오.
+
 **이미지 가져오기:**
 
 > 이 이미지는 ARM 아키텍처 머신(Mac M1 등)에서 빌드되었습니다. x86 아키텍처 머신에서 사용할 경우 Dockerfile을 사용하여 빌드하세요.
@@ -145,6 +147,20 @@ docker pull linzeyi/hivision_idphotos:v1
 docker build -t hivision_idphotos .
 ```
 
+**Docker Compose:**
+
+모델 가중치 파일 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)가 루트 디렉터리에 있는지 확인한 후 루트 디렉터리에서 실행합니다:
+
+```bash
+도커 컴포즈 빌드
+```
+
+이미지 패키징이 완료되면 다음 명령어를 실행하여 API 서비스를 시작합니다:
+
+```bash
+docker compose up -d
+```
+
 ## 2. Gradio 데모 실행
 
 이미지 패키징이 완료되면 다음 명령어를 실행하여 Gradio 데모 서비스를 시작하세요:
@@ -159,20 +175,6 @@ docker run -p 7860:7860 hivision_idphotos
 
 ```bash
 docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
-```
-
-를 사용합니다:
-
-모델 가중치 파일 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)가 루트 디렉터리에 있는지 확인한 후 루트 디렉터리에서 실행합니다:
-
-```bash
-도커 컴포즈 빌드
-```
-
-이미지 패키징이 완료되면 다음 명령어를 실행하여 API 서비스를 시작합니다:
-
-```bash
-docker compose up -d
 ```
 
 <br>

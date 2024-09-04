@@ -140,10 +140,26 @@ docker pull linzeyi/hivision_idphotos:v1
 
 **Dockrfile によるイメージの構築：**
 
+> 次の 3 つの方法から 1 つを選択してください
+
 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)というモデルの重みファイルがルートディレクトリに配置されていることを確認した後、次のコマンドを実行します。
 
 ```bash
 docker build -t hivision_idphotos .
+```
+
+**Docker Compose:**
+
+モデルのウェイトファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)がルートディレクトリに置かれていることを確認したら、ルートディレクトリで実行します：
+
+```bash
+docker compose build
+```
+
+イメージがパッケージ化されたら、以下のコマンドを実行して API サービスを起動する：
+
+```bash
+docker compose up -d
 ```
 
 ## 2. Gradio Demo の実行
@@ -164,20 +180,6 @@ docker run -p 7860:7860 hivision_idphotos
 
 docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
-```
-
-を実行します：
-
-モデルのウェイトファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)がルートディレクトリに置かれていることを確認したら、ルートディレクトリで実行します：
-
-```bash
-docker compose build
-```
-
-イメージがパッケージ化されたら、以下のコマンドを実行して API サービスを起動する：
-
-```bash
-docker compose up -d
 ```
 
 <br>

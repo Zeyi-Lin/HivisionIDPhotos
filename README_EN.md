@@ -160,9 +160,9 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 ## 1. Pull or Build Image
 
-> Choose one of the following two methods
+> Choose one of the following three methods
 
-**Pull Image from DockerHub**
+**Pull Image from DockerHub:**
 
 > This image is built on a machine with ARM architecture (e.g. Mac M1). If you want to use it on a machine with x86 architecture, please use Dockerfile.
 > In this way, starting from step 2, change the image name `hivision_idphotos` to `linzeyi/hivision_idphotos`.
@@ -171,12 +171,26 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 docker pull linzeyi/hivision_idphotos:v1
 ```
 
-**Build Image**
+**Build Image:**
 
 After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
 
 ```bash
 docker build -t hivision_idphotos .
+```
+
+**Docker Compose:**
+
+After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
+
+```bash
+docker compose build
+```
+
+After the image is packaged, run the following command to start the API service:
+
+```bash
+docker compose up -d
 ```
 
 ## 2. Run the Gradio Demo
@@ -193,20 +207,6 @@ You can access it locally at [http://127.0.0.1:7860](http://127.0.0.1:7860/).
 
 ```bash
 docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
-```
-
-for docker compose:
-
-After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
-
-```bash
-docker compose build
-```
-
-After the image is packaged, run the following command to start the API service:
-
-```bash
-docker compose up -d
 ```
 
 <br>

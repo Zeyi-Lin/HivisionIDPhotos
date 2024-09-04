@@ -168,7 +168,7 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 ## 1. 拉取或构建镜像
 
-> 以下两种方式二选一
+> 以下方式三选一
 
 **拉取镜像：**
 
@@ -187,6 +187,20 @@ docker pull linzeyi/hivision_idphotos:v1
 docker build -t hivision_idphotos .
 ```
 
+**Docker compose：**
+
+确保将模型权重文件 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) 放在根目录下后，在根目录下执行：
+
+```bash
+docker compose build
+```
+
+镜像打包完成后，运行以下命令启动 API 服务：
+
+```bash
+docker compose up -d
+```
+
 ## 2. 运行 Gradio Demo
 
 等待镜像封装完毕后，运行以下指令，即可开启 Gradio Demo 服务：
@@ -201,20 +215,6 @@ docker run -p 7860:7860 hivision_idphotos
 
 ```bash
 docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
-```
-
-用于 docker compose：
-
-确保将模型权重文件 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) 放在根目录下后，在根目录下执行：
-
-```bash
-docker compose build
-```
-
-镜像打包完成后，运行以下命令启动 API 服务：
-
-```bash
-docker compose up -d
 ```
 
 <br>
