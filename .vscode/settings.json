@@ -103,5 +103,6 @@
     "**/__pycache__": true,
     ".idea": true
   },
-  "python.testing.pytestEnabled": true
+  "python.testing.pytestEnabled": true,
+  "ros.distro": "humble"
 }

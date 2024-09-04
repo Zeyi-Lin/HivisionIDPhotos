@@ -4,18 +4,24 @@ import numpy as np
 import functools
 import time
 
+
 def calTime(mark):
     """
     一个输出函数时间的装饰器。
     :param mark: str, 可选填，如果填了就会在 print 开头加上 mark 标签。
     """
     if isinstance(mark, str):
+
         def decorater(func):
             @functools.wraps(func)
             def wrapper(*args, **kw):
                 start_time = time.time()
                 return_param = func(*args, **kw)
-                print("[Mark-{}] {} 函数花费的时间为 {:.2f}.".format(mark, func.__name__, time.time() - start_time))
+                print(
+                    "[Mark-{}] {} 函数花费的时间为 {:.2f}.".format(
+                        mark, func.__name__, time.time() - start_time
+                    )
+                )
                 return return_param
 
             return wrapper
@@ -28,7 +34,11 @@ def calTime(mark):
         def wrapper(*args, **kw):
             start_time = time.time()
             return_param = func(*args, **kw)
-            print("{} 函数花费的时间为 {:.2f}.".format(func.__name__, time.time() - start_time))
+            print(
+                "{} 函数花费的时间为 {:.2f}.".format(
+                    func.__name__, time.time() - start_time
+                )
+            )
             return return_param
 
         return wrapper
@@ -44,7 +54,9 @@ def ChangeImageDPI(input_path, output_path, dpi=300):
     image = Image.open(input_path)
     image.save(output_path, dpi=(dpi, dpi))
     # print(1)
-    print("Your Image's DPI have been changed. The last DPI = ({},{}) ".format(dpi,dpi))
+    print(
+        "Your Image's DPI have been changed. The last DPI = ({},{}) ".format(dpi, dpi)
+    )
 
 
 def IDphotos_cut(x1, y1, x2, y2, img):
@@ -63,7 +75,7 @@ def IDphotos_cut(x1, y1, x2, y2, img):
     ------------------------------------
     """
 
-    crop_size = (y2-y1, x2-x1)
+    crop_size = (y2 - y1, x2 - x1)
     """
     ------------------------------------
     temp_x_1:裁剪框左边超出图像部分
@@ -97,9 +109,13 @@ def IDphotos_cut(x1, y1, x2, y2, img):
     print("crop_size:", crop_size)
     background_bgr = np.full((crop_size[0], crop_size[1]), 255, dtype=np.uint8)
     background_a = np.full((crop_size[0], crop_size[1]), 0, dtype=np.uint8)
-    background = cv2.merge((background_bgr, background_bgr, background_bgr, background_a))
+    background = cv2.merge(
+        (background_bgr, background_bgr, background_bgr, background_a)
+    )
 
-    background[temp_y_1: crop_size[0] - temp_y_2, temp_x_1: crop_size[1] - temp_x_2] = img[y1:y2, x1:x2]
+    background[
+        temp_y_1 : crop_size[0] - temp_y_2, temp_x_1 : crop_size[1] - temp_x_2
+    ] = img[y1:y2, x1:x2]
 
     return background
 
@@ -126,7 +142,9 @@ def resize_image_esp(input_image, esp=2000):
             width = int((esp / length) * width)
             length = esp
         print(length, width)
-        im_resize = cv2.resize(input_image, (length, width), interpolation=cv2.INTER_AREA)
+        im_resize = cv2.resize(
+            input_image, (length, width), interpolation=cv2.INTER_AREA
+        )
         return im_resize
     else:
         return input_image
@@ -149,7 +167,12 @@ def resize_image_by_min(input_image, esp=600):
             new_height = esp
             new_width = width * esp // height
 
-        return cv2.resize(input_image, (new_width, new_height), interpolation=cv2.INTER_AREA), new_height / height
+        return (
+            cv2.resize(
+                input_image, (new_width, new_height), interpolation=cv2.INTER_AREA
+            ),
+            new_height / height,
+        )
 
     else:
         return input_image, 1
@@ -209,13 +232,13 @@ def draw_picture_rectangle(image, bbox, pen_size=2, pen_color=(0, 0, 255)):
     y1 = int(bbox[1])
     x2 = int(bbox[2])
     y2 = int(bbox[3])
-    cv2.rectangle(image, (x1,y1), (x2, y2), pen_color, pen_size)
+    cv2.rectangle(image, (x1, y1), (x2, y2), pen_color, pen_size)
     return image
 
 
 def generate_gradient(start_color, width, height, mode="updown"):
     # 定义背景颜色
-    end_color = (255, 255, 255) # 白色
+    end_color = (255, 255, 255)  # 白色
 
     # 创建一个空白图像
     r_out = np.zeros((height, width), dtype=int)
@@ -225,9 +248,15 @@ def generate_gradient(start_color, width, height, mode="updown"):
     if mode == "updown":
         # 生成上下渐变色
         for y in range(height):
-            r = int((y / height) * end_color[0] + ((height - y) / height) * start_color[0])
-            g = int((y / height) * end_color[1] + ((height - y) / height) * start_color[1])
-            b = int((y / height) * end_color[2] + ((height - y) / height) * start_color[2])
+            r = int(
+                (y / height) * end_color[0] + ((height - y) / height) * start_color[0]
+            )
+            g = int(
+                (y / height) * end_color[1] + ((height - y) / height) * start_color[1]
+            )
+            b = int(
+                (y / height) * end_color[2] + ((height - y) / height) * start_color[2]
+            )
             r_out[y, :] = r
             g_out[y, :] = g
             b_out[y, :] = b
@@ -236,16 +265,25 @@ def generate_gradient(start_color, width, height, mode="updown"):
         # 生成中心渐变色
         img = np.zeros((height, width, 3))
         # 定义椭圆中心和半径
-        center = (width//2, height//2)
+        center = (width // 2, height // 2)
         end_axies = max(height, width)
         # 定义渐变色
         end_color = (255, 255, 255)
         # 绘制椭圆
         for y in range(end_axies):
             axes = (end_axies - y, end_axies - y)
-            r = int((y / end_axies) * end_color[0] + ((end_axies - y) / end_axies) * start_color[0])
-            g = int((y / end_axies) * end_color[1] + ((end_axies - y) / end_axies) * start_color[1])
-            b = int((y / end_axies) * end_color[2] + ((end_axies - y) / end_axies) * start_color[2])
+            r = int(
+                (y / end_axies) * end_color[0]
+                + ((end_axies - y) / end_axies) * start_color[0]
+            )
+            g = int(
+                (y / end_axies) * end_color[1]
+                + ((end_axies - y) / end_axies) * start_color[1]
+            )
+            b = int(
+                (y / end_axies) * end_color[2]
+                + ((end_axies - y) / end_axies) * start_color[2]
+            )
 
             cv2.ellipse(img, center, axes, 0, 0, 360, (b, g, r), -1)
         b_out, g_out, r_out = cv2.split(np.uint64(img))
@@ -274,7 +312,9 @@ def add_background(input_image, bgr=(0, 0, 0), mode="pure_color"):
     else:
         b2, g2, r2 = generate_gradient(bgr, width, height, mode="center")
 
-    output = cv2.merge(((b - b2) * a_cal + b2, (g - g2) * a_cal + g2, (r - r2) * a_cal + r2))
+    output = cv2.merge(
+        ((b - b2) * a_cal + b2, (g - g2) * a_cal + g2, (r - r2) * a_cal + r2)
+    )
 
     return output
 
@@ -338,11 +378,25 @@ def cover_image(image, background, x, y, mode=1):
     wuqiong_img_y = height2 + 1
     wuqiong_img_x = width2 + 1
 
-    def cover_mode(image, background, imgy1=0, imgy2=-1, imgx1=0, imgx2=-1, bgy1=0, bgy2=-1, bgx1=0, bgx2=-1, mode=1):
+    def cover_mode(
+        image,
+        background,
+        imgy1=0,
+        imgy2=-1,
+        imgx1=0,
+        imgx2=-1,
+        bgy1=0,
+        bgy2=-1,
+        bgx1=0,
+        bgx2=-1,
+        mode=1,
+    ):
         if mode == 1:
             background[bgy1:bgy2, bgx1:bgx2] = image[imgy1:imgy2, imgx1:imgx2]
         elif mode == 2:
-            background[bgy1:bgy2, bgx1:bgx2] = cv2.add(background[bgy1:bgy2, bgx1:bgx2], image[imgy1:imgy2, imgx1:imgx2])
+            background[bgy1:bgy2, bgx1:bgx2] = cv2.add(
+                background[bgy1:bgy2, bgx1:bgx2], image[imgy1:imgy2, imgx1:imgx2]
+            )
         elif mode == 3:
             b, g, r, a = cv2.split(image[imgy1:imgy2, imgx1:imgx2])
             b2, g2, r2, a2 = cv2.split(background[bgy1:bgy2, bgx1:bgx2])
@@ -358,18 +412,66 @@ def cover_image(image, background, x, y, mode=1):
         y2 = y + height2
 
         if x2 <= width1 and y2 <= height1:
-            background = cover_mode(image, background,0,wuqiong_img_y,0,wuqiong_img_x,y,y2,x,x2,mode)
+            background = cover_mode(
+                image,
+                background,
+                0,
+                wuqiong_img_y,
+                0,
+                wuqiong_img_x,
+                y,
+                y2,
+                x,
+                x2,
+                mode,
+            )
 
         elif x2 > width1 and y2 <= height1:
             # background[y:y2, x:] = image[:, :width1 - x]
-            background = cover_mode(image, background, 0, wuqiong_img_y, 0, width1-x, y, y2, x, wuqiong_bg_x,mode)
+            background = cover_mode(
+                image,
+                background,
+                0,
+                wuqiong_img_y,
+                0,
+                width1 - x,
+                y,
+                y2,
+                x,
+                wuqiong_bg_x,
+                mode,
+            )
 
         elif x2 <= width1 and y2 > height1:
             # background[y:, x:x2] = image[:height1 - y, :]
-            background = cover_mode(image, background, 0, height1-y, 0, wuqiong_img_x, y, wuqiong_bg_y, x, x2,mode)
+            background = cover_mode(
+                image,
+                background,
+                0,
+                height1 - y,
+                0,
+                wuqiong_img_x,
+                y,
+                wuqiong_bg_y,
+                x,
+                x2,
+                mode,
+            )
         else:
             # background[y:, x:] = image[:height1 - y, :width1 - x]
-            background = cover_mode(image, background, 0, height1-y, 0, width1-x, y, wuqiong_bg_y, x, wuqiong_bg_x,mode)
+            background = cover_mode(
+                image,
+                background,
+                0,
+                height1 - y,
+                0,
+                width1 - x,
+                y,
+                wuqiong_bg_y,
+                x,
+                wuqiong_bg_x,
+                mode,
+            )
 
     elif x < 0 and y >= 0:
         x2 = x + width2
@@ -377,16 +479,64 @@ def cover_image(image, background, x, y, mode=1):
 
         if x2 <= width1 and y2 <= height1:
             # background[y:y2, :x + width2] = image[:, abs(x):]
-            background = cover_mode(image, background, 0, wuqiong_img_y, abs(x), wuqiong_img_x, y, y2, 0, x+width2,mode)
+            background = cover_mode(
+                image,
+                background,
+                0,
+                wuqiong_img_y,
+                abs(x),
+                wuqiong_img_x,
+                y,
+                y2,
+                0,
+                x + width2,
+                mode,
+            )
         elif x2 > width1 and y2 <= height1:
-            background = cover_mode(image, background, 0, wuqiong_img_y, abs(x), width1+abs(x), y, y2, 0, wuqiong_bg_x,mode)
+            background = cover_mode(
+                image,
+                background,
+                0,
+                wuqiong_img_y,
+                abs(x),
+                width1 + abs(x),
+                y,
+                y2,
+                0,
+                wuqiong_bg_x,
+                mode,
+            )
         elif x2 <= 0:
             pass
         elif x2 <= width1 and y2 > height1:
-            background = cover_mode(image, background, 0, height1-y, abs(x), wuqiong_img_x, y, wuqiong_bg_y, 0, x2, mode)
+            background = cover_mode(
+                image,
+                background,
+                0,
+                height1 - y,
+                abs(x),
+                wuqiong_img_x,
+                y,
+                wuqiong_bg_y,
+                0,
+                x2,
+                mode,
+            )
         else:
             # background[y:, :] = image[:height1 - y, abs(x):width1 + abs(x)]
-            background = cover_mode(image, background, 0, height1-y, abs(x), width1+abs(x), y, wuqiong_bg_y, 0, wuqiong_bg_x,mode)
+            background = cover_mode(
+                image,
+                background,
+                0,
+                height1 - y,
+                abs(x),
+                width1 + abs(x),
+                y,
+                wuqiong_bg_y,
+                0,
+                wuqiong_bg_x,
+                mode,
+            )
 
     elif x >= 0 and y < 0:
         x2 = x + width2
@@ -395,16 +545,64 @@ def cover_image(image, background, x, y, mode=1):
             pass
         if x2 <= width1 and y2 <= height1:
             # background[:y2, x:x2] = image[abs(y):, :]
-            background = cover_mode(image, background, abs(y), wuqiong_img_y, 0, wuqiong_img_x, 0, y2, x, x2,mode)
+            background = cover_mode(
+                image,
+                background,
+                abs(y),
+                wuqiong_img_y,
+                0,
+                wuqiong_img_x,
+                0,
+                y2,
+                x,
+                x2,
+                mode,
+            )
         elif x2 > width1 and y2 <= height1:
             # background[:y2, x:] = image[abs(y):, :width1 - x]
-            background = cover_mode(image, background, abs(y), wuqiong_img_y, 0, width1-x, 0, y2, x, wuqiong_bg_x,mode)
+            background = cover_mode(
+                image,
+                background,
+                abs(y),
+                wuqiong_img_y,
+                0,
+                width1 - x,
+                0,
+                y2,
+                x,
+                wuqiong_bg_x,
+                mode,
+            )
         elif x2 <= width1 and y2 > height1:
             # background[:, x:x2] = image[abs(y):height1 + abs(y), :]
-            background = cover_mode(image, background, abs(y), height1+abs(y), 0, wuqiong_img_x, 0, wuqiong_bg_y, x, x2,mode)
+            background = cover_mode(
+                image,
+                background,
+                abs(y),
+                height1 + abs(y),
+                0,
+                wuqiong_img_x,
+                0,
+                wuqiong_bg_y,
+                x,
+                x2,
+                mode,
+            )
         else:
             # background[:, x:] = image[abs(y):height1 + abs(y), :width1 - abs(x)]
-            background = cover_mode(image, background, abs(y), height1+abs(y), 0, width1-abs(x), 0, wuqiong_bg_x, x, wuqiong_bg_x,mode)
+            background = cover_mode(
+                image,
+                background,
+                abs(y),
+                height1 + abs(y),
+                0,
+                width1 - abs(x),
+                0,
+                wuqiong_bg_x,
+                x,
+                wuqiong_bg_x,
+                mode,
+            )
 
     else:
         x2 = x + width2
@@ -413,16 +611,64 @@ def cover_image(image, background, x, y, mode=1):
             pass
         if x2 <= width1 and y2 <= height1:
             # background[:y2, :x2] = image[abs(y):, abs(x):]
-            background = cover_mode(image, background, abs(y), wuqiong_img_y, abs(x), wuqiong_img_x, 0, y2, 0, x2,mode)
+            background = cover_mode(
+                image,
+                background,
+                abs(y),
+                wuqiong_img_y,
+                abs(x),
+                wuqiong_img_x,
+                0,
+                y2,
+                0,
+                x2,
+                mode,
+            )
         elif x2 > width1 and y2 <= height1:
             # background[:y2, :] = image[abs(y):, abs(x):width1 + abs(x)]
-            background = cover_mode(image, background, abs(y), wuqiong_img_y, abs(x), width1+abs(x), 0, y2, 0, wuqiong_bg_x,mode)
+            background = cover_mode(
+                image,
+                background,
+                abs(y),
+                wuqiong_img_y,
+                abs(x),
+                width1 + abs(x),
+                0,
+                y2,
+                0,
+                wuqiong_bg_x,
+                mode,
+            )
         elif x2 <= width1 and y2 > height1:
             # background[:, :x2] = image[abs(y):height1 + abs(y), abs(x):]
-            background = cover_mode(image, background, abs(y), height1+abs(y), abs(x), wuqiong_img_x, 0, wuqiong_bg_y, 0, x2,mode)
+            background = cover_mode(
+                image,
+                background,
+                abs(y),
+                height1 + abs(y),
+                abs(x),
+                wuqiong_img_x,
+                0,
+                wuqiong_bg_y,
+                0,
+                x2,
+                mode,
+            )
         else:
             # background[:, :] = image[abs(y):height1 - abs(y), abs(x):width1 + abs(x)]
-            background = cover_mode(image, background, abs(y), height1-abs(y), abs(x), width1+abs(x), 0, wuqiong_bg_y, 0, wuqiong_bg_x,mode)
+            background = cover_mode(
+                image,
+                background,
+                abs(y),
+                height1 - abs(y),
+                abs(x),
+                width1 + abs(x),
+                0,
+                wuqiong_bg_y,
+                0,
+                wuqiong_bg_x,
+                mode,
+            )
 
     return background
 

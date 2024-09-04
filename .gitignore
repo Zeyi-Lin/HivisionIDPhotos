@@ -1,9 +1,14 @@
 *.pyc
 **/__pycache__
 .idea
+.vscode/*
 .DS_Store
 hivision_modnet.onnx
 output/*.jpg
 # build outputs
 dist
 build
+# checkpoint
+*.pth
+*.pt
+*.onnx
