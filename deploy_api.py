@@ -135,7 +135,7 @@ async def photo_add_background(input_image: UploadFile, color: str = Form(...)):
     with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp:
         temp_path = temp.name
         save_numpy_image(bg_img, temp_path)
-        return FileResponse(temp_path, media_type="image/jpg", filename="output.jpg")
+        return FileResponse(temp_path, media_type="image/jpeg", filename="output.jpg")
 
 
 # 六寸排版照生成接口
@@ -177,7 +177,7 @@ async def generate_layout_photos(input_image: UploadFile, size: str = Form(...))
     with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp:
         temp_path = temp.name
         save_numpy_image(result_layout_image, temp_path)
-        return FileResponse(temp_path, media_type="image/jpg", filename="output.jpg")
+        return FileResponse(temp_path, media_type="image/jpeg", filename="output.jpg")
 
 
 if __name__ == "__main__":
