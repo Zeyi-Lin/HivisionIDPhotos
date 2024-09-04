@@ -7,7 +7,6 @@ import os
 from image_utils import resize_image_to_kb
 
 
-
 def base64_save(base64_image_data, save_path, kb=None):
     # 解码 Base64 数据并保存为 PNG 文件
     img_data = base64.b64decode(base64_image_data)
@@ -21,7 +20,9 @@ def base64_save(base64_image_data, save_path, kb=None):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="HivisionIDPhotos 证件照制作推理程序。")
+    parser = argparse.ArgumentParser(
+        description="HivisionIDPhotos 证件照制作推理程序。"
+    )
 
     parser.add_argument(
         "-u", "--url", help="API 服务的 URL", default="http://127.0.0.1:8080"
