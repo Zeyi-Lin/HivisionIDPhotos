@@ -4,7 +4,7 @@ from PIL import Image
 from io import BytesIO
 import argparse
 import os
-from image_utils import resize_image_to_kb
+from utils.image_utils import resize_image_to_kb
 
 
 def base64_save(base64_image_data, save_path, kb=None):

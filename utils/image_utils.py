@@ -1,6 +1,8 @@
 from PIL import Image
 import io
 import numpy as np
+import cv2
+import base64
 
 
 def resize_image_to_kb(input_image, output_image_path, target_size_kb):
@@ -61,3 +63,34 @@ def resize_image_to_kb(input_image, output_image_path, target_size_kb):
         # Ensure quality does not go below 1
         if quality < 1:
             quality = 1
+
+
+def numpy_2_base64(img: np.ndarray):
+    retval, buffer = cv2.imencode(".png", img)
+    base64_image = base64.b64encode(buffer).decode("utf-8")
+
+    return base64_image
+
+
+def save_numpy_image(numpy_img, file_path):
+    # 检查数组的形状
+    if numpy_img.shape[2] == 4:
+        # 将 BGR 转换为 RGB，并保留透明通道
+        rgb_img = np.concatenate(
+            (np.flip(numpy_img[:, :, :3], axis=-1), numpy_img[:, :, 3:]), axis=-1
+        ).astype(np.uint8)
+        img = Image.fromarray(rgb_img, mode="RGBA")
+    else:
+        # 将 BGR 转换为 RGB
+        rgb_img = np.flip(numpy_img, axis=-1).astype(np.uint8)
+        img = Image.fromarray(rgb_img, mode="RGB")
+
+    img.save(file_path)
+
+
+def numpy_to_bytes(numpy_img):
+    img = Image.fromarray(numpy_img)
+    img_byte_arr = io.BytesIO()
+    img.save(img_byte_arr, format="PNG")
+    img_byte_arr.seek(0)
+    return img_byte_arr

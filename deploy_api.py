@@ -1,40 +1,57 @@
 from fastapi import FastAPI, UploadFile, Form
+from fastapi.responses import FileResponse
+import tempfile
 import onnxruntime
 from src.face_judgement_align import IDphotos_create
 from src.layoutCreate import generate_layout_photo, generate_layout_image
 from hivisionai.hycv.vision import add_background
-import base64
+from utils import numpy_2_base64
 import numpy as np
 import cv2
 import ast
+from utils import save_numpy_image
+from loguru import logger
 
 app = FastAPI()
 
 
-# 将图像转换为 Base64 编码
-def numpy_2_base64(img: np.ndarray):
-    retval, buffer = cv2.imencode(".png", img)
-    base64_image = base64.b64encode(buffer).decode("utf-8")
+"""证件照制作接口
 
-    return base64_image
+input_image: 上传的图像文件
+size: 证件照尺寸，格式为字符串，如 '(413,295)'
+hd_mode: 是否输出高清照片，默认为false
+
+"""
 
 
-# 证件照智能制作接口
 @app.post("/idphoto")
 async def idphoto_inference(
     input_image: UploadFile,
     size: str = Form(...),
+    hd_mode: bool = Form(False),
     head_measure_ratio=0.2,
     head_height_ratio=0.45,
     top_distance_max=0.12,
     top_distance_min=0.10,
 ):
-    image_bytes = await input_image.read()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    try:
+        image_bytes = await input_image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    except Exception:
+        err_msg: str = "read image error"
+        logger.error(err_msg)
+        result_messgae = {"status": False, "err_msg": err_msg}
+        return result_messgae
 
-    # 将字符串转为元组
-    size = ast.literal_eval(size)
+    try:
+        # 将字符串转为元组
+        size = ast.literal_eval(size)
+    except Exception:
+        err_msg = "size param error, expect format like '(418,295)'"
+        logger.error(err_msg)
+        result_messgae = {"status": False, "err_msg": err_msg}
+        return result_messgae
 
     (
         result_image_hd,
@@ -63,46 +80,62 @@ async def idphoto_inference(
     # 如果检测到人脸数量不等于 1（照片无人脸 or 多人脸）
     if status == 0:
         result_messgae = {"status": False}
-
-    # 如果检测到人脸数量等于 1, 则返回标准证和高清照结果（png 4 通道图像）
+        return result_messgae
     else:
-        result_messgae = {
-            "status": True,
-            "img_output_standard": numpy_2_base64(result_image_standard),
-            "img_output_standard_hd": numpy_2_base64(result_image_hd),
-        }
+        with tempfile.NamedTemporaryFile(
+            delete=False, suffix=".png"
+        ) as temp_standard, tempfile.NamedTemporaryFile(
+            delete=False, suffix=".png"
+        ) as temp_hd:
+            temp_standard_path = temp_standard.name
+            temp_hd_path = temp_hd.name
 
-    return result_messgae
+            # 假设 save_numpy_image 是一个将 numpy 图像保存为文件的函数
+            save_numpy_image(result_image_standard, temp_standard_path)
+            save_numpy_image(result_image_hd, temp_hd_path)
+
+            if hd_mode:
+                return FileResponse(
+                    temp_hd_path, media_type="image/png", filename="output_hd.png"
+                )
+            else:
+                return FileResponse(
+                    temp_standard_path,
+                    media_type="image/png",
+                    filename="output_standard.png",
+                )
 
 
 # 透明图像添加纯色背景接口
 @app.post("/add_background")
 async def photo_add_background(input_image: UploadFile, color: str = Form(...)):
-
     # 读取图像
-    image_bytes = await input_image.read()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
+    try:
+        image_bytes = await input_image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
+    except Exception:
+        err_msg = "read image error"
+        logger.error(err_msg)
+        result_messgae = {"status": False, "err_msg": err_msg}
+        return result_messgae
 
-    # 将字符串转为元组
-    color = ast.literal_eval(color)
-    # 将元祖的 0 和 2 号数字交换
-    color = (color[2], color[1], color[0])
+    try:
+        # 将字符串转为元组
+        color = ast.literal_eval(color)
+        # 将元组的 0 和 2 号数字交换
+        color = (color[2], color[1], color[0])
+    except Exception:
+        err_msg = "color param error, expect format like '(255,255,255)'"
+        logger.error(err_msg)
+        result_messgae = {"status": False, "err_msg": err_msg}
+        return result_messgae
 
-    # try:
-    result_messgae = {
-        "status": True,
-        "image": numpy_2_base64(add_background(img, bgr=color)),
-    }
-
-    # except Exception as e:
-    #     print(e)
-    #     result_messgae = {
-    #         "status": False,
-    #         "error": e
-    #     }
-
-    return result_messgae
+    bg_img = add_background(img, bgr=color)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp:
+        temp_path = temp.name
+        save_numpy_image(bg_img, temp_path)
+        return FileResponse(temp_path, media_type="image/jpg", filename="output.jpg")
 
 
 # 六寸排版照生成接口
@@ -112,9 +145,22 @@ async def generate_layout_photos(input_image: UploadFile, size: str = Form(...))
         image_bytes = await input_image.read()
         nparr = np.frombuffer(image_bytes, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    except Exception:
+        err_msg = "read image error"
+        logger.error(err_msg)
+        result_messgae = {"status": False, "err_msg": err_msg}
+        return result_messgae
 
+    try:
         size = ast.literal_eval(size)
+    except Exception:
+        err_msg = "size param error, expect format like '(418,295)'"
+        logger.error(err_msg)
+        result_messgae = {"status": False, "err_msg": err_msg}
+        return result_messgae
 
+    logger.info(f"size: {size}")
+    try:
         typography_arr, typography_rotate = generate_layout_photo(
             input_height=size[0], input_width=size[1]
         )
@@ -122,18 +168,16 @@ async def generate_layout_photos(input_image: UploadFile, size: str = Form(...))
         result_layout_image = generate_layout_image(
             img, typography_arr, typography_rotate, height=size[0], width=size[1]
         )
-
-        result_messgae = {
-            "status": True,
-            "image": numpy_2_base64(result_layout_image),
-        }
-
     except Exception as e:
         result_messgae = {
             "status": False,
         }
+        return result_messgae
 
-    return result_messgae
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp:
+        temp_path = temp.name
+        save_numpy_image(result_layout_image, temp_path)
+        return FileResponse(temp_path, media_type="image/jpg", filename="output.jpg")
 
 
 if __name__ == "__main__":
