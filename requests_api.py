@@ -1,10 +1,11 @@
 import requests
 import base64
+import argparse
+import ast
 from PIL import Image
 from io import BytesIO
-import argparse
-import os
 from utils.image_utils import resize_image_to_kb
+import os
 
 
 def base64_save(base64_image_data, save_path, kb=None):
@@ -19,14 +20,47 @@ def base64_save(base64_image_data, save_path, kb=None):
         img.save(save_path, "PNG")
 
 
+# 读取本地图像文件并转换为Base64编码
+def file_2_base64(file_path):
+    with open(file_path, "rb") as file:
+        encoded_string = base64.b64encode(file.read()).decode("utf-8")
+    return encoded_string
+
+
+# 发送请求到 /idphoto 接口
+def request_idphoto(file_path, size):
+    files = {"input_image": open(file_path, "rb")}
+    data = {"size": str(size)}
+    response = requests.post(url, files=files, data=data)
+    return response.json()
+
+
+# 发送请求到 /add_background 接口
+def request_add_background(file_path, color):
+    files = {"input_image": open(file_path, "rb")}
+    data = {"color": str(color)}
+    response = requests.post(url, files=files, data=data)
+    return response.json()
+
+
+# 发送请求到 /generate_layout_photos 接口
+def request_generate_layout_photos(file_path, size):
+    files = {"input_image": open(file_path, "rb")}
+    data = {"size": str(size)}
+    response = requests.post(url, files=files, data=data)
+    return response.json()
+
+
+# 示例调用
 if __name__ == "__main__":
+
     parser = argparse.ArgumentParser(
         description="HivisionIDPhotos 证件照制作推理程序。"
     )
-
     parser.add_argument(
-        "-u", "--url", help="API 服务的 URL", default="http://127.0.0.1:8080"
+        "-u", "--url", help="API 服务的 URL", default="http://localhost:8080"
     )
+
     parser.add_argument(
         "-t",
         "--type",
@@ -40,70 +74,45 @@ if __name__ == "__main__":
     parser.add_argument(
         "-k", "--kb", help="输出照片的 KB 值，仅对换底和制作排版照生效", default=None
     )
-
     args = parser.parse_args()
 
     url = f"{args.url}/{args.type}"  # 替换为实际的接口 URL
-    files = {
-        "input_image": (open(args.input_image_dir, "rb"))
-    }  # 替换为实际的文件路径和文件名
-    data = {
-        "size": args.size,
-        "color": args.color,
-    }
+    size = ast.literal_eval(args.size)
+    color = ast.literal_eval(args.color)
 
-    response = requests.post(url, data=data, files=files)
+    if args.type == "idphoto":
+        # 调用 /idphoto 接口
+        idphoto_response = request_idphoto(args.input_image_dir, args.size)
+        # print("ID Photo Response:", json.dumps(idphoto_response, indent=4))
 
-    if response.status_code == 200:
-        # 获取 Base64 编码的图像数据
-        if args.type == "idphoto":
-            response_json = response.json()
+        if idphoto_response["status"]:
+            # 解码 Base64 数据并保存为 PNG 文件
+            base64_image_data_standard = idphoto_response["image_base64_standard"]
+            base64_image_data_standard_hd = idphoto_response["image_base64_hd"]
 
-            status = response_json["status"]
-            if status:
+            file_name, file_extension = os.path.splitext(args.output_image_dir)
+            # 定义新的文件路径（在原有的文件名后添加"_hd"）
+            new_file_name = file_name + "_hd" + file_extension
 
-                base64_image_data_standard = response_json["img_output_standard"]
-                base64_image_data_standard_hd = response_json["img_output_standard_hd"]
+            # 解码 Base64 数据并保存为 PNG 文件
+            base64_save(base64_image_data_standard, args.output_image_dir)
+            base64_save(base64_image_data_standard_hd, new_file_name)
+        else:
+            print("人脸数量不等于 1，请上传单张人脸的图像。")
 
-                # 解码 Base64 数据并保存为 PNG 文件
-                base64_save(base64_image_data_standard, args.output_image_dir)
+    elif args.type == "add_background":
+        # 调用 /add_background 接口
+        add_background_response = request_add_background(args.input_image_dir, color)
+        base64_image_data = add_background_response["image_base64"]
+        base64_save(base64_image_data, args.output_image_dir, kb=args.kb)
 
-                file_name, file_extension = os.path.splitext(args.output_image_dir)
-                # 定义新的文件路径（在原有的文件名后添加"_hd"）
-                new_file_name = file_name + "_hd" + file_extension
-
-                base64_save(base64_image_data_standard_hd, new_file_name)
-
-                print(
-                    f"标准照保存至'{args.output_image_dir}'，高清照保存至'{new_file_name}'"
-                )
-
-            else:
-                print("人脸数量不等于 1，请上传单张人脸的图像。")
-
-        elif args.type == "add_background":
-            response_json = response.json()
-
-            status = response_json["status"]
-
-            if status:
-                base64_image_data = response_json["image"]
-                base64_save(base64_image_data, args.output_image_dir, kb=args.kb)
-                print(f"增加背景后的照片保存至'{args.output_image_dir}'。")
-            else:
-                print(f'遇到了一些问题，报错为{response_json["error"]}')
-
-        elif args.type == "generate_layout_photos":
-            response_json = response.json()
-
-            status = response_json["status"]
-
-            if status:
-                base64_image_data = response_json["image"]
-                base64_save(base64_image_data, args.output_image_dir, kb=args.kb)
-                print(f"排版照保存至'{args.output_image_dir}'。")
-            else:
-                print(f'遇到了一些问题，报错为{response_json["error"]}')
+    elif args.type == "generate_layout_photos":
+        # 调用 /generate_layout_photos 接口
+        generate_layout_response = request_generate_layout_photos(
+            args.input_image_dir, size
+        )
+        base64_image_data = generate_layout_response["image_base64"]
+        base64_save(base64_image_data, args.output_image_dir, kb=args.kb)
 
     else:
-        print("请求失败")
+        print("不支持的 API 类型，请检查输入参数。")
