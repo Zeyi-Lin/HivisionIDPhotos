@@ -92,6 +92,40 @@ Running the program will generate a local web page, where operations and interac
 
 <br>
 
+# 🚀 Python Inference
+
+## 1. ID Photo Production
+
+Input 1 photo, get 1 standard ID photo and 1 HD ID photo in a transparent PNG with 4 channels.
+
+```python
+
+python inference.py -i images/test.jpg -o ./idphoto.png -s '(413,295)'
+
+```
+
+## 2. Add Background Color
+
+Input 1 transparent PNG with 4 channels, get an image with added background color.
+
+```python
+
+python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg -c '(0,0,0)' -k 30
+
+```
+
+## 3. Obtain Six-Inch Layout Photo
+
+Input 1 photo with 3 channels, obtain one six-inch layout photo.
+
+```python
+
+python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)'-k200
+
+```
+
+<br>
+
 # ⚡️ Deploy API service
 
 ```
@@ -126,9 +160,12 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 ## 1. Pull or Build Image
 
+> Choose one of the following two methods
+
 **Pull Image from DockerHub**
 
 > This image is built on a machine with ARM architecture (e.g. Mac M1). If you want to use it on a machine with x86 architecture, please use Dockerfile.
+> In this way, starting from step 2, change the image name `hivision_idphotos` to `linzeyi/hivision_idphotos`.
 
 ```bash
 docker pull linzeyi/hivision_idphotos:v1
