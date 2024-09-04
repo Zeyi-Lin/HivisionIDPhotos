@@ -65,6 +65,63 @@ def resize_image_to_kb(input_image, output_image_path, target_size_kb):
             quality = 1
 
 
+def resize_image_to_kb_base64(input_image, target_size_kb):
+    """
+    Resize an image to a target size in KB and return it as a base64 encoded string.
+    将图像调整大小至目标文件大小（KB）并返回base64编码的字符串。
+
+    :param input_image: Input image as a NumPy array or PIL Image. 输入图像，可以是NumPy数组或PIL图像。
+    :param target_size_kb: Target size in KB. 目标文件大小（KB）。
+
+    :return: Base64 encoded string of the resized image. 调整大小后的图像的base64编码字符串。
+    """
+
+    if isinstance(input_image, np.ndarray):
+        img = Image.fromarray(input_image)
+    elif isinstance(input_image, Image.Image):
+        img = input_image
+    else:
+        raise ValueError("input_image must be a NumPy array or PIL Image.")
+
+    # Convert image to RGB mode if it's not
+    if img.mode != "RGB":
+        img = img.convert("RGB")
+
+    # Initial quality value
+    quality = 95
+
+    while True:
+        # Create a BytesIO object to hold the image data in memory
+        img_byte_arr = io.BytesIO()
+
+        # Save the image to the BytesIO object with the current quality
+        img.save(img_byte_arr, format="JPEG", quality=quality)
+
+        # Get the size of the image in KB
+        img_size_kb = len(img_byte_arr.getvalue()) / 1024
+
+        # Check if the image size is within the target size
+        if img_size_kb <= target_size_kb or quality == 1:
+            # If the image is smaller than the target size, add padding
+            if img_size_kb < target_size_kb:
+                padding_size = int(
+                    (target_size_kb * 1024) - len(img_byte_arr.getvalue())
+                )
+                padding = b"\x00" * padding_size
+                img_byte_arr.write(padding)
+
+            # Encode the image data to base64
+            img_base64 = base64.b64encode(img_byte_arr.getvalue()).decode("utf-8")
+            return img_base64
+
+        # Reduce the quality if the image is still too large
+        quality -= 5
+
+        # Ensure quality does not go below 1
+        if quality < 1:
+            quality = 1
+
+
 def numpy_2_base64(img: np.ndarray):
     retval, buffer = cv2.imencode(".png", img)
     base64_image = base64.b64encode(buffer).decode("utf-8")

@@ -4,20 +4,14 @@ import argparse
 import ast
 from PIL import Image
 from io import BytesIO
-from utils.image_utils import resize_image_to_kb
 import os
 
 
-def base64_save(base64_image_data, save_path, kb=None):
+def base64_save(base64_image_data, save_path):
     # 解码 Base64 数据并保存为 PNG 文件
     img_data = base64.b64decode(base64_image_data)
-    img = Image.open(BytesIO(img_data))
-
-    if kb:
-        img = resize_image_to_kb(img, save_path, float(kb))
-    else:
-        # 保存为本地 PNG 文件
-        img.save(save_path, "PNG")
+    with open(save_path, "wb") as file:
+        file.write(img_data)
 
 
 # 读取本地图像文件并转换为Base64编码
@@ -36,17 +30,17 @@ def request_idphoto(file_path, size):
 
 
 # 发送请求到 /add_background 接口
-def request_add_background(file_path, color):
+def request_add_background(file_path, color, kb=None):
     files = {"input_image": open(file_path, "rb")}
-    data = {"color": str(color)}
+    data = {"color": str(color), "kb": kb}
     response = requests.post(url, files=files, data=data)
     return response.json()
 
 
 # 发送请求到 /generate_layout_photos 接口
-def request_generate_layout_photos(file_path, size):
+def request_generate_layout_photos(file_path, size, kb=None):
     files = {"input_image": open(file_path, "rb")}
-    data = {"size": str(size)}
+    data = {"size": str(size), "kb": kb}
     response = requests.post(url, files=files, data=data)
     return response.json()
 
@@ -102,17 +96,19 @@ if __name__ == "__main__":
 
     elif args.type == "add_background":
         # 调用 /add_background 接口
-        add_background_response = request_add_background(args.input_image_dir, color)
+        add_background_response = request_add_background(
+            args.input_image_dir, color, kb=args.kb
+        )
         base64_image_data = add_background_response["image_base64"]
-        base64_save(base64_image_data, args.output_image_dir, kb=args.kb)
+        base64_save(base64_image_data, args.output_image_dir)
 
     elif args.type == "generate_layout_photos":
         # 调用 /generate_layout_photos 接口
         generate_layout_response = request_generate_layout_photos(
-            args.input_image_dir, size
+            args.input_image_dir, size, args.kb
         )
         base64_image_data = generate_layout_response["image_base64"]
-        base64_save(base64_image_data, args.output_image_dir, kb=args.kb)
+        base64_save(base64_image_data, args.output_image_dir)
 
     else:
         print("不支持的 API 类型，请检查输入参数。")

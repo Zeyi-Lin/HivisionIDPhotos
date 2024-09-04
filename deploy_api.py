@@ -3,24 +3,24 @@ import onnxruntime
 from src.face_judgement_align import IDphotos_create
 from src.layoutCreate import generate_layout_photo, generate_layout_image
 from hivisionai.hycv.vision import add_background
+from utils.image_utils import resize_image_to_kb_base64
+import base64
 import numpy as np
 import cv2
 import ast
-from utils import numpy_2_base64
-from loguru import logger
 
 app = FastAPI()
 
 
-"""证件照制作接口
+# 将图像转换为Base64编码
+def numpy_2_base64(img: np.ndarray):
+    retval, buffer = cv2.imencode(".png", img)
+    base64_image = base64.b64encode(buffer).decode("utf-8")
 
-input_image: 上传的图像文件
-size: 证件照尺寸，格式为字符串，如 '(413,295)'
-hd_mode: 是否输出高清照片，默认为false
-
-"""
+    return base64_image
 
 
+# 证件照智能制作接口
 @app.post("/idphoto")
 async def idphoto_inference(
     input_image: UploadFile,
@@ -30,24 +30,12 @@ async def idphoto_inference(
     top_distance_max=0.12,
     top_distance_min=0.10,
 ):
-    try:
-        image_bytes = await input_image.read()
-        nparr = np.frombuffer(image_bytes, np.uint8)
-        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    except Exception:
-        err_msg: str = "read image error"
-        logger.error(err_msg)
-        result_messgae = {"status": False, "err_msg": err_msg}
-        return result_messgae
+    image_bytes = await input_image.read()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-    try:
-        # 将字符串转为元组
-        size = ast.literal_eval(size)
-    except Exception:
-        err_msg = "size param error, expect format like '(418,295)'"
-        logger.error(err_msg)
-        result_messgae = {"status": False, "err_msg": err_msg}
-        return result_messgae
+    # 将字符串转为元组
+    size = ast.literal_eval(size)
 
     (
         result_image_hd,
@@ -73,75 +61,68 @@ async def idphoto_inference(
         top_distance_min=top_distance_min,
     )
 
-    # 如果检测到人脸数量不等于 1（照片无人脸 or 多人脸）
+    # 如果检测到人脸数量不等于1（照片无人脸 or 多人脸）
     if status == 0:
         result_messgae = {"status": False}
-        return result_messgae
+
+    # 如果检测到人脸数量等于1, 则返回标准证和高清照结果（png 4通道图像）
     else:
         result_messgae = {
             "status": True,
-            "image_base64_standard": numpy_2_base64(result_image_standard),
-            "image_base64_hd": numpy_2_base64(result_image_hd),
+            "img_output_standard": numpy_2_base64(result_image_standard),
+            "img_output_standard_hd": numpy_2_base64(result_image_hd),
         }
+
     return result_messgae
 
 
 # 透明图像添加纯色背景接口
 @app.post("/add_background")
-async def photo_add_background(input_image: UploadFile, color: str = Form(...)):
-    # 读取图像
-    try:
-        image_bytes = await input_image.read()
-        nparr = np.frombuffer(image_bytes, np.uint8)
-        img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
-    except Exception:
-        err_msg = "read image error"
-        logger.error(err_msg)
-        result_messgae = {"status": False, "err_msg": err_msg}
-        return result_messgae
+async def photo_add_background(
+    input_image: UploadFile, color: str = Form(...), kb: str = Form(...)
+):
+    image_bytes = await input_image.read()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
 
-    try:
-        # 将字符串转为元组
-        color = ast.literal_eval(color)
-        # 将元组的 0 和 2 号数字交换
-        color = (color[2], color[1], color[0])
-    except Exception:
-        err_msg = "color param error, expect format like '(255,255,255)'"
-        logger.error(err_msg)
-        result_messgae = {"status": False, "err_msg": err_msg}
-        return result_messgae
+    color = ast.literal_eval(color)
+    result_image = add_background(img, bgr=color).astype(np.uint8)
 
-    bg_img = add_background(img, bgr=color)
+    if kb:
+        result_image = cv2.cvtColor(result_image, cv2.COLOR_RGB2BGR)
+        result_image_base64 = resize_image_to_kb_base64(result_image, int(kb))
+    else:
+        result_image_base64 = numpy_2_base64(result_image)
+
+    # try:
+
     result_messgae = {
         "status": True,
-        "image_base64": numpy_2_base64(bg_img),
+        "image_base64": result_image_base64,
     }
+
+    # except Exception as e:
+    #     print(e)
+    #     result_messgae = {
+    #         "status": False,
+    #         "error": e
+    #     }
+
     return result_messgae
 
 
 # 六寸排版照生成接口
 @app.post("/generate_layout_photos")
-async def generate_layout_photos(input_image: UploadFile, size: str = Form(...)):
+async def generate_layout_photos(
+    input_image: UploadFile, size: str = Form(...), kb: int = Form(...)
+):
     try:
         image_bytes = await input_image.read()
         nparr = np.frombuffer(image_bytes, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    except Exception:
-        err_msg = "read image error"
-        logger.error(err_msg)
-        result_messgae = {"status": False, "err_msg": err_msg}
-        return result_messgae
 
-    try:
         size = ast.literal_eval(size)
-    except Exception:
-        err_msg = "size param error, expect format like '(418,295)'"
-        logger.error(err_msg)
-        result_messgae = {"status": False, "err_msg": err_msg}
-        return result_messgae
 
-    logger.info(f"size: {size}")
-    try:
         typography_arr, typography_rotate = generate_layout_photo(
             input_height=size[0], input_width=size[1]
         )
@@ -149,15 +130,25 @@ async def generate_layout_photos(input_image: UploadFile, size: str = Form(...))
         result_layout_image = generate_layout_image(
             img, typography_arr, typography_rotate, height=size[0], width=size[1]
         )
+
+        if kb:
+            result_layout_image = cv2.cvtColor(result_layout_image, cv2.COLOR_RGB2BGR)
+            result_layout_image_base64 = resize_image_to_kb_base64(
+                result_layout_image, int(kb)
+            )
+        else:
+            result_layout_image_base64 = numpy_2_base64(result_layout_image)
+
+        result_messgae = {
+            "status": True,
+            "image": numpy_2_base64(result_layout_image_base64),
+        }
+
     except Exception as e:
         result_messgae = {
             "status": False,
         }
-        return result_messgae
-    result_messgae = {
-        "status": True,
-        "image_base64": numpy_2_base64(result_layout_image),
-    }
+
     return result_messgae
 
 
@@ -168,5 +159,5 @@ if __name__ == "__main__":
     HY_HUMAN_MATTING_WEIGHTS_PATH = "./hivision_modnet.onnx"
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
 
-    # 在 8080 端口运行推理服务
+    # 在8080端口运行推理服务
     uvicorn.run(app, host="0.0.0.0", port=8080)
