@@ -1,6 +1,4 @@
 from fastapi import FastAPI, UploadFile, Form
-from fastapi.responses import FileResponse
-import tempfile
 import onnxruntime
 from src.face_judgement_align import IDphotos_create
 from src.layoutCreate import generate_layout_photo, generate_layout_image
@@ -8,7 +6,7 @@ from hivisionai.hycv.vision import add_background
 import numpy as np
 import cv2
 import ast
-from utils import save_numpy_image
+from utils import numpy_2_base64
 from loguru import logger
 
 app = FastAPI()
@@ -27,7 +25,6 @@ hd_mode: 是否输出高清照片，默认为false
 async def idphoto_inference(
     input_image: UploadFile,
     size: str = Form(...),
-    hd_mode: bool = Form(False),
     head_measure_ratio=0.2,
     head_height_ratio=0.45,
     top_distance_max=0.12,
@@ -81,28 +78,12 @@ async def idphoto_inference(
         result_messgae = {"status": False}
         return result_messgae
     else:
-        with tempfile.NamedTemporaryFile(
-            delete=False, suffix=".png"
-        ) as temp_standard, tempfile.NamedTemporaryFile(
-            delete=False, suffix=".png"
-        ) as temp_hd:
-            temp_standard_path = temp_standard.name
-            temp_hd_path = temp_hd.name
-
-            # 假设 save_numpy_image 是一个将 numpy 图像保存为文件的函数
-            save_numpy_image(result_image_standard, temp_standard_path)
-            save_numpy_image(result_image_hd, temp_hd_path)
-
-            if hd_mode:
-                return FileResponse(
-                    temp_hd_path, media_type="image/png", filename="output_hd.png"
-                )
-            else:
-                return FileResponse(
-                    temp_standard_path,
-                    media_type="image/png",
-                    filename="output_standard.png",
-                )
+        result_messgae = {
+            "status": True,
+            "image_base64_standard": numpy_2_base64(result_image_standard),
+            "image_base64_hd": numpy_2_base64(result_image_hd),
+        }
+    return result_messgae
 
 
 # 透明图像添加纯色背景接口
@@ -131,10 +112,11 @@ async def photo_add_background(input_image: UploadFile, color: str = Form(...)):
         return result_messgae
 
     bg_img = add_background(img, bgr=color)
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp:
-        temp_path = temp.name
-        save_numpy_image(bg_img, temp_path)
-        return FileResponse(temp_path, media_type="image/jpeg", filename="output.jpg")
+    result_messgae = {
+        "status": True,
+        "image_base64": numpy_2_base64(bg_img),
+    }
+    return result_messgae
 
 
 # 六寸排版照生成接口
@@ -172,11 +154,11 @@ async def generate_layout_photos(input_image: UploadFile, size: str = Form(...))
             "status": False,
         }
         return result_messgae
-
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp:
-        temp_path = temp.name
-        save_numpy_image(result_layout_image, temp_path)
-        return FileResponse(temp_path, media_type="image/jpeg", filename="output.jpg")
+    result_messgae = {
+        "status": True,
+        "image_base64": numpy_2_base64(result_layout_image),
+    }
+    return result_messgae
 
 
 if __name__ == "__main__":
