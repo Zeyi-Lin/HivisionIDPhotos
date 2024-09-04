@@ -158,6 +158,20 @@ You can access it locally at [http://127.0.0.1:7860](http://127.0.0.1:7860/).
 docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 ```
 
+for docker compose:
+
+After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
+
+```bash
+docker compose build
+```
+
+After the image is packaged, run the following command to start the API service:
+
+```bash
+docker compose up -d
+```
+
 <br>
 
 # 📖 Reference Projects
