@@ -40,7 +40,7 @@ python delopy_api.py
 
 <br>
 
-## Python Requests 请求方法
+## 1️⃣ Python Requests 请求方法
 
 ### 1.生成证件照(底透明)
 
@@ -94,7 +94,9 @@ response = requests.post(url, files=files, data=data).json()
 print(response)
 ```
 
-## Python 脚本请求方法
+<br>
+
+## 2️⃣ Python 脚本请求方法
 
 ```bash
 python requests_api.py -u <URL> -t <TYPE> -i <INPUT_IMAGE_DIR> -o <OUTPUT_IMAGE_DIR> [-s <SIZE>] [-c <COLOR>] [-k <KB>]
