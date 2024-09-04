@@ -187,7 +187,7 @@ After ensuring that the model weight file [hivision_modnet.onnx](https://github.
 docker compose build
 ```
 
-After the image is packaged, run the following command to start the API service:
+After the image is packaged, run the following command to start the Gradio service:
 
 ```bash
 docker compose up -d

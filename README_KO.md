@@ -155,7 +155,7 @@ docker build -t hivision_idphotos .
 도커 컴포즈 빌드
 ```
 
-이미지 패키징이 완료되면 다음 명령어를 실행하여 API 서비스를 시작합니다:
+이미지 패키징이 완료되면 다음 명령어를 실행하여 Gradio 서비스를 시작합니다:
 
 ```bash
 docker compose up -d

@@ -156,7 +156,7 @@ docker build -t hivision_idphotos .
 docker compose build
 ```
 
-イメージがパッケージ化されたら、以下のコマンドを実行して API サービスを起動する：
+イメージがパッケージ化されたら、以下のコマンドを実行して Gradio サービスを起動する：
 
 ```bash
 docker compose up -d

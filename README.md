@@ -195,7 +195,7 @@ docker build -t hivision_idphotos .
 docker compose build
 ```
 
-镜像打包完成后，运行以下命令启动 API 服务：
+镜像打包完成后，运行以下命令启动 Gradio 服务：
 
 ```bash
 docker compose up -d
