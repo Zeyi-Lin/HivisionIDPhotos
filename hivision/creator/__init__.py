@@ -35,15 +35,10 @@ class IDCreator:
         """
         在人脸检测之后，ctx.face 被赋值，如果为仅换底，则不会执行此回调
         """
-        self.after_adjust: ContextHandler = None
-        """
-        在人脸调整之后，ctx.face 被赋值，如果为仅换底，则不会执行此回调
-        """
         self.after_all: ContextHandler = None
         """
-        在所有处理之后，此时 ctx.result被赋值
+        在所有处理之后，此时 ctx.result 被赋值
         """
-
         # 处理者
         self.matting_handler: ContextHandler = extract_human
         self.detection_handler: ContextHandler = detect_face
@@ -111,5 +106,5 @@ class IDCreator:
             clothing_params=clothing_params,
             typography_params=typography_params,
         )
-        self.after_adjust and self.after_adjust(ctx)
+        self.after_all and self.after_all(ctx)
         return ctx.result
