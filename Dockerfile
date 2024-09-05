@@ -22,7 +22,8 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt && \
+    pip3 install -r requirements-app.txt
 
 RUN echo "==> Clean up..."  && \
     rm -rf ~/.cache/pip
@@ -31,4 +32,4 @@ RUN echo "==> Clean up..."  && \
 
 EXPOSE 7860
 
-CMD [ "python3", "app.py", "--host", "0.0.0.0", "--port", "7860"]
+CMD [ "python3", "app/web.py", "--host", "0.0.0.0", "--port", "7860"]
