@@ -4,7 +4,7 @@ import ast
 import argparse
 import numpy as np
 import onnxruntime
-from utils import resize_image_to_kb
+from utils import resize_image_to_kb, hex_to_rgb
 from src.face_judgement_align import IDphotos_create
 from hivisionai.hycv.vision import add_background
 from src.layoutCreate import generate_layout_photo, generate_layout_image
@@ -20,8 +20,9 @@ parser.add_argument(
 )
 parser.add_argument("-i", "--input_image_dir", help="输入图像路径", required=True)
 parser.add_argument("-o", "--output_image_dir", help="保存图像路径", required=True)
-parser.add_argument("-s", "--size", help="证件照尺寸", default="(413,295)")
-parser.add_argument("-c", "--color", help="证件照背景色", default="(255,255,255)")
+parser.add_argument("--height", help="证件照尺寸-高", default=413)
+parser.add_argument("--width", help="证件照尺寸-宽", default=295)
+parser.add_argument("-c", "--color", help="证件照背景色", default="638cce")
 parser.add_argument(
     "-k", "--kb", help="输出照片的 KB 值，仅对换底和制作排版照生效", default=None
 )
@@ -42,7 +43,7 @@ input_image = cv2.imread(args.input_image_dir, cv2.IMREAD_UNCHANGED)
 if args.type == "idphoto":
 
     # 将字符串转为元组
-    size = ast.literal_eval(args.size)
+    size = (int(args.height), int(args.width))
 
     (
         result_image_hd,
@@ -82,7 +83,7 @@ if args.type == "idphoto":
 elif args.type == "add_background":
 
     # 将字符串转为元组
-    color = ast.literal_eval(args.color)
+    color = hex_to_rgb(args.color)
     # 将元祖的 0 和 2 号数字交换
     color = (color[2], color[1], color[0])
 
@@ -100,8 +101,7 @@ elif args.type == "add_background":
 # 如果模式是生成排版照
 elif args.type == "generate_layout_photos":
 
-    # 将字符串转为元组
-    size = ast.literal_eval(args.size)
+    size = (int(args.height), int(args.width))
 
     typography_arr, typography_rotate = generate_layout_photo(
         input_height=size[0], input_width=size[1]

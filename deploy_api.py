@@ -3,7 +3,7 @@ import onnxruntime
 from src.face_judgement_align import IDphotos_create
 from src.layoutCreate import generate_layout_photo, generate_layout_image
 from hivisionai.hycv.vision import add_background
-from utils.image_utils import resize_image_to_kb_base64
+from utils import resize_image_to_kb_base64, hex_to_rgb
 import base64
 import numpy as np
 import cv2
@@ -24,18 +24,20 @@ def numpy_2_base64(img: np.ndarray):
 @app.post("/idphoto")
 async def idphoto_inference(
     input_image: UploadFile,
-    size: str = Form(...),
+    height: str = Form(...),
+    width: str = Form(...),
     head_measure_ratio=0.2,
     head_height_ratio=0.45,
     top_distance_max=0.12,
     top_distance_min=0.10,
 ):
+
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     # 将字符串转为元组
-    size = ast.literal_eval(size)
+    size = (int(height), int(width))
 
     (
         result_image_hd,
@@ -85,7 +87,9 @@ async def photo_add_background(
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
 
-    color = ast.literal_eval(color)
+    color = hex_to_rgb(color)
+    color = (color[2], color[1], color[0])
+
     result_image = add_background(img, bgr=color).astype(np.uint8)
 
     if kb:
@@ -114,14 +118,17 @@ async def photo_add_background(
 # 六寸排版照生成接口
 @app.post("/generate_layout_photos")
 async def generate_layout_photos(
-    input_image: UploadFile, size: str = Form(...), kb: str = Form(None)
+    input_image: UploadFile,
+    height: str = Form(...),
+    width: str = Form(...),
+    kb: str = Form(None),
 ):
     # try:
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-    size = ast.literal_eval(size)
+    size = (int(height), int(width))
 
     typography_arr, typography_rotate = generate_layout_photo(
         input_height=size[0], input_width=size[1]

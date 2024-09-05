@@ -51,7 +51,7 @@ url = "http://127.0.0.1:8080/idphoto"
 input_image_path = "images/test.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
-data = {"size": '(413, 295)'}
+data = {"height": 413, "width": 295}
 
 response = requests.post(url, files=files, data=data).json()
 
@@ -69,7 +69,7 @@ url = "http://127.0.0.1:8080/add_background"
 input_image_path = "test.png"
 
 files = {"input_image": open(input_image_path, "rb")}
-data = {"color": '(99,126,194)', 'kb': None}
+data = {"color": '638cce', 'kb': None}
 
 response = requests.post(url, files=files, data=data).json()
 
@@ -86,7 +86,7 @@ url = "http://127.0.0.1:8080/generate_layout_photos"
 input_image_path = "test.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
-data = {"size": "(413,295)", "kb": 200}
+data = {"height": 413, "width": 295, "kb": 200}
 
 response = requests.post(url, files=files, data=data).json()
 
@@ -99,7 +99,7 @@ print(response)
 ## 2️⃣ Python 脚本请求方法
 
 ```bash
-python requests_api.py -u <URL> -t <TYPE> -i <INPUT_IMAGE_DIR> -o <OUTPUT_IMAGE_DIR> [-s <SIZE>] [-c <COLOR>] [-k <KB>]
+python requests_api.py -u <URL> -t <TYPE> -i <INPUT_IMAGE_DIR> -o <OUTPUT_IMAGE_DIR> [--height <HEIGHT>] [--width <WIDTH>] [-c <COLOR>] [-k <KB>]
 ```
 
 ### 参数说明
@@ -129,15 +129,20 @@ python requests_api.py -u <URL> -t <TYPE> -i <INPUT_IMAGE_DIR> -o <OUTPUT_IMAGE_
 
 #### 可选参数
 
-- `-s`, `--size`
+- `--height`,
 
-  - **描述**: 标准证件照的输出尺寸，格式为 `(高度, 宽度)`。
-  - **默认值**: `(413,295)`
+  - **描述**: 标准证件照的输出尺寸的高度。
+  - **默认值**: 413
+
+- `--width`,
+
+  - **描述**: 标准证件照的输出尺寸的宽度。
+  - **默认值**: 295
 
 - `-c`, `--color`
 
-  - **描述**: 给透明图增加背景色，格式为 `(R, G, B)`，仅在 type 为`add_background`时生效
-  - **默认值**: `(255,255,255)`
+  - **描述**: 给透明图增加背景色，格式为 Hex（如#638cce），仅在 type 为`add_background`时生效
+  - **默认值**: `638cce`
 
 - `-k`, `--kb`
   - **描述**: 输出照片的 KB 值，仅在 type 为`add_background`和`generate_layout_photos`时生效，值为 None 时不做设置。
@@ -152,7 +157,8 @@ python requests_api.py  \
     -t idphoto \
     -i ./photo.jpg \
     -o ./idphoto.png \
-    -s '(413,295)'
+    --height 413 \
+    --width 295
 ```
 
 ### 2.添加背景色
@@ -163,7 +169,7 @@ python requests_api.py  \
     -t add_background  \
     -i ./idphoto.png  \
     -o ./idphoto_with_background.jpg  \
-    -c '(99,126,194)'  \
+    -c 638cce  \
     -k 50
 ```
 
@@ -175,7 +181,8 @@ python requests_api.py  \
     -t generate_layout_photos  \
     -i ./idphoto_with_background.jpg  \
     -o ./layout_photo.jpg  \
-    -s '(413,295)'  \
+    --height 413  \
+    --width 295 \
     -k 200
 ```
 

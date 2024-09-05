@@ -107,7 +107,7 @@ python app.py
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
 
 ```python
-python inference.py -i images/test.jpg -o ./idphoto.png -s '(413,295)'
+python inference.py -i images/test.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
 ## 2. 增加底色
@@ -115,7 +115,7 @@ python inference.py -i images/test.jpg -o ./idphoto.png -s '(413,295)'
 输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像）
 
 ```python
-python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c '(0,0,0)' -k 30
+python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
 ```
 
 ## 3. 得到六寸排版照
@@ -123,7 +123,7 @@ python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c '(
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 
 ```python
-python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  -s '(413,295)' -k 200
+python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
 ```
 
 <br>
@@ -147,7 +147,7 @@ python deploy_api.py
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.png -s '(413,295)'
+python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
 ### 2. 增加底色
@@ -155,7 +155,7 @@ python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.
 输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c '(0,0,0)' -k 30
+python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
 ```
 
 ### 3. 得到六寸排版照
@@ -163,7 +163,7 @@ python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.p
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  -s '(413,295)' -k 200
+python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
 ```
 
 <br>
