@@ -28,11 +28,6 @@
 - 2023.12.1: **API 배포(fastapi 기반)** 업데이트
 - 2023.6.20: **미리 설정된 사이즈 메뉴** 업데이트
 - 2023.6.19: **레이아웃 사진** 업데이트
-- 2023.6.13: **중앙 그라데이션 색상** 업데이트
-- 2023.6.11: **상하 그라데이션 색상** 업데이트
-- 2023.6.8: **맞춤형 사이즈** 업데이트
-- 2023.6.4: **맞춤형 배경색, 얼굴 인식 오류 알림** 업데이트
-- 2023.5.10: **크기 변경 없이 배경만 교체** 업데이트
 
 # 개요
 
@@ -79,51 +74,104 @@ cd  HivisionIDPhotos
 
 ```bash
 pip install -r requirements.txt
+pip install -r requirements-app.txt
 ```
 
 **3. 모델 가중치 다운로드**
 
-[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)에서 가중치 파일 `hivision_modnet.onnx`를 다운로드하여 루트 디렉토리에 저장하세요.
+[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)에서 무게 파일 'hivision_modnet.onnx' (24.7MB)을 다운로드하여 프로젝트의 'hivision/creator/weights' 디렉토리에 저장하십시오.
 
 <br>
 
-# 🚀 Gradio 데모 실행
+# 🚀 Python 추론
 
-```bash
-python app.py
+## 1. 신분증 사진 제작
+
+1장의 사진을 입력하여 1장의 표준 신분증 사진과 1장의 고화질 신분증 사진의 4채널 투명 PNG를 얻습니다.
+
+```python
+python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
-프로그램을 실행하면 로컬 웹 페이지가 생성되며, 해당 페이지에서 증명사진 작업 및 상호작용을 완료할 수 있습니다.
+## 2. 배경색 추가
+
+1장의 4채널 투명 PNG를 입력하여 배경색이 추가된 1장의 이미지를 얻습니다.
+
+```python
+python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
+```
+
+## 3. 6인치 레이아웃 사진 얻기
+
+1장의 3채널 사진을 입력하여 1장의 6인치 레이아웃 사진을 얻습니다.
+
+```python
+python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
+```
 
 <br>
 
-# ⚡️ API 서비스 배포
+## API 서비스 요청 - Python Request
 
-```
-python deploy_api.py
-```
+### 1. 신분증 사진 제작
 
-**API 서비스 요청(Python)**
-
-Python을 사용하여 서비스에 요청을 보낼 수 있습니다:
-
-증명사진 생성(사진 1장을 입력하여 표준 증명사진 1장과 고해상도 증명사진의 4채널 투명 PNG 1장을 얻습니다):
+1장의 사진을 입력하여 1장의 표준 신분증 사진과 1장의 고화질 신분증 사진의 4채널 투명 PNG를 얻습니다.
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.png -s '(413,295)'
+import requests
+
+url = "http://127.0.0.1:8080/idphoto"
+input_image_path = "demo/images/test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response는 status, image_base64_standard, image_base64_hd를 포함한 JSON 형식의 딕셔너리입니다.
+print(response)
+
 ```
 
-배경색 추가(4채널 투명 PNG 1장을 입력하여 배경색이 추가된 이미지를 얻습니다):
+### 2. 배경색 추가
+
+1장의 4채널 투명 PNG를 입력하여 배경색이 추가된 1장의 이미지를 얻습니다.
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c '(0,0,0)' -k 30
+import requests
+
+url = "http://127.0.0.1:8080/add_background"
+input_image_path = "test.png"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"color": '638cce', 'kb': None}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response는 status와 image_base64를 포함한 JSON 형식의 딕셔너리입니다.
+print(response)
 ```
 
-여섯 컷 레이아웃 사진 얻기(3채널 사진 1장을 입력하여 여섯 컷 레이아웃 사진을 얻습니다):
+### 3. 6인치 레이아웃 사진 얻기
+
+1장의 3채널 사진을 입력하여 1장의 6인치 레이아웃 사진을 얻습니다.
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  -s '(413,295)' -k 200
+import requests
+
+url = "http://127.0.0.1:8080/generate_layout_photos"
+input_image_path = "test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295, "kb": 200}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response는 status와 image_base64를 포함한 JSON 형식의 딕셔너리입니다.
+print(response)
 ```
+
+더 많은 요청 방법은 [API 문서](docs/api_EN.md)를 참조하세요. Python 스크립트 요청, Python Request 요청, Java 요청이 포함되어 있습니다.
 
 <br>
 
@@ -131,40 +179,40 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 ## 1. 이미지 가져오기 또는 빌드
 
-> 다음 3가지 방법 중 하나를 선택하십시오.
+> 다음 방법 중 하나를 선택하세요
 
-**방법 1：이미지 가져오기:**
+**방법 1: 이미지 가져오기:**
 
 ```bash
 docker pull linzeyi/hivision_idphotos:v1
 docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
 ```
 
-**방법 2：Dockerfile로 이미지 빌드:**
+**방법 2: Dockerfile로 직접 이미지 빌드:**
 
-모델 가중치 파일 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)을 루트 디렉토리에 놓고, 루트 디렉토리에서 다음 명령어를 실행하세요:
+모델 가중치 파일 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)을 `hivision/creator/weights` 디렉토리에 넣은 후, 프로젝트 루트 디렉토리에서 다음을 실행합니다:
 
 ```bash
 docker build -t hivision_idphotos .
 ```
 
-**방법 3：Docker Compose:**
+**방법 3: Docker compose로 빌드:**
 
-모델 가중치 파일 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)가 루트 디렉터리에 있는지 확인한 후 루트 디렉터리에서 실행합니다:
+모델 가중치 파일 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)을 `hivision/creator/weights` 디렉토리에 넣은 후, 프로젝트 루트 디렉토리에서 다음을 실행합니다:
 
 ```bash
-도커 컴포즈 빌드
+docker compose build
 ```
 
-이미지 패키징이 완료되면 다음 명령어를 실행하여 Gradio 서비스를 시작합니다:
+이미지 패키징이 완료되면, 다음 명령을 실행하여 Gradio 서비스를 시작합니다:
 
 ```bash
 docker compose up -d
 ```
 
-## 2. Gradio 데모 실행
+## 2. Gradio Demo 실행
 
-이미지 패키징이 완료되면 다음 명령어를 실행하여 Gradio 데모 서비스를 시작하세요:
+이미지 패키징이 완료되면, 다음 명령을 실행하여 Gradio Demo 서비스를 시작합니다:
 
 ```bash
 docker run -p 7860:7860 hivision_idphotos
@@ -179,6 +227,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 ```
 
 <br>
+
 
 # 📖 프로젝트 인용
 

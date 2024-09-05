@@ -1,0 +1,2 @@
+gradio==3.38.0
+fastapi

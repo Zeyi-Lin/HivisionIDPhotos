@@ -1,4 +1,0 @@
-from .MakeBeautiful import makeBeautiful
-
-
-

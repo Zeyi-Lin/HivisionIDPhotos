@@ -33,11 +33,6 @@
 - 2023.12.1: 更新**API 部署（基于 fastapi）**
 - 2023.6.20: 更新**预设尺寸菜单**
 - 2023.6.19: 更新**排版照**
-- 2023.6.13: 更新**中心渐变色**
-- 2023.6.11: 更新**上下渐变色**
-- 2023.6.8: 更新**自定义尺寸**
-- 2023.6.4: 更新**自定义底色、人脸检测 Bug 通知**
-- 2023.5.10: 更新**不改尺寸只换底**
 
 # Overview
 
@@ -84,11 +79,12 @@ cd  HivisionIDPhotos
 
 ```bash
 pip install -r requirements.txt
+pip install -r requirements-app.txt
 ```
 
 **3. 下载权重文件**
 
-在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx` (24.7MB)，存到项目根目录下。
+在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx` (24.7MB)，存到项目的`hivision/creator/weights`目录下。
 
 <br>
 
@@ -109,7 +105,7 @@ python app.py
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
 
 ```python
-python inference.py -i images/test.jpg -o ./idphoto.png --height 413 --width 295
+python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
 ## 2. 增加底色
@@ -148,7 +144,7 @@ python deploy_api.py
 import requests
 
 url = "http://127.0.0.1:8080/idphoto"
-input_image_path = "images/test.jpg"
+input_image_path = "demo/images/test.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
 data = {"height": 413, "width": 295}
@@ -224,7 +220,7 @@ docker tag registry.cn-hangzhou.aliyuncs.com/swanhub/hivision_idphotos:v1 hivisi
 
 **方式二：Dockrfile 直接构建镜像：**
 
-在确保将模型权重文件[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)放到根目录下后，在根目录执行：
+在确保将模型权重文件[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)放到`hivision/creator/weights`下后，在项目根目录执行：
 
 ```bash
 docker build -t hivision_idphotos .
@@ -232,7 +228,7 @@ docker build -t hivision_idphotos .
 
 **方式三：Docker compose 构建：**
 
-确保将模型权重文件 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) 放在根目录下后，在根目录下执行：
+确保将模型权重文件 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) 放在`hivision/creator/weights`下后，在项目根目录下执行：
 
 ```bash
 docker compose build

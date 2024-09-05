@@ -23,11 +23,6 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 - 2023.12.1: Update **API deployment (based on fastapi)**
 - 2023.6.20: Update **Preset size menu**
 - 2023.6.19: Update **Layout photos**
-- 2023.6.13: Update **Center gradient color**
-- 2023.6.11: Update **Top and bottom gradient color**
-- 2023.6.8: Update **Custom size**
-- 2023.6.4: Update **Custom background color, face detection bug notification**
-- 2023.5.10: Update **Change the background without changing the size**
 
 <br>
 
@@ -74,13 +69,14 @@ cd  HivisionIDPhotos
 
 > It is recommended to create a Python 3.10 virtual environment with conda and then execute the following command.
 
-```
+```bash
 pip install -r requirements.txt
+pip install -r requirements-app.txt
 ```
 
 **3. Download Pretrain file**
 
-Download the weight file `hivision_modnet.onnx` from our [Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) and save it to the root directory.
+Download the weight file `hivision_modnet.onnx` from our [Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) and save it to the  `hivision/creator/weights` directory.
 
 <br>
 
@@ -101,9 +97,7 @@ Running the program will generate a local web page, where operations and interac
 Input 1 photo, get 1 standard ID photo and 1 HD ID photo in a transparent PNG with 4 channels.
 
 ```python
-
-python inference.py -i images/test.jpg -o ./idphoto.png -s '(413,295)'
-
+python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
 ## 2. Add Background Color
@@ -112,7 +106,7 @@ Input 1 transparent PNG with 4 channels, get an image with added background colo
 
 ```python
 
-python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg -c '(0,0,0)' -k 30
+python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
 
 ```
 
@@ -122,7 +116,7 @@ Input 1 photo with 3 channels, obtain one six-inch layout photo.
 
 ```python
 
-python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)' -k 200
+python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
 
 ```
 
@@ -215,7 +209,7 @@ docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
 
 **Method 2 - Build Image:**
 
-After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
+After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the `hivision/creator/weights` directory, execute in the root directory:
 
 ```bash
 docker build -t hivision_idphotos .
@@ -223,7 +217,7 @@ docker build -t hivision_idphotos .
 
 **Method 3 - Docker Compose:**
 
-After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
+After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the `hivision/creator/weights` directory, execute in the root directory:
 
 ```bash
 docker compose build

@@ -29,11 +29,6 @@
 - 2023.12.1: **API デプロイメント（fastapi ベース）**を更新
 - 2023.6.20: **プリセットサイズメニュー**
 - 2023.6.19: **レイアウト写真**を更新
-- 2023.6.13: **センターグラデーションカラー**を更新
-- 2023.6.11: **上下グラデーションカラー**を更新
-- 2023.6.8: **カスタムサイズ**を更新
-- 2023.6.4: **カスタム背景色、顔検出バグ通知**を更新
-- 2023.5.10: **サイズを変更せずに背景を変更**を更新
 
 # 概要
 
@@ -80,11 +75,12 @@ cd  HivisionIDPhotos
 
 ```bash
 pip install -r requirements.txt
+pip install -r requirements-app.txt
 ```
 
 **3. 重みファイルをダウンロード**
 
-[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)から重みファイル`hivision_modnet.onnx`をダウンロードし、ルートディレクトリに保存します。
+私たちの[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)から重みファイル`hivision_modnet.onnx`（24.7MB）をダウンロードし、プロジェクトの`hivision/creator/weights`ディレクトリに保存してください。
 
 <br>
 
@@ -95,6 +91,34 @@ python app.py
 ```
 
 プログラムを実行すると、ローカルの Web ページが生成され、そのページで証明写真の操作と対話を完了できます。
+
+<br>
+
+# 🚀 Python 推論
+
+## 1. 証明写真の作成
+
+1 枚の写真を入力し、1 枚の標準証明写真と 1 枚の高解像度証明写真の 4 チャンネル透明 PNG を取得します。
+
+```python
+python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
+```
+
+## 2. 背景色の追加
+
+1 枚の 4 チャンネル透明 PNG を入力し、背景色が追加された 1 枚の画像を取得します。
+
+```python
+python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
+```
+
+## 3. 六寸レイアウト写真の取得
+
+1 枚の 3 チャンネル写真を入力し、1 枚の六寸レイアウト写真を取得します。
+
+```python
+python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
+```
 
 <br>
 
@@ -128,38 +152,100 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 <br>
 
-＃🐳 Docker デプロイメント
+## API サービスリクエスト - Python Request
 
-## 1. イメージの取得またはビルド
+### 1. 証明写真の作成
 
-> 以下の方法から 1 つを選択してください
+1枚の写真を入力し、1枚の標準証明写真と1枚の高解像度証明写真の4チャンネル透明PNGを取得します。
 
-**方法その 1 です：イメージの取得：**
+```bash
+import requests
+
+url = "http://127.0.0.1:8080/idphoto"
+input_image_path = "demo/images/test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295}
+
+response = requests.post(url, files=files, data=data).json()
+
+# responseはstatus、image_base64_standard、image_base64_hdを含むJSON形式の辞書です。
+print(response)
+
+```
+
+### 2. 背景色の追加
+
+1枚の4チャンネル透明PNGを入力し、背景色が追加された1枚の画像を取得します。
+
+```bash
+import requests
+
+url = "http://127.0.0.1:8080/add_background"
+input_image_path = "test.png"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"color": '638cce', 'kb': None}
+
+response = requests.post(url, files=files, data=data).json()
+
+# responseはstatusとimage_base64を含むJSON形式の辞書です。
+print(response)
+```
+
+### 3. 6インチレイアウト写真の取得
+
+1枚の3チャンネル写真を入力し、1枚の6インチレイアウト写真を取得します。
+
+```bash
+import requests
+
+url = "http://127.0.0.1:8080/generate_layout_photos"
+input_image_path = "test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295, "kb": 200}
+
+response = requests.post(url, files=files, data=data).json()
+
+# responseはstatusとimage_base64を含むJSON形式の辞書です。
+print(response)
+```
+
+より多くのリクエスト方法については、[API ドキュメント](docs/api_EN.md)を参照してください。Python スクリプトリクエスト、Python Request リクエスト、Java リクエストが含まれています。
+
+<br>
+
+# 🐳 Docker デプロイ
+
+## 1. イメージのプルまたはビルド
+
+> 以下の方法から一つを選択してください
+
+**方法一：イメージのプル：**
 
 ```bash
 docker pull linzeyi/hivision_idphotos:v1
 docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
 ```
 
-**方法その 2 です：Dockrfile によるイメージの構築：**
+**方法二：Dockerfile で直接イメージをビルド：**
 
-> 次の 3 つの方法から 1 つを選択してください
-
-[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)というモデルの重みファイルがルートディレクトリに配置されていることを確認した後、次のコマンドを実行します。
+モデルの重みファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)を`hivision/creator/weights`ディレクトリに配置した後、プロジェクトのルートディレクトリで以下を実行します：
 
 ```bash
 docker build -t hivision_idphotos .
 ```
 
-**方法その 3 です：Docker Compose:**
+**方法三：Docker compose でビルド：**
 
-モデルのウェイトファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)がルートディレクトリに置かれていることを確認したら、ルートディレクトリで実行します：
+モデルの重みファイル [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) を`hivision/creator/weights`ディレクトリに配置した後、プロジェクトのルートディレクトリで以下を実行します：
 
 ```bash
 docker compose build
 ```
 
-イメージがパッケージ化されたら、以下のコマンドを実行して Gradio サービスを起動する：
+イメージのパッケージングが完了したら、以下のコマンドを実行して Gradio サービスを起動します：
 
 ```bash
 docker compose up -d
@@ -167,22 +253,18 @@ docker compose up -d
 
 ## 2. Gradio Demo の実行
 
-画像パッケージングが完了したら、次のコマンドを実行して Gradio Demo サービスを開始します。
+イメージのパッケージングが完了したら、以下のコマンドを実行して Gradio Demo サービスを起動します：
 
 ```bash
-
 docker run -p 7860:7860 hivision_idphotos
-
 ```
 
-[http://127.0.0.1:7860](http://127.0.0.1:7860/)でローカルからアクセスできます。
+ローカルで [http://127.0.0.1:7860](http://127.0.0.1:7860/) にアクセスすると使用できます。
 
-## 3.API バックエンドサービスの実行
+## 3. API バックエンドサービスの実行
 
 ```bash
-
 docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
-
 ```
 
 <br>

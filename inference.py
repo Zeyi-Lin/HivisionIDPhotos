@@ -3,13 +3,17 @@ import cv2
 import argparse
 import numpy as np
 import onnxruntime
-from utils import resize_image_to_kb, hex_to_rgb
-from src.face_judgement_align import IDphotos_create
-from hivisionai.hycv.vision import add_background
-from src.layoutCreate import generate_layout_photo, generate_layout_image
-
+from hivision.error import FaceError
+from hivision.utils import hex_to_rgb, resize_image_to_kb, add_background
+from hivision import IDCreator
+from hivision.creator.layout_calculator import (
+    generate_layout_photo,
+    generate_layout_image,
+)
 
 parser = argparse.ArgumentParser(description="HivisionIDPhotos 证件照制作推理程序。")
+
+creator = IDCreator()
 
 parser.add_argument(
     "-t",
@@ -32,8 +36,10 @@ root_dir = os.path.dirname(os.path.abspath(__file__))
 
 # 预加载 ONNX 模型
 print("正在加载抠图模型...")
-HY_HUMAN_MATTING_WEIGHTS_PATH = os.path.join(root_dir, "hivision_modnet.onnx")
-sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
+# HY_HUMAN_MATTING_WEIGHTS_PATH = os.path.join(
+#     root_dir, "hivision/creator/weights/hivision_modnet.onnx"
+# )
+# sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
 
 input_image = cv2.imread(args.input_image_dir, cv2.IMREAD_UNCHANGED)
 
@@ -43,40 +49,18 @@ if args.type == "idphoto":
 
     # 将字符串转为元组
     size = (int(args.height), int(args.width))
-
-    (
-        result_image_hd,
-        result_image_standard,
-        typography_arr,
-        typography_rotate,
-        _,
-        _,
-        _,
-        _,
-        status,
-    ) = IDphotos_create(
-        input_image,
-        size=size,
-        align=False,
-        beauty=False,
-        fd68=None,
-        human_sess=sess,
-        IS_DEBUG=False,
-    )
-
-    # 如果检测到人脸数量不等于 1（照片无人脸 or 多人脸）
-    if status == 0:
+    try:
+        result = creator(input_image, size=size)
+    except FaceError:
         print("人脸数量不等于 1，请上传单张人脸的图像。")
-
-    # 如果检测到人脸数量等于 1, 则返回标准证和高清照结果（png 4 通道图像）
     else:
         # 保存标准照
-        cv2.imwrite(args.output_image_dir, result_image_standard)
+        cv2.imwrite(args.output_image_dir, result.standard)
 
         # 保存高清照
         file_name, file_extension = os.path.splitext(args.output_image_dir)
         new_file_name = file_name + "_hd" + file_extension
-        cv2.imwrite(new_file_name, result_image_hd)
+        cv2.imwrite(new_file_name, result.hd)
 
 # 如果模式是添加背景
 elif args.type == "add_background":

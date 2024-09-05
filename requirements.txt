@@ -1,7 +1,4 @@
-opencv-python==4.7.0.72
-onnx==1.14.0
+opencv-python>=4.8.1.78
 onnxruntime==1.15.0
 numpy==1.24.3
-gradio==3.38.0
-fastapi
-loguru
+mtcnn-runtime

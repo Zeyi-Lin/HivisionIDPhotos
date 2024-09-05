@@ -7,7 +7,7 @@ datas += collect_data_files('gradio')
 
 
 a = Analysis(
-    ['app.py'],
+    ['app/web.py'],
     pathex=[],
     binaries=[],
     datas=datas,

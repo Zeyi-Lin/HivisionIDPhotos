@@ -1,15 +1,19 @@
 from fastapi import FastAPI, UploadFile, Form
 import onnxruntime
-from src.face_judgement_align import IDphotos_create
-from src.layoutCreate import generate_layout_photo, generate_layout_image
-from hivisionai.hycv.vision import add_background
-from utils import resize_image_to_kb_base64, hex_to_rgb
+from hivision import IDCreator
+from hivision.error import FaceError
+from hivision.creator.layout_calculator import (
+    generate_layout_photo,
+    generate_layout_image,
+)
+from hivision.utils import add_background, resize_image_to_kb_base64, hex_to_rgb
 import base64
 import numpy as np
 import cv2
-import ast
+import os
 
 app = FastAPI()
+creator = IDCreator()
 
 
 # 将图像转换为Base64编码
@@ -38,44 +42,24 @@ async def idphoto_inference(
 
     # 将字符串转为元组
     size = (int(height), int(width))
-
-    (
-        result_image_hd,
-        result_image_standard,
-        typography_arr,
-        typography_rotate,
-        _,
-        _,
-        _,
-        _,
-        status,
-    ) = IDphotos_create(
-        img,
-        size=size,
-        head_measure_ratio=head_measure_ratio,
-        head_height_ratio=head_height_ratio,
-        align=False,
-        beauty=False,
-        fd68=None,
-        human_sess=sess,
-        IS_DEBUG=False,
-        top_distance_max=top_distance_max,
-        top_distance_min=top_distance_min,
-    )
-
-    # 如果检测到人脸数量不等于1（照片无人脸 or 多人脸）
-    if status == 0:
-        result_messgae = {"status": False}
-
+    try:
+        result = creator(
+            img,
+            size=size,
+            head_measure_ratio=head_measure_ratio,
+            head_height_ratio=head_height_ratio,
+        )
+    except FaceError:
+        result_message = {"status": False}
     # 如果检测到人脸数量等于1, 则返回标准证和高清照结果（png 4通道图像）
     else:
-        result_messgae = {
+        result_message = {
             "status": True,
-            "image_base64_standard": numpy_2_base64(result_image_standard),
-            "image_base64_hd": numpy_2_base64(result_image_hd),
+            "image_base64_standard": numpy_2_base64(result.standard),
+            "image_base64_hd": numpy_2_base64(result.hd),
         }
 
-    return result_messgae
+    return result_message
 
 
 # 透明图像添加纯色背景接口
@@ -163,7 +147,10 @@ if __name__ == "__main__":
     import uvicorn
 
     # 加载权重文件
-    HY_HUMAN_MATTING_WEIGHTS_PATH = "./hivision_modnet.onnx"
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    HY_HUMAN_MATTING_WEIGHTS_PATH = os.path.join(
+        root_dir, "hivision/creator/weights/hivision_modnet.onnx"
+    )
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
 
     # 在8080端口运行推理服务
