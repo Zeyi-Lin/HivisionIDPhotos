@@ -4,9 +4,9 @@ import argparse
 import os
 
 
-def base64_save(base64_image_data, save_path):
+def base64_save(_base64_image_data, save_path):
     # 解码 Base64 数据并保存为 PNG 文件
-    img_data = base64.b64decode(base64_image_data)
+    img_data = base64.b64decode(_base64_image_data)
     with open(save_path, "wb") as file:
         file.write(img_data)
 
