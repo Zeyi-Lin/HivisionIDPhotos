@@ -215,6 +215,13 @@ docker pull linzeyi/hivision_idphotos:v1
 docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
 ```
 
+国内拉取加速：
+
+```bash
+docker pull registry.cn-hangzhou.aliyuncs.com/swanhub/hivision_idphotos:v1
+docker tag registry.cn-hangzhou.aliyuncs.com/swanhub/hivision_idphotos:v1 hivision_idphotos
+```
+
 **方式二：Dockrfile 直接构建镜像：**
 
 在确保将模型权重文件[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)放到根目录下后，在根目录执行：
