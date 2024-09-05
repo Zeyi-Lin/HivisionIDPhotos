@@ -11,6 +11,7 @@ import numpy as np
 from typing import Tuple
 import hivision.creator.utils as U
 from .context import Context, ContextHandler, Params, Result
+from .human_matting import extract_human
 from .face_detector import detect_face
 from .photo_adjuster import adjust_photo
 
@@ -44,8 +45,8 @@ class IDCreator:
         """
 
         # 处理者
-        self.matting_handler: ContextHandler = None
-        self.detection_handler: ContextHandler = None
+        self.matting_handler: ContextHandler = extract_human
+        self.detection_handler: ContextHandler = detect_face
         # 上下文
         self.ctx = None
 
@@ -83,13 +84,13 @@ class IDCreator:
         ctx.processing_image = U.resize_image_esp(
             ctx.processing_image, 2000
         )  # 将输入图片 resize 到最大边长为 2000
+        ctx.origin_image = ctx.processing_image.copy()
         self.before_all and self.before_all(ctx)
         # 1. 人像抠图
         self.matting_handler(ctx)
-        ctx.matting_image = ctx.processing_image.copy()
         self.after_matting and self.after_matting(ctx)
         # 2. 人脸检测
-        ctx.face = detect_face(ctx)
+        self.detection_handler(ctx)
         self.after_detect and self.after_detect(ctx)
         # 3. 图像调整
         result_image_hd, result_image_standard, clothing_params, typography_params = (

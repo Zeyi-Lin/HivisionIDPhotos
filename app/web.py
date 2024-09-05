@@ -2,7 +2,7 @@ import os
 import gradio as gr
 import onnxruntime
 from hivision.creator.face_judgement_align import IDphotos_create
-from hivisionai.hycv.vision import add_background
+from hivision.creator.vision import add_background
 from hivision.creator.layoutCreate import generate_layout_photo, generate_layout_image
 import pathlib
 import numpy as np

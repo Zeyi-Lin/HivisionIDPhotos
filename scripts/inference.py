@@ -5,7 +5,7 @@ import numpy as np
 import onnxruntime
 from utils import resize_image_to_kb, hex_to_rgb
 from hivision.creator.face_judgement_align import IDphotos_create
-from hivisionai.hycv.vision import add_background
+from hivision.creator.vision import add_background
 from hivision.creator.layoutCreate import generate_layout_photo, generate_layout_image
 
 

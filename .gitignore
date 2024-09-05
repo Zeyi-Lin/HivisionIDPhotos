@@ -12,3 +12,5 @@ build
 *.pth
 *.pt
 *.onnx
+test/temp/*
+!test/temp/.gitkeep

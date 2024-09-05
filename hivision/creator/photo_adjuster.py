@@ -8,17 +8,11 @@ r"""
     证件照调整
 """
 from .context import Context
+from .layout_calculator import generate_layout_photo
 import hivision.creator.utils as U
-from hivision.creator.imageTransform import (
-    standard_photo_resize,
-)
-from hivisionai.hycv.vision import (
-    resize_image_by_min,
-)
 import numpy as np
 import math
 import cv2
-from hivision.creator.layoutCreate import generate_layout_photo
 
 
 def adjust_photo(ctx: Context):
@@ -205,3 +199,60 @@ def move(input_image):
     png_img = png_img[0 : height - y_high, :, :]  # for 循环
     png_img = np.concatenate((base, png_img), axis=0)
     return png_img, y_high
+
+
+def standard_photo_resize(input_image: np.array, size):
+    """
+    input_image: 输入图像，即高清照
+    size: 标准照的尺寸
+    """
+    resize_ratio = input_image.shape[0] / size[0]
+    resize_item = int(round(input_image.shape[0] / size[0]))
+    if resize_ratio >= 2:
+        for i in range(resize_item - 1):
+            if i == 0:
+                result_image = cv2.resize(
+                    input_image,
+                    (size[1] * (resize_item - i - 1), size[0] * (resize_item - i - 1)),
+                    interpolation=cv2.INTER_AREA,
+                )
+            else:
+                result_image = cv2.resize(
+                    result_image,
+                    (size[1] * (resize_item - i - 1), size[0] * (resize_item - i - 1)),
+                    interpolation=cv2.INTER_AREA,
+                )
+    else:
+        result_image = cv2.resize(
+            input_image, (size[1], size[0]), interpolation=cv2.INTER_AREA
+        )
+
+    return result_image
+
+
+def resize_image_by_min(input_image, esp=600):
+    """
+    将图像缩放为最短边至少为 esp 的图像。
+    :param input_image: 输入图像（OpenCV 矩阵）
+    :param esp: 缩放后的最短边长
+    :return: 缩放后的图像，缩放倍率
+    """
+    height, width = input_image.shape[0], input_image.shape[1]
+    min_border = min(height, width)
+    if min_border < esp:
+        if height >= width:
+            new_width = esp
+            new_height = height * esp // width
+        else:
+            new_height = esp
+            new_width = width * esp // height
+
+        return (
+            cv2.resize(
+                input_image, (new_width, new_height), interpolation=cv2.INTER_AREA
+            ),
+            new_height / height,
+        )
+
+    else:
+        return input_image, 1
