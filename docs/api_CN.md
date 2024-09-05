@@ -1,5 +1,14 @@
 # API Docs
 
+## 目录
+
+- [开始之前：开启后端服务](#开始之前开启后端服务)
+- [接口功能说明](#接口功能说明)
+- [Python 请求示例](#python-请求示例)
+  - [Python Requests 请求方法](#1️⃣-python-requests-请求方法)
+  - [Python 脚本请求方法](#2️⃣-python-脚本请求方法)
+- [Java 请求示例](#java-请求示例)
+
 ## 开始之前：开启后端服务
 
 在请求 API 之前，请先运行后端服务
@@ -134,7 +143,6 @@ python requests_api.py -u <URL> -t <TYPE> -i <INPUT_IMAGE_DIR> -o <OUTPUT_IMAGE_
 - `--height`,
   - **描述**: 标准证件照的输出尺寸的高度。
   - **默认值**: 413
-  
 - `--width`,
 
   - **描述**: 标准证件照的输出尺寸的宽度。
@@ -193,7 +201,7 @@ python requests_api.py  \
 
 ## Java 请求示例
 
-### 添加maven依赖
+### 添加 maven 依赖
 
 ```java
         <dependency>
