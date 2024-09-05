@@ -12,16 +12,16 @@ from hivisionai.hycv.vision import (
     rotate_bound_4channels,
 )
 import onnxruntime
-from src.error import IDError
-from src.imageTransform import (
+from hivision.error import FaceError
+from hivision.creator.imageTransform import (
     standard_photo_resize,
     hollowOutFix,
     get_modnet_matting,
     draw_picture_dots,
     detect_distance,
 )
-from src.layoutCreate import generate_layout_photo
-from src.move_image import move
+from hivision.creator.layoutCreate import generate_layout_photo
+from hivision.creator.move_image import move
 
 testImages = []
 
@@ -89,25 +89,12 @@ def face_number_and_angle_detection(input_image):
         - landmark: list，人脸关键点信息
     """
 
-    # face++ 人脸检测
-    # input_image_bytes = CV2Bytes.cv2_byte(input_image, ".jpg")
-    # face_num, face_rectangle, landmarks, headpose = megvii_face_detector(input_image_bytes)
-    # print(face_rectangle)
-
     faces, landmarks = face_detect_mtcnn(input_image)
     face_num = len(faces)
 
     # 排除不合人脸数目要求（必须是 1）的照片
     if face_num == 0 or face_num >= 2:
-        if face_num == 0:
-            status_id_ = "1101"
-        else:
-            status_id_ = "1102"
-        raise IDError(
-            f"人脸检测出错！检测出了{face_num}张人脸",
-            face_num=face_num,
-            status_id=status_id_,
-        )
+        raise FaceError(f"人脸检测出错！检测出了{face_num}张人脸", face_num=face_num)
 
     # 获得人脸定位坐标
     face_rectangle = []
@@ -328,10 +315,7 @@ def idphoto_cutting(
     standard_size,
     head_height_ratio,
     origin_png_image,
-    origin_png_image_pre,
     rotation_params,
-    align=False,
-    IS_DEBUG=False,
     top_distance_max=0.12,
     top_distance_min=0.10,
 ):
@@ -435,8 +419,6 @@ def idphoto_cutting(
     y_top, y_bottom, x_left, x_right = get_box_pro(
         cut_image.astype(np.uint8), model=2, correction_factor=0
     )  # 得到 cut_image 中人像的上下左右距离信息
-    if IS_DEBUG:
-        testImages.append(["firstCut", cut_image])
 
     # Step5. 判定 cut_image 中的人像是否处于合理的位置，若不合理，则处理数据以便之后调整位置
     # 检测人像与裁剪框左边或右边是否存在空隙
@@ -470,8 +452,6 @@ def idphoto_cutting(
             y2 - cut_value_top + status_top * move_value,
             origin_png_image,
         )
-    if IS_DEBUG:
-        testImages.append(["result_image_pre", result_image])
 
     # 换装参数准备
     relative_x = x - (x1 + x_left)
@@ -665,37 +645,3 @@ def IDphotos_create(
         clothing_params["h"],
         1,
     )
-
-
-if __name__ == "__main__":
-    HY_HUMAN_MATTING_WEIGHTS_PATH = "./hivision_modnet.onnx"
-    sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
-
-    input_image = cv2.imread("test.jpg")
-
-    (
-        result_image_hd,
-        result_image_standard,
-        typography_arr,
-        typography_rotate,
-        _,
-        _,
-        _,
-        _,
-        _,
-    ) = IDphotos_create(
-        input_image,
-        size=(413, 295),
-        head_measure_ratio=0.2,
-        head_height_ratio=0.45,
-        align=True,
-        beauty=True,
-        fd68=None,
-        human_sess=sess,
-        oss_image_name="test_tmping.jpg",
-        user=None,
-        IS_DEBUG=False,
-        top_distance_max=0.12,
-        top_distance_min=0.10,
-    )
-    cv2.imwrite("result_image_hd.png", result_image_hd)

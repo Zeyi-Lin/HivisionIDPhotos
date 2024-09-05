@@ -1,9 +1,9 @@
 import os
 import gradio as gr
 import onnxruntime
-from src.face_judgement_align import IDphotos_create
+from hivision.creator.face_judgement_align import IDphotos_create
 from hivisionai.hycv.vision import add_background
-from src.layoutCreate import generate_layout_photo, generate_layout_image
+from hivision.creator.layoutCreate import generate_layout_photo, generate_layout_image
 import pathlib
 import numpy as np
 from utils.image_utils import resize_image_to_kb

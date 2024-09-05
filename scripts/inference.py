@@ -4,9 +4,9 @@ import argparse
 import numpy as np
 import onnxruntime
 from utils import resize_image_to_kb, hex_to_rgb
-from src.face_judgement_align import IDphotos_create
+from hivision.creator.face_judgement_align import IDphotos_create
 from hivisionai.hycv.vision import add_background
-from src.layoutCreate import generate_layout_photo, generate_layout_image
+from hivision.creator.layoutCreate import generate_layout_photo, generate_layout_image
 
 
 parser = argparse.ArgumentParser(description="HivisionIDPhotos 证件照制作推理程序。")
