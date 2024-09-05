@@ -265,6 +265,10 @@ Copyright © 2023, ZeYiLin. All Rights Reserved.
 
 # Contributor
 
+<a href="https://github.com/Zeyi-Lin/HivisionIDPhotos/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Zeyi-Lin/HivisionIDPhotos" />
+</a>
+
 [Zeyi-Lin](https://github.com/Zeyi-Lin)、[SAKURA-CAT](https://github.com/SAKURA-CAT)、[Feudalman](https://github.com/Feudalman)、[swpfY](https://github.com/swpfY)、[Kaikaikaifang](https://github.com/Kaikaikaifang)、[ShaohonChen](https://github.com/ShaohonChen)、[KashiwaByte](https://github.com/KashiwaByte)
 
 <br>

@@ -224,6 +224,10 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
 # 기여자
 
+<a href="https://github.com/Zeyi-Lin/HivisionIDPhotos/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Zeyi-Lin/HivisionIDPhotos" />
+</a>
+
 [Zeyi-Lin](https://github.com/Zeyi-Lin)、[SAKURA-CAT](https://github.com/SAKURA-CAT)、[Feudalman](https://github.com/Feudalman)、[swpfY](https://github.com/swpfY)、[Kaikaikaifang](https://github.com/Kaikaikaifang)、[ShaohonChen](https://github.com/ShaohonChen)、[KashiwaByte](https://github.com/KashiwaByte)
 
 <br>
