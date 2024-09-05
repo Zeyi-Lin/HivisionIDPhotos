@@ -338,7 +338,7 @@ if __name__ == "__main__":
                     size_list_options = gr.Dropdown(
                         choices=size_list_CN,
                         label="预设尺寸",
-                        value="一寸",
+                        value=size_list_CN[0],
                         elem_id="size_list",
                     )
 
@@ -419,7 +419,7 @@ if __name__ == "__main__":
                         size_list_options: gr.update(
                             label="预设尺寸",
                             choices=size_list_CN,
-                            value="一寸",
+                            value=size_list_CN[0],
                         ),
                         mode_options: gr.update(
                             label="证件照尺寸选项",
@@ -454,7 +454,7 @@ if __name__ == "__main__":
                         size_list_options: gr.update(
                             label="Default size",
                             choices=size_list_EN,
-                            value="One inch",
+                            value=size_list_EN[0],
                         ),
                         mode_options: gr.update(
                             label="ID photo size options",
