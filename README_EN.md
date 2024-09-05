@@ -17,7 +17,7 @@ English / [中文](README.md) / [日本語](README_JP.md)
 
 # 🤩Project Update
 
-- Online Demo: [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
+- Online Demo:  [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
 - 2024.9.2: Update **Adjusted photo KB size**，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
 - 2023.12.1: Update **API deployment (based on fastapi)**
@@ -129,6 +129,7 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 <br>
 
 # ⚡️ Deploy API service
+Please refer to the [API documentation](docs/api_CN.md) for details, including [RestAPI request methods](https://github.com/Zeyi-Lin/HivisionIDPhotos/blob/master/docs/api_CN.md#1%EF%B8%8F%E2%83%A3-python-requests-%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95)
 
 ```
 python deploy_api.py
