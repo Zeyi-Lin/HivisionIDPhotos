@@ -27,15 +27,12 @@
 # 🤩 项目更新
 
 - 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
+
+- 2024.9.5: 更新 [Restful API 文档](docs/api_CN.md)
 - 2024.9.2: 更新**调整照片 KB 大小**，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
 - 2023.12.1: 更新**API 部署（基于 fastapi）**
 - 2023.6.20: 更新**预设尺寸菜单**
 - 2023.6.19: 更新**排版照**
-- 2023.6.13: 更新**中心渐变色**
-- 2023.6.11: 更新**上下渐变色**
-- 2023.6.8: 更新**自定义尺寸**
-- 2023.6.4: 更新**自定义底色、人脸检测 Bug 通知**
-- 2023.5.10: 更新**不改尺寸只换底**
 
 # Overview
 
@@ -53,7 +50,7 @@ HivisionIDPhoto 旨在开发一种实用的证件照智能制作算法。
 4. 智能换正装（waiting）
 
 <div align="center">
-    <img src="assets/gradio-image.jpeg" width=900>
+<img src="assets/gradio-image.jpeg" width=900>
 </div>
 
 ---
@@ -82,18 +79,19 @@ cd  HivisionIDPhotos
 
 ```bash
 pip install -r requirements.txt
+pip install -r requirements-app.txt
 ```
 
 **3. 下载权重文件**
 
-在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx` (24.7MB)，存到项目根目录下。
+在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx` (24.7MB)，存到项目的`hivision/creator/weights`目录下。
 
 <br>
 
 # 🚀 运行 Gradio Demo
 
 ```bash
-python app/web.py
+python app.py
 ```
 
 运行程序将生成一个本地 Web 页面，在页面中可完成证件照的操作与交互。
@@ -106,48 +104,56 @@ python app/web.py
 
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
 
-```bash
-python scripts/inference.py -i images/test.jpg -o ./idphoto.png --height 413 --width 295
+```python
+python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
 ## 2. 增加底色
 
 输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像）
 
-```bash
-python scripts/inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
+```python
+python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
 ```
 
 ## 3. 得到六寸排版照
 
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 
-```bash
-python scripts/inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
+```python
+python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
 ```
 
 <br>
 
 # ⚡️ 部署 API 服务
 
-详细请参考 [API 文档](docs/api_CN.md)，含 [RestAPI 请求方式](https://github.com/Zeyi-Lin/HivisionIDPhotos/blob/master/docs/api_CN.md#1%EF%B8%8F%E2%83%A3-python-requests-%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95)
-
 ## 启动后端
 
 ```
-
 python deploy_api.py
-
 ```
 
-## 请求 API 服务 - Python 脚本
+## 请求 API 服务 - Python Request
 
 ### 1. 证件照制作
 
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.png --height 413 --width 295
+import requests
+
+url = "http://127.0.0.1:8080/idphoto"
+input_image_path = "demo/images/test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response为一个json格式字典，包含status、image_base64_standard和image_base64_hd三项
+print(response)
+
 ```
 
 ### 2. 增加底色
@@ -155,7 +161,18 @@ python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.
 输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
+import requests
+
+url = "http://127.0.0.1:8080/add_background"
+input_image_path = "test.png"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"color": '638cce', 'kb': None}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response为一个json格式字典，包含status和image_base64
+print(response)
 ```
 
 ### 3. 得到六寸排版照
@@ -163,8 +180,21 @@ python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.p
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
+import requests
+
+url = "http://127.0.0.1:8080/generate_layout_photos"
+input_image_path = "test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295, "kb": 200}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response为一个json格式字典，包含status和image_base64
+print(response)
 ```
+
+更多请求方式请参考 [API 文档](docs/api_CN.md)，含 Python 脚本请求、Python Request 请求、Java 请求。
 
 <br>
 
@@ -181,9 +211,16 @@ docker pull linzeyi/hivision_idphotos:v1
 docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
 ```
 
+国内拉取加速：
+
+```bash
+docker pull registry.cn-hangzhou.aliyuncs.com/swanhub/hivision_idphotos:v1
+docker tag registry.cn-hangzhou.aliyuncs.com/swanhub/hivision_idphotos:v1 hivision_idphotos
+```
+
 **方式二：Dockrfile 直接构建镜像：**
 
-在确保将模型权重文件[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)放到根目录下后，在根目录执行：
+在确保将模型权重文件[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)放到`hivision/creator/weights`下后，在项目根目录执行：
 
 ```bash
 docker build -t hivision_idphotos .
@@ -191,7 +228,7 @@ docker build -t hivision_idphotos .
 
 **方式三：Docker compose 构建：**
 
-确保将模型权重文件 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) 放在根目录下后，在根目录下执行：
+确保将模型权重文件 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) 放在`hivision/creator/weights`下后，在项目根目录下执行：
 
 ```bash
 docker compose build
@@ -259,7 +296,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
 **1. 如何修改预设尺寸？**
 
-修改[size_list_CN.csv](app/size_list_CN.csv)后再次运行 app.py 即可，其中第一列为尺寸名，第二列为高度，第三列为宽度。
+修改[size_list_CN.csv](size_list_CN.csv)后再次运行 app.py 即可，其中第一列为尺寸名，第二列为高度，第三列为宽度。
 
 <br>
 
@@ -272,7 +309,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 # 贡献者
 
 <a href="https://github.com/Zeyi-Lin/HivisionIDPhotos/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Zeyi-Lin/HivisionIDPhotos" alt="contributors" />
+  <img src="https://contrib.rocks/image?repo=Zeyi-Lin/HivisionIDPhotos" />
 </a>
 
 [Zeyi-Lin](https://github.com/Zeyi-Lin)、[SAKURA-CAT](https://github.com/SAKURA-CAT)、[Feudalman](https://github.com/Feudalman)、[swpfY](https://github.com/swpfY)、[Kaikaikaifang](https://github.com/Kaikaikaifang)、[ShaohonChen](https://github.com/ShaohonChen)、[KashiwaByte](https://github.com/KashiwaByte)

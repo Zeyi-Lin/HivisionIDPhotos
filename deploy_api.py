@@ -10,6 +10,7 @@ from hivision.utils import add_background, resize_image_to_kb_base64, hex_to_rgb
 import base64
 import numpy as np
 import cv2
+import os
 
 app = FastAPI()
 creator = IDCreator()
@@ -146,7 +147,10 @@ if __name__ == "__main__":
     import uvicorn
 
     # 加载权重文件
-    HY_HUMAN_MATTING_WEIGHTS_PATH = "./hivision_modnet.onnx"
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    HY_HUMAN_MATTING_WEIGHTS_PATH = os.path.join(
+        root_dir, "hivision/creator/weights/hivision_modnet.onnx"
+    )
     sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
 
     # 在8080端口运行推理服务

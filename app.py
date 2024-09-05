@@ -9,13 +9,14 @@ from hivision.creator.layout_calculator import (
 )
 import pathlib
 import numpy as np
-from app.utils import csv_to_size_list
+from demo.utils import csv_to_size_list
 import argparse
+import onnxruntime
 
 # 获取尺寸列表
 root_dir = os.path.dirname(os.path.abspath(__file__))
-size_list_dict_CN = csv_to_size_list(os.path.join(root_dir, "size_list_CN.csv"))
-size_list_dict_EN = csv_to_size_list(os.path.join(root_dir, "size_list_EN.csv"))
+size_list_dict_CN = csv_to_size_list(os.path.join(root_dir, "demo/size_list_CN.csv"))
+size_list_dict_EN = csv_to_size_list(os.path.join(root_dir, "demo/size_list_EN.csv"))
 
 color_list_dict_CN = {
     "蓝色": (86, 140, 212),
@@ -239,7 +240,7 @@ def idphoto_inference(
             # 输出路径为一个根据时间戳 + 哈希值生成的随机文件名
             import time
 
-            output_image_path = f"{os.path.join(os.path.dirname(__file__), 'output')}/{int(time.time())}.jpg"
+            output_image_path = f"{os.path.join(os.path.dirname(__file__), 'demo/kb_output')}/{int(time.time())}.jpg"
             resize_image_to_kb(
                 result_image_standard,
                 output_image_path,
@@ -375,7 +376,7 @@ if __name__ == "__main__":
                     samples=[
                         [path.as_posix()]
                         for path in sorted(
-                            pathlib.Path(os.path.join(root_dir, "images")).rglob(
+                            pathlib.Path(os.path.join(root_dir, "demo/images")).rglob(
                                 "*.jpg"
                             )
                         )

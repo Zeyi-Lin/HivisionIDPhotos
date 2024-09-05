@@ -23,11 +23,6 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 - 2023.12.1: Update **API deployment (based on fastapi)**
 - 2023.6.20: Update **Preset size menu**
 - 2023.6.19: Update **Layout photos**
-- 2023.6.13: Update **Center gradient color**
-- 2023.6.11: Update **Top and bottom gradient color**
-- 2023.6.8: Update **Custom size**
-- 2023.6.4: Update **Custom background color, face detection bug notification**
-- 2023.5.10: Update **Change the background without changing the size**
 
 <br>
 
@@ -74,20 +69,21 @@ cd  HivisionIDPhotos
 
 > It is recommended to create a Python 3.10 virtual environment with conda and then execute the following command.
 
-```
+```bash
 pip install -r requirements.txt
+pip install -r requirements-app.txt
 ```
 
 **3. Download Pretrain file**
 
-Download the weight file `hivision_modnet.onnx` from our [Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) and save it to the root directory.
+Download the weight file `hivision_modnet.onnx` from our [Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) and save it to the  `hivision/creator/weights` directory.
 
 <br>
 
 # 🚀 Gradio Demo
 
 ```bash
-python app/web.py
+python app.py
 ```
 
 Running the program will generate a local web page, where operations and interactions with ID photos can be completed.
@@ -101,9 +97,7 @@ Running the program will generate a local web page, where operations and interac
 Input 1 photo, get 1 standard ID photo and 1 HD ID photo in a transparent PNG with 4 channels.
 
 ```python
-
-python inference.py -i images/test.jpg -o ./idphoto.png -s '(413,295)'
-
+python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
 ## 2. Add Background Color
@@ -112,7 +106,7 @@ Input 1 transparent PNG with 4 channels, get an image with added background colo
 
 ```python
 
-python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg -c '(0,0,0)' -k 30
+python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
 
 ```
 
@@ -122,7 +116,7 @@ Input 1 photo with 3 channels, obtain one six-inch layout photo.
 
 ```python
 
-python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)' -k 200
+python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
 
 ```
 
@@ -130,33 +124,73 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 
 # ⚡️ Deploy API service
 
-Please refer to the [API documentation](docs/api_EN.md) for details, including [RestAPI request methods](https://github.com/Zeyi-Lin/HivisionIDPhotos/blob/master/docs/api_CN.md#Python-Requests-Method)
+## Start backend
 
 ```
 python deploy_api.py
 ```
 
-**Request API service (Python)**
+## Request API Service - Python Request
 
-Use Python to send a request to the service:
+### 1. ID Photo Creation
 
-ID photo production (input 1 photo, get 1 standard ID photo and 1 high-definition ID photo 4-channel transparent png):
-
-```bash
-python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.png -s '(413,295)'
-```
-
-Add background color (input 1 4-channel transparent png, get 1 image with added background color):
+Input 1 photo, receive 1 standard ID photo and 1 high-definition ID photo in 4-channel transparent PNG format.
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg -c '(0,0,0)' -k 30
+import requests
+
+url = "http://127.0.0.1:8080/idphoto"
+input_image_path = "images/test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response is a JSON dictionary containing status, image_base64_standard, and image_base64_hd
+print(response)
+
 ```
 
-Get a six-inch layout photo (input a 3-channel photo, get a six-inch layout photo):
+### 2. Add Background Color
+
+Input 1 4-channel transparent PNG, receive 1 image with added background color.
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)' -k 200
+import requests
+
+url = "http://127.0.0.1:8080/add_background"
+input_image_path = "test.png"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"color": '638cce', 'kb': None}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response is a JSON dictionary containing status and image_base64
+print(response)
 ```
+
+### 3. Get 6-inch Layout Photo
+
+Input 1 3-channel photo, receive 1 6-inch layout photo.
+
+```bash
+import requests
+
+url = "http://127.0.0.1:8080/generate_layout_photos"
+input_image_path = "test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295, "kb": 200}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response is a JSON dictionary containing status and image_base64
+print(response)
+```
+
+For more request methods, please refer to the [API documentation](docs/api_EN.md), including Python script requests, Python Request requests, and Java requests.
 
 <br>
 
@@ -175,7 +209,7 @@ docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
 
 **Method 2 - Build Image:**
 
-After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
+After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the `hivision/creator/weights` directory, execute in the root directory:
 
 ```bash
 docker build -t hivision_idphotos .
@@ -183,7 +217,7 @@ docker build -t hivision_idphotos .
 
 **Method 3 - Docker Compose:**
 
-After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the root directory, execute in the root directory:
+After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the `hivision/creator/weights` directory, execute in the root directory:
 
 ```bash
 docker compose build
@@ -251,7 +285,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
 **1. How to modify the preset size?**
 
-After modifying [size_list_CN.csv](app/size_list_CN.csv), run app.py again, where the first column is the size name, the second column is height, and the third column is width.
+After modifying [size_list_CN.csv](size_list_CN.csv), run app.py again, where the first column is the size name, the second column is height, and the third column is width.
 
 <br>
 
