@@ -261,7 +261,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
 **1. 미리 설정된 사이즈를 어떻게 수정하나요?**
 
-[size_list_CN.csv](size_list_CN.csv)을 수정한 후 app.py 를 다시 실행하세요. 첫 번째 열은 사이즈 이름, 두 번째 열은 높이, 세 번째 열은 너비입니다.
+[size_list_CN.csv](demo/size_list_CN.csv)을 수정한 후 app.py 를 다시 실행하세요. 첫 번째 열은 사이즈 이름, 두 번째 열은 높이, 세 번째 열은 너비입니다.
 
 <br>
 
