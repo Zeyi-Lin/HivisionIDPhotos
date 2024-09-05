@@ -1,7 +1,6 @@
 import requests
 import base64
 import argparse
-from utils import hex_to_rgb
 import os
 
 

@@ -1,6 +1,5 @@
 import os
 import cv2
-import ast
 import argparse
 import numpy as np
 import onnxruntime
