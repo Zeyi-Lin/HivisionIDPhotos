@@ -168,3 +168,86 @@ def hex_to_rgb(value):
     return tuple(
         int(value[i : i + length // 3], 16) for i in range(0, length, length // 3)
     )
+
+
+def generate_gradient(start_color, width, height, mode="updown"):
+    # 定义背景颜色
+    end_color = (255, 255, 255)  # 白色
+
+    # 创建一个空白图像
+    r_out = np.zeros((height, width), dtype=int)
+    g_out = np.zeros((height, width), dtype=int)
+    b_out = np.zeros((height, width), dtype=int)
+
+    if mode == "updown":
+        # 生成上下渐变色
+        for y in range(height):
+            r = int(
+                (y / height) * end_color[0] + ((height - y) / height) * start_color[0]
+            )
+            g = int(
+                (y / height) * end_color[1] + ((height - y) / height) * start_color[1]
+            )
+            b = int(
+                (y / height) * end_color[2] + ((height - y) / height) * start_color[2]
+            )
+            r_out[y, :] = r
+            g_out[y, :] = g
+            b_out[y, :] = b
+
+    else:
+        # 生成中心渐变色
+        img = np.zeros((height, width, 3))
+        # 定义椭圆中心和半径
+        center = (width // 2, height // 2)
+        end_axies = max(height, width)
+        # 定义渐变色
+        end_color = (255, 255, 255)
+        # 绘制椭圆
+        for y in range(end_axies):
+            axes = (end_axies - y, end_axies - y)
+            r = int(
+                (y / end_axies) * end_color[0]
+                + ((end_axies - y) / end_axies) * start_color[0]
+            )
+            g = int(
+                (y / end_axies) * end_color[1]
+                + ((end_axies - y) / end_axies) * start_color[1]
+            )
+            b = int(
+                (y / end_axies) * end_color[2]
+                + ((end_axies - y) / end_axies) * start_color[2]
+            )
+
+            cv2.ellipse(img, center, axes, 0, 0, 360, (b, g, r), -1)
+        b_out, g_out, r_out = cv2.split(np.uint64(img))
+
+    return r_out, g_out, b_out
+
+
+def add_background(input_image, bgr=(0, 0, 0), mode="pure_color"):
+    """
+    本函数的功能为为透明图像加上背景。
+    :param input_image: numpy.array(4 channels), 透明图像
+    :param bgr: tuple, 合成纯色底时的 BGR 值
+    :param new_background: numpy.array(3 channels)，合成自定义图像底时的背景图
+    :return: output: 合成好的输出图像
+    """
+    height, width = input_image.shape[0], input_image.shape[1]
+    b, g, r, a = cv2.split(input_image)
+    a_cal = a / 255
+    if mode == "pure_color":
+        # 纯色填充
+        b2 = np.full([height, width], bgr[0], dtype=int)
+        g2 = np.full([height, width], bgr[1], dtype=int)
+        r2 = np.full([height, width], bgr[2], dtype=int)
+    elif mode == "updown_gradient":
+        b2, g2, r2 = generate_gradient(bgr, width, height, mode="updown")
+    else:
+        b2, g2, r2 = generate_gradient(bgr, width, height, mode="center")
+
+    output = cv2.merge(
+        ((b - b2) * a_cal + b2, (g - g2) * a_cal + g2, (r - r2) * a_cal + r2)
+    )
+
+    return output

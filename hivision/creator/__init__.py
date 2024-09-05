@@ -89,6 +89,15 @@ class IDCreator:
         # 1. 人像抠图
         self.matting_handler(ctx)
         self.after_matting and self.after_matting(ctx)
+        if ctx.params.change_bg_only:
+            ctx.result = Result(
+                standard=ctx.matting_image,
+                hd=ctx.matting_image,
+                clothing_params=None,
+                typography_params=None,
+            )
+            self.after_all and self.after_all(ctx)
+            return ctx.result
         # 2. 人脸检测
         self.detection_handler(ctx)
         self.after_detect and self.after_detect(ctx)

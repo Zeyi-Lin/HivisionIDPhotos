@@ -1,15 +1,16 @@
 import os
 import gradio as gr
-import onnxruntime
-from hivision.creator.face_judgement_align import IDphotos_create
-from hivision.creator.vision import add_background
-from hivision.creator.layoutCreate import generate_layout_photo, generate_layout_image
+from hivision import IDCreator
+from hivision.error import FaceError
+from hivision.utils import add_background, resize_image_to_kb
+from hivision.creator.layout_calculator import (
+    generate_layout_photo,
+    generate_layout_image,
+)
 import pathlib
 import numpy as np
-from utils.image_utils import resize_image_to_kb
 from app.utils import csv_to_size_list
 import argparse
-
 
 # 获取尺寸列表
 root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -149,35 +150,19 @@ def idphoto_inference(
     else:
         idphoto_json["custom_image_kb"] = None
 
+    creator = IDCreator()
+    change_bg_only = idphoto_json["size_mode"] in ["只换底", "Only Change Background"]
     # 生成证件照
-    (
-        result_image_hd,
-        result_image_standard,
-        typography_arr,
-        typography_rotate,
-        _,
-        _,
-        _,
-        _,
-        status,
-    ) = IDphotos_create(
-        input_image,
-        mode=idphoto_json["size_mode"],
-        size=idphoto_json["size"],
-        head_measure_ratio=head_measure_ratio,
-        head_height_ratio=head_height_ratio,
-        align=False,
-        beauty=False,
-        fd68=None,
-        human_sess=sess,
-        IS_DEBUG=False,
-        top_distance_max=top_distance_max,
-        top_distance_min=top_distance_min,
-    )
-
-    # 如果检测到人脸数量不等于 1
-    if status == 0:
-        result_messgae = {
+    try:
+        result = creator(
+            input_image,
+            change_bg_only=change_bg_only,
+            size=idphoto_json["size"],
+            head_measure_ratio=head_measure_ratio,
+            head_height_ratio=head_height_ratio,
+        )
+    except FaceError:
+        result_message = {
             img_output_standard: gr.update(value=None),
             img_output_standard_hd: gr.update(value=None),
             notification: gr.update(
@@ -185,9 +170,8 @@ def idphoto_inference(
                 visible=True,
             ),
         }
-
-    # 如果检测到人脸数量等于 1
     else:
+        (result_image_hd, result_image_standard, _, _) = result
         if idphoto_json["render_mode"] == text_lang_map[language]["Solid Color"]:
             result_image_standard = np.uint8(
                 add_background(result_image_standard, bgr=idphoto_json["color_bgr"])
@@ -255,7 +239,7 @@ def idphoto_inference(
             # 输出路径为一个根据时间戳 + 哈希值生成的随机文件名
             import time
 
-            output_image_path = f"./output/{int(time.time())}.jpg"
+            output_image_path = f"{os.path.join(os.path.dirname(__file__), 'output')}/{int(time.time())}.jpg"
             resize_image_to_kb(
                 result_image_standard,
                 output_image_path,
@@ -265,7 +249,7 @@ def idphoto_inference(
             output_image_path = None
 
         if output_image_path:
-            result_messgae = {
+            result_message = {
                 img_output_standard: result_image_standard,
                 img_output_standard_hd: result_image_hd,
                 img_output_layout: result_layout_image,
@@ -273,7 +257,7 @@ def idphoto_inference(
                 file_download: gr.update(visible=True, value=output_image_path),
             }
         else:
-            result_messgae = {
+            result_message = {
                 img_output_standard: result_image_standard,
                 img_output_standard_hd: result_image_hd,
                 img_output_layout: result_layout_image,
@@ -281,14 +265,10 @@ def idphoto_inference(
                 file_download: gr.update(visible=False),
             }
 
-    return result_messgae
+    return result_message
 
 
 if __name__ == "__main__":
-    # 预加载 ONNX 模型
-    HY_HUMAN_MATTING_WEIGHTS_PATH = os.path.join(root_dir, "hivision_modnet.onnx")
-    sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
-
     language = ["中文", "English"]
     size_mode_CN = ["尺寸列表", "只换底", "自定义尺寸"]
     size_mode_EN = ["Size List", "Only Change Background", "Custom Size"]

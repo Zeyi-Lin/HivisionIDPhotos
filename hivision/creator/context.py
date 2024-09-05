@@ -52,13 +52,24 @@ class Result:
         self,
         standard: np.ndarray,
         hd: np.ndarray,
-        clothing_params: dict,
-        typography_params: dict,
+        clothing_params: Optional[dict],
+        typography_params: Optional[dict],
     ):
         self.standard = standard
         self.hd = hd
         self.clothing_params = clothing_params
+        """
+        服装参数，仅换底时为 None
+        """
         self.typography_params = typography_params
+        """
+        排版参数，仅换底时为 None
+        """
+
+    def __iter__(self):
+        return iter(
+            [self.standard, self.hd, self.clothing_params, self.typography_params]
+        )
 
 
 class Context:

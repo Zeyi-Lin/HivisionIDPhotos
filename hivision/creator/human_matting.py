@@ -92,8 +92,13 @@ def read_modnet_image(input_image, ref_size=512):
     return im, width, length
 
 
+sess = None
+
+
 def get_modnet_matting(input_image, checkpoint_path, ref_size=512):
-    sess = onnxruntime.InferenceSession(checkpoint_path)
+    global sess
+    if sess is None:
+        sess = onnxruntime.InferenceSession(checkpoint_path)
 
     input_name = sess.get_inputs()[0].name
     output_name = sess.get_outputs()[0].name

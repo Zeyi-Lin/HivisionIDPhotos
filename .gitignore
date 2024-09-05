@@ -3,8 +3,7 @@
 .idea
 .vscode/*
 .DS_Store
-hivision_modnet.onnx
-output/*.jpg
+app/output/*.jpg
 # build outputs
 dist
 build
