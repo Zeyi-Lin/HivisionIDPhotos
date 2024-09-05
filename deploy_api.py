@@ -69,8 +69,8 @@ async def idphoto_inference(
     else:
         result_messgae = {
             "status": True,
-            "img_output_standard": numpy_2_base64(result_image_standard),
-            "img_output_standard_hd": numpy_2_base64(result_image_hd),
+            "image_base64_standard": numpy_2_base64(result_image_standard),
+            "image_base64_hd": numpy_2_base64(result_image_hd),
         }
 
     return result_messgae
@@ -141,7 +141,7 @@ async def generate_layout_photos(
 
     result_messgae = {
         "status": True,
-        "image": result_layout_image_base64,
+        "image_base64": result_layout_image_base64,
     }
 
     # except Exception as e:
