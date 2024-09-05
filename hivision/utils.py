@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+r"""
+@DATE: 2024/9/5 21:52
+@File: utils.py
+@IDE: pycharm
+@Description:
+    hivision提供的工具函数
+"""
 from PIL import Image
 import io
 import numpy as np
