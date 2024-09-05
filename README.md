@@ -130,24 +130,32 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 
 # ⚡️ 部署 API 服务
 
-详细请参考 [API 文档](docs/api_CN.md)，含 [RestAPI 请求方式](https://github.com/Zeyi-Lin/HivisionIDPhotos/blob/master/docs/api_CN.md#1%EF%B8%8F%E2%83%A3-python-requests-%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95)
-
 ## 启动后端
 
 ```
-
 python deploy_api.py
-
 ```
 
-## 请求 API 服务 - Python 脚本
+## 请求 API 服务 - Python Request
 
 ### 1. 证件照制作
 
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.png --height 413 --width 295
+import requests
+
+url = "http://127.0.0.1:8080/idphoto"
+input_image_path = "images/test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response为一个json格式字典，包含status、image_base64_standard和image_base64_hd三项
+print(response)
+
 ```
 
 ### 2. 增加底色
@@ -155,7 +163,18 @@ python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.
 输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
+import requests
+
+url = "http://127.0.0.1:8080/add_background"
+input_image_path = "test.png"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"color": '638cce', 'kb': None}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response为一个json格式字典，包含status和image_base64
+print(response)
 ```
 
 ### 3. 得到六寸排版照
@@ -163,8 +182,21 @@ python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.p
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
+import requests
+
+url = "http://127.0.0.1:8080/generate_layout_photos"
+input_image_path = "test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295, "kb": 200}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response为一个json格式字典，包含status和image_base64
+print(response)
 ```
+
+更多请求方式请参考 [API 文档](docs/api_CN.md)，含 Python 脚本请求、Python Request 请求、Java 请求。
 
 <br>
 

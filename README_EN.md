@@ -130,33 +130,73 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 
 # ⚡️ Deploy API service
 
-Please refer to the [API documentation](docs/api_EN.md) for details, including [RestAPI request methods](https://github.com/Zeyi-Lin/HivisionIDPhotos/blob/master/docs/api_CN.md#Python-Requests-Method)
+## Start backend
 
 ```
 python deploy_api.py
 ```
 
-**Request API service (Python)**
+## Request API Service - Python Request
 
-Use Python to send a request to the service:
+### 1. ID Photo Creation
 
-ID photo production (input 1 photo, get 1 standard ID photo and 1 high-definition ID photo 4-channel transparent png):
-
-```bash
-python requests_api.py -u http://127.0.0.1:8080 -i images/test.jpg -o ./idphoto.png -s '(413,295)'
-```
-
-Add background color (input 1 4-channel transparent png, get 1 image with added background color):
+Input 1 photo, receive 1 standard ID photo and 1 high-definition ID photo in 4-channel transparent PNG format.
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg -c '(0,0,0)' -k 30
+import requests
+
+url = "http://127.0.0.1:8080/idphoto"
+input_image_path = "images/test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response is a JSON dictionary containing status, image_base64_standard, and image_base64_hd
+print(response)
+
 ```
 
-Get a six-inch layout photo (input a 3-channel photo, get a six-inch layout photo):
+### 2. Add Background Color
+
+Input 1 4-channel transparent PNG, receive 1 image with added background color.
 
 ```bash
-python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg -s '(413,295)' -k 200
+import requests
+
+url = "http://127.0.0.1:8080/add_background"
+input_image_path = "test.png"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"color": '638cce', 'kb': None}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response is a JSON dictionary containing status and image_base64
+print(response)
 ```
+
+### 3. Get 6-inch Layout Photo
+
+Input 1 3-channel photo, receive 1 6-inch layout photo.
+
+```bash
+import requests
+
+url = "http://127.0.0.1:8080/generate_layout_photos"
+input_image_path = "test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"height": 413, "width": 295, "kb": 200}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response is a JSON dictionary containing status and image_base64
+print(response)
+```
+
+For more request methods, please refer to the [API documentation](docs/api_EN.md), including Python script requests, Python Request requests, and Java requests.
 
 <br>
 
