@@ -87,7 +87,7 @@ Download the weight file `hivision_modnet.onnx` from our [Release](https://githu
 # 🚀 Gradio Demo
 
 ```bash
-python app.py
+python app/web.py
 ```
 
 Running the program will generate a local web page, where operations and interactions with ID photos can be completed.

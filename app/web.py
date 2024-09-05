@@ -7,7 +7,7 @@ from src.layoutCreate import generate_layout_photo, generate_layout_image
 import pathlib
 import numpy as np
 from utils.image_utils import resize_image_to_kb
-from utils.data_utils import csv_to_size_list
+from app.utils import csv_to_size_list
 import argparse
 
 

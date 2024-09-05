@@ -93,7 +93,7 @@ pip install -r requirements.txt
 # 🚀 运行 Gradio Demo
 
 ```bash
-python app.py
+python app/web.py
 ```
 
 运行程序将生成一个本地 Web 页面，在页面中可完成证件照的操作与交互。
@@ -272,7 +272,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 # 贡献者
 
 <a href="https://github.com/Zeyi-Lin/HivisionIDPhotos/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Zeyi-Lin/HivisionIDPhotos" />
+  <img src="https://contrib.rocks/image?repo=Zeyi-Lin/HivisionIDPhotos" alt="contributors" />
 </a>
 
 [Zeyi-Lin](https://github.com/Zeyi-Lin)、[SAKURA-CAT](https://github.com/SAKURA-CAT)、[Feudalman](https://github.com/Feudalman)、[swpfY](https://github.com/swpfY)、[Kaikaikaifang](https://github.com/Kaikaikaifang)、[ShaohonChen](https://github.com/ShaohonChen)、[KashiwaByte](https://github.com/KashiwaByte)

@@ -3,7 +3,7 @@
 """
 @Time     : 2022/8/27 14:17
 @Author   : cuny
-@File     : app.py
+@File     : web.py
 @Software : PyCharm
 @Introduce: 
 查看包版本等一系列操作
@@ -16,6 +16,7 @@ import zipfile
 import requests
 from argparse import ArgumentParser
 from importlib.metadata import version
+
 try:  # 加上这个 try 的原因在于本地环境和云函数端的 import 形式有所不同
     from qcloud_cos import CosConfig
     from qcloud_cos import CosS3Client
@@ -32,6 +33,7 @@ class HivisionaiParams(object):
     """
     定义一些基本常量
     """
+
     # 文件所在路径
     # 包名称
     package_name = "HY-sdk"
@@ -44,7 +46,7 @@ class HivisionaiParams(object):
     # 压缩包类型
     file_format = ".zip"
     # 下载路径（.hivisionai 文件夹路径）
-    download_path = os.path.expandvars('$HOME')
+    download_path = os.path.expandvars("$HOME")
     # zip 文件、zip 解压缩文件的存放路径
     save_folder = f"{os.path.expandvars('$HOME')}/.hivisionai/sdk"
     # 腾讯云配置文件存放路径
@@ -56,35 +58,35 @@ class HivisionaiParams(object):
     # HY-func 的依赖配置
     # 每个依赖会包含三个参数，保存路径（save_path，相对于 HY_func 的路径）、下载 url（url）
     functionDependence = {
-        "configs":  [
+        "configs": [
             # --------- 配置文件部分
             # _lib
             {
                 "url": "https://hy-sdk-config-1305323352.cos.ap-beijing.myqcloud.com/hy-func/_lib/config/aliyun-human-matting-api.json",
-                "save_path": "_lib/config/aliyun-human-matting-api.json"
+                "save_path": "_lib/config/aliyun-human-matting-api.json",
             },
             {
                 "url": "https://hy-sdk-config-1305323352.cos.ap-beijing.myqcloud.com/hy-func/_lib/config/megvii-face-plus-api.json",
-                "save_path": "_lib/config/megvii-face-plus-api.json"
+                "save_path": "_lib/config/megvii-face-plus-api.json",
             },
             {
                 "url": "https://hy-sdk-config-1305323352.cos.ap-beijing.myqcloud.com/hy-func/_lib/config/volcano-face-change-api.json",
-                "save_path": "_lib/config/volcano-face-change-api.json"
+                "save_path": "_lib/config/volcano-face-change-api.json",
             },
             # _service
             {
                 "url": "https://hy-sdk-config-1305323352.cos.ap-beijing.myqcloud.com/hy-func/_service/config/func_error_conf.json",
-                "save_path": "_service/utils/config/func_error_conf.json"
+                "save_path": "_service/utils/config/func_error_conf.json",
             },
             {
                 "url": "https://hy-sdk-config-1305323352.cos.ap-beijing.myqcloud.com/hy-func/_service/config/service_config.json",
-                "save_path": "_service/utils/config/service_config.json"
+                "save_path": "_service/utils/config/service_config.json",
             },
             # --------- 模型部分
             # 模型部分存储在 Notion 文档当中
             # https://www.notion.so/HY-func-cc6cc41ba6e94b36b8fa5f5d67d1683f
         ],
-        "weights": "https://www.notion.so/HY-func-cc6cc41ba6e94b36b8fa5f5d67d1683f"
+        "weights": "https://www.notion.so/HY-func-cc6cc41ba6e94b36b8fa5f5d67d1683f",
     }
 
 
@@ -92,9 +94,11 @@ class HivisionaiUtils(object):
     """
     本类为一些基本工具类，包含代码复用相关内容
     """
+
     @staticmethod
     def get_client():
         """获取 cos 客户端对象"""
+
         def get_secret():
             # 首先判断 cloud_config_save 下是否存在
             if not os.path.exists(HivisionaiParams.cloud_config_save):
@@ -103,12 +107,20 @@ class HivisionaiUtils(object):
                 open(HivisionaiParams.cloud_config_save, "wb").write(resp.content)
             config = json.load(open(HivisionaiParams.cloud_config_save, "r"))
             return config["secret_id"], config["secret_key"]
+
         # todo 接入 HY-Auth-Sync
         secret_id, secret_key = get_secret()
-        return CosS3Client(CosConfig(Region=HivisionaiParams.region, Secret_id=secret_id, Secret_key=secret_key))
+        return CosS3Client(
+            CosConfig(
+                Region=HivisionaiParams.region,
+                Secret_id=secret_id,
+                Secret_key=secret_key,
+            )
+        )
 
     def get_all_versions(self):
         """获取云端的所有版本号"""
+
         def getAllVersion_base():
             """
             返回 cos 存储桶内部的某个文件夹的内部名称
@@ -120,13 +132,20 @@ class HivisionaiUtils(object):
             resp = client.list_objects(
                 Bucket=HivisionaiParams.bucket,
                 Prefix=HivisionaiParams.zip_key,
-                Marker=marker
+                Marker=marker,
             )
-            versions_list.extend([x["Key"].split("/")[-1].split(HivisionaiParams.file_format)[0] for x in resp["Contents"] if int(x["Size"]) > 0])
-            if resp['IsTruncated'] == 'false':  # 接下来没有数据了，就退出
+            versions_list.extend(
+                [
+                    x["Key"].split("/")[-1].split(HivisionaiParams.file_format)[0]
+                    for x in resp["Contents"]
+                    if int(x["Size"]) > 0
+                ]
+            )
+            if resp["IsTruncated"] == "false":  # 接下来没有数据了，就退出
                 return ""
             else:
-                return resp['NextMarker']
+                return resp["NextMarker"]
+
         client = self.get_client()
         marker = ""
         versions_list = []
@@ -162,14 +181,18 @@ class HivisionaiUtils(object):
         client = self.get_client()
         print(f"Download to {HivisionaiParams.save_folder}...")
         try:
-            resp = client.get_object(HivisionaiParams.bucket, HivisionaiParams.zip_key + "/" + file_name)
+            resp = client.get_object(
+                HivisionaiParams.bucket, HivisionaiParams.zip_key + "/" + file_name
+            )
             contents = resp["Body"].get_raw_stream().read()
         except CosServiceError:
             print(f"[{file_name}.zip] does not exist, please check your version!")
             sys.exit()
         if not os.path.exists(HivisionaiParams.save_folder):
             os.makedirs(HivisionaiParams.save_folder)
-        open(os.path.join(HivisionaiParams.save_folder, file_name), "wb").write(contents)
+        open(os.path.join(HivisionaiParams.save_folder, file_name), "wb").write(
+            contents
+        )
         print("Download success!")
 
     @staticmethod
@@ -190,7 +213,7 @@ class HivisionaiUtils(object):
         # ----------------下载 mtcnn 模型文件
         mtcnn_path = os.path.join(path, "hivisionai/hycv/mtcnn_onnx/weights")
         base_url = "https://linimages.oss-cn-beijing.aliyuncs.com/"
-        onnx_files = ["pnet.onnx",  "rnet.onnx", "onet.onnx"]
+        onnx_files = ["pnet.onnx", "rnet.onnx", "onet.onnx"]
         print(f"Downloading mtcnn model in {mtcnn_path}")
         if not os.path.exists(mtcnn_path):
             os.mkdir(mtcnn_path)
@@ -201,7 +224,9 @@ class HivisionaiUtils(object):
                 print("Downloading Onnx Model in:", onnx_url)
                 r = requests.get(onnx_url, stream=True)
                 if r.status_code == 200:
-                    open(os.path.join(mtcnn_path, onnx_file), 'wb').write(r.content)  # 将内容写入文件
+                    open(os.path.join(mtcnn_path, onnx_file), "wb").write(
+                        r.content
+                    )  # 将内容写入文件
                     print(f"Download finished -- {onnx_file}")
                 del r
         # ----------------
@@ -212,6 +237,7 @@ class HivisionaiApps(object):
     """
     本类为 app 对外暴露的接口，为了代码规整性，这里使用类来对暴露接口进行调整
     """
+
     @staticmethod
     def show_cloud_version():
         """查看在 cos 中的所有 HY-sdk 版本"""
@@ -242,6 +268,7 @@ class HivisionaiApps(object):
         Returns:
             None
         """
+
         def check_format():
             # noinspection PyBroadException
             try:
@@ -252,6 +279,7 @@ class HivisionaiApps(object):
             except Exception as e:
                 print(f"Illegal version number!\n{e}")
             pass
+
         print("Upgrading, please wait a moment...")
         if v == "-1":
             v = hivisionai_utils.get_newest_version()
@@ -263,8 +291,10 @@ class HivisionaiApps(object):
         hivisionai_utils.download_version(v)
         # 下载完毕（下载至 save_folder），解压文件
         target_zip = os.path.join(HivisionaiParams.save_folder, f"{v}.zip")
-        assert zipfile.is_zipfile(target_zip), "Decompression failed, and the target was not a zip file."
-        new_dir = target_zip.replace('.zip', '')  # 解压的文件名
+        assert zipfile.is_zipfile(
+            target_zip
+        ), "Decompression failed, and the target was not a zip file."
+        new_dir = target_zip.replace(".zip", "")  # 解压的文件名
         if os.path.exists(new_dir):  # 判断文件夹是否存在
             shutil.rmtree(new_dir)
         os.mkdir(new_dir)  # 新建文件夹
@@ -276,7 +306,7 @@ class HivisionaiApps(object):
         hivisionai_utils.download_dependence()
         # 安装完毕，如果 save_cached 为真，删除"$HOME/.hivisionai/sdk"内部的所有文件元素
         if save_cached is True:
-            os.system(f'rm -rf {HivisionaiParams.save_folder}/**')
+            os.system(f"rm -rf {HivisionaiParams.save_folder}/**")
 
     @staticmethod
     def export(path):
@@ -298,8 +328,10 @@ class HivisionaiApps(object):
         hivisionai_utils.download_version(v)
         # 下载完毕（下载至 save_folder），解压文件
         target_zip = os.path.join(HivisionaiParams.save_folder, f"{v}.zip")
-        assert zipfile.is_zipfile(target_zip), "Decompression failed, and the target was not a zip file."
-        new_dir = os.path.basename(target_zip.replace('.zip', ''))  # 解压的文件名
+        assert zipfile.is_zipfile(
+            target_zip
+        ), "Decompression failed, and the target was not a zip file."
+        new_dir = os.path.basename(target_zip.replace(".zip", ""))  # 解压的文件名
         new_dir = os.path.join(export_path, new_dir)  # 解压的文件路径
         if os.path.exists(new_dir):  # 判断文件夹是否存在
             shutil.rmtree(new_dir)
@@ -316,7 +348,7 @@ class HivisionaiApps(object):
         os.system(f'pip3 install {os.path.join(new_dir, "**.whl")} -t {export_path}')
         hivisionai_utils.download_dependence(export_path)
         # 将下载下来的文件夹删除
-        os.system(f'rm -rf {target_zip} && rm -rf {new_dir}')
+        os.system(f"rm -rf {target_zip} && rm -rf {new_dir}")
         print("Done.")
 
     @staticmethod
@@ -339,15 +371,17 @@ class HivisionaiApps(object):
         configs = functionDependence["configs"]
         print("正在下载配置文件...")
         for config in configs:
-            if not force and os.path.exists(config['save_path']):
+            if not force and os.path.exists(config["save_path"]):
                 print(f"[pass]: {os.path.basename(config['url'])}")
                 continue
             print(f"[Download]: {config['url']}")
-            resp = requests.get(config['url'])
+            resp = requests.get(config["url"])
             # json 文件存储在 text 区域，但是其他的不一定
-            open(os.path.join(cwd, config['save_path']), 'w').write(resp.text)
+            open(os.path.join(cwd, config["save_path"]), "w").write(resp.text)
         # 其他文件，提示访问 notion 文档
-        print(f"[NOTICE]: 一切准备就绪，请访问下面的文档下载剩下的模型文件:\n{functionDependence['weights']}")
+        print(
+            f"[NOTICE]: 一切准备就绪，请访问下面的文档下载剩下的模型文件:\n{functionDependence['weights']}"
+        )
 
     @staticmethod
     def hy_func_deploy(functionName: str = None, functionPath: str = None):
@@ -371,13 +405,13 @@ class HivisionaiApps(object):
             func_path = os.path.join(HivisionaiParams.getcwd, functionPath)
             assert os.path.join(func_path), f"路径不存在：{func_path}"
             # functionPath 的路径写到 user_config 当中
-            user_config = json.load(open(HivisionaiParams.cloud_config_save, 'rb'))
+            user_config = json.load(open(HivisionaiParams.cloud_config_save, "rb"))
             user_config["func_path"] = func_path
-            open(HivisionaiParams.cloud_config_save, 'w').write(json.dumps(user_config))
+            open(HivisionaiParams.cloud_config_save, "w").write(json.dumps(user_config))
             print("HY-func 全局路径保存成功！")
         try:
-            user_config = json.load(open(HivisionaiParams.cloud_config_save, 'rb'))
-            func_path = user_config['func_path']
+            user_config = json.load(open(HivisionaiParams.cloud_config_save, "rb"))
+            func_path = user_config["func_path"]
         except KeyError:
             return print("请先使用-p 命令注册全局 HY-func 路径！")
         # 此时 func_path 必然存在
@@ -387,23 +421,27 @@ class HivisionaiApps(object):
         # 开始复制文件到指定目录
         # 我们默认移动到 Desktop 目录下，如果没有此目录，需要先创建一个
         target_dir = os.path.join(HivisionaiParams.download_path, "Desktop")
-        assert os.path.exists(target_dir), target_dir + "文件路径不存在，你需要先创建一下！"
+        assert os.path.exists(target_dir), (
+            target_dir + "文件路径不存在，你需要先创建一下！"
+        )
         # 开始移动
         target_dir = os.path.join(target_dir, functionName)
         print("正在复制需要部署的文件...")
         os.system(f"rm -rf {target_dir}")
-        os.system(f'cp -rf {func_path_deploy} {target_dir}')
+        os.system(f"cp -rf {func_path_deploy} {target_dir}")
         os.system(f"cp -rf {os.path.join(func_path, '_lib')} {target_dir}")
         os.system(f"cp -rf {os.path.join(func_path, '_service')} {target_dir}")
         # 生成最新的 hivisionai
         print("正在生成 hivisionai 代码包...")
-        os.system(f'hivisionai -t {target_dir}')
+        os.system(f"hivisionai -t {target_dir}")
         # 移动完毕，删除模型文件
         print("移动完毕，正在删除不需要的文件...")
         # 模型文件
         os.system(f"rm -rf {os.path.join(target_dir, '_lib', 'weights', '**')}")
         # hivisionai 生成时的多余文件
-        os.system(f"rm -rf {os.path.join(target_dir, 'bin')} {os.path.join(target_dir, 'HY_sdk**')}")
+        os.system(
+            f"rm -rf {os.path.join(target_dir, 'bin')} {os.path.join(target_dir, 'HY_sdk**')}"
+        )
         print("部署文件生成成功，你可以开始部署了！")
 
 
@@ -413,21 +451,58 @@ hivisionai_utils = HivisionaiUtils()
 def entry_point():
     parser = ArgumentParser()
     # 查看版本号
-    parser.add_argument("-v", "--version", action="store_true", help="View the current HY-sdk version, which does not represent the final cloud version.")
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="store_true",
+        help="View the current HY-sdk version, which does not represent the final cloud version.",
+    )
     # 自动更新
-    parser.add_argument("-u", "--upgrade", nargs='?', const="-1", type=str, help="Automatically update HY-sdk to the latest version")
+    parser.add_argument(
+        "-u",
+        "--upgrade",
+        nargs="?",
+        const="-1",
+        type=str,
+        help="Automatically update HY-sdk to the latest version",
+    )
     # 查找云端的 HY-sdk 版本
-    parser.add_argument("-l", "--list", action="store_true", help="Find HY-sdk versions of the cloud, and keep up to ten")
+    parser.add_argument(
+        "-l",
+        "--list",
+        action="store_true",
+        help="Find HY-sdk versions of the cloud, and keep up to ten",
+    )
     # 下载云端的版本到本地路径
-    parser.add_argument("-t", "--export", nargs='?', const="./", help="Add a path parameter to automatically download the latest version of sdk to this path. If there are no parameters, the default is the current path")
+    parser.add_argument(
+        "-t",
+        "--export",
+        nargs="?",
+        const="./",
+        help="Add a path parameter to automatically download the latest version of sdk to this path. If there are no parameters, the default is the current path",
+    )
     # 强制更新附带参数，当一个功能需要强制执行一遍的时候，需要附带此参数
-    parser.add_argument("-f", "--force", action="store_true", help="Enforcement of other functions, execution of a single parameter is meaningless")
+    parser.add_argument(
+        "-f",
+        "--force",
+        action="store_true",
+        help="Enforcement of other functions, execution of a single parameter is meaningless",
+    )
     # 初始化 HY-func
     parser.add_argument("--init", action="store_true", help="Initialization HY-func")
     # 部署 HY-func
-    parser.add_argument("-d", "--deploy", nargs='?', const="-1", type=str, help="Deploy HY-func")
+    parser.add_argument(
+        "-d", "--deploy", nargs="?", const="-1", type=str, help="Deploy HY-func"
+    )
     # 涉及注册一些自定义内容的时候，需要附带此参数，并写上自定义内容
-    parser.add_argument("-p", "--param", nargs='?', const="-1", type=str, help="When registering some custom content, you need to attach this parameter and write the custom content.")
+    parser.add_argument(
+        "-p",
+        "--param",
+        nargs="?",
+        const="-1",
+        type=str,
+        help="When registering some custom content, you need to attach this parameter and write the custom content.",
+    )
     args = parser.parse_args()
     if args.version:
         print(version(HivisionaiParams.package_name))

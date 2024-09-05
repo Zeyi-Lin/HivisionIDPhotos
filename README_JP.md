@@ -91,7 +91,7 @@ pip install -r requirements.txt
 # 🚀 Gradio デモの実行
 
 ```bash
-python app.py
+python app/web.py
 ```
 
 プログラムを実行すると、ローカルの Web ページが生成され、そのページで証明写真の操作と対話を完了できます。

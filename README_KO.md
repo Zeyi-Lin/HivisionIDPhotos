@@ -90,7 +90,7 @@ pip install -r requirements.txt
 # 🚀 Gradio 데모 실행
 
 ```bash
-python app.py
+python app/web.py
 ```
 
 프로그램을 실행하면 로컬 웹 페이지가 생성되며, 해당 페이지에서 증명사진 작업 및 상호작용을 완료할 수 있습니다.
