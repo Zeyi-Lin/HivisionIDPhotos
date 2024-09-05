@@ -251,7 +251,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
 **1. How to modify the preset size?**
 
-After modifying [size_list_CN.csv](size_list_CN.csv), run app.py again, where the first column is the size name, the second column is height, and the third column is width.
+After modifying [size_list_CN.csv](app/size_list_CN.csv), run app.py again, where the first column is the size name, the second column is height, and the third column is width.
 
 <br>
 

@@ -53,7 +53,7 @@ HivisionIDPhoto 旨在开发一种实用的证件照智能制作算法。
 4. 智能换正装（waiting）
 
 <div align="center">
-<img src="assets/gradio-image.jpeg" width=900>
+    <img src="assets/gradio-image.jpeg" width=900>
 </div>
 
 ---
@@ -106,24 +106,24 @@ python app.py
 
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
 
-```python
-python inference.py -i images/test.jpg -o ./idphoto.png --height 413 --width 295
+```bash
+python scripts/inference.py -i images/test.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
 ## 2. 增加底色
 
 输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像）
 
-```python
-python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
+```bash
+python scripts/inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
 ```
 
 ## 3. 得到六寸排版照
 
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 
-```python
-python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
+```bash
+python scripts/inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
 ```
 
 <br>
@@ -259,7 +259,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
 **1. 如何修改预设尺寸？**
 
-修改[size_list_CN.csv](size_list_CN.csv)后再次运行 app.py 即可，其中第一列为尺寸名，第二列为高度，第三列为宽度。
+修改[size_list_CN.csv](app/size_list_CN.csv)后再次运行 app.py 即可，其中第一列为尺寸名，第二列为高度，第三列为宽度。
 
 <br>
 

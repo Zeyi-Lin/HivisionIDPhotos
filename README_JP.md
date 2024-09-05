@@ -219,7 +219,7 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
 **1. デフォルトサイズを変更する方法**
 
-[size_list_CN.csv](size_list_CN.csv) を変更してから、app.py を再実行します。最初の列はサイズ名であり、2 番目の列は高さ、3 番目の列は幅です。
+[size_list_CN.csv](app/size_list_CN.csv) を変更してから、app.py を再実行します。最初の列はサイズ名であり、2 番目の列は高さ、3 番目の列は幅です。
 
 <br>
 
