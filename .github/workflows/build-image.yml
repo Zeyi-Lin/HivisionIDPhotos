@@ -7,11 +7,6 @@ on:
     tags:
       - '*'
 
-env:
-  MODEL_URLS: |
-    https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx
-    https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/modnet_photographic_portrait_matting.onnx
-
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -21,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download models
-        run: echo ${{ vars.MODEL_URLS }} | xargs -n 1 -I {} wget -P hivision/creator/weights {}
+        run: echo ${{ vars.MODEL_URLS }} | xargs -n 1 -I {} wget -P "hivision/creator/weights" {}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
