@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: hivision_idphotos2
-    command: python3 app.py --host 0.0.0.0 --port 7860
+    image: hivision_idphotos
+    command: python3 -u app.py --host 0.0.0.0 --port 7860
     ports:
       - '7860:7860'
 
