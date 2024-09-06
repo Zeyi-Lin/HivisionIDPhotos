@@ -27,6 +27,21 @@
 
 <br>
 
+# 目录
+
+- [项目更新](#-项目更新)
+- [Overview](#overview)
+- [准备工作](#-准备工作)
+- [Demo启动](#-运行-gradio-demo)
+- [Python推理](#-python-推理)
+- [API服务部署](#️-部署-api-服务)
+- [Docker部署](#-docker-部署)
+- [友情链接](#-友情链接)
+- [联系我们](#-联系我们)
+- [贡献者](#贡献者)
+
+<br>
+
 # 🤩 项目更新
 
 - 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
@@ -67,8 +82,9 @@ HivisionIDPhoto 旨在开发一种实用的证件照智能制作算法。
 
 <br>
 
-# 🔧 环境安装与依赖
+# 🔧 准备工作
 
+环境安装与依赖：
 - Python >= 3.7（项目主要测试在 python 3.10）
 - onnxruntime
 - OpenCV
