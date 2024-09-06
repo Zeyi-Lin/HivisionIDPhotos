@@ -34,31 +34,43 @@ parser.add_argument(
     "-k", "--kb", help="输出照片的 KB 值，仅对换底和制作排版照生效", default=None
 )
 parser.add_argument("--matting_model", help="抠图模型权重", default="hivision_modnet")
+parser.add_argument(
+    "-r",
+    "--render",
+    type=int,
+    help="底色合成的模式，有 0:纯色、1:上下渐变、2:中心渐变 可选",
+    default=0,
+)
 
 args = parser.parse_args()
 
+# ------------------- 参数检查 -------------------
 INFERENCE_TYPE = [
     "idphoto",
     "human_matting",
     "add_background",
     "generate_layout_photos",
 ]
+MATTING_MODEL = ["hivision_modnet", "modnet_photographic_portrait_matting"]
+RENDER = [0, 1, 2]
+
 if args.type not in INFERENCE_TYPE:
     raise ValueError("输入了不支持的推理类型，请查看inference.py的INFERENCE_TYPE变量。")
 
-MATTING_MODEL = ["hivision_modnet", "modnet_photographic_portrait_matting"]
 if args.matting_model not in MATTING_MODEL:
     raise ValueError("输入了不支持的抠图模型，请查看inference.py的MATTING_MODEL变量。")
 
+if args.render not in RENDER:
+    raise ValueError("输入了不支持的底色合成模式，请查看inference.py的RENDER变量。")
+
+# ------------------- 人像抠图模型选择 -------------------
 if args.matting_model == "hivision_modnet":
     creator.matting_handler = extract_human
 elif args.matting_model == "modnet_photographic_portrait_matting":
     creator.matting_handler = extract_human_modnet_photographic_portrait_matting
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
-
 input_image = cv2.imread(args.input_image_dir, cv2.IMREAD_UNCHANGED)
-
 
 # 如果模式是生成证件照
 if args.type == "idphoto":
@@ -85,12 +97,16 @@ elif args.type == "human_matting":
 # 如果模式是添加背景
 elif args.type == "add_background":
 
+    render_choice = ["pure_color", "updown_gradient", "center_gradient"]
+
     # 将字符串转为元组
     color = hex_to_rgb(args.color)
     # 将元祖的 0 和 2 号数字交换
     color = (color[2], color[1], color[0])
 
-    result_image = add_background(input_image, bgr=color)
+    result_image = add_background(
+        input_image, bgr=color, mode=render_choice[args.render]
+    )
     result_image = result_image.astype(np.uint8)
 
     if args.kb:
