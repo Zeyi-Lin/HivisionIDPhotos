@@ -4,10 +4,12 @@
 
 - [开始之前：开启后端服务](#开始之前开启后端服务)
 - [接口功能说明](#接口功能说明)
+- [cURL 请求示例](#curl-请求示例)
 - [Python 请求示例](#python-请求示例)
   - [Python Requests 请求方法](#1️⃣-python-requests-请求方法)
   - [Python 脚本请求方法](#2️⃣-python-脚本请求方法)
 - [Java 请求示例](#java-请求示例)
+- [Javascript 请求示例](#javascript-请求示例)
 
 ## 开始之前：开启后端服务
 
@@ -48,6 +50,40 @@ python delopy_api.py
 `生成六寸排版照`接口的逻辑是发送一张 RGB 图像（一般为添加背景色之后的证件照），根据`size`进行照片排布，然后生成一张六寸排版照。
 
 <br>
+
+
+## cURL 请求示例
+
+cURL 是一个命令行工具，用于使用各种网络协议传输数据。以下是使用 cURL 调用这些 API 的示例。
+
+### 1. 生成证件照(底透明)
+
+```bash
+curl -X POST "http://127.0.0.1:8080/idphoto" \
+-F "input_image=@demo/images/test.jpg" \
+-F "height=413" \
+-F "width=295"
+```
+
+### 2. 添加背景色
+
+```bash
+curl -X POST "http://127.0.0.1:8080/add_background" \
+-F "input_image=@test.png" \
+-F "color=638cce" \
+-F "kb=200"
+```
+
+### 3. 生成六寸排版照
+
+```bash
+curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
+-F "input_image=@test.jpg" \
+-F "height=413" \
+-F "width=295" \
+-F "kb=200"
+```
+
 
 ## Python 请求示例
 
@@ -430,4 +466,87 @@ public class Test {
     }
 }
 
+```
+
+## JavaScript 请求示例
+
+在JavaScript中，我们可以使用`fetch` API来发送HTTP请求。以下是如何使用JavaScript调用这些API的示例。
+
+### 1. 生成证件照(底透明)
+
+```javascript
+async function generateIdPhoto(inputImagePath, height, width) {
+    const url = "http://127.0.0.1:8080/idphoto";
+    const formData = new FormData();
+    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.jpg"));
+    formData.append("height", height);
+    formData.append("width", width);
+
+    const response = await fetch(url, {
+        method: 'POST',
+        body: formData
+    });
+
+    const result = await response.json();
+    console.log(result);
+    return result;
+}
+
+// 示例调用
+generateIdPhoto("images/test.jpg", 413, 295).then(response => {
+    console.log(response);
+});
+```
+
+### 2. 添加背景色
+
+```javascript
+async function addBackground(inputImagePath, color, kb) {
+    const url = "http://127.0.0.1:8080/add_background";
+    const formData = new FormData();
+    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.png"));
+    formData.append("color", color);
+    formData.append("kb", kb);
+
+    const response = await fetch(url, {
+        method: 'POST',
+        body: formData
+    });
+
+    const result = await response.json();
+    console.log(result);
+    return result;
+}
+
+// 示例调用
+addBackground("test.png", "638cce", 200).then(response => {
+    console.log(response);
+});
+```
+
+### 3. 生成六寸排版照
+
+```javascript
+async function generateLayoutPhotos(inputImagePath, height, width, kb) {
+    const url = "http://127.0.0.1:8080/generate_layout_photos";
+    const formData = new FormData();
+    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.jpg"));
+    formData.append("height", height);
+    formData.append("width", width);
+    formData.append("kb", kb);
+
+    const response = await fetch(url, {
+        method: 'POST',
+        body: formData
+    });
+
+    const result = await response.json();
+    console.log(result);
+    return result;
+}
+
+// 示例调用
+generateLayoutPhotos("test.jpg", 413, 295, 200).then(response => {
+    console.log(response);
+});
 ```
