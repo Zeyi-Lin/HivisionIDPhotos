@@ -355,7 +355,7 @@ if __name__ == "__main__":
                     )
                     matting_model_options = gr.Dropdown(
                         choices=matting_model_list,
-                        label="Matting Model",
+                        label="抠图模型",
                         value="modnet_photographic_portrait_matting",
                         elem_id="matting_model",
                     )
@@ -482,6 +482,7 @@ if __name__ == "__main__":
                             choices=image_kb_CN,
                             value="不设置",
                         ),
+                        matting_model_options: gr.update(label="抠图模型"),
                         custom_image_kb_size: gr.update(label="KB 大小"),
                         notification: gr.update(label="状态"),
                         img_output_standard: gr.update(label="标准照"),
@@ -518,6 +519,7 @@ if __name__ == "__main__":
                             choices=image_kb_EN,
                             value="Not Set",
                         ),
+                        matting_model_options: gr.update(label="Matting model"),
                         custom_image_kb_size: gr.update(label="KB size"),
                         notification: gr.update(label="Status"),
                         img_output_standard: gr.update(label="Standard photo"),
@@ -574,6 +576,7 @@ if __name__ == "__main__":
                 img_but,
                 render_options,
                 image_kb_options,
+                matting_model_options,
                 custom_image_kb_size,
                 notification,
                 img_output_standard,
