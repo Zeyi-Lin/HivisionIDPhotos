@@ -53,8 +53,12 @@ HivisionIDPhoto 旨在开发一种实用的证件照智能制作算法。
 4. 智能换正装（waiting）
 
 <div align="center">
-<img src="assets/gradio-image.jpeg" width=900>
+<img src="assets/harry.png" width=900>
 </div>
+
+<!-- <div align="center">
+<img src="assets/gradio-image.jpeg" width=900>
+</div> -->
 
 ---
 

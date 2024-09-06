@@ -356,7 +356,7 @@ if __name__ == "__main__":
                     matting_model_options = gr.Dropdown(
                         choices=matting_model_list,
                         label="Matting Model",
-                        value="hivision_modnet",
+                        value="modnet_photographic_portrait_matting",
                         elem_id="matting_model",
                     )
 
