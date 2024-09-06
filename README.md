@@ -277,13 +277,13 @@ docker compose build
 运行下面的命令，在你的本地访问 [http://127.0.0.1:7860](http://127.0.0.1:7860/) 即可使用。
 
 ```bash
-docker run -p 7860:7860 linzeyi/hivision_idphotos
+docker run -d -p 7860:7860 linzeyi/hivision_idphotos
 ```
 
 **启动 API 后端服务**
 
 ```bash
-docker run -p 8080:8080 linzeyi/hivision_idphotos python3 deploy_api.py
+docker run -d -p 8080:8080 linzeyi/hivision_idphotos python3 deploy_api.py
 ```
 
 **两个服务同时启动**
