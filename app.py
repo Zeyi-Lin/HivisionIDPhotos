@@ -176,7 +176,7 @@ def idphoto_inference(
             ),
         }
     else:
-        (result_image_hd, result_image_standard, _, _) = result
+        (result_image_standard, result_image_hd, _, _) = result
         if idphoto_json["render_mode"] == text_lang_map[language]["Solid Color"]:
             result_image_standard = np.uint8(
                 add_background(result_image_standard, bgr=idphoto_json["color_bgr"])
