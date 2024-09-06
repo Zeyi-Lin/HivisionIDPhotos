@@ -254,26 +254,26 @@ docker build -t hivision_idphotos .
 docker compose build
 ```
 
-镜像打包完成后，运行以下命令启动 Gradio 服务：
+## 2. 运行服务
 
-```bash
-docker compose up -d
-```
+**启动 Gradio Demo 服务**
 
-## 2. 运行 Gradio Demo
-
-等待镜像封装完毕后，运行以下指令，即可开启 Gradio Demo 服务：
+运行下面的命令，在你的本地访问 [http://127.0.0.1:7860](http://127.0.0.1:7860/) 即可使用。
 
 ```bash
 docker run -p 7860:7860 hivision_idphotos
 ```
 
-在你的本地访问 [http://127.0.0.1:7860](http://127.0.0.1:7860/) 即可使用。
-
-## 3. 运行 API 后端服务
+**启动 API 后端服务**
 
 ```bash
 docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
+```
+
+**两个服务同时启动**
+
+```bash
+docker compose up -d
 ```
 
 <br>
