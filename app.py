@@ -7,6 +7,10 @@ from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
+from hivision.creator.human_matting import (
+    extract_human_modnet_photographic_portrait_matting,
+    extract_human,
+)
 import pathlib
 import numpy as np
 from demo.utils import csv_to_size_list
@@ -54,6 +58,7 @@ def idphoto_inference(
     custom_size_width,
     custom_image_kb,
     language,
+    matting_model_option,
     head_measure_ratio=0.2,
     head_height_ratio=0.45,
     top_distance_max=0.12,
@@ -146,6 +151,11 @@ def idphoto_inference(
         idphoto_json["custom_image_kb"] = None
 
     creator = IDCreator()
+    if matting_model_option == "modnet_photographic_portrait_matting":
+        creator.matting_handler = extract_human_modnet_photographic_portrait_matting
+    else:
+        creator.matting_handler = extract_human
+
     change_bg_only = idphoto_json["size_mode"] in ["只换底", "Only Change Background"]
     # 生成证件照
     try:
@@ -267,7 +277,24 @@ def idphoto_inference(
 
 
 if __name__ == "__main__":
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument(
+        "--port", type=int, default=7860, help="The port number of the server"
+    )
+    argparser.add_argument(
+        "--host", type=str, default="127.0.0.1", help="The host of the server"
+    )
+
+    args = argparser.parse_args()
+
     language = ["中文", "English"]
+
+    matting_model_list = [
+        os.path.splitext(file)[0]
+        for file in os.listdir(os.path.join(root_dir, "hivision/creator/weights"))
+        if file.endswith(".onnx")
+    ]
+
     size_mode_CN = ["尺寸列表", "只换底", "自定义尺寸"]
     size_mode_EN = ["Size List", "Only Change Background", "Custom Size"]
 
@@ -282,14 +309,6 @@ if __name__ == "__main__":
 
     image_kb_CN = ["不设置", "自定义"]
     image_kb_EN = ["Not Set", "Custom"]
-
-    # title = "<h1 id='title'>HivisionIDPhotos</h1>"
-    # description = "<h3>😎9.2 Update: Add photo size KB adjustment</h3>"
-    # css = """
-    # h1#title, h3 {
-    #   text-align: center;
-    # }
-    # """
 
     css = """
         #col-left {
@@ -326,9 +345,20 @@ if __name__ == "__main__":
             # ------------ 左半边 UI ----------------
             with gr.Column():
                 img_input = gr.Image(height=400)
-                language_options = gr.Dropdown(
-                    choices=language, label="Language", value="中文", elem_id="language"
-                )
+
+                with gr.Row():
+                    language_options = gr.Dropdown(
+                        choices=language,
+                        label="Language",
+                        value="中文",
+                        elem_id="language",
+                    )
+                    matting_model_options = gr.Dropdown(
+                        choices=matting_model_list,
+                        label="Matting Model",
+                        value="hivision_modnet",
+                        elem_id="matting_model",
+                    )
 
                 mode_options = gr.Radio(
                     choices=size_mode_CN,
@@ -453,6 +483,7 @@ if __name__ == "__main__":
                         img_output_layout: gr.update(label="六寸排版照"),
                         file_download: gr.update(label="下载调整 KB 大小后的照片"),
                     }
+
                 elif language == "English":
                     return {
                         size_list_options: gr.update(
@@ -576,6 +607,7 @@ if __name__ == "__main__":
                 custom_size_wdith,
                 custom_image_kb_size,
                 language_options,
+                matting_model_options,
             ],
             outputs=[
                 img_output_standard,
@@ -585,14 +617,5 @@ if __name__ == "__main__":
                 file_download,
             ],
         )
-
-    argparser = argparse.ArgumentParser()
-    argparser.add_argument(
-        "--port", type=int, default=7860, help="The port number of the server"
-    )
-    argparser.add_argument(
-        "--host", type=str, default="127.0.0.1", help="The host of the server"
-    )
-    args = argparser.parse_args()
 
     demo.launch(server_name=args.host, server_port=args.port)

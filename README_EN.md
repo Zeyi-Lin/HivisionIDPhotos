@@ -21,6 +21,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 
 - Online Demo: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
+- 2024.9.6: Add a new image matting model [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
 - 2024.9.2: Update **Adjusted photo KB size**，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
 - 2023.12.1: Update **API deployment (based on fastapi)**
 - 2023.6.20: Update **Preset size menu**
@@ -79,6 +80,10 @@ pip install -r requirements-app.txt
 **3. Download Pretrain file**
 
 Download the weight file `hivision_modnet.onnx` from our [Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) and save it to the  `hivision/creator/weights` directory.
+
+Expand matting model weights (all in the `hivision/creator/weights` directory) :
+
+- modnet_photographic_portrait_matting.onnx: by [MODNet](https://github.com/ZHKKKe/MODNet)，[Download](https://drive.google.com/drive/folders/1umYmlCulvIFNaqPjwod1SayFmSRHziyR)
 
 <br>
 
