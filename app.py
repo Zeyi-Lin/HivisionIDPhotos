@@ -11,7 +11,6 @@ import pathlib
 import numpy as np
 from demo.utils import csv_to_size_list
 import argparse
-import onnxruntime
 
 # 获取尺寸列表
 root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -29,11 +28,6 @@ color_list_dict_EN = {
     "White": (255, 255, 255),
     "Red": (233, 51, 35),
 }
-
-
-# 设置 Gradio examples
-def set_example_image(example: list) -> dict:
-    return gr.Image.update(value=example[0])
 
 
 # 检测 RGB 是否超出范围，如果超出则约束到 0～255 之间
@@ -225,12 +219,15 @@ def idphoto_inference(
                 input_width=idphoto_json["size"][1],
             )
 
-            result_layout_image = generate_layout_image(
-                result_image_standard,
-                typography_arr,
-                typography_rotate,
-                height=idphoto_json["size"][0],
-                width=idphoto_json["size"][1],
+            result_layout_image = gr.update(
+                value=generate_layout_image(
+                    result_image_standard,
+                    typography_arr,
+                    typography_rotate,
+                    height=idphoto_json["size"][0],
+                    width=idphoto_json["size"][1],
+                ),
+                visible=True,
             )
 
         # 如果输出 KB 大小选择的是自定义
@@ -286,23 +283,49 @@ if __name__ == "__main__":
     image_kb_CN = ["不设置", "自定义"]
     image_kb_EN = ["Not Set", "Custom"]
 
-    title = "<h1 id='title'>HivisionIDPhotos</h1>"
-    description = "<h3>😎9.2 Update: Add photo size KB adjustment</h3>"
+    # title = "<h1 id='title'>HivisionIDPhotos</h1>"
+    # description = "<h3>😎9.2 Update: Add photo size KB adjustment</h3>"
+    # css = """
+    # h1#title, h3 {
+    #   text-align: center;
+    # }
+    # """
+
     css = """
-    h1#title, h3 {
-      text-align: center;
-    }
-    """
+        #col-left {
+            margin: 0 auto;
+            max-width: 430px;
+        }
+        #col-mid {
+            margin: 0 auto;
+            max-width: 430px;
+        }
+        #col-right {
+            margin: 0 auto;
+            max-width: 430px;
+        }
+        #col-showcase {
+            margin: 0 auto;
+            max-width: 1100px;
+        }
+        #button {
+            color: blue;
+        }
+        """
+
+    def load_description(fp):
+        with open(fp, "r", encoding="utf-8") as f:
+            content = f.read()
+        return content
 
     demo = gr.Blocks(css=css)
 
     with demo:
-        gr.Markdown(title)
-        gr.Markdown(description)
+        gr.HTML(load_description(os.path.join(root_dir, "assets/title.md")))
         with gr.Row():
             # ------------ 左半边 UI ----------------
             with gr.Column():
-                img_input = gr.Image().style(height=350)
+                img_input = gr.Image(height=400)
                 language_options = gr.Dropdown(
                     choices=language, label="Language", value="中文", elem_id="language"
                 )
@@ -371,9 +394,9 @@ if __name__ == "__main__":
                 img_but = gr.Button("开始制作")
 
                 # 案例图片
-                example_images = gr.Dataset(
-                    components=[img_input],
-                    samples=[
+                example_images = gr.Examples(
+                    inputs=[img_input],
+                    examples=[
                         [path.as_posix()]
                         for path in sorted(
                             pathlib.Path(os.path.join(root_dir, "demo/images")).rglob(
@@ -387,9 +410,9 @@ if __name__ == "__main__":
             with gr.Column():
                 notification = gr.Text(label="状态", visible=False)
                 with gr.Row():
-                    img_output_standard = gr.Image(label="标准照").style(height=350)
-                    img_output_standard_hd = gr.Image(label="高清照").style(height=350)
-                img_output_layout = gr.Image(label="六寸排版照").style(height=350)
+                    img_output_standard = gr.Image(label="标准照", height=350)
+                    img_output_standard_hd = gr.Image(label="高清照", height=350)
+                img_output_layout = gr.Image(label="六寸排版照", height=350)
                 file_download = gr.File(label="下载调整 KB 大小后的照片", visible=False)
 
             # ---------------- 设置隐藏/显示组件 ----------------
@@ -561,10 +584,6 @@ if __name__ == "__main__":
                 notification,
                 file_download,
             ],
-        )
-
-        example_images.click(
-            fn=set_example_image, inputs=[example_images], outputs=[img_input]
         )
 
     argparser = argparse.ArgumentParser()
