@@ -30,12 +30,13 @@ RENDER = [0, 1, 2]
 
 parser.add_argument(
     "-t",
+    "--type",
     help="请求 API 的种类",
     choices=INFERENCE_TYPE,
     default="idphoto",
 )
-parser.add_argument("-i", help="输入图像路径", required=True)
-parser.add_argument("-o", help="保存图像路径", required=True)
+parser.add_argument("-i", "--input_image_dir", help="输入图像路径", required=True)
+parser.add_argument("-o", "--output_image_dir", help="保存图像路径", required=True)
 parser.add_argument("--height", help="证件照尺寸-高", default=413)
 parser.add_argument("--width", help="证件照尺寸-宽", default=295)
 parser.add_argument("-c", "--color", help="证件照背景色", default="638cce")

@@ -148,7 +148,7 @@ python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --widt
 ## 2. 人像抠图
 
 ```python
-python inference.py -i -t human_matting demo/images/test.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
+python inference.py -t human_matting -i demo/images/test.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
 ```
 
 ## 3. 透明图增加底色
