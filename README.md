@@ -134,7 +134,10 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 python deploy_api.py
 ```
 
+
 ## 请求 API 服务 - Python Request
+
+> 请求方式请参考 [API 文档](docs/api_CN.md)，含 [cURL](docs/api_CN.md#curl-请求示例)、[Python](docs/api_CN.md#python-请求示例)、[Java](docs/api_CN.md#java-请求示例)、[Javascript](docs/api_CN.md#javascript-请求示例) 请求示例。
 
 ### 1. 证件照制作
 
@@ -193,8 +196,6 @@ response = requests.post(url, files=files, data=data).json()
 # response为一个json格式字典，包含status和image_base64
 print(response)
 ```
-
-更多请求方式请参考 [API 文档](docs/api_CN.md)，含 Python 脚本请求、Python Request 请求、Java 请求。
 
 <br>
 
