@@ -1,6 +1,6 @@
 <div align="center">
 
-<img alt="hivision_logo" src="assets/hivision_logo.png" width=150 height=150>
+<img alt="hivision_logo" src="assets/hivision_logo.png" width=120 height=120>
 <h1>HivisionIDPhoto</h1>
 
 [English](README_EN.md) / 中文 / [日本語](README_JP.md) / [한국어](README_KO.md)
