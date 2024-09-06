@@ -111,6 +111,15 @@ python app.py
 
 # 🚀 Python 推理
 
+核心参数：
+
+- `-i`: 输入图像路径
+- `-o`: 保存图像路径
+- `-t`: 推理类型，有idphoto、human_matting、add_background、generate_layout_photos可选
+- `--matting_model`: 人像抠图模型权重选择，可选`hivision_modnet`、`modnet_photographic_portrait_matting`
+
+更多参数可通过`python inference.py --help`查看
+
 ## 1. 证件照制作
 
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
@@ -119,15 +128,21 @@ python app.py
 python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
-## 2. 增加底色
+## 2. 人像抠图
+
+```python
+python inference.py -i -t human_matting demo/images/test.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
+```
+
+## 3. 透明图增加底色
 
 输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像）
 
 ```python
-python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
+python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 4f83ce -k 30 -r 1
 ```
 
-## 3. 得到六寸排版照
+## 4. 得到六寸排版照
 
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 

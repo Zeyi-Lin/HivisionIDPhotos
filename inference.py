@@ -19,32 +19,6 @@ parser = argparse.ArgumentParser(description="HivisionIDPhotos 证件照制作�
 
 creator = IDCreator()
 
-parser.add_argument(
-    "-t",
-    "--type",
-    help="请求 API 的种类，有 idphoto、add_background 和 generate_layout_photos 可选",
-    default="idphoto",
-)
-parser.add_argument("-i", "--input_image_dir", help="输入图像路径", required=True)
-parser.add_argument("-o", "--output_image_dir", help="保存图像路径", required=True)
-parser.add_argument("--height", help="证件照尺寸-高", default=413)
-parser.add_argument("--width", help="证件照尺寸-宽", default=295)
-parser.add_argument("-c", "--color", help="证件照背景色", default="638cce")
-parser.add_argument(
-    "-k", "--kb", help="输出照片的 KB 值，仅对换底和制作排版照生效", default=None
-)
-parser.add_argument("--matting_model", help="抠图模型权重", default="hivision_modnet")
-parser.add_argument(
-    "-r",
-    "--render",
-    type=int,
-    help="底色合成的模式，有 0:纯色、1:上下渐变、2:中心渐变 可选",
-    default=0,
-)
-
-args = parser.parse_args()
-
-# ------------------- 参数检查 -------------------
 INFERENCE_TYPE = [
     "idphoto",
     "human_matting",
@@ -54,14 +28,36 @@ INFERENCE_TYPE = [
 MATTING_MODEL = ["hivision_modnet", "modnet_photographic_portrait_matting"]
 RENDER = [0, 1, 2]
 
-if args.type not in INFERENCE_TYPE:
-    raise ValueError("输入了不支持的推理类型，请查看inference.py的INFERENCE_TYPE变量。")
+parser.add_argument(
+    "-t",
+    help="请求 API 的种类",
+    choices=INFERENCE_TYPE,
+    default="idphoto",
+)
+parser.add_argument("-i", help="输入图像路径", required=True)
+parser.add_argument("-o", help="保存图像路径", required=True)
+parser.add_argument("--height", help="证件照尺寸-高", default=413)
+parser.add_argument("--width", help="证件照尺寸-宽", default=295)
+parser.add_argument("-c", "--color", help="证件照背景色", default="638cce")
+parser.add_argument(
+    "-k", "--kb", help="输出照片的 KB 值，仅对换底和制作排版照生效", default=None
+)
+parser.add_argument(
+    "--matting_model",
+    help="抠图模型权重",
+    default="hivision_modnet",
+    choices=MATTING_MODEL,
+)
+parser.add_argument(
+    "-r",
+    "--render",
+    type=int,
+    help="底色合成的模式，有 0:纯色、1:上下渐变、2:中心渐变 可选",
+    choices=RENDER,
+    default=0,
+)
 
-if args.matting_model not in MATTING_MODEL:
-    raise ValueError("输入了不支持的抠图模型，请查看inference.py的MATTING_MODEL变量。")
-
-if args.render not in RENDER:
-    raise ValueError("输入了不支持的底色合成模式，请查看inference.py的RENDER变量。")
+args = parser.parse_args()
 
 # ------------------- 人像抠图模型选择 -------------------
 if args.matting_model == "hivision_modnet":
