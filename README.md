@@ -234,15 +234,8 @@ print(response)
 **方式一：拉取镜像：**
 
 ```bash
-docker pull linzeyi/hivision_idphotos:v1
-docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
-```
-
-国内拉取加速：
-
-```bash
-docker pull registry.cn-hangzhou.aliyuncs.com/swanhub/hivision_idphotos:v1
-docker tag registry.cn-hangzhou.aliyuncs.com/swanhub/hivision_idphotos:v1 hivision_idphotos
+docker pull linzeyi/hivision_idphotos
+docker tag linzeyi/hivision_idphotos hivision_idphotos
 ```
 
 **方式二：Dockrfile 直接构建镜像：**
