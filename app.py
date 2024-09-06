@@ -284,6 +284,12 @@ if __name__ == "__main__":
     argparser.add_argument(
         "--host", type=str, default="127.0.0.1", help="The host of the server"
     )
+    argparser.add_argument(
+        "--root_path",
+        type=str,
+        default=None,
+        help="The root path of the server, default is None (='/'), e.g. '/myapp'",
+    )
 
     args = argparser.parse_args()
 
@@ -631,4 +637,10 @@ if __name__ == "__main__":
             ],
         )
 
-    demo.launch(server_name=args.host, server_port=args.port)
+    demo.launch(
+        server_name=args.host,
+        server_port=args.port,
+        show_api=False,
+        favicon_path=os.path.join(root_dir, "assets/hivision_logo.png"),
+        root_path=args.root_path,
+    )
