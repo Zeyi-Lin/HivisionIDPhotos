@@ -117,7 +117,7 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 
 1장의 사진을 입력하여 1장의 표준 신분증 사진과 1장의 고화질 신분증 사진의 4채널 투명 PNG를 얻습니다.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/idphoto"
@@ -137,7 +137,7 @@ print(response)
 
 1장의 4채널 투명 PNG를 입력하여 배경색이 추가된 1장의 이미지를 얻습니다.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/add_background"
@@ -156,7 +156,7 @@ print(response)
 
 1장의 3채널 사진을 입력하여 1장의 6인치 레이아웃 사진을 얻습니다.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/generate_layout_photos"

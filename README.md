@@ -140,7 +140,7 @@ python deploy_api.py
 
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/idphoto"
@@ -160,7 +160,7 @@ print(response)
 
 输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/add_background"
@@ -179,7 +179,7 @@ print(response)
 
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/generate_layout_photos"

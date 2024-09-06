@@ -158,7 +158,7 @@ python requests_api.py -u http://127.0.0.1:8080 -t generate_layout_photos -i ./i
 
 1枚の写真を入力し、1枚の標準証明写真と1枚の高解像度証明写真の4チャンネル透明PNGを取得します。
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/idphoto"
@@ -178,7 +178,7 @@ print(response)
 
 1枚の4チャンネル透明PNGを入力し、背景色が追加された1枚の画像を取得します。
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/add_background"
@@ -197,7 +197,7 @@ print(response)
 
 1枚の3チャンネル写真を入力し、1枚の6インチレイアウト写真を取得します。
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/generate_layout_photos"

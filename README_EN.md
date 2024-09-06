@@ -136,7 +136,7 @@ python deploy_api.py
 
 Input 1 photo, receive 1 standard ID photo and 1 high-definition ID photo in 4-channel transparent PNG format.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/idphoto"
@@ -156,7 +156,7 @@ print(response)
 
 Input 1 4-channel transparent PNG, receive 1 image with added background color.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/add_background"
@@ -175,7 +175,7 @@ print(response)
 
 Input 1 3-channel photo, receive 1 6-inch layout photo.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/generate_layout_photos"
