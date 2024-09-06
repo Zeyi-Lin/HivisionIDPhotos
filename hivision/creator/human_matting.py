@@ -15,7 +15,17 @@ from .context import Context
 import cv2
 import os
 
-weight_path = os.path.join(os.path.dirname(__file__), "weights", "hivision_modnet.onnx")
+
+WEIGHTS = {
+    "hivision_modnet": os.path.join(
+        os.path.dirname(__file__), "weights", "hivision_modnet.onnx"
+    ),
+    "modnet_photographic_portrait_matting": os.path.join(
+        os.path.dirname(__file__),
+        "weights",
+        "modnet_photographic_portrait_matting.onnx",
+    ),
+}
 
 
 def extract_human(ctx: Context):
@@ -24,7 +34,21 @@ def extract_human(ctx: Context):
     :param ctx: 上下文
     """
     # 抠图
-    matting_image = get_modnet_matting(ctx.processing_image, weight_path)
+    matting_image = get_modnet_matting(ctx.processing_image, WEIGHTS["hivision_modnet"])
+    # 修复抠图
+    ctx.processing_image = hollow_out_fix(matting_image)
+    ctx.matting_image = ctx.processing_image.copy()
+
+
+def extract_human_modnet_photographic_portrait_matting(ctx: Context):
+    """
+    人像抠图
+    :param ctx: 上下文
+    """
+    # 抠图
+    matting_image = get_modnet_matting(
+        ctx.processing_image, WEIGHTS["modnet_photographic_portrait_matting"]
+    )
     # 修复抠图
     ctx.processing_image = hollow_out_fix(matting_image)
     ctx.matting_image = ctx.processing_image.copy()
@@ -92,13 +116,13 @@ def read_modnet_image(input_image, ref_size=512):
     return im, width, length
 
 
-sess = None
+# sess = None
 
 
 def get_modnet_matting(input_image, checkpoint_path, ref_size=512):
-    global sess
-    if sess is None:
-        sess = onnxruntime.InferenceSession(checkpoint_path)
+    # global sess
+    # if sess is None:
+    sess = onnxruntime.InferenceSession(checkpoint_path)
 
     input_name = sess.get_inputs()[0].name
     output_name = sess.get_outputs()[0].name

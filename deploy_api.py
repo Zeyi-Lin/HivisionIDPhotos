@@ -146,12 +146,5 @@ async def generate_layout_photos(
 if __name__ == "__main__":
     import uvicorn
 
-    # 加载权重文件
-    root_dir = os.path.dirname(os.path.abspath(__file__))
-    HY_HUMAN_MATTING_WEIGHTS_PATH = os.path.join(
-        root_dir, "hivision/creator/weights/hivision_modnet.onnx"
-    )
-    sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
-
     # 在8080端口运行推理服务
     uvicorn.run(app, host="0.0.0.0", port=8080)

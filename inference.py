@@ -34,13 +34,6 @@ args = parser.parse_args()
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
 
-# 预加载 ONNX 模型
-print("正在加载抠图模型...")
-# HY_HUMAN_MATTING_WEIGHTS_PATH = os.path.join(
-#     root_dir, "hivision/creator/weights/hivision_modnet.onnx"
-# )
-# sess = onnxruntime.InferenceSession(HY_HUMAN_MATTING_WEIGHTS_PATH)
-
 input_image = cv2.imread(args.input_image_dir, cv2.IMREAD_UNCHANGED)
 
 
