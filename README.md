@@ -12,7 +12,12 @@
 <a href="https://docs.qq.com/doc/DUkpBdk90eWZFS2JW" target="_blank">
 <img alt="Static Badge" src="https://img.shields.io/badge/WeChat-微信-4cb55e"></a>
 
+<div>
 <a href="https://trendshift.io/repositories/11622" target="_blank"><img src="https://trendshift.io/api/badge/repositories/11622" alt="Zeyi-Lin%2FHivisionIDPhotos | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+
+<a href="https://hellogithub.com/repository/8ea1457289fb4062ba661e5299e733d6" target="_blank"><img src="https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=8ea1457289fb4062ba661e5299e733d6&claim_uid=Oh5UaGjfrblg0yZ" alt="Featured｜HelloGitHub" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
+</div>
 
 <img src="assets/demoImage.png" width=900>
 
