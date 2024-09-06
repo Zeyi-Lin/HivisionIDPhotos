@@ -294,6 +294,10 @@ if __name__ == "__main__":
         for file in os.listdir(os.path.join(root_dir, "hivision/creator/weights"))
         if file.endswith(".onnx")
     ]
+    DEFAULT_MATTING_MODEL = "modnet_photographic_portrait_matting"
+    if DEFAULT_MATTING_MODEL in matting_model_list:
+        matting_model_list.remove(DEFAULT_MATTING_MODEL)
+        matting_model_list.insert(0, DEFAULT_MATTING_MODEL)
 
     size_mode_CN = ["尺寸列表", "只换底", "自定义尺寸"]
     size_mode_EN = ["Size List", "Only Change Background", "Custom Size"]
@@ -356,7 +360,7 @@ if __name__ == "__main__":
                     matting_model_options = gr.Dropdown(
                         choices=matting_model_list,
                         label="抠图模型",
-                        value="modnet_photographic_portrait_matting",
+                        value=matting_model_list[0],
                         elem_id="matting_model",
                     )
 
