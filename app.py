@@ -7,11 +7,14 @@ from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
+from hivision.creator.human_matting import (
+    extract_human_modnet_photographic_portrait_matting,
+    extract_human,
+)
 import pathlib
 import numpy as np
 from demo.utils import csv_to_size_list
 import argparse
-import onnxruntime
 
 # 获取尺寸列表
 root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -29,11 +32,6 @@ color_list_dict_EN = {
     "White": (255, 255, 255),
     "Red": (233, 51, 35),
 }
-
-
-# 设置 Gradio examples
-def set_example_image(example: list) -> dict:
-    return gr.Image.update(value=example[0])
 
 
 # 检测 RGB 是否超出范围，如果超出则约束到 0～255 之间
@@ -60,6 +58,7 @@ def idphoto_inference(
     custom_size_width,
     custom_image_kb,
     language,
+    matting_model_option,
     head_measure_ratio=0.2,
     head_height_ratio=0.45,
     top_distance_max=0.12,
@@ -152,6 +151,11 @@ def idphoto_inference(
         idphoto_json["custom_image_kb"] = None
 
     creator = IDCreator()
+    if matting_model_option == "modnet_photographic_portrait_matting":
+        creator.matting_handler = extract_human_modnet_photographic_portrait_matting
+    else:
+        creator.matting_handler = extract_human
+
     change_bg_only = idphoto_json["size_mode"] in ["只换底", "Only Change Background"]
     # 生成证件照
     try:
@@ -172,7 +176,7 @@ def idphoto_inference(
             ),
         }
     else:
-        (result_image_hd, result_image_standard, _, _) = result
+        (result_image_standard, result_image_hd, _, _) = result
         if idphoto_json["render_mode"] == text_lang_map[language]["Solid Color"]:
             result_image_standard = np.uint8(
                 add_background(result_image_standard, bgr=idphoto_json["color_bgr"])
@@ -225,12 +229,15 @@ def idphoto_inference(
                 input_width=idphoto_json["size"][1],
             )
 
-            result_layout_image = generate_layout_image(
-                result_image_standard,
-                typography_arr,
-                typography_rotate,
-                height=idphoto_json["size"][0],
-                width=idphoto_json["size"][1],
+            result_layout_image = gr.update(
+                value=generate_layout_image(
+                    result_image_standard,
+                    typography_arr,
+                    typography_rotate,
+                    height=idphoto_json["size"][0],
+                    width=idphoto_json["size"][1],
+                ),
+                visible=True,
             )
 
         # 如果输出 KB 大小选择的是自定义
@@ -270,7 +277,34 @@ def idphoto_inference(
 
 
 if __name__ == "__main__":
+    argparser = argparse.ArgumentParser()
+    argparser.add_argument(
+        "--port", type=int, default=7860, help="The port number of the server"
+    )
+    argparser.add_argument(
+        "--host", type=str, default="127.0.0.1", help="The host of the server"
+    )
+    argparser.add_argument(
+        "--root_path",
+        type=str,
+        default=None,
+        help="The root path of the server, default is None (='/'), e.g. '/myapp'",
+    )
+
+    args = argparser.parse_args()
+
     language = ["中文", "English"]
+
+    matting_model_list = [
+        os.path.splitext(file)[0]
+        for file in os.listdir(os.path.join(root_dir, "hivision/creator/weights"))
+        if file.endswith(".onnx")
+    ]
+    DEFAULT_MATTING_MODEL = "modnet_photographic_portrait_matting"
+    if DEFAULT_MATTING_MODEL in matting_model_list:
+        matting_model_list.remove(DEFAULT_MATTING_MODEL)
+        matting_model_list.insert(0, DEFAULT_MATTING_MODEL)
+
     size_mode_CN = ["尺寸列表", "只换底", "自定义尺寸"]
     size_mode_EN = ["Size List", "Only Change Background", "Custom Size"]
 
@@ -286,26 +320,55 @@ if __name__ == "__main__":
     image_kb_CN = ["不设置", "自定义"]
     image_kb_EN = ["Not Set", "Custom"]
 
-    title = "<h1 id='title'>HivisionIDPhotos</h1>"
-    description = "<h3>😎9.2 Update: Add photo size KB adjustment</h3>"
     css = """
-    h1#title, h3 {
-      text-align: center;
-    }
-    """
+        #col-left {
+            margin: 0 auto;
+            max-width: 430px;
+        }
+        #col-mid {
+            margin: 0 auto;
+            max-width: 430px;
+        }
+        #col-right {
+            margin: 0 auto;
+            max-width: 430px;
+        }
+        #col-showcase {
+            margin: 0 auto;
+            max-width: 1100px;
+        }
+        #button {
+            color: blue;
+        }
+        """
+
+    def load_description(fp):
+        with open(fp, "r", encoding="utf-8") as f:
+            content = f.read()
+        return content
 
     demo = gr.Blocks(css=css)
 
     with demo:
-        gr.Markdown(title)
-        gr.Markdown(description)
+        gr.HTML(load_description(os.path.join(root_dir, "assets/title.md")))
         with gr.Row():
             # ------------ 左半边 UI ----------------
             with gr.Column():
-                img_input = gr.Image().style(height=350)
-                language_options = gr.Dropdown(
-                    choices=language, label="Language", value="中文", elem_id="language"
-                )
+                img_input = gr.Image(height=400)
+
+                with gr.Row():
+                    language_options = gr.Dropdown(
+                        choices=language,
+                        label="Language",
+                        value="中文",
+                        elem_id="language",
+                    )
+                    matting_model_options = gr.Dropdown(
+                        choices=matting_model_list,
+                        label="抠图模型",
+                        value=matting_model_list[0],
+                        elem_id="matting_model",
+                    )
 
                 mode_options = gr.Radio(
                     choices=size_mode_CN,
@@ -371,9 +434,9 @@ if __name__ == "__main__":
                 img_but = gr.Button("开始制作")
 
                 # 案例图片
-                example_images = gr.Dataset(
-                    components=[img_input],
-                    samples=[
+                example_images = gr.Examples(
+                    inputs=[img_input],
+                    examples=[
                         [path.as_posix()]
                         for path in sorted(
                             pathlib.Path(os.path.join(root_dir, "demo/images")).rglob(
@@ -387,9 +450,15 @@ if __name__ == "__main__":
             with gr.Column():
                 notification = gr.Text(label="状态", visible=False)
                 with gr.Row():
-                    img_output_standard = gr.Image(label="标准照").style(height=350)
-                    img_output_standard_hd = gr.Image(label="高清照").style(height=350)
-                img_output_layout = gr.Image(label="六寸排版照").style(height=350)
+                    img_output_standard = gr.Image(
+                        label="标准照", height=350, format="jpeg"
+                    )
+                    img_output_standard_hd = gr.Image(
+                        label="高清照", height=350, format="jpeg"
+                    )
+                img_output_layout = gr.Image(
+                    label="六寸排版照", height=350, format="jpeg"
+                )
                 file_download = gr.File(label="下载调整 KB 大小后的照片", visible=False)
 
             # ---------------- 设置隐藏/显示组件 ----------------
@@ -423,6 +492,7 @@ if __name__ == "__main__":
                             choices=image_kb_CN,
                             value="不设置",
                         ),
+                        matting_model_options: gr.update(label="抠图模型"),
                         custom_image_kb_size: gr.update(label="KB 大小"),
                         notification: gr.update(label="状态"),
                         img_output_standard: gr.update(label="标准照"),
@@ -430,6 +500,7 @@ if __name__ == "__main__":
                         img_output_layout: gr.update(label="六寸排版照"),
                         file_download: gr.update(label="下载调整 KB 大小后的照片"),
                     }
+
                 elif language == "English":
                     return {
                         size_list_options: gr.update(
@@ -458,6 +529,7 @@ if __name__ == "__main__":
                             choices=image_kb_EN,
                             value="Not Set",
                         ),
+                        matting_model_options: gr.update(label="Matting model"),
                         custom_image_kb_size: gr.update(label="KB size"),
                         notification: gr.update(label="Status"),
                         img_output_standard: gr.update(label="Standard photo"),
@@ -514,6 +586,7 @@ if __name__ == "__main__":
                 img_but,
                 render_options,
                 image_kb_options,
+                matting_model_options,
                 custom_image_kb_size,
                 notification,
                 img_output_standard,
@@ -553,6 +626,7 @@ if __name__ == "__main__":
                 custom_size_wdith,
                 custom_image_kb_size,
                 language_options,
+                matting_model_options,
             ],
             outputs=[
                 img_output_standard,
@@ -563,24 +637,10 @@ if __name__ == "__main__":
             ],
         )
 
-        example_images.click(
-            fn=set_example_image, inputs=[example_images], outputs=[img_input]
-        )
-
-    argparser = argparse.ArgumentParser()
-    argparser.add_argument(
-        "--port", type=int, default=7860, help="The port number of the server"
+    demo.launch(
+        server_name=args.host,
+        server_port=args.port,
+        show_api=False,
+        favicon_path=os.path.join(root_dir, "assets/hivision_logo.png"),
+        root_path=args.root_path,
     )
-    argparser.add_argument(
-        "--host", type=str, default="127.0.0.1", help="The host of the server"
-    )
-    argparser.add_argument(
-        "--base_path", type=str, default="/", help="The base path of the server"
-    )
-    args = argparser.parse_args()
-
-    import uvicorn
-    from fastapi import FastAPI
-    app = FastAPI()
-    app.mount(args.base_path, demo.app)
-    uvicorn.run(app, host=args.host, port=args.port)

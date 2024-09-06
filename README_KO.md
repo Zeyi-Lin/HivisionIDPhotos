@@ -1,9 +1,11 @@
 <div align="center">
+<img alt="hivision_logo" src="assets/hivision_logo.png" width=120 height=120>
 <h1>HivisionIDPhoto</h1>
 
 [English](README_EN.md) / [中文](README_CN.md) / [日本語](README_JP.md) / 한국어
 
 [![GitHub](https://img.shields.io/static/v1?label=GitHub&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
+[![GitHub stars](https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos)](https://github.com/zeyi-lin/hivisionidphotos/stargazers)
 [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 [![zhihu](https://img.shields.io/static/v1?label=知乎&message=知乎&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 [![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
@@ -117,7 +119,7 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 
 1장의 사진을 입력하여 1장의 표준 신분증 사진과 1장의 고화질 신분증 사진의 4채널 투명 PNG를 얻습니다.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/idphoto"
@@ -137,7 +139,7 @@ print(response)
 
 1장의 4채널 투명 PNG를 입력하여 배경색이 추가된 1장의 이미지를 얻습니다.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/add_background"
@@ -156,7 +158,7 @@ print(response)
 
 1장의 3채널 사진을 입력하여 1장의 6인치 레이아웃 사진을 얻습니다.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/generate_layout_photos"

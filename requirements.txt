@@ -1,4 +1,4 @@
 opencv-python>=4.8.1.78
-onnxruntime==1.15.0
-numpy==1.24.3
+onnxruntime>=1.15.0
+numpy<=1.26.4
 mtcnn-runtime

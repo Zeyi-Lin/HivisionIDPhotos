@@ -1,11 +1,13 @@
 <div align="center">
+
+<img alt="hivision_logo" src="assets/hivision_logo.png" width=120 height=120>
 <h1>HivisionIDPhoto</h1>
 
 [English](README_EN.md) / 中文 / [日本語](README_JP.md) / [한국어](README_KO.md)
 
 [![GitHub](https://img.shields.io/static/v1?label=GitHub&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
+[![GitHub stars](https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos)](https://github.com/zeyi-lin/hivisionidphotos/stargazers)
 [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
-[![zhihu](https://img.shields.io/static/v1?label=知乎&message=知乎&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 [![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 <a href="https://docs.qq.com/doc/DUkpBdk90eWZFS2JW" target="_blank">
 <img alt="Static Badge" src="https://img.shields.io/badge/WeChat-微信-4cb55e"></a>
@@ -28,6 +30,7 @@
 
 - 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
+- 2024.9.6: 增加新的抠图模型 [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
 - 2024.9.5: 更新 [Restful API 文档](docs/api_CN.md)
 - 2024.9.2: 更新**调整照片 KB 大小**，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
 - 2023.12.1: 更新**API 部署（基于 fastapi）**
@@ -50,8 +53,12 @@ HivisionIDPhoto 旨在开发一种实用的证件照智能制作算法。
 4. 智能换正装（waiting）
 
 <div align="center">
-<img src="assets/gradio-image.jpeg" width=900>
+<img src="assets/harry.png" width=900>
 </div>
+
+<!-- <div align="center">
+<img src="assets/gradio-image.jpeg" width=900>
+</div> -->
 
 ---
 
@@ -86,6 +93,10 @@ pip install -r requirements-app.txt
 
 在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx` (24.7MB)，存到项目的`hivision/creator/weights`目录下。
 
+拓展抠图模型权重（均放到`hivision/creator/weights`目录下）：
+- modnet_photographic_portrait_matting.onnx: [MODNet](https://github.com/ZHKKKe/MODNet)官方权重，[下载](https://drive.google.com/drive/folders/1umYmlCulvIFNaqPjwod1SayFmSRHziyR)
+
+
 <br>
 
 # 🚀 运行 Gradio Demo
@@ -100,6 +111,15 @@ python app.py
 
 # 🚀 Python 推理
 
+核心参数：
+
+- `-i`: 输入图像路径
+- `-o`: 保存图像路径
+- `-t`: 推理类型，有idphoto、human_matting、add_background、generate_layout_photos可选
+- `--matting_model`: 人像抠图模型权重选择，可选`hivision_modnet`、`modnet_photographic_portrait_matting`
+
+更多参数可通过`python inference.py --help`查看
+
 ## 1. 证件照制作
 
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
@@ -108,15 +128,21 @@ python app.py
 python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
-## 2. 增加底色
+## 2. 人像抠图
+
+```python
+python inference.py -i -t human_matting demo/images/test.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
+```
+
+## 3. 透明图增加底色
 
 输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像）
 
 ```python
-python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
+python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 4f83ce -k 30 -r 1
 ```
 
-## 3. 得到六寸排版照
+## 4. 得到六寸排版照
 
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 
@@ -134,13 +160,16 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 python deploy_api.py
 ```
 
+
 ## 请求 API 服务 - Python Request
+
+> 请求方式请参考 [API 文档](docs/api_CN.md)，含 [cURL](docs/api_CN.md#curl-请求示例)、[Python](docs/api_CN.md#python-请求示例)、[Java](docs/api_CN.md#java-请求示例)、[Javascript](docs/api_CN.md#javascript-请求示例) 请求示例。
 
 ### 1. 证件照制作
 
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/idphoto"
@@ -160,7 +189,7 @@ print(response)
 
 输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/add_background"
@@ -179,7 +208,7 @@ print(response)
 
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/generate_layout_photos"
@@ -194,8 +223,6 @@ response = requests.post(url, files=files, data=data).json()
 print(response)
 ```
 
-更多请求方式请参考 [API 文档](docs/api_CN.md)，含 Python 脚本请求、Python Request 请求、Java 请求。
-
 <br>
 
 # 🐳 Docker 部署
@@ -207,15 +234,8 @@ print(response)
 **方式一：拉取镜像：**
 
 ```bash
-docker pull linzeyi/hivision_idphotos:v1
-docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
-```
-
-国内拉取加速：
-
-```bash
-docker pull registry.cn-hangzhou.aliyuncs.com/swanhub/hivision_idphotos:v1
-docker tag registry.cn-hangzhou.aliyuncs.com/swanhub/hivision_idphotos:v1 hivision_idphotos
+docker pull linzeyi/hivision_idphotos
+docker tag linzeyi/hivision_idphotos hivision_idphotos
 ```
 
 **方式二：Dockrfile 直接构建镜像：**

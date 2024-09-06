@@ -1,9 +1,11 @@
 <div align="center">
+<img alt="hivision_logo" src="assets/hivision_logo.png" width=120 height=120>
 <h1>HivisionIDPhoto</h1>
 
 English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_KO.md)
 
 [![GitHub](https://img.shields.io/static/v1?label=Github&message=GitHub&color=black)](https://github.com/xiaolin199912/HivisionIDPhotos)
+[![GitHub stars](https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos)](https://github.com/zeyi-lin/hivisionidphotos/stargazers)
 [![SwanHub Demo](https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)
 [![zhihu](https://img.shields.io/static/v1?label=知乎&message=zhihu&color=blue)](https://zhuanlan.zhihu.com/p/638254028)
 [![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
@@ -19,6 +21,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 
 - Online Demo: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
+- 2024.9.6: Add a new image matting model [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
 - 2024.9.2: Update **Adjusted photo KB size**，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
 - 2023.12.1: Update **API deployment (based on fastapi)**
 - 2023.6.20: Update **Preset size menu**
@@ -78,6 +81,10 @@ pip install -r requirements-app.txt
 
 Download the weight file `hivision_modnet.onnx` from our [Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) and save it to the  `hivision/creator/weights` directory.
 
+Expand matting model weights (all in the `hivision/creator/weights` directory) :
+
+- modnet_photographic_portrait_matting.onnx: by [MODNet](https://github.com/ZHKKKe/MODNet)，[Download](https://drive.google.com/drive/folders/1umYmlCulvIFNaqPjwod1SayFmSRHziyR)
+
 <br>
 
 # 🚀 Gradio Demo
@@ -132,11 +139,13 @@ python deploy_api.py
 
 ## Request API Service - Python Request
 
+> Please refer to the [API documentation](docs/api_EN.md) for the request method, including examples of requests using [cURL](docs/api_EN.md#curl-request-example), [Python](docs/api_EN.md#python-request-example), [Java](docs/api_EN.md#java-request-example), and [Javascript](docs/api_EN.md#javascript-request-example).
+
 ### 1. ID Photo Creation
 
 Input 1 photo, receive 1 standard ID photo and 1 high-definition ID photo in 4-channel transparent PNG format.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/idphoto"
@@ -156,7 +165,7 @@ print(response)
 
 Input 1 4-channel transparent PNG, receive 1 image with added background color.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/add_background"
@@ -175,7 +184,7 @@ print(response)
 
 Input 1 3-channel photo, receive 1 6-inch layout photo.
 
-```bash
+```python
 import requests
 
 url = "http://127.0.0.1:8080/generate_layout_photos"
@@ -189,8 +198,6 @@ response = requests.post(url, files=files, data=data).json()
 # response is a JSON dictionary containing status and image_base64
 print(response)
 ```
-
-For more request methods, please refer to the [API documentation](docs/api_EN.md), including Python script requests, Python Request requests, and Java requests.
 
 <br>
 
