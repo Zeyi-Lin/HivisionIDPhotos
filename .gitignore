@@ -1,5 +1,5 @@
 *.pyc
-**/__pycache__
+**/__pycache__/
 .idea
 .vscode/*
 .DS_Store
@@ -14,3 +14,5 @@ build
 *.onnx
 test/temp/*
 !test/temp/.gitkeep
+
+.python-version
