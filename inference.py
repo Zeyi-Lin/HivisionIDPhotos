@@ -10,6 +10,10 @@ from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
+from hivision.creator.human_matting import (
+    extract_human_modnet_photographic_portrait_matting,
+    extract_human,
+)
 
 parser = argparse.ArgumentParser(description="HivisionIDPhotos 证件照制作推理程序。")
 
@@ -29,8 +33,19 @@ parser.add_argument("-c", "--color", help="证件照背景色", default="638cce"
 parser.add_argument(
     "-k", "--kb", help="输出照片的 KB 值，仅对换底和制作排版照生效", default=None
 )
+parser.add_argument("--matting_model", help="抠图模型权重", default="hivision_modnet")
 
 args = parser.parse_args()
+
+MATTING_MODEL = ["hivision_modnet", "modnet_photographic_portrait_matting"]
+
+if args.matting_model not in MATTING_MODEL:
+    raise ValueError("输入了不支持的抠图模型，请查看inference.py的MATTING_MODEL变量。")
+
+if args.matting_model == "hivision_modnet":
+    creator.matting_handler = extract_human
+elif args.matting_model == "modnet_photographic_portrait_matting":
+    creator.matting_handler = extract_human_modnet_photographic_portrait_matting
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
 
