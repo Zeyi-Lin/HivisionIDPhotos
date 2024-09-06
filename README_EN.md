@@ -132,7 +132,7 @@ python deploy_api.py
 
 ## Request API Service - Python Request
 
-> Please refer to the [API documentation](docs/api_EN.md) for request methods, including cURL, Python, Java, and JavaScript request examples.
+> Please refer to the [API documentation](docs/api_EN.md) for the request method, including examples of requests using [cURL](docs/api_EN.md#curl-request-example), [Python](docs/api_EN.md#python-request-example), [Java](docs/api_EN.md#java-request-example), and [Javascript](docs/api_EN.md#javascript-request-example).
 
 ### 1. ID Photo Creation
 
