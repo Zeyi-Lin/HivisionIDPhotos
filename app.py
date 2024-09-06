@@ -574,6 +574,13 @@ if __name__ == "__main__":
     argparser.add_argument(
         "--host", type=str, default="127.0.0.1", help="The host of the server"
     )
+    argparser.add_argument(
+        "--base_path", type=str, default="/", help="The base path of the server"
+    )
     args = argparser.parse_args()
 
-    demo.launch(server_name=args.host, server_port=args.port)
+    import uvicorn
+    from fastapi import FastAPI
+    app = FastAPI()
+    app.mount(args.base_path, demo.app)
+    uvicorn.run(app, host=args.host, port=args.port)
