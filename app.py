@@ -440,9 +440,15 @@ if __name__ == "__main__":
             with gr.Column():
                 notification = gr.Text(label="状态", visible=False)
                 with gr.Row():
-                    img_output_standard = gr.Image(label="标准照", height=350)
-                    img_output_standard_hd = gr.Image(label="高清照", height=350)
-                img_output_layout = gr.Image(label="六寸排版照", height=350)
+                    img_output_standard = gr.Image(
+                        label="标准照", height=350, format="jpeg"
+                    )
+                    img_output_standard_hd = gr.Image(
+                        label="高清照", height=350, format="jpeg"
+                    )
+                img_output_layout = gr.Image(
+                    label="六寸排版照", height=350, format="jpeg"
+                )
                 file_download = gr.File(label="下载调整 KB 大小后的照片", visible=False)
 
             # ---------------- 设置隐藏/显示组件 ----------------
