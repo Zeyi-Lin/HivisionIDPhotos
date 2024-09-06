@@ -132,6 +132,8 @@ python deploy_api.py
 
 ## Request API Service - Python Request
 
+> Please refer to the [API documentation](docs/api_EN.md) for request methods, including cURL, Python, Java, and JavaScript request examples.
+
 ### 1. ID Photo Creation
 
 Input 1 photo, receive 1 standard ID photo and 1 high-definition ID photo in 4-channel transparent PNG format.
@@ -189,8 +191,6 @@ response = requests.post(url, files=files, data=data).json()
 # response is a JSON dictionary containing status and image_base64
 print(response)
 ```
-
-For more request methods, please refer to the [API documentation](docs/api_EN.md), including Python script requests, Python Request requests, and Java requests.
 
 <br>
 

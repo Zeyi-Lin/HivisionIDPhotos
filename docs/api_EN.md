@@ -4,10 +4,12 @@
 
 - [Before You Start: Launch the Backend Service](#before-you-start-launch-the-backend-service)
 - [Interface Function Descriptions](#interface-function-descriptions)
+- [cURL Request Example](#curl-request-examples)
 - [Python Request Example](#python-request-example)
   - [Python Requests Method](#1️⃣-python-requests-method)
   - [Python Script Method](#2️⃣-python-script-request-method)
 - [Java Request Example](#java-request-example)
+- [Javascript Request Example](#javascript-request-examples)
 
 ## Before You Start: Launch the Backend Service
 
@@ -48,6 +50,39 @@ Interface Name: `generate_layout_photos`
 The `Generate 6-inch Layout Photo` interface logic involves sending an RGB image (usually an ID photo after adding a background color), arranging the photos according to `size`, and then generating a 6-inch layout photo.
 
 <br>
+
+
+## cURL Request Examples
+
+cURL is a command-line tool used to transfer data using various network protocols. Below are examples of how to use cURL to call these APIs.
+
+### 1. Generate ID Photo (Transparent Background)
+
+```bash
+curl -X POST "http://127.0.0.1:8080/idphoto" \
+-F "input_image=@demo/images/test.jpg" \
+-F "height=413" \
+-F "width=295"
+```
+
+### 2. Add Background Color
+
+```bash
+curl -X POST "http://127.0.0.1:8080/add_background" \
+-F "input_image=@test.png" \
+-F "color=638cce" \
+-F "kb=200"
+```
+
+### 3. Generate Six-Inch Layout Photo
+
+```bash
+curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
+-F "input_image=@test.jpg" \
+-F "height=413" \
+-F "width=295" \
+-F "kb=200"
+```
 
 ## Python Request Example
 
@@ -430,5 +465,87 @@ public class Test {
         }
     }
 }
+```
 
+## JavaScript Request Examples
+
+In JavaScript, we can use the `fetch` API to send HTTP requests. Below are examples of how to call these APIs using JavaScript.
+
+### 1. Generate ID Photo (Transparent Background)
+
+```javascript
+async function generateIdPhoto(inputImagePath, height, width) {
+    const url = "http://127.0.0.1:8080/idphoto";
+    const formData = new FormData();
+    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.jpg"));
+    formData.append("height", height);
+    formData.append("width", width);
+
+    const response = await fetch(url, {
+        method: 'POST',
+        body: formData
+    });
+
+    const result = await response.json();
+    console.log(result);
+    return result;
+}
+
+// Example call
+generateIdPhoto("images/test.jpg", 413, 295).then(response => {
+    console.log(response);
+});
+```
+
+### 2. Add Background Color
+
+```javascript
+async function addBackground(inputImagePath, color, kb) {
+    const url = "http://127.0.0.1:8080/add_background";
+    const formData = new FormData();
+    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.png"));
+    formData.append("color", color);
+    formData.append("kb", kb);
+
+    const response = await fetch(url, {
+        method: 'POST',
+        body: formData
+    });
+
+    const result = await response.json();
+    console.log(result);
+    return result;
+}
+
+// Example call
+addBackground("test.png", "638cce", 200).then(response => {
+    console.log(response);
+});
+```
+
+### 3. Generate Six-Inch Layout Photo
+
+```javascript
+async function generateLayoutPhotos(inputImagePath, height, width, kb) {
+    const url = "http://127.0.0.1:8080/generate_layout_photos";
+    const formData = new FormData();
+    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.jpg"));
+    formData.append("height", height);
+    formData.append("width", width);
+    formData.append("kb", kb);
+
+    const response = await fetch(url, {
+        method: 'POST',
+        body: formData
+    });
+
+    const result = await response.json();
+    console.log(result);
+    return result;
+}
+
+// Example call
+generateLayoutPhotos("test.jpg", 413, 295, 200).then(response => {
+    console.log(response);
+});
 ```
