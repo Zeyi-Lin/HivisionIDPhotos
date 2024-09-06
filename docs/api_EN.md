@@ -1,5 +1,7 @@
 # API Documentation
 
+中文 | [English](api_EN.md)
+
 ## TOC
 
 - [Before You Start: Launch the Backend Service](#before-you-start-launch-the-backend-service)
