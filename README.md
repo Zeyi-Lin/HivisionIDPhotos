@@ -248,11 +248,10 @@ print(response)
 
 > 以下方式三选一
 
-**方式一：拉取镜像：**
+**方式一：拉取最新镜像：**
 
 ```bash
 docker pull linzeyi/hivision_idphotos
-docker tag linzeyi/hivision_idphotos hivision_idphotos
 ```
 
 **方式二：Dockrfile 直接构建镜像：**
@@ -260,7 +259,7 @@ docker tag linzeyi/hivision_idphotos hivision_idphotos
 在确保将模型权重文件[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)放到`hivision/creator/weights`下后，在项目根目录执行：
 
 ```bash
-docker build -t hivision_idphotos .
+docker build -t linzeyi/hivision_idphotos .
 ```
 
 **方式三：Docker compose 构建：**
@@ -278,13 +277,13 @@ docker compose build
 运行下面的命令，在你的本地访问 [http://127.0.0.1:7860](http://127.0.0.1:7860/) 即可使用。
 
 ```bash
-docker run -p 7860:7860 hivision_idphotos
+docker run -p 7860:7860 linzeyi/hivision_idphotos
 ```
 
 **启动 API 后端服务**
 
 ```bash
-docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
+docker run -p 8080:8080 linzeyi/hivision_idphotos python3 deploy_api.py
 ```
 
 **两个服务同时启动**
