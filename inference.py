@@ -37,8 +37,16 @@ parser.add_argument("--matting_model", help="抠图模型权重", default="hivis
 
 args = parser.parse_args()
 
-MATTING_MODEL = ["hivision_modnet", "modnet_photographic_portrait_matting"]
+INFERENCE_TYPE = [
+    "idphoto",
+    "human_matting",
+    "add_background",
+    "generate_layout_photos",
+]
+if args.type not in INFERENCE_TYPE:
+    raise ValueError("输入了不支持的推理类型，请查看inference.py的INFERENCE_TYPE变量。")
 
+MATTING_MODEL = ["hivision_modnet", "modnet_photographic_portrait_matting"]
 if args.matting_model not in MATTING_MODEL:
     raise ValueError("输入了不支持的抠图模型，请查看inference.py的MATTING_MODEL变量。")
 
@@ -54,7 +62,6 @@ input_image = cv2.imread(args.input_image_dir, cv2.IMREAD_UNCHANGED)
 
 # 如果模式是生成证件照
 if args.type == "idphoto":
-
     # 将字符串转为元组
     size = (int(args.height), int(args.width))
     try:
@@ -69,6 +76,11 @@ if args.type == "idphoto":
         file_name, file_extension = os.path.splitext(args.output_image_dir)
         new_file_name = file_name + "_hd" + file_extension
         cv2.imwrite(new_file_name, result.hd)
+
+# 如果模式是人像抠图
+elif args.type == "human_matting":
+    result = creator(input_image, change_bg_only=True)
+    cv2.imwrite(args.output_image_dir, result.hd)
 
 # 如果模式是添加背景
 elif args.type == "add_background":
