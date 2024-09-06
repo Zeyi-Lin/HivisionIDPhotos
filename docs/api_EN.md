@@ -1,6 +1,6 @@
 # API Documentation
 
-中文 | [English](api_EN.md)
+[中文](api_CN.md) | English
 
 ## TOC
 
