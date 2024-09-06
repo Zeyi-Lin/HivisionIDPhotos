@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Download models
-        run: echo ${{ vars.MODEL_URLS }} | xargs -n 1 -I {} wget -P "hivision/creator/weights" {}
+        run: echo ${{ vars.MODEL_URLS }} | tr ' ' '\n' | xargs -n 1 -I {} wget -P "hivision/creator/weights" {}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
