@@ -3,12 +3,9 @@ name: build image and push
 on:
   push:
     branches:
-      - action
+      - master
     tags:
       - '*'
-
-env:
-  MODEL_URL: https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx
 
 jobs:
   docker:
@@ -18,8 +15,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download model
-        run: wget -O hivision_modnet.onnx ${{ vars.MODEL_URL || env.MODEL_URL  }}
+      - name: Download models
+        run: echo ${{ vars.MODEL_URLS }} | xargs -n 1 -I {} wget -P hivision/creator/weights {}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
