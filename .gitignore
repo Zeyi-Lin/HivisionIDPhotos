@@ -4,7 +4,10 @@
 .vscode/*
 .DS_Store
 app/output/*.jpg
+app/output/*.png
 demo/kb_output/*.jpg
+*.jpg
+*.png
 # build outputs
 dist
 build
