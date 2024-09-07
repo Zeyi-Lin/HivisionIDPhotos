@@ -5,8 +5,7 @@ from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
-from hivision.creator.human_matting import *
-from hivision.creator.face_detector import *
+from hivision.creator.choose_handler import choose_handler
 from hivision.utils import add_background, resize_image_to_kb_base64, hex_to_rgb
 import base64
 import numpy as np
@@ -42,21 +41,8 @@ async def idphoto_inference(
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-    # 选择人像抠图模型
-    if human_matting_model == "modnet_photographic_portrait_matting":
-        creator.matting_handler = extract_human_modnet_photographic_portrait_matting
-    elif human_matting_model == "mnn_hivision_modnet":
-        creator.matting_handler = extract_human_mnn_modnet
-    elif human_matting_model == "rmbg-1.4":
-        creator.matting_handler = extract_human_rmbg
-    else:
-        creator.matting_handler = extract_human
-
-    # 选择人脸检测模型
-    if face_detect_model == "face_plusplus":
-        creator.detection_handler = detect_face_face_plusplus
-    else:
-        creator.detection_handler = detect_face_mtcnn
+    # ------------------- 选择抠图与人脸检测模型 -------------------
+    choose_handler(creator, human_matting_model, face_detect_model)
 
     # 将字符串转为元组
     size = (int(height), int(width))
@@ -90,15 +76,8 @@ async def idphoto_inference(
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
-    # 选择人像抠图模型
-    if human_matting_model == "modnet_photographic_portrait_matting":
-        creator.matting_handler = extract_human_modnet_photographic_portrait_matting
-    elif human_matting_model == "mnn_hivision_modnet":
-        creator.matting_handler = extract_human_mnn_modnet
-    elif human_matting_model == "rmbg-1.4":
-        creator.matting_handler = extract_human_rmbg
-    else:
-        creator.matting_handler = extract_human
+    # ------------------- 选择抠图与人脸检测模型 -------------------
+    choose_handler(creator, human_matting_model, None)
 
     try:
         result = creator(

@@ -7,8 +7,7 @@ from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
-from hivision.creator.human_matting import *
-from hivision.creator.face_detector import *
+from hivision.creator.choose_handler import choose_handler
 import pathlib
 import numpy as np
 from demo.utils import csv_to_size_list
@@ -150,19 +149,7 @@ def idphoto_inference(
         idphoto_json["custom_image_kb"] = None
 
     creator = IDCreator()
-    if matting_model_option == "modnet_photographic_portrait_matting":
-        creator.matting_handler = extract_human_modnet_photographic_portrait_matting
-    elif matting_model_option == "mnn_hivision_modnet":
-        creator.matting_handler = extract_human_mnn_modnet
-    elif matting_model_option == "rmbg-1.4":
-        creator.matting_handler = extract_human_rmbg
-    else:
-        creator.matting_handler = extract_human
-
-    if face_detect_option == "mtcnn":
-        creator.detection_handler = detect_face_mtcnn
-    else:
-        creator.detection_handler = detect_face_face_plusplus
+    choose_handler(creator, matting_model_option, face_detect_option)
 
     change_bg_only = idphoto_json["size_mode"] in ["只换底", "Only Change Background"]
     # 生成证件照

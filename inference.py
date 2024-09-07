@@ -9,12 +9,8 @@ from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
-from hivision.creator.human_matting import *
-from hivision.creator.face_detector import *
+from hivision.creator.choose_handler import choose_handler
 
-parser = argparse.ArgumentParser(description="HivisionIDPhotos 证件照制作推理程序。")
-
-creator = IDCreator()
 
 INFERENCE_TYPE = [
     "idphoto",
@@ -34,6 +30,7 @@ FACE_DETECT_MODEL = [
 ]
 RENDER = [0, 1, 2]
 
+parser = argparse.ArgumentParser(description="HivisionIDPhotos 证件照制作推理程序。")
 parser.add_argument(
     "-t",
     "--type",
@@ -72,21 +69,9 @@ parser.add_argument(
 
 args = parser.parse_args()
 
-# ------------------- 人像抠图模型选择 -------------------
-if args.matting_model == "hivision_modnet":
-    creator.matting_handler = extract_human
-elif args.matting_model == "modnet_photographic_portrait_matting":
-    creator.matting_handler = extract_human_modnet_photographic_portrait_matting
-elif args.matting_model == "mnn_hivision_modnet":
-    creator.matting_handler = extract_human_mnn_modnet
-elif args.matting_model == "rmbg-1.4":
-    creator.matting_handler = extract_human_rmbg
-
-# ------------------- 人脸检测模型选择 -------------------
-if args.face_detect_model == "mtcnn":
-    creator.detection_handler = detect_face_mtcnn
-elif args.face_detect_model == "face_plusplus":
-    creator.detection_handler = detect_face_face_plusplus
+# ------------------- 选择抠图与人脸检测模型 -------------------
+creator = IDCreator()
+choose_handler(creator, args.matting_model, args.face_detect_model)
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
 input_image = cv2.imread(args.input_image_dir, cv2.IMREAD_UNCHANGED)
