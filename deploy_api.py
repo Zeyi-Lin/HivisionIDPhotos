@@ -1,5 +1,4 @@
 from fastapi import FastAPI, UploadFile, Form
-import onnxruntime
 from hivision import IDCreator
 from hivision.error import FaceError
 from hivision.creator.layout_calculator import (

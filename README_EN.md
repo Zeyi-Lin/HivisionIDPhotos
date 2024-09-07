@@ -1,143 +1,191 @@
 <div align="center">
+
 <img alt="hivision_logo" src="assets/hivision_logo.png" width=120 height=120>
 <h1>HivisionIDPhoto</h1>
 
 English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_KO.md)
 
-[![][github-shield]][github-link]
-[![][github-stars-shield]][github-stars-link]
-[![][swanhub-demo-shield]][swanhub-demo-link]
-[![][spaces-shield]][spaces-link]
-[![][wechat-shield]][wechat-link]
 [![][release-shield]][release-link]
-[![][license-shield]][license-link]
-[![][github-issues-shield]][github-issues-link]
 [![][dockerhub-shield]][dockerhub-link]
+[![][github-stars-shield]][github-stars-link]
+[![][github-issues-shield]][github-issues-link]
+[![][github-contributors-shield]][github-contributors-link]
+[![][github-forks-shield]][github-forks-link]
+[![][license-shield]][license-link]  
+[![][wechat-shield]][wechat-link]
+[![][spaces-shield]][spaces-link]
+[![][swanhub-demo-shield]][swanhub-demo-link]
 
 [![][trendshift-shield]][trendshift-link]
 
-<a href="https://trendshift.io/repositories/11622" target="_blank"><img src="https://trendshift.io/api/badge/repositories/11622" alt="Zeyi-Lin%2FHivisionIDPhotos | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-
 <img src="assets/demoImage.png" width=900>
-</div>
 
 </div>
-
-# 🤩Project Update
-
-- Online Demo: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
-
-- 2024.9.6: Add a new image matting model [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
-- 2024.9.2: Update **Adjusted photo KB size**，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
-- 2023.12.1: Update **API deployment (based on fastapi)**
-- 2023.6.20: Update **Preset size menu**
-- 2023.6.19: Update **Layout photos**
 
 <br>
 
+> **Related Projects**:
+>
+> - [SwanLab](https://github.com/SwanHubX/SwanLab): Used for analyzing, monitoring, and collaborating with lab colleagues throughout the training of portrait matting models, significantly improving training efficiency.
+
+<br>
+
+# Table of Contents
+
+- [Project Updates](#-project-updates)
+- [Overview](#overview)
+- [Preparation](#-preparation)
+- [Running Demo](#-running-gradio-demo)
+- [Python Inference](#-python-inference)
+- [API Service Deployment](#️-deploying-api-service)
+- [Docker Deployment](#-docker-deployment)
+- [Links](#-links)
+- [Contact Us](#-contact-us)
+- [Contributors](#contributors)
+
+<br>
+
+# 🤩 Project Updates
+
+- Online Experience: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
+
+- 2024.09.07: Added **Face Detection API Option** [Face++](docs/face++_EN.md) for higher accuracy face detection
+- 2024.09.06: Added new matting model [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
+- 2024.09.05: Updated [Restful API Documentation](docs/api_EN.md)
+- 2024.09.02: Updated **Photo Size Adjustment**
+- 2023.12.01: Updated **API Deployment (based on fastapi)**
+- 2023.06.20: Updated **Preset Size Menu**
+
 # Overview
 
-> 🚀Thank you for your interest in our work. You may also want to check out our other achievements in the field of image processing. Please feel free to contact us at zeyi.lin@swanhub.co.
+> 🚀 Thank you for your interest in our work. You may also want to check out our other achievements in the field of image processing. Feel free to contact us at: zeyi.lin@swanhub.co.
 
-HivisionIDPhoto aims to develop a practical intelligent algorithm for producing ID photos. It uses a complete set of model workflows to recognize various user photo scenarios, perform image segmentation, and generate ID photos.
+HivisionIDPhoto aims to develop a practical and systematic algorithm for intelligent ID photo creation.
 
-**HivisionIDPhoto can:**
+It utilizes a complete AI model workflow to recognize various user photo scenarios, perform matting, and generate ID photos.
 
-1. Perform lightweight image segmentation (Only CPU is needed for fast inference.)
-2. Generate standard ID photos and six-inch layout photos according to different size specifications
-3. Provide beauty features (waiting)
-4. Provide intelligent formal wear replacement (waiting)
+**HivisionIDPhoto can achieve:**
+
+1. Lightweight matting (purely offline, fast inference with just **CPU**)
+2. Generating standard ID photos of different sizes and six-inch layout photos
+3. Supporting pure offline or edge-cloud inference
+4. Beauty enhancement (waiting)
+5. Intelligent formal wear swapping (waiting)
 
 <div align="center">
-<img src="assets/gradio-image.jpeg" width=900>
+<img src="assets/harry.png" width=900>
 </div>
 
 ---
 
-If HivisionIDPhoto is helpful to you, please star this repo or recommend it to your friends to solve the problem of emergency ID photo production!
+If HivisionIDPhoto is helpful to you, please star this repo or recommend it to your friends to solve urgent ID photo creation issues!
 
 <br>
 
-# 🔧Environment Dependencies and Installation
+# 🔧 Preparation
 
-- Python >= 3.7 (The main test of the project is in Python 3.10.)
-- onnxruntime
-- OpenCV
-- Option: Linux, Windows, MacOS
+Environment installation and dependencies:
+- Python >= 3.7 (mainly tested on Python 3.10)
+- OS: Linux, Windows, MacOS
 
-### Installation
-
-1. Clone repo
+## 1. Clone the Project
 
 ```bash
 git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
-2. (Important) Install dependent packages
+## 2. Install Dependencies
 
-> It is recommended to create a Python 3.10 virtual environment with conda and then execute the following command.
+> It is recommended to create a python3.10 virtual environment using conda, then execute the following commands:
 
 ```bash
 pip install -r requirements.txt
 pip install -r requirements-app.txt
 ```
 
-**3. Download Pretrain file**
+## 3. Download Weight Files
 
-Download the weight file `hivision_modnet.onnx` from our [Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) and save it to the  `hivision/creator/weights` directory.
+**Option 1: Script Download**
 
-Expand matting model weights (all in the `hivision/creator/weights` directory) :
+```bash
+python scripts/download_model.py
+```
 
-- modnet_photographic_portrait_matting.onnx: by [MODNet](https://github.com/ZHKKKe/MODNet)，[Download](https://drive.google.com/drive/folders/1umYmlCulvIFNaqPjwod1SayFmSRHziyR)
+**Option 2: Direct Download**
+
+Save in the project's `hivision/creator/weights` directory:
+- `modnet_photographic_portrait_matting.onnx` (24.7MB): Official weights from [MODNet](https://github.com/ZHKKKe/MODNet), [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/modnet_photographic_portrait_matting.onnx)
+- `hivision_modnet.onnx` (24.7MB): A matting model better suited for solid background swapping, [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx)
+- `mnn_hivision_modnet.mnn` (24.7MB): MNN converted matting model by [zjkhahah](https://github.com/zjkhahah), [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/mnn_hivision_modnet.mnn)
+
+## 4. Face Detection Model Configuration
+
+> This is an optional step.
+
+| Extended Face Detection Model | Description | Documentation |
+| -- | -- | -- |
+| MTCNN | **Offline** face detection model, high-performance CPU inference, default model with lower detection accuracy | Directly use after cloning this project |
+| Face++ | An online face detection API launched by Megvii, with higher detection accuracy, [Official Documentation](https://console.faceplusplus.com.cn/documents/4888373) | [Usage Documentation](docs/face++_EN.md)|
 
 <br>
 
-# 🚀 Gradio Demo
+# 🚀 Running Gradio Demo
 
 ```bash
 python app.py
 ```
 
-Running the program will generate a local web page, where operations and interactions with ID photos can be completed.
+Running the program will generate a local web page where you can interact with and perform ID photo operations.
 
 <br>
 
 # 🚀 Python Inference
 
-## 1. ID Photo Production
+Core parameters:
 
-Input 1 photo, get 1 standard ID photo and 1 HD ID photo in a transparent PNG with 4 channels.
+- `-i`: Input image path
+- `-o`: Output image path
+- `-t`: Inference type, options include idphoto, human_matting, add_background, generate_layout_photos
+- `--matting_model`: Selection of portrait matting model weights, options are `hivision_modnet`, `modnet_photographic_portrait_matting`
+
+For more parameters, you can check using `python inference.py --help`.
+
+## 1. ID Photo Creation
+
+Input 1 photo to obtain 1 standard ID photo and 1 high-definition ID photo in 4-channel transparent PNG format.
 
 ```python
 python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
-## 2. Add Background Color
-
-Input 1 transparent PNG with 4 channels, get an image with added background color.
+## 2. Portrait Matting
 
 ```python
-
-python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 000000 -k 30
-
+python inference.py -t human_matting -i demo/images/test.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
 ```
 
-## 3. Obtain Six-Inch Layout Photo
+## 3. Adding Background Color to Transparent Image
 
-Input 1 photo with 3 channels, obtain one six-inch layout photo.
+Input 1 4-channel transparent PNG to obtain 1 image with added background color.
 
 ```python
+python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 4f83ce -k 30 -r 1
+```
 
+## 4. Obtain Six-Inch Layout Photo
+
+Input 1 3-channel photo to obtain 1 six-inch layout photo.
+
+```python
 python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
-
 ```
 
 <br>
 
-# ⚡️ Deploy API service
+# ⚡️ Deploying API Service
 
-## Start backend
+## Start Backend
 
 ```
 python deploy_api.py
@@ -145,31 +193,31 @@ python deploy_api.py
 
 ## Request API Service - Python Request
 
-> Please refer to the [API documentation](docs/api_EN.md) for the request method, including examples of requests using [cURL](docs/api_EN.md#curl-request-example), [Python](docs/api_EN.md#python-request-example), [Java](docs/api_EN.md#java-request-example), and [Javascript](docs/api_EN.md#javascript-request-example).
+> For request methods, please refer to the [API Documentation](docs/api_EN.md), including [cURL](docs/api_EN.md#curl-request-examples), [Python](docs/api_EN.md#python-request-example), [Java](docs/api_EN.md#java-request-example), [Javascript](docs/api_EN.md#javascript-request-examples) request examples.
 
 ### 1. ID Photo Creation
 
-Input 1 photo, receive 1 standard ID photo and 1 high-definition ID photo in 4-channel transparent PNG format.
+Input 1 photo to obtain 1 standard ID photo and 1 high-definition ID photo in 4-channel transparent PNG format.
 
 ```python
 import requests
 
 url = "http://127.0.0.1:8080/idphoto"
-input_image_path = "images/test.jpg"
+input_image_path = "demo/images/test.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
 data = {"height": 413, "width": 295}
 
 response = requests.post(url, files=files, data=data).json()
 
-# response is a JSON dictionary containing status, image_base64_standard, and image_base64_hd
+# response is a json-formatted dictionary containing status, image_base64_standard, and image_base64_hd
 print(response)
 
 ```
 
-### 2. Add Background Color
+### 2. Adding Background Color
 
-Input 1 4-channel transparent PNG, receive 1 image with added background color.
+Input 1 4-channel transparent PNG to obtain 1 image with added background color.
 
 ```python
 import requests
@@ -182,13 +230,13 @@ data = {"color": '638cce', 'kb': None}
 
 response = requests.post(url, files=files, data=data).json()
 
-# response is a JSON dictionary containing status and image_base64
+# response is a json-formatted dictionary containing status and image_base64
 print(response)
 ```
 
-### 3. Get 6-inch Layout Photo
+### 3. Obtain Six-Inch Layout Photo
 
-Input 1 3-channel photo, receive 1 6-inch layout photo.
+Input 1 3-channel photo to obtain 1 six-inch layout photo.
 
 ```python
 import requests
@@ -201,72 +249,88 @@ data = {"height": 413, "width": 295, "kb": 200}
 
 response = requests.post(url, files=files, data=data).json()
 
-# response is a JSON dictionary containing status and image_base64
+# response is a json-formatted dictionary containing status and image_base64
 print(response)
 ```
 
 <br>
 
-# 🐳 Docker deployment
+# 🐳 Docker Deployment
 
-## 1. Pull or Build Image
+## 1. Pull or Build the Image
 
-> Choose one of the following three methods
+> Choose one of the following three methods.
 
-**Method 1 - Pull Image from DockerHub:**
-
-```bash
-docker pull linzeyi/hivision_idphotos:v1
-docker tag linzeyi/hivision_idphotos:v1 hivision_idphotos
-```
-
-**Method 2 - Build Image:**
-
-After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the `hivision/creator/weights` directory, execute in the root directory:
+**Option 1: Pull the latest image:**
 
 ```bash
-docker build -t hivision_idphotos .
+docker pull linzeyi/hivision_idphotos
 ```
 
-**Method 3 - Docker Compose:**
+**Option 2: Directly build the image from Dockerfile:**
 
-After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in the `hivision/creator/weights` directory, execute in the root directory:
+After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in `hivision/creator/weights`, execute the following in the project root directory:
+
+```bash
+docker build -t linzeyi/hivision_idphotos .
+```
+
+**Option 3: Build using Docker Compose:**
+
+After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in `hivision/creator/weights`, execute the following in the project root directory:
 
 ```bash
 docker compose build
 ```
 
-After the image is packaged, run the following command to start the Gradio service:
+## 2. Run the Service
+
+**Start Gradio Demo Service**
+
+Run the following command, and you can access it locally at [http://127.0.0.1:7860](http://127.0.0.1:7860/).
+
+```bash
+docker run -d -p 7860:7860 linzeyi/hivision_idphotos
+```
+
+**Start API Backend Service**
+
+```bash
+docker run -d -p 8080:8080 linzeyi/hivision_idphotos python3 deploy_api.py
+```
+
+**Start Both Services Simultaneously**
 
 ```bash
 docker compose up -d
 ```
 
-## 2. Run the Gradio Demo
+## Environment Variables
 
-After the image packaging is completed, run the following command to start the Gradio Demo service:
+This project provides some additional configuration options that can be set using environment variables:
 
+| Environment Variable | Type | Description | Example |
+| -- | -- | -- | -- |
+| FACE_PLUS_API_KEY | Optional | This is the API key you applied for in the Face++ console | `7-fZStDJ····` |
+| FACE_PLUS_API_SECRET | Optional | The Secret corresponding to the Face++ API key | `VTee824E····` |
+
+Example of using environment variables with Docker:
 ```bash
-docker run -p 7860:7860 hivision_idphotos
-```
-
-You can access it locally at [http://127.0.0.1:7860](http://127.0.0.1:7860/).
-
-## 3. Run API backend service
-
-```bash
-docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
+docker run  -d -p 7860:7860 \
+    -e FACE_PLUS_API_KEY=7-fZStDJ···· \
+    -e FACE_PLUS_API_SECRET=VTee824E···· \
+    linzeyi/hivision_idphotos 
 ```
 
 <br>
 
-# 🌲 Friendship link
+# 🌲 Links
 
 - [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)
 
 <br>
 
-# 📖 Reference Projects
+# 📖 Citations
 
 1. MTCNN:
 
@@ -296,21 +360,19 @@ docker run -p 8080:8080 hivision_idphotos python3 deploy_api.py
 
 # 💻 Development Tips
 
-**1. How to modify the preset size?**
+**1. How to Modify Preset Sizes?**
 
-After modifying [demo/size_list_CN.csv](size_list_CN.csv), run app.py again, where the first column is the size name, the second column is height, and the third column is width.
-
-<br>
-
-# 📧 Contact
-
-If you have any questions, please email Zeyi.lin@swanhub.co
-
-Copyright © 2023, ZeYiLin. All Rights Reserved.
+Modify [size_list_CN.csv](demo/size_list_CN.csv) and run app.py again, where the first column is the size name, the second column is height, and the third column is width.
 
 <br>
 
-# Contributor
+# 📧 Contact Us
+
+If you have any questions, please email zeyi.lin@swanhub.co.
+
+<br>
+
+# Contributors
 
 <a href="https://github.com/Zeyi-Lin/HivisionIDPhotos/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Zeyi-Lin/HivisionIDPhotos" />
@@ -324,10 +386,7 @@ Copyright © 2023, ZeYiLin. All Rights Reserved.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
 
-[github-shield]: https://img.shields.io/static/v1?label=GitHub&message=GitHub&color=black
-[github-link]: https://github.com/xiaolin199912/HivisionIDPhotos
-
-[github-stars-shield]: https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos
+[github-stars-shield]: https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos?color=ffcb47&labelColor=black&style=flat-square
 [github-stars-link]: https://github.com/zeyi-lin/hivisionidphotos/stargazers
 
 [swanhub-demo-shield]: https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg
@@ -336,19 +395,21 @@ Copyright © 2023, ZeYiLin. All Rights Reserved.
 [spaces-shield]: https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue
 [spaces-link]: https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos
 
+<!-- WeChat group link -->
 [wechat-shield]: https://img.shields.io/badge/WeChat-微信-4cb55e
 [wechat-link]: https://docs.qq.com/doc/DUkpBdk90eWZFS2JW
 
-[release-shield]: https://img.shields.io/github/release/zeyi-lin/hivisionidphotos
+<!-- Github Release -->
+[release-shield]: https://img.shields.io/github/v/release/zeyi-lin/hivisionidphotos?color=369eff&labelColor=black&logo=github&style=flat-square
 [release-link]: https://github.com/zeyi-lin/hivisionidphotos/releases
 
-[license-shield]: https://img.shields.io/github/license/zeyi-lin/hivisionidphotos.svg?color=brightgreen
+[license-shield]: https://img.shields.io/badge/license-apache%202.0-white?labelColor=black&style=flat-square
 [license-link]: https://github.com/Zeyi-Lin/HivisionIDPhotos/blob/master/LICENSE
 
-[github-issues-shield]: https://img.shields.io/github/issues/zeyi-lin/hivisionidphotos
+[github-issues-shield]: https://img.shields.io/github/issues/zeyi-lin/hivisionidphotos?color=ff80eb&labelColor=black&style=flat-square
 [github-issues-link]: https://github.com/zeyi-lin/hivisionidphotos/issues
 
-[dockerhub-shield]: https://img.shields.io/docker/v/linzeyi/hivision_idphotos?color=369eff&label=docker&labelColor=black&logo=docker&logoColor=white&style=flat-square
+[dockerhub-shield]: https://img.shields.io/docker/v/linzeyi/hivision_idphotos?color=369eff&label=docker&labelColor=black&logoColor=white&style=flat-square
 [dockerhub-link]: https://hub.docker.com/r/linzeyi/hivision_idphotos/tags
 
 [trendshift-shield]: https://trendshift.io/api/badge/repositories/11622
@@ -356,3 +417,9 @@ Copyright © 2023, ZeYiLin. All Rights Reserved.
 
 [hellogithub-shield]: https://abroad.hellogithub.com/v1/widgets/recommend.svg?rid=8ea1457289fb4062ba661e5299e733d6&claim_uid=Oh5UaGjfrblg0yZ
 [hellogithub-link]: https://hellogithub.com/repository/8ea1457289fb4062ba661e5299e733d6
+
+[github-contributors-shield]: https://img.shields.io/github/contributors/zeyi-lin/hivisionidphotos?color=c4f042&labelColor=black&style=flat-square
+[github-contributors-link]: https://github.com/zeyi-lin/hivisionidphotos/graphs/contributors
+
+[github-forks-shield]: https://img.shields.io/github/forks/zeyi-lin/hivisionidphotos?color=8ae8ff&labelColor=black&style=flat-square
+[github-forks-link]: https://github.com/zeyi-lin/hivisionidphotos/network/members
