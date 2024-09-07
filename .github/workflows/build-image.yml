@@ -2,8 +2,6 @@ name: build image and push
 
 on:
   push:
-    branches:
-      - master
     tags:
       - '*'
 
@@ -36,4 +34,6 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ vars.IMAGE_NAME }}:${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}
+          tags: |
+            ${{ vars.IMAGE_NAME }}:latest
+            ${{ vars.IMAGE_NAME }}:${{ github.ref_name }}
