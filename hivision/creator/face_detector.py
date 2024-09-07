@@ -11,8 +11,10 @@ from mtcnnruntime import MTCNN
 from .context import Context
 from hivision.error import FaceError, APIError
 from hivision.utils import resize_image_to_kb_base64
-import os
+import requests
 import cv2
+import os
+
 
 mtcnn = None
 
@@ -59,8 +61,6 @@ def detect_face_face_plusplus(ctx: Context):
     :param scale: 最大边长缩放比例，原图:缩放图 = 1:scale
     :raise FaceError: 人脸检测错误，多个人脸或者没有人脸
     """
-    import requests
-
     url = "https://api-cn.faceplusplus.com/facepp/v3/detect"
     api_key = os.getenv("FACE_PLUS_API_KEY")
     api_secret = os.getenv("FACE_PLUS_API_SECRET")

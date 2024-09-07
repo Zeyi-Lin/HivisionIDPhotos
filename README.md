@@ -46,7 +46,7 @@
 
 - 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
-- 2024.09.07: 增加人脸检测API选项 - Face++，实现更高精度的人脸检测
+- 2024.09.07: 增加**人脸检测API选项** [Face++](docs/face++_CN.md)，实现更高精度的人脸检测
 - 2024.09.06: 增加新的抠图模型 [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
 - 2024.09.05: 更新 [Restful API 文档](docs/api_CN.md)
 - 2024.09.02: 更新**调整照片 KB 大小**，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
