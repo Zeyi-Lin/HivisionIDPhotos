@@ -14,8 +14,7 @@ from .tensor2numpy import NNormalize, NTo_Tensor, NUnsqueeze
 from .context import Context
 import cv2
 import os
-import MNN.expr as expr
-import MNN.nn as nn
+
 
 WEIGHTS = {
     "hivision_modnet": os.path.join(
@@ -47,6 +46,11 @@ def extract_human(ctx: Context):
 
 
 def get_mnn_modnet_matting(input_image, checkpoint_path, ref_size=512):
+    try:
+        import MNN.expr as expr
+        import MNN.nn as nn
+    except ImportError as e:
+        raise ImportError("MNN模块未安装或导入错误。请确保已安装MNN库，使用命令 'pip install mnn' 安装。") from e
     config = {}
     config['precision'] = 'low'  # 当硬件支持（armv8.2）时使用fp16推理
     config['backend'] = 0  # CPU
