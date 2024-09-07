@@ -14,7 +14,8 @@ from .tensor2numpy import NNormalize, NTo_Tensor, NUnsqueeze
 from .context import Context
 import cv2
 import os
-
+import MNN.expr as expr
+import MNN.nn as nn
 
 WEIGHTS = {
     "hivision_modnet": os.path.join(
@@ -25,6 +26,11 @@ WEIGHTS = {
         "weights",
         "modnet_photographic_portrait_matting.onnx",
     ),
+    "mnn_hivision_modnet": os.path.join(
+        os.path.dirname(__file__),
+        "weights",
+        "mnn_hivision_modnet.mnn",
+    )
 }
 
 
@@ -40,6 +46,27 @@ def extract_human(ctx: Context):
     ctx.matting_image = ctx.processing_image.copy()
 
 
+def get_mnn_modnet_matting(input_image, checkpoint_path, ref_size=512):
+    config = {}
+    config['precision'] = 'low'  # 当硬件支持（armv8.2）时使用fp16推理
+    config['backend'] = 0  # CPU
+    config['numThread'] = 4  # 线程数
+    im, width, length = read_modnet_image(input_image, ref_size=512)
+    rt = nn.create_runtime_manager((config,))
+    net = nn.load_module_from_file(checkpoint_path, ['input1'], ['output1'], runtime_manager=rt)
+    input_var = expr.convert(im, expr.NCHW)
+    output_var = net.forward(input_var)
+    matte = expr.convert(output_var, expr.NCHW)
+    matte = matte.read()#var转换为np
+    matte = (matte * 255).astype("uint8")
+    matte = np.squeeze(matte)
+    mask = cv2.resize(matte, (width, length), interpolation=cv2.INTER_AREA)
+    b, g, r = cv2.split(np.uint8(input_image))
+
+    output_image = cv2.merge((b, g, r, mask))
+
+    return output_image
+
 def extract_human_modnet_photographic_portrait_matting(ctx: Context):
     """
     人像抠图
@@ -50,6 +77,11 @@ def extract_human_modnet_photographic_portrait_matting(ctx: Context):
         ctx.processing_image, WEIGHTS["modnet_photographic_portrait_matting"]
     )
     # 修复抠图
+    ctx.processing_image = hollow_out_fix(matting_image)
+    ctx.matting_image = ctx.processing_image.copy()
+
+def extract_human_mnn_modnet(ctx: Context):
+    matting_image = get_mnn_modnet_matting(ctx.processing_image, WEIGHTS["mnn_hivision_modnet"])
     ctx.processing_image = hollow_out_fix(matting_image)
     ctx.matting_image = ctx.processing_image.copy()
 
