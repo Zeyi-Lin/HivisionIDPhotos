@@ -116,7 +116,7 @@ pip install -r requirements-app.txt
 
 | 拓展人脸检测模型 | 介绍 | 使用文档 |
 | -- | -- | -- |
-| MTCNN | 离线人脸检测模型，高性能CPU推理，为默认模型，检测精度较低 | 无需配置 |
+| MTCNN | **离线**人脸检测模型，高性能CPU推理，为默认模型，检测精度较低 | 无需配置 |
 | Face++ | 旷视推出的在线人脸检测API，检测精度较高，[官方文档](https://console.faceplusplus.com.cn/documents/4888373) | [使用文档](docs/face++_CN.md)|
 
 
