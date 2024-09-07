@@ -142,7 +142,7 @@ if __name__ == "__main__":
 
     elif args.type == "human_matting":
         # 调用 /human_matting 接口
-        human_matting_response = request_human_matting(args.input_image_dir, kb=args.kb)
+        human_matting_response = request_human_matting(args.input_image_dir)
         if human_matting_response["status"]:
             base64_image_data_standard = human_matting_response["image_base64_standard"]
             base64_image_data_standard_hd = human_matting_response["image_base64_hd"]
