@@ -322,8 +322,10 @@ docker compose up -d
 
 docker使用环境变量示例：
 ```bash
-docker run linzeyi/hivision_idphotos \
-    -e FACE_PLUS_API_KEY=7-fZStDJ····
+docker run  -d -p 7860:7860 \
+    -e FACE_PLUS_API_KEY=7-fZStDJ···· \
+    -e FACE_PLUS_API_SECRET=VTee824E···· \
+    linzeyi/hivision_idphotos 
 ```
 
 <br>
