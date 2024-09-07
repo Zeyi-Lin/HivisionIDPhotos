@@ -96,7 +96,7 @@ git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
-## 2. （重要）安装依赖环境
+## 2. 安装依赖环境
 
 > 建议 conda 创建一个 python3.10 虚拟环境后，执行以下命令
 
@@ -120,11 +120,13 @@ python scripts/download_model.py
 - `hivision_modnet.onnx` (24.7MB)：对纯色换底适配性更好的抠图模型，[下载](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)
 
 
-## （可选）人脸检测模型配置
+## 4. 人脸检测模型配置
+
+> 这是一个可选项
 
 | 拓展人脸检测模型 | 介绍 | 使用文档 |
 | -- | -- | -- |
-| MTCNN | **离线**人脸检测模型，高性能CPU推理，为默认模型，检测精度较低 | 无需配置 |
+| MTCNN | **离线**人脸检测模型，高性能CPU推理，为默认模型，检测精度较低 | Clone此项目后直接使用 |
 | Face++ | 旷视推出的在线人脸检测API，检测精度较高，[官方文档](https://console.faceplusplus.com.cn/documents/4888373) | [使用文档](docs/face++_CN.md)|
 
 <br>
