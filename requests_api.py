@@ -14,6 +14,10 @@ MATTING_MODEL = [
     "modnet_photographic_portrait_matting",
     "mnn_hivision_modnet",
 ]
+FACE_DETECT_MODEL = [
+    "mtcnn",
+    "face_plusplus",
+]
 RENDER = [0, 1, 2]
 
 
@@ -32,9 +36,20 @@ def file_2_base64(file_path):
 
 
 # 发送请求到 /idphoto 接口
-def request_idphoto(file_path, height, width):
+def request_idphoto(
+    file_path,
+    height,
+    width,
+    human_matting_model="hivision_idphotos",
+    face_detector_model="mtcnn",
+):
     files = {"input_image": open(file_path, "rb")}
-    data = {"height": int(height), "width": int(width)}
+    data = {
+        "height": int(height),
+        "width": int(width),
+        "human_matting_model": human_matting_model,
+        "face_detector_model": face_detector_model,
+    }
     response = requests.post(url, files=files, data=data)
     return response.json()
 
@@ -56,9 +71,13 @@ def request_generate_layout_photos(file_path, height, width, kb=None):
 
 
 # 发送请求到 /human_matting 接口
-def request_human_matting(file_path):
+def request_human_matting(
+    file_path,
+    human_matting_model="hivision_idphotos",
+):
     files = {"input_image": open(file_path, "rb")}
-    response = requests.post(url, files=files)
+    data = {"human_matting_model": human_matting_model}
+    response = requests.post(url, files=files, data=data)
     return response.json()
 
 
@@ -71,7 +90,6 @@ if __name__ == "__main__":
     parser.add_argument(
         "-u", "--url", help="API 服务的 URL", default="http://localhost:8080"
     )
-
     parser.add_argument(
         "-t",
         "--type",
@@ -94,13 +112,30 @@ if __name__ == "__main__":
         choices=RENDER,
         default=0,
     )
+    parser.add_argument(
+        "--matting_model",
+        help="抠图模型权重",
+        default="hivision_modnet",
+        choices=MATTING_MODEL,
+    )
+    parser.add_argument(
+        "--face_detector_model",
+        help="人脸检测模型",
+        default="mtcnn",
+        choices=FACE_DETECT_MODEL,
+    )
+
     args = parser.parse_args()
     url = f"{args.url}/{args.type}"  # 替换为实际的接口 URL
 
     if args.type == "idphoto":
         # 调用 /idphoto 接口
         idphoto_response = request_idphoto(
-            args.input_image_dir, int(args.height), int(args.width), args.render
+            args.input_image_dir,
+            int(args.height),
+            int(args.width),
+            human_matting_model=args.matting_model,
+            face_detector_model=args.face_detector_model,
         )
 
         if idphoto_response["status"]:
@@ -142,17 +177,15 @@ if __name__ == "__main__":
 
     elif args.type == "human_matting":
         # 调用 /human_matting 接口
-        human_matting_response = request_human_matting(args.input_image_dir)
-        base64_image_data_standard = human_matting_response["image_base64_standard"]
-        base64_image_data_standard_hd = human_matting_response["image_base64_hd"]
+        human_matting_response = request_human_matting(
+            args.input_image_dir, args.matting_model
+        )
+        base64_image_data = human_matting_response["image_base64"]
 
         file_name, file_extension = os.path.splitext(args.output_image_dir)
-        # 定义新的文件路径（在原有的文件名后添加"_hd"）
-        new_file_name = file_name + "_hd" + file_extension
 
         # 解码 Base64 数据并保存为 PNG 文件
-        base64_save(base64_image_data_standard, args.output_image_dir)
-        base64_save(base64_image_data_standard_hd, new_file_name)
+        base64_save(base64_image_data, args.output_image_dir)
 
         print(f"请求{args.type}接口成功，已保存图像。")
 

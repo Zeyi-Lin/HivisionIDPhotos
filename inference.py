@@ -9,11 +9,8 @@ from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
-from hivision.creator.human_matting import (
-    extract_human_modnet_photographic_portrait_matting,
-    extract_human,
-    extract_human_mnn_modnet,
-)
+from hivision.creator.human_matting import *
+from hivision.creator.face_detector import *
 
 parser = argparse.ArgumentParser(description="HivisionIDPhotos 证件照制作推理程序。")
 
@@ -29,6 +26,10 @@ MATTING_MODEL = [
     "hivision_modnet",
     "modnet_photographic_portrait_matting",
     "mnn_hivision_modnet",
+]
+FACE_DETECT_MODEL = [
+    "mtcnn",
+    "face_plusplus",
 ]
 RENDER = [0, 1, 2]
 
@@ -61,6 +62,12 @@ parser.add_argument(
     choices=RENDER,
     default=0,
 )
+parser.add_argument(
+    "--face_detect_model",
+    help="人脸检测模型",
+    default="mtcnn",
+    choices=FACE_DETECT_MODEL,
+)
 
 args = parser.parse_args()
 
@@ -71,6 +78,12 @@ elif args.matting_model == "modnet_photographic_portrait_matting":
     creator.matting_handler = extract_human_modnet_photographic_portrait_matting
 elif args.matting_model == "mnn_hivision_modnet":
     creator.matting_handler = extract_human_mnn_modnet
+
+# ------------------- 人脸检测模型选择 -------------------
+if args.face_detect_model == "mtcnn":
+    creator.detection_handler = detect_face_mtcnn
+elif args.face_detect_model == "face_plusplus":
+    creator.detection_handler = detect_face_face_plusplus
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
 input_image = cv2.imread(args.input_image_dir, cv2.IMREAD_UNCHANGED)

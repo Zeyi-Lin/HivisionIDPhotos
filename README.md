@@ -154,6 +154,7 @@ python app.py
 - `-o`: 保存图像路径
 - `-t`: 推理类型，有idphoto、human_matting、add_background、generate_layout_photos可选
 - `--matting_model`: 人像抠图模型权重选择，可选`hivision_modnet`、`modnet_photographic_portrait_matting`
+- `--face_detect_model`: 人脸检测模型选择，可选`mtcnn`、`face_plusplus`
 
 更多参数可通过`python inference.py --help`查看
 

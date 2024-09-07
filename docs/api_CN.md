@@ -69,7 +69,9 @@ cURL 是一个命令行工具，用于使用各种网络协议传输数据。以
 curl -X POST "http://127.0.0.1:8080/idphoto" \
 -F "input_image=@demo/images/test.jpg" \
 -F "height=413" \
--F "width=295"
+-F "width=295" \
+-F "human_matting_model=hivision_modnet" \
+-F "face_detect_model=mtcnn"
 ```
 
 ### 2. 添加背景色
@@ -78,7 +80,8 @@ curl -X POST "http://127.0.0.1:8080/idphoto" \
 curl -X POST "http://127.0.0.1:8080/add_background" \
 -F "input_image=@test.png" \
 -F "color=638cce" \
--F "kb=200"
+-F "kb=200" \
+-F "render=0"
 ```
 
 ### 3. 生成六寸排版照
@@ -95,7 +98,8 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/human_matting" \
--F "input_image=@demo/images/test.jpg"
+-F "input_image=@demo/images/test.jpg" \
+-F "human_matting_model=hivision_modnet"
 ```
 
 <br>
@@ -113,7 +117,7 @@ url = "http://127.0.0.1:8080/idphoto"
 input_image_path = "images/test.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
-data = {"height": 413, "width": 295}
+data = {"height": 413, "width": 295, "human_matting_model": "hivision_modnet", "face_detect_model": "mtcnn"}
 
 response = requests.post(url, files=files, data=data).json()
 
@@ -131,7 +135,7 @@ url = "http://127.0.0.1:8080/add_background"
 input_image_path = "test.png"
 
 files = {"input_image": open(input_image_path, "rb")}
-data = {"color": '638cce', 'kb': None}
+data = {"color": '638cce', "kb": None, "render": 0}
 
 response = requests.post(url, files=files, data=data).json()
 
@@ -165,8 +169,9 @@ url = "http://127.0.0.1:8080/human_matting"
 input_image_path = "test.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
+data = {"human_matting_model": "hivision_modnet"}
 
-response = requests.post(url, files=files).json()
+response = requests.post(url, files=files, data=data).json()
 
 # response为一个json格式字典，包含status和image_base64
 print(response)
@@ -189,7 +194,7 @@ python requests_api.py -u <URL> -t <TYPE> -i <INPUT_IMAGE_DIR> -o <OUTPUT_IMAGE_
 
 - `-t`, `--type`
 
-  - **描述**: 请求 API 的种类，可选值有 `idphoto`、`add_background` 和 `generate_layout_photos`。分别代表证件照制作、透明图加背景和排版照生成。
+  - **描述**: 请求 API 的种类。
   - **默认值**: `idphoto`
 
 - `-i`, `--input_image_dir`
@@ -205,23 +210,34 @@ python requests_api.py -u <URL> -t <TYPE> -i <INPUT_IMAGE_DIR> -o <OUTPUT_IMAGE_
 
 ##### 可选参数
 
+- `--face_detect_model`
+  - **描述**: 人脸检测模型
+  - **默认值**: mtcnn
+
+- `--human_matting_model`
+  - **描述**: 人像抠图模型
+  - **默认值**: hivision_modnet
+
 - `--height`,
   - **描述**: 标准证件照的输出尺寸的高度。
   - **默认值**: 413
-- `--width`,
 
+- `--width`,
   - **描述**: 标准证件照的输出尺寸的宽度。
   - **默认值**: 295
 
 - `-c`, `--color`
-
   - **描述**: 给透明图增加背景色，格式为 Hex（如#638cce），仅在 type 为`add_background`时生效
   - **默认值**: `638cce`
 
 - `-k`, `--kb`
   - **描述**: 输出照片的 KB 值，仅在 type 为`add_background`和`generate_layout_photos`时生效，值为 None 时不做设置。
   - **默认值**: `None`
-  - **示例**: `50`
+  - **示例**: 50
+
+- `-r`, `--render`
+  - **描述**: 给透明图增加背景色时的渲染方式，仅在 type 为`add_background`和`generate_layout_photos`时生效
+  - **默认值**: 0
 
 ### 1.生成证件照(底透明)
 
@@ -232,7 +248,9 @@ python requests_api.py  \
     -i ./photo.jpg \
     -o ./idphoto.png \
     --height 413 \
-    --width 295
+    --width 295 \
+    --face_detect_model mtcnn \
+    --human_matting_model hivision_modnet
 ```
 
 ### 2.添加背景色
@@ -244,7 +262,8 @@ python requests_api.py  \
     -i ./idphoto.png  \
     -o ./idphoto_with_background.jpg  \
     -c 638cce  \
-    -k 50
+    -k 50 \
+    -r 0
 ```
 
 ### 3.生成六寸排版照
@@ -269,6 +288,7 @@ python requests_api.py  \
     -t human_matting  \
     -i ./photo.jpg  \
     -o ./photo_matting.png
+    --human_matting_model hivision_modnet
 ```
 
 ### 请求失败的情况
@@ -282,17 +302,17 @@ python requests_api.py  \
 ### 添加 maven 依赖
 
 ```java
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.8.16</version>
-        </dependency>
+<dependency>
+    <groupId>cn.hutool</groupId>
+    <artifactId>hutool-all</artifactId>
+    <version>5.8.16</version>
+</dependency>
 
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.6</version>
-        </dependency>
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.6</version>
+</dependency>
 ```
 
 ### 运行代码
@@ -300,88 +320,88 @@ python requests_api.py  \
 #### 1.生成证件照(底透明)
 
 ```java
-    /**
-     * 生成证件照(底透明)  /idphoto 接口
-     * @param inputImageDir 文件地址
-     * @return
-     * @throws IOException
-     */
-    public static String requestIdPhoto(String inputImageDir) throws IOException {
-        String url = BASE_URL+"/idphoto";
-        // 创建文件对象
-        File inputFile = new File(inputImageDir);
-        Map<String, Object> paramMap=new HashMap<>();
-        paramMap.put("input_image",inputFile);
-        paramMap.put("height","413");
-        paramMap.put("width","295");
-        //包含status、image_base64_standard和image_base64_hd三项
-        return HttpUtil.post(url, paramMap);
-    }
+/**
+    * 生成证件照(底透明)  /idphoto 接口
+    * @param inputImageDir 文件地址
+    * @return
+    * @throws IOException
+    */
+public static String requestIdPhoto(String inputImageDir) throws IOException {
+    String url = BASE_URL+"/idphoto";
+    // 创建文件对象
+    File inputFile = new File(inputImageDir);
+    Map<String, Object> paramMap=new HashMap<>();
+    paramMap.put("input_image",inputFile);
+    paramMap.put("height","413");
+    paramMap.put("width","295");
+    //包含status、image_base64_standard和image_base64_hd三项
+    return HttpUtil.post(url, paramMap);
+}
 ```
 
 #### 2.添加背景色
 
 ```java
-    /**
-     * 添加背景色  /add_background 接口
-     * @param inputImageDir 文件地址
-     * @return
-     * @throws IOException
-     */
-    public static String requestAddBackground(String inputImageDir) throws IOException {
-        String url = BASE_URL+"/add_background";
-        // 创建文件对象
-        File inputFile = new File(inputImageDir);
-        Map<String, Object> paramMap=new HashMap<>();
-        paramMap.put("input_image",inputFile);
-        paramMap.put("color","638cce");
-        paramMap.put("kb","200");
-        // response为一个json格式字典，包含status和image_base64
-        return HttpUtil.post(url, paramMap);
-    }
+/**
+    * 添加背景色  /add_background 接口
+    * @param inputImageDir 文件地址
+    * @return
+    * @throws IOException
+    */
+public static String requestAddBackground(String inputImageDir) throws IOException {
+    String url = BASE_URL+"/add_background";
+    // 创建文件对象
+    File inputFile = new File(inputImageDir);
+    Map<String, Object> paramMap=new HashMap<>();
+    paramMap.put("input_image",inputFile);
+    paramMap.put("color","638cce");
+    paramMap.put("kb","200");
+    // response为一个json格式字典，包含status和image_base64
+    return HttpUtil.post(url, paramMap);
+}
 ```
 
 #### 3.生成六寸排版照
 
 ```java
-    /**
-     * 生成六寸排版照  /generate_layout_photos 接口
-     * @param inputImageDir 文件地址
-     * @return
-     * @throws IOException
-     */
-    public static String requestGenerateLayoutPhotos(String inputImageDir) throws IOException {
-        String url = BASE_URL+"/generate_layout_photos";
-        // 创建文件对象
-        File inputFile = new File(inputImageDir);
-        Map<String, Object> paramMap=new HashMap<>();
-        paramMap.put("input_image",inputFile);
-        paramMap.put("height","413");
-        paramMap.put("width","295");
-        paramMap.put("kb","200");
-        //response为一个json格式字典，包含status和image_base64
-        return HttpUtil.post(url, paramMap);
-    }
+/**
+    * 生成六寸排版照  /generate_layout_photos 接口
+    * @param inputImageDir 文件地址
+    * @return
+    * @throws IOException
+    */
+public static String requestGenerateLayoutPhotos(String inputImageDir) throws IOException {
+    String url = BASE_URL+"/generate_layout_photos";
+    // 创建文件对象
+    File inputFile = new File(inputImageDir);
+    Map<String, Object> paramMap=new HashMap<>();
+    paramMap.put("input_image",inputFile);
+    paramMap.put("height","413");
+    paramMap.put("width","295");
+    paramMap.put("kb","200");
+    //response为一个json格式字典，包含status和image_base64
+    return HttpUtil.post(url, paramMap);
+}
 ```
 
 #### 4.人像抠图
 
 ```java
-    /**
-     * 生成人像抠图照  /human_matting 接口
-     * @param inputImageDir 文件地址
-     * @return
-     * @throws IOException
-     */
-    public static String requestHumanMattingPhotos(String inputImageDir) throws IOException {
-        String url = BASE_URL+"/human_matting";
-        // 创建文件对象
-        File inputFile = new File(inputImageDir);
-        Map<String, Object> paramMap=new HashMap<>();
-        paramMap.put("input_image",inputFile);
-        //包含status、image_base64
-        return HttpUtil.post(url, paramMap);
-    }
+/**
+    * 生成人像抠图照  /human_matting 接口
+    * @param inputImageDir 文件地址
+    * @return
+    * @throws IOException
+    */
+public static String requestHumanMattingPhotos(String inputImageDir) throws IOException {
+    String url = BASE_URL+"/human_matting";
+    // 创建文件对象
+    File inputFile = new File(inputImageDir);
+    Map<String, Object> paramMap=new HashMap<>();
+    paramMap.put("input_image",inputFile);
+    //包含status、image_base64
+    return HttpUtil.post(url, paramMap);
+}
 ```
 
 <br>

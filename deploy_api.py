@@ -5,6 +5,8 @@ from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
+from hivision.creator.human_matting import *
+from hivision.creator.face_detector import *
 from hivision.utils import add_background, resize_image_to_kb_base64, hex_to_rgb
 import base64
 import numpy as np
@@ -28,6 +30,8 @@ async def idphoto_inference(
     input_image: UploadFile,
     height: str = Form(...),
     width: str = Form(...),
+    human_matting_model: str = Form("hivision_modnet"),
+    face_detect_model: str = Form("mtcnn"),
     head_measure_ratio=0.2,
     head_height_ratio=0.45,
     top_distance_max=0.12,
@@ -37,6 +41,20 @@ async def idphoto_inference(
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    # 选择人像抠图模型
+    if human_matting_model == "modnet_photographic_portrait_matting":
+        creator.matting_handler = extract_human_modnet_photographic_portrait_matting
+    elif human_matting_model == "mnn_hivision_modnet":
+        creator.matting_handler = extract_human_mnn_modnet
+    else:
+        creator.matting_handler = extract_human
+
+    # 选择人脸检测模型
+    if face_detect_model == "face_plusplus":
+        creator.detection_handler = detect_face_face_plusplus
+    else:
+        creator.detection_handler = detect_face_mtcnn
 
     # 将字符串转为元组
     size = (int(height), int(width))
@@ -64,10 +82,19 @@ async def idphoto_inference(
 @app.post("/human_matting")
 async def idphoto_inference(
     input_image: UploadFile,
+    human_matting_model: str = Form("hivision_modnet"),
 ):
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    # 选择人像抠图模型
+    if human_matting_model == "modnet_photographic_portrait_matting":
+        creator.matting_handler = extract_human_modnet_photographic_portrait_matting
+    elif human_matting_model == "mnn_hivision_modnet":
+        creator.matting_handler = extract_human_mnn_modnet
+    else:
+        creator.matting_handler = extract_human
 
     try:
         result = creator(
