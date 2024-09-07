@@ -5,15 +5,15 @@
 
 [English](README_EN.md) / 中文 / [日本語](README_JP.md) / [한국어](README_KO.md)
 
-[![][github-shield]][github-link]
-[![][github-stars-shield]][github-stars-link]
-[![][swanhub-demo-shield]][swanhub-demo-link]
-[![][spaces-shield]][spaces-link]
-[![][wechat-shield]][wechat-link]
 [![][release-shield]][release-link]
-[![][license-shield]][license-link]
-[![][github-issues-shield]][github-issues-link]
 [![][dockerhub-shield]][dockerhub-link]
+[![][github-stars-shield]][github-stars-link]
+[![][github-issues-shield]][github-issues-link]
+[![][license-shield]][license-link]
+
+[![][wechat-shield]][wechat-link]
+[![][spaces-shield]][spaces-link]
+[![][swanhub-demo-shield]][swanhub-demo-link]
 
 [![][trendshift-shield]][trendshift-link]
 [![][hellogithub-shield]][hellogithub-link]
@@ -392,10 +392,7 @@ docker run  -d -p 7860:7860 \
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
 
-[github-shield]: https://img.shields.io/static/v1?label=GitHub&message=GitHub&color=black
-[github-link]: https://github.com/xiaolin199912/HivisionIDPhotos
-
-[github-stars-shield]: https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos
+[github-stars-shield]: https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos?color=ffcb47&labelColor=black&style=flat-square
 [github-stars-link]: https://github.com/zeyi-lin/hivisionidphotos/stargazers
 
 [swanhub-demo-shield]: https://swanhub.co/git/repo/SwanHub%2FAuto-README/file/preview?ref=main&path=swanhub.svg
@@ -404,19 +401,21 @@ docker run  -d -p 7860:7860 \
 [spaces-shield]: https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue
 [spaces-link]: https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos
 
+<!-- 微信群链接 -->
 [wechat-shield]: https://img.shields.io/badge/WeChat-微信-4cb55e
 [wechat-link]: https://docs.qq.com/doc/DUkpBdk90eWZFS2JW
 
-[release-shield]: https://img.shields.io/github/release/zeyi-lin/hivisionidphotos
+<!-- Github Release -->
+[release-shield]: https://img.shields.io/github/v/release/zeyi-lin/hivisionidphotos?color=369eff&labelColor=black&logo=github&style=flat-square
 [release-link]: https://github.com/zeyi-lin/hivisionidphotos/releases
 
-[license-shield]: https://img.shields.io/github/license/zeyi-lin/hivisionidphotos.svg?color=brightgreen
+[license-shield]: https://img.shields.io/badge/license-apache%202.0-white?labelColor=black&style=flat-square
 [license-link]: https://github.com/Zeyi-Lin/HivisionIDPhotos/blob/master/LICENSE
 
-[github-issues-shield]: https://img.shields.io/github/issues/zeyi-lin/hivisionidphotos
+[github-issues-shield]: https://img.shields.io/github/issues/zeyi-lin/hivisionidphotos?color=ff80eb&labelColor=black&style=flat-square
 [github-issues-link]: https://github.com/zeyi-lin/hivisionidphotos/issues
 
-[dockerhub-shield]: https://img.shields.io/docker/v/linzeyi/hivision_idphotos?color=369eff&label=docker&labelColor=black&logo=docker&logoColor=white&style=flat-square
+[dockerhub-shield]: https://img.shields.io/docker/v/linzeyi/hivision_idphotos?color=369eff&label=docker&labelColor=black&logoColor=white&style=flat-square
 [dockerhub-link]: https://hub.docker.com/r/linzeyi/hivision_idphotos/tags
 
 [trendshift-shield]: https://trendshift.io/api/badge/repositories/11622
