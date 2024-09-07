@@ -12,6 +12,7 @@ from hivision.creator.layout_calculator import (
 from hivision.creator.human_matting import (
     extract_human_modnet_photographic_portrait_matting,
     extract_human,
+    extract_human_mnn_modnet,
 )
 
 parser = argparse.ArgumentParser(description="HivisionIDPhotos 证件照制作推理程序。")
@@ -24,7 +25,7 @@ INFERENCE_TYPE = [
     "add_background",
     "generate_layout_photos",
 ]
-MATTING_MODEL = ["hivision_modnet", "modnet_photographic_portrait_matting"]
+MATTING_MODEL = ["hivision_modnet", "modnet_photographic_portrait_matting", "mnn_hivision_modnet"]
 RENDER = [0, 1, 2]
 
 parser.add_argument(
@@ -64,6 +65,8 @@ if args.matting_model == "hivision_modnet":
     creator.matting_handler = extract_human
 elif args.matting_model == "modnet_photographic_portrait_matting":
     creator.matting_handler = extract_human_modnet_photographic_portrait_matting
+elif args.matting_model == "mnn_hivision_modnet":
+    creator.matting_handler = extract_human_mnn_modnet
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
 input_image = cv2.imread(args.input_image_dir, cv2.IMREAD_UNCHANGED)
