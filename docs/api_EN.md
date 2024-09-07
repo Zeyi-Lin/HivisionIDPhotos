@@ -370,7 +370,28 @@ python requests_api.py  \
     }
 ```
 
-#### 4. Summary
+#### 4. Human Matting
+```java
+    /**
+     * Generate Matted Portrait /human_matting interface
+     * @param inputImageDir File address
+     * @return
+     * @throws IOException
+     */
+    public static String requestHumanMattingPhotos(String inputImageDir) throws IOException {
+        String url = BASE_URL+"/human_matting";
+        // Create file object
+        File inputFile = new File(inputImageDir);
+        Map<String, Object> paramMap=new HashMap<>();
+        paramMap.put("input_image",inputFile);
+        paramMap.put("kb","200");
+        // Contains status, image_base64_standard, and image_base64_hd
+        return HttpUtil.post(url, paramMap);
+    }
+```
+
+
+#### 5. Summary
 
 ```java
 
@@ -446,6 +467,22 @@ public class Test {
         return HttpUtil.post(url, paramMap);
     }
     /**
+     * Generate Matted Portrait /human_matting interface
+     * @param inputImageDir File address
+     * @return
+     * @throws IOException
+     */
+    public static String requestHumanMattingPhotos(String inputImageDir) throws IOException {
+        String url = BASE_URL+"/human_matting";
+        // Create file object
+        File inputFile = new File(inputImageDir);
+        Map<String, Object> paramMap=new HashMap<>();
+        paramMap.put("input_image",inputFile);
+        paramMap.put("kb","200");
+        // Contains status, image_base64_standard, and image_base64_hd
+        return HttpUtil.post(url, paramMap);
+    }
+    /**
      * Generate ID Photo (Transparent Background)
      * @param inputImageDir Source file address
      * @param outputImageDir Output file address
@@ -499,6 +536,27 @@ public class Test {
         }
     }
 
+     /**
+     * Generate Matted Portrait /human_matting interface
+     * @param inputImageDir Source file address
+     * @param outputImageDir Output file address
+     * @return
+     * @throws IOException
+     */
+    public static String requestHumanMattingPhotosToImage(String inputImageDir) throws IOException {
+        String res =requestHumanMattingPhotos(inputImageDir);
+        // Convert to JSON
+        JSONObject response= JSONUtil.parseObj(res);
+        if(response.getBool("status")){
+            String  image_base64_standard= response.getStr("image_base64_standard");
+            String  image_base64_hd =response.getStr("image_base64_hd");
+            String[] outputImageDirArr= StringUtils.split(outputImageDir,".");
+            // Save Base64 as images
+            FileUtils.writeByteArrayToFile(new File(outputImageDirArr[0]+"_standard."+outputImageDirArr[1]),  Base64.getDecoder().decode(image_base64_standard));
+            FileUtils.writeByteArrayToFile(new File(outputImageDirArr[0]+"_hd."+outputImageDirArr[1]),  Base64.getDecoder().decode(image_base64_hd));
+        }
+    }
+
     public static void main(String[] args) {
         try {
             // Generate ID Photo (Transparent Background)
@@ -507,6 +565,8 @@ public class Test {
             requestAddBackgroundToImage("C:\\Users\\Administrator\\Desktop\\2222_hd.png","C:\\Users\\Administrator\\Desktop\\idphoto_with_background.jpg");
             // Generate 6-inch Layout Photo
             requestGenerateLayoutPhotosToImage("C:\\Users\\Administrator\\Desktop\\1111.jpg","C:\\Users\\Administrator\\Desktop\\2222.png");
+            //Generate Human Matted Portrait
+            requestHumanMattingPhotosToImage("C:\\Users\\Administrator\\Desktop\\1111.jpg","C:\\Users\\Administrator\\Desktop\\2222.png");
 
         } catch (IOException e) {
             e.printStackTrace();
