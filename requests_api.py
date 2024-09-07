@@ -56,10 +56,9 @@ def request_generate_layout_photos(file_path, height, width, kb=None):
 
 
 # 发送请求到 /human_matting 接口
-def request_human_matting(file_path, kb=None):
+def request_human_matting(file_path):
     files = {"input_image": open(file_path, "rb")}
-    data = {"kb": kb}
-    response = requests.post(url, files=files, data=data)
+    response = requests.post(url, files=files)
     return response.json()
 
 
