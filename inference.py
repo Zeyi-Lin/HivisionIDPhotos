@@ -25,7 +25,11 @@ INFERENCE_TYPE = [
     "add_background",
     "generate_layout_photos",
 ]
-MATTING_MODEL = ["hivision_modnet", "modnet_photographic_portrait_matting", "mnn_hivision_modnet"]
+MATTING_MODEL = [
+    "hivision_modnet",
+    "modnet_photographic_portrait_matting",
+    "mnn_hivision_modnet",
+]
 RENDER = [0, 1, 2]
 
 parser.add_argument(

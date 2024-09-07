@@ -3,6 +3,19 @@ import base64
 import argparse
 import os
 
+INFERENCE_TYPE = [
+    "idphoto",
+    "human_matting",
+    "add_background",
+    "generate_layout_photos",
+]
+MATTING_MODEL = [
+    "hivision_modnet",
+    "modnet_photographic_portrait_matting",
+    "mnn_hivision_modnet",
+]
+RENDER = [0, 1, 2]
+
 
 def base64_save(_base64_image_data, save_path):
     # 解码 Base64 数据并保存为 PNG 文件
@@ -66,16 +79,21 @@ if __name__ == "__main__":
     parser.add_argument(
         "-k", "--kb", help="输出照片的 KB 值，仅对换底和制作排版照生效", default=None
     )
+    parser.add_argument(
+        "-r",
+        "--render",
+        type=int,
+        help="底色合成的模式，有 0:纯色、1:上下渐变、2:中心渐变 可选",
+        choices=RENDER,
+        default=0,
+    )
     args = parser.parse_args()
-
     url = f"{args.url}/{args.type}"  # 替换为实际的接口 URL
-    # color = hex_to_rgb(args.color)
-    # color = (color[2], color[1], color[0])
 
     if args.type == "idphoto":
         # 调用 /idphoto 接口
         idphoto_response = request_idphoto(
-            args.input_image_dir, int(args.height), int(args.width)
+            args.input_image_dir, int(args.height), int(args.width), args.render
         )
 
         if idphoto_response["status"]:
