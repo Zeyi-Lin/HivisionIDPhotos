@@ -57,16 +57,17 @@
 
 > 🚀 谢谢你对我们的工作感兴趣。您可能还想查看我们在图像领域的其他成果，欢迎来信:zeyi.lin@swanhub.co.
 
-HivisionIDPhoto 旨在开发一种实用的证件照智能制作算法。
+HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算法。
 
-它利用一套完善的模型工作流程，实现对多种用户拍照场景的识别、抠图与证件照生成。
+它利用一套完善的AI模型工作流程，实现对多种用户拍照场景的识别、抠图与证件照生成。
 
 **HivisionIDPhoto 可以做到：**
 
-1. 轻量级抠图（仅需 **CPU** 即可快速推理）
+1. 轻量级抠图（纯离线，仅需 **CPU** 即可快速推理）
 2. 根据不同尺寸规格生成不同的标准证件照、六寸排版照
-3. 美颜（waiting）
-4. 智能换正装（waiting）
+3. 支持 纯离线 或 端云 推理
+4. 美颜（waiting）
+5. 智能换正装（waiting）
 
 <div align="center">
 <img src="assets/harry.png" width=900>
@@ -111,7 +112,7 @@ pip install -r requirements-app.txt
 拓展抠图模型权重（均放到`hivision/creator/weights`目录下）：
 - `modnet_photographic_portrait_matting.onnx`: [MODNet](https://github.com/ZHKKKe/MODNet)官方权重，[下载](https://drive.google.com/drive/folders/1umYmlCulvIFNaqPjwod1SayFmSRHziyR)
 
-**4.（可选）人脸检测模型配置**
+**（可选）人脸检测模型配置**
 
 
 | 拓展人脸检测模型 | 介绍 | 使用文档 |
