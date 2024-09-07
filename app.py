@@ -170,6 +170,7 @@ def idphoto_inference(
         result_message = {
             img_output_standard: gr.update(value=None),
             img_output_standard_hd: gr.update(value=None),
+            img_output_layout: gr.update(visible=False),
             notification: gr.update(
                 value=text_lang_map[language]["The number of faces is not equal to 1"],
                 visible=True,
