@@ -80,8 +80,7 @@ async def idphoto_inference(
     else:
         result_message = {
             "status": True,
-            "image_base64_standard": numpy_2_base64(result.standard),
-            "image_base64_hd": numpy_2_base64(result.hd),
+            "image_base64": numpy_2_base64(result.standard),
         }
     return result_message
 
