@@ -370,7 +370,7 @@ if __name__ == "__main__":
             content = f.read()
         return content
 
-    demo = gr.Blocks(css=css)
+    demo = gr.Blocks(title="HivisionIDPhotos", css=css)
 
     with demo:
         gr.HTML(load_description(os.path.join(root_dir, "assets/title.md")))
