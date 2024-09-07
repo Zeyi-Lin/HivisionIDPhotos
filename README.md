@@ -197,68 +197,13 @@ python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_lay
 python deploy_api.py
 ```
 
+## 请求 API 服务
 
-## 请求 API 服务 - Python Request
-
-> 请求方式请参考 [API 文档](docs/api_CN.md)，含 [cURL](docs/api_CN.md#curl-请求示例)、[Python](docs/api_CN.md#python-请求示例)、[Java](docs/api_CN.md#java-请求示例)、[Javascript](docs/api_CN.md#javascript-请求示例) 请求示例。
-
-### 1. 证件照制作
-
-输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
-
-```python
-import requests
-
-url = "http://127.0.0.1:8080/idphoto"
-input_image_path = "demo/images/test.jpg"
-
-files = {"input_image": open(input_image_path, "rb")}
-data = {"height": 413, "width": 295}
-
-response = requests.post(url, files=files, data=data).json()
-
-# response为一个json格式字典，包含status、image_base64_standard和image_base64_hd三项
-print(response)
-
-```
-
-### 2. 增加底色
-
-输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像
-
-```python
-import requests
-
-url = "http://127.0.0.1:8080/add_background"
-input_image_path = "test.png"
-
-files = {"input_image": open(input_image_path, "rb")}
-data = {"color": '638cce', 'kb': None}
-
-response = requests.post(url, files=files, data=data).json()
-
-# response为一个json格式字典，包含status和image_base64
-print(response)
-```
-
-### 3. 得到六寸排版照
-
-输入 1 张 3 通道照片，获得 1 张六寸排版照
-
-```python
-import requests
-
-url = "http://127.0.0.1:8080/generate_layout_photos"
-input_image_path = "test.jpg"
-
-files = {"input_image": open(input_image_path, "rb")}
-data = {"height": 413, "width": 295, "kb": 200}
-
-response = requests.post(url, files=files, data=data).json()
-
-# response为一个json格式字典，包含status和image_base64
-print(response)
-```
+详细请求方式请参考 [API 文档](docs/api_CN.md)，包含以下请求示例：
+- [cURL](docs/api_CN.md#curl-请求示例)
+- [Python](docs/api_CN.md#python-请求示例)
+- [Java](docs/api_CN.md#java-请求示例)
+- [Javascript](docs/api_CN.md#javascript-请求示例)
 
 <br>
 
@@ -369,7 +314,7 @@ docker run  -d -p 7860:7860 \
 
 **1. 如何修改预设尺寸？**
 
-修改[size_list_CN.csv](demo/size_list_CN.csv)后再次运行 app.py 即可，其中第一列为尺寸名，第二列为高度，第三列为宽度。
+修改[size_list_CN.csv](demo/size_list_CN.csv)后再次运行 `app.py` 即可，其中第一列为尺寸名，第二列为高度，第三列为宽度。
 
 <br>
 

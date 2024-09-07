@@ -270,7 +270,7 @@ python requests_api.py  \
     -u http://127.0.0.1:8080  \
     -t human_matting  \
     -i ./photo.jpg  \
-    -o ./photo_matting.png  \
+    -o ./photo_matting.png
 ```
 
 ### 请求失败的情况
@@ -463,6 +463,30 @@ async function generateLayoutPhotos(inputImagePath, height, width, kb) {
 
 // 示例调用
 generateLayoutPhotos("test.jpg", 413, 295, 200).then(response => {
+    console.log(response);
+});
+```
+
+### 4.人像抠图
+
+```javascript
+async function uploadImage(inputImagePath) {
+    const url = "http://127.0.0.1:8080/human_matting";
+    const formData = new FormData();
+    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.jpg"));
+
+    const response = await fetch(url, {
+        method: 'POST',
+        body: formData
+    });
+
+    const result = await response.json(); // 假设响应是JSON格式
+    console.log(result);
+    return result;
+}
+
+// 示例调用
+uploadImage("demo/images/test.jpg").then(response => {
     console.log(response);
 });
 ```

@@ -468,3 +468,28 @@ generateLayoutPhotos("test.jpg", 413, 295, 200).then(response => {
     console.log(response);
 });
 ```
+
+
+### 4. Human Matting
+
+```javascript
+async function uploadImage(inputImagePath) {
+    const url = "http://127.0.0.1:8080/human_matting";
+    const formData = new FormData();
+    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.jpg"));
+
+    const response = await fetch(url, {
+        method: 'POST',
+        body: formData
+    });
+
+    const result = await response.json(); // Assume the response is in JSON format
+    console.log(result);
+    return result;
+}
+
+// Example call
+uploadImage("demo/images/test.jpg").then(response => {
+    console.log(response);
+});
+```
