@@ -96,8 +96,7 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/human_matting" \
--F "input_image=@test.jpg" \
--F "kb=200"
+-F "input_image=@demo/images/test.jpg"
 ```
 
 
@@ -166,9 +165,8 @@ url = "http://127.0.0.1:8080/human_matting"
 input_image_path = "test.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
-data = {"kb": 200}
 
-response = requests.post(url, files=files, data=data).json()
+response = requests.post(url, files=files).json()
 
 # response为一个json格式字典，包含status和image_base64
 print(response)
@@ -271,9 +269,8 @@ python requests_api.py  \
 python requests_api.py  \
     -u http://127.0.0.1:8080  \
     -t human_matting  \
-    -i ./0x02.jpg  \
+    -i ./photo.jpg  \
     -o ./photo_matting.png  \
-    -k 200
 ```
 
 ### 请求失败的情况
@@ -382,194 +379,9 @@ python requests_api.py  \
         File inputFile = new File(inputImageDir);
         Map<String, Object> paramMap=new HashMap<>();
         paramMap.put("input_image",inputFile);
-        paramMap.put("kb","200");
         //包含status、image_base64_standard和image_base64_hd三项
         return HttpUtil.post(url, paramMap);
     }
-```
-
-#### 5.汇总
-
-```java
-
-import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
-import org.apache.commons.io.FileUtils;
-import org.springframework.util.StringUtils;
-import java.io.File;
-import java.io.IOException;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * @author: qingshuang
- * @createDate: 2024/09/05
- * @description: java生成证件照，测试用例
- */
-public class Test {
-    /**
-     * 接口地址
-     */
-    private final static String BASE_URL = "http://127.0.0.1:8080";
-
-    /**
-     * 生成证件照(底透明)  /idphoto 接口
-     * @param inputImageDir 文件地址
-     * @return
-     * @throws IOException
-     */
-    public static String requestIdPhoto(String inputImageDir) throws IOException {
-        String url = BASE_URL+"/idphoto";
-        // 创建文件对象
-        File inputFile = new File(inputImageDir);
-        Map<String, Object> paramMap=new HashMap<>();
-        paramMap.put("input_image",inputFile);
-        paramMap.put("height","413");
-        paramMap.put("width","295");
-        return HttpUtil.post(url, paramMap);
-    }
-    /**
-     * 添加背景色  /add_background 接口
-     * @param inputImageDir 文件地址
-     * @return
-     * @throws IOException
-     */
-    public static String requestAddBackground(String inputImageDir) throws IOException {
-        String url = BASE_URL+"/add_background";
-        // 创建文件对象
-        File inputFile = new File(inputImageDir);
-        Map<String, Object> paramMap=new HashMap<>();
-        paramMap.put("input_image",inputFile);
-        paramMap.put("color","638cce");
-        paramMap.put("kb","200");
-        return HttpUtil.post(url, paramMap);
-    }
-    /**
-     * 生成六寸排版照  /generate_layout_photos 接口
-     * @param inputImageDir 文件地址
-     * @return
-     * @throws IOException
-     */
-    public static String requestGenerateLayoutPhotos(String inputImageDir) throws IOException {
-        String url = BASE_URL+"/generate_layout_photos";
-        // 创建文件对象
-        File inputFile = new File(inputImageDir);
-        Map<String, Object> paramMap=new HashMap<>();
-        paramMap.put("input_image",inputFile);
-        paramMap.put("height","413");
-        paramMap.put("width","295");
-        paramMap.put("kb","200");
-        return HttpUtil.post(url, paramMap);
-    }
-    /**
-     * 生成人像抠图照  /human_matting 接口
-     * @param inputImageDir 文件地址
-     * @return
-     * @throws IOException
-     */
-    public static String requestHumanMattingPhotos(String inputImageDir) throws IOException {
-        String url = BASE_URL+"/human_matting";
-        // 创建文件对象
-        File inputFile = new File(inputImageDir);
-        Map<String, Object> paramMap=new HashMap<>();
-        paramMap.put("input_image",inputFile);
-        paramMap.put("kb","200");
-        //包含status、image_base64_standard和image_base64_hd三项
-        return HttpUtil.post(url, paramMap);
-    }
-    /**
-     * 生成证件照(底透明)
-     * @param inputImageDir 源文件地址
-     * @param outputImageDir 输出文件地址
-     * @throws IOException
-     */
-    private static void requestIdPhotoToImage(String inputImageDir, String outputImageDir) throws IOException {
-        String res =requestIdPhoto(inputImageDir);
-        //转成json
-        JSONObject response= JSONUtil.parseObj(res);
-        if(response.getBool("status")){//请求接口成功
-            String  image_base64_standard= response.getStr("image_base64_standard");
-            String  image_base64_hd =response.getStr("image_base64_hd");
-            String[] outputImageDirArr= StringUtils.split(outputImageDir,".");
-            // Base64 保存为图片
-            FileUtils.writeByteArrayToFile(new File(outputImageDirArr[0]+"_standard."+outputImageDirArr[1]),  Base64.getDecoder().decode(image_base64_standard));
-            FileUtils.writeByteArrayToFile(new File(outputImageDirArr[0]+"_hd."+outputImageDirArr[1]),  Base64.getDecoder().decode(image_base64_hd));
-        }
-    }
-    /**
-     * 添加背景色
-     * @param inputImageDir 源文件地址
-     * @param outputImageDir 输出文件地址
-     * @throws IOException
-     */
-    private static void requestAddBackgroundToImage(String inputImageDir, String outputImageDir) throws IOException {
-        String res =requestAddBackground(inputImageDir);
-        //转成json
-        JSONObject response= JSONUtil.parseObj(res);
-        if(response.getBool("status")){//请求接口成功
-            String  image_base64= response.getStr("image_base64");
-            String[] outputImageDirArr= StringUtils.split(outputImageDir,".");
-            // Base64 保存为图片
-            FileUtils.writeByteArrayToFile(new File(outputImageDirArr[0]+"_background."+outputImageDirArr[1]),  Base64.getDecoder().decode(image_base64));
-        }
-    }
-    /**
-     * 生成六寸排版照
-     * @param inputImageDir 源文件地址
-     * @param outputImageDir 输出文件地址
-     * @throws IOException
-     */
-    private static void requestGenerateLayoutPhotosToImage(String inputImageDir, String outputImageDir) throws IOException {
-        String res =requestGenerateLayoutPhotos(inputImageDir);
-        //转成json
-        JSONObject response= JSONUtil.parseObj(res);
-        if(response.getBool("status")){//请求接口成功
-            String  image_base64= response.getStr("image_base64");
-            String[] outputImageDirArr= StringUtils.split(outputImageDir,".");
-            // Base64 保存为图片
-            FileUtils.writeByteArrayToFile(new File(outputImageDirArr[0]+"_layout."+outputImageDirArr[1]),  Base64.getDecoder().decode(image_base64));
-        }
-    }
-    /**
-     * 生成人像抠图照  /human_matting 接口
-     * @param inputImageDir 源文件地址
-     * @param outputImageDir 输出文件地址
-     * @return
-     * @throws IOException
-     */
-    public static String requestHumanMattingPhotosToImage(String inputImageDir) throws IOException {
-        String res =requestHumanMattingPhotos(inputImageDir);
-        //转成json
-        JSONObject response= JSONUtil.parseObj(res);
-        if(response.getBool("status")){//请求接口成功
-            String  image_base64_standard= response.getStr("image_base64_standard");
-            String  image_base64_hd =response.getStr("image_base64_hd");
-            String[] outputImageDirArr= StringUtils.split(outputImageDir,".");
-            // Base64 保存为图片
-            FileUtils.writeByteArrayToFile(new File(outputImageDirArr[0]+"_standard."+outputImageDirArr[1]),  Base64.getDecoder().decode(image_base64_standard));
-            FileUtils.writeByteArrayToFile(new File(outputImageDirArr[0]+"_hd."+outputImageDirArr[1]),  Base64.getDecoder().decode(image_base64_hd));
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            //生成证件照(底透明)
-            requestIdPhotoToImage("C:\\Users\\Administrator\\Desktop\\1111.jpg","C:\\Users\\Administrator\\Desktop\\2222.png");
-            //添加背景色
-            requestAddBackgroundToImage("C:\\Users\\Administrator\\Desktop\\2222_hd.png","C:\\Users\\Administrator\\Desktop\\idphoto_with_background.jpg");
-            //生成六寸排版照
-            requestGenerateLayoutPhotosToImage("C:\\Users\\Administrator\\Desktop\\1111.jpg","C:\\Users\\Administrator\\Desktop\\2222.png");
-             //生成抠图照
-            requestHumanMattingPhotosToImage("C:\\Users\\Administrator\\Desktop\\1111.jpg","C:\\Users\\Administrator\\Desktop\\2222.png");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
 ```
 
 ## JavaScript 请求示例
