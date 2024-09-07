@@ -29,7 +29,7 @@ WEIGHTS = {
         os.path.dirname(__file__),
         "weights",
         "mnn_hivision_modnet.mnn",
-    )
+    ),
 }
 
 
@@ -50,18 +50,22 @@ def get_mnn_modnet_matting(input_image, checkpoint_path, ref_size=512):
         import MNN.expr as expr
         import MNN.nn as nn
     except ImportError as e:
-        raise ImportError("MNN模块未安装或导入错误。请确保已安装MNN库，使用命令 'pip install mnn' 安装。") from e
+        raise ImportError(
+            "The MNN module is not installed or there was an import error. Please ensure that the MNN library is installed by using the command 'pip install mnn'."
+        ) from e
     config = {}
-    config['precision'] = 'low'  # 当硬件支持（armv8.2）时使用fp16推理
-    config['backend'] = 0  # CPU
-    config['numThread'] = 4  # 线程数
+    config["precision"] = "low"  # 当硬件支持（armv8.2）时使用fp16推理
+    config["backend"] = 0  # CPU
+    config["numThread"] = 4  # 线程数
     im, width, length = read_modnet_image(input_image, ref_size=512)
     rt = nn.create_runtime_manager((config,))
-    net = nn.load_module_from_file(checkpoint_path, ['input1'], ['output1'], runtime_manager=rt)
+    net = nn.load_module_from_file(
+        checkpoint_path, ["input1"], ["output1"], runtime_manager=rt
+    )
     input_var = expr.convert(im, expr.NCHW)
     output_var = net.forward(input_var)
     matte = expr.convert(output_var, expr.NCHW)
-    matte = matte.read()#var转换为np
+    matte = matte.read()  # var转换为np
     matte = (matte * 255).astype("uint8")
     matte = np.squeeze(matte)
     mask = cv2.resize(matte, (width, length), interpolation=cv2.INTER_AREA)
@@ -70,6 +74,7 @@ def get_mnn_modnet_matting(input_image, checkpoint_path, ref_size=512):
     output_image = cv2.merge((b, g, r, mask))
 
     return output_image
+
 
 def extract_human_modnet_photographic_portrait_matting(ctx: Context):
     """
@@ -84,8 +89,11 @@ def extract_human_modnet_photographic_portrait_matting(ctx: Context):
     ctx.processing_image = hollow_out_fix(matting_image)
     ctx.matting_image = ctx.processing_image.copy()
 
+
 def extract_human_mnn_modnet(ctx: Context):
-    matting_image = get_mnn_modnet_matting(ctx.processing_image, WEIGHTS["mnn_hivision_modnet"])
+    matting_image = get_mnn_modnet_matting(
+        ctx.processing_image, WEIGHTS["mnn_hivision_modnet"]
+    )
     ctx.processing_image = hollow_out_fix(matting_image)
     ctx.matting_image = ctx.processing_image.copy()
 

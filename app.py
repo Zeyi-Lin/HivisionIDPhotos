@@ -152,6 +152,8 @@ def idphoto_inference(
     creator = IDCreator()
     if matting_model_option == "modnet_photographic_portrait_matting":
         creator.matting_handler = extract_human_modnet_photographic_portrait_matting
+    elif matting_model_option == "mnn_hivision_modnet":
+        creator.matting_handler = extract_human_mnn_modnet
     else:
         creator.matting_handler = extract_human
 
@@ -315,7 +317,7 @@ if __name__ == "__main__":
     matting_model_list = [
         os.path.splitext(file)[0]
         for file in os.listdir(os.path.join(root_dir, "hivision/creator/weights"))
-        if file.endswith(".onnx")
+        if file.endswith(".onnx") or file.endswith(".mnn")
     ]
     DEFAULT_MATTING_MODEL = "modnet_photographic_portrait_matting"
     if DEFAULT_MATTING_MODEL in matting_model_list:
