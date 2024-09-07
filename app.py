@@ -7,10 +7,8 @@ from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
-from hivision.creator.human_matting import (
-    extract_human_modnet_photographic_portrait_matting,
-    extract_human,
-)
+from hivision.creator.human_matting import *
+from hivision.creator.face_detector import *
 import pathlib
 import numpy as np
 from demo.utils import csv_to_size_list
@@ -59,6 +57,7 @@ def idphoto_inference(
     custom_image_kb,
     language,
     matting_model_option,
+    face_detect_option,
     head_measure_ratio=0.2,
     head_height_ratio=0.45,
     top_distance_max=0.12,
@@ -155,6 +154,11 @@ def idphoto_inference(
         creator.matting_handler = extract_human_modnet_photographic_portrait_matting
     else:
         creator.matting_handler = extract_human
+
+    if face_detect_option == "mtcnn":
+        creator.detection_handler = detect_face_mtcnn
+    else:
+        creator.detection_handler = detect_face_face_plusplus
 
     change_bg_only = idphoto_json["size_mode"] in ["只换底", "Only Change Background"]
     # 生成证件照
@@ -306,6 +310,8 @@ if __name__ == "__main__":
         matting_model_list.remove(DEFAULT_MATTING_MODEL)
         matting_model_list.insert(0, DEFAULT_MATTING_MODEL)
 
+    face_detect_model_list = ["mtcnn", "face++"]
+
     size_mode_CN = ["尺寸列表", "只换底", "自定义尺寸"]
     size_mode_EN = ["Size List", "Only Change Background", "Custom Size"]
 
@@ -363,6 +369,12 @@ if __name__ == "__main__":
                         label="Language",
                         value="中文",
                         elem_id="language",
+                    )
+                    face_detect_model_options = gr.Dropdown(
+                        choices=face_detect_model_list,
+                        label="人脸检测模型",
+                        value=face_detect_model_list[0],
+                        elem_id="matting_model",
                     )
                     matting_model_options = gr.Dropdown(
                         choices=matting_model_list,
@@ -494,6 +506,7 @@ if __name__ == "__main__":
                             value="不设置",
                         ),
                         matting_model_options: gr.update(label="抠图模型"),
+                        face_detect_model_options: gr.update(label="人脸检测模型"),
                         custom_image_kb_size: gr.update(label="KB 大小"),
                         notification: gr.update(label="状态"),
                         img_output_standard: gr.update(label="标准照"),
@@ -531,6 +544,7 @@ if __name__ == "__main__":
                             value="Not Set",
                         ),
                         matting_model_options: gr.update(label="Matting model"),
+                        face_detect_model_options: gr.update(label="Face detect model"),
                         custom_image_kb_size: gr.update(label="KB size"),
                         notification: gr.update(label="Status"),
                         img_output_standard: gr.update(label="Standard photo"),
@@ -588,6 +602,7 @@ if __name__ == "__main__":
                 render_options,
                 image_kb_options,
                 matting_model_options,
+                face_detect_model_options,
                 custom_image_kb_size,
                 notification,
                 img_output_standard,
@@ -628,6 +643,7 @@ if __name__ == "__main__":
                 custom_image_kb_size,
                 language_options,
                 matting_model_options,
+                face_detect_model_options,
             ],
             outputs=[
                 img_output_standard,

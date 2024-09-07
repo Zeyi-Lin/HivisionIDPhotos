@@ -46,8 +46,8 @@ def detect_face_mtcnn(ctx: Context, scale: int = 2):
 
     left = faces[0][0]
     top = faces[0][1]
-    width = faces[0][2] - top + 1
-    height = faces[0][3] - left + 1
+    width = faces[0][2] - left + 1
+    height = faces[0][3] - top + 1
 
     ctx.face = (left, top, width, height)
 
