@@ -55,6 +55,14 @@ def request_generate_layout_photos(file_path, height, width, kb=None):
     return response.json()
 
 
+# 发送请求到 /human_matting 接口
+def request_human_matting(file_path, kb=None):
+    files = {"input_image": open(file_path, "rb")}
+    data = {"kb": kb}
+    response = requests.post(url, files=files, data=data)
+    return response.json()
+
+
 # 示例调用
 if __name__ == "__main__":
 
@@ -132,6 +140,25 @@ if __name__ == "__main__":
         base64_save(base64_image_data, args.output_image_dir)
 
         print(f"请求{args.type}接口成功，已保存图像。")
+
+    elif args.type == "human_matting":
+        # 调用 /human_matting 接口
+        human_matting_response = request_human_matting(args.input_image_dir, kb=args.kb)
+        if human_matting_response["status"]:
+            base64_image_data_standard = human_matting_response["image_base64_standard"]
+            base64_image_data_standard_hd = human_matting_response["image_base64_hd"]
+
+            file_name, file_extension = os.path.splitext(args.output_image_dir)
+            # 定义新的文件路径（在原有的文件名后添加"_hd"）
+            new_file_name = file_name + "_hd" + file_extension
+
+            # 解码 Base64 数据并保存为 PNG 文件
+            base64_save(base64_image_data_standard, args.output_image_dir)
+            base64_save(base64_image_data_standard_hd, new_file_name)
+
+            print(f"请求{args.type}接口成功，已保存图像。")
+        else:
+            print("人脸数量不等于 1，请上传单张人脸的图像。")
 
     else:
         print("不支持的 API 类型，请检查输入参数。")

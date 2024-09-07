@@ -51,6 +51,13 @@ Interface Name: `generate_layout_photos`
 
 The `Generate 6-inch Layout Photo` interface logic involves sending an RGB image (usually an ID photo after adding a background color), arranging the photos according to `size`, and then generating a 6-inch layout photo.
 
+
+### 4.Human Matting
+
+Interface Name：`human_matting`
+
+The `human_matting` interface logic involves sending an RGB image (usually an ID photo with background) and receiving a standard matted portrait photo and a high-definition matted portrait photo (without background fill).
+
 <br>
 
 
@@ -85,6 +92,15 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 -F "width=295" \
 -F "kb=200"
 ```
+
+### 4. Human Matting
+
+```bash
+curl -X POST "http://127.0.0.1:8080/human_matting" \
+-F "input_image=@test.jpg" \
+-F "kb=200"
+```
+
 
 ## Python Request Example
 
@@ -138,6 +154,24 @@ data = {"height": 413, "width": 295, "kb": 200}
 response = requests.post(url, files=files, data=data).json()
 
 # response is a JSON dictionary containing status and image_base64
+print(response)
+```
+
+
+#### 4.Human Matting
+
+```python
+import requests
+
+url = "http://127.0.0.1:8080/human_matting"
+input_image_path = "test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"kb": 200}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response is a JSON dictionary containing status, image_base64_standard, and image_base64_hd
 print(response)
 ```
 
@@ -232,6 +266,18 @@ python requests_api.py  \
     --width 295 \
     -k 200
 ```
+
+### 4.Human Matting
+
+```bash
+python requests_api.py  \
+    -u http://127.0.0.1:8080  \
+    -t human_matting  \
+    -i ./0x02.jpg  \
+    -o ./photo_matting.png  \
+    -k 200
+```
+
 
 #### Request Failure Scenarios
 

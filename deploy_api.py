@@ -60,6 +60,32 @@ async def idphoto_inference(
     return result_message
 
 
+# 人像抠图接口
+@app.post("/human_matting")
+async def idphoto_inference(
+    input_image: UploadFile,
+):
+    image_bytes = await input_image.read()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    try:
+        result = creator(
+            img,
+            change_bg_only=True,
+        )
+    except FaceError:
+        result_message = {"status": False}
+
+    else:
+        result_message = {
+            "status": True,
+            "image_base64_standard": numpy_2_base64(result.standard),
+            "image_base64_hd": numpy_2_base64(result.hd),
+        }
+    return result_message
+
+
 # 透明图像添加纯色背景接口
 @app.post("/add_background")
 async def photo_add_background(

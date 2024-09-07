@@ -51,6 +51,12 @@ python delopy_api.py
 
 `生成六寸排版照`接口的逻辑是发送一张 RGB 图像（一般为添加背景色之后的证件照），根据`size`进行照片排布，然后生成一张六寸排版照。
 
+### 4.人像抠图
+
+接口名：`human_matting`
+
+`人像抠图`接口的逻辑是发送一张 RGB 图像，输出一张标准抠图人像照和高清抠图人像照（无任何背景填充）。
+
 <br>
 
 
@@ -83,6 +89,14 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 -F "input_image=@test.jpg" \
 -F "height=413" \
 -F "width=295" \
+-F "kb=200"
+```
+
+### 4. 人像抠图
+
+```bash
+curl -X POST "http://127.0.0.1:8080/human_matting" \
+-F "input_image=@test.jpg" \
 -F "kb=200"
 ```
 
@@ -136,6 +150,23 @@ input_image_path = "test.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
 data = {"height": 413, "width": 295, "kb": 200}
+
+response = requests.post(url, files=files, data=data).json()
+
+# response为一个json格式字典，包含status和image_base64
+print(response)
+```
+
+#### 4.人像抠图
+
+```python
+import requests
+
+url = "http://127.0.0.1:8080/human_matting"
+input_image_path = "test.jpg"
+
+files = {"input_image": open(input_image_path, "rb")}
+data = {"kb": 200}
 
 response = requests.post(url, files=files, data=data).json()
 
@@ -230,6 +261,18 @@ python requests_api.py  \
     -o ./layout_photo.jpg  \
     --height 413  \
     --width 295 \
+    -k 200
+```
+
+
+### 4.人像抠图
+
+```bash
+python requests_api.py  \
+    -u http://127.0.0.1:8080  \
+    -t human_matting  \
+    -i ./0x02.jpg  \
+    -o ./photo_matting.png  \
     -k 200
 ```
 
