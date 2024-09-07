@@ -307,6 +307,21 @@ docker run -d -p 8080:8080 linzeyi/hivision_idphotos python3 deploy_api.py
 docker compose up -d
 ```
 
+## 环境变量
+
+本项目提供了一些额外的配置项，使用环境变量进行设置：
+
+| 环境变量 | 类型	| 描述 | 示例 |
+|--|--|--|--|
+| FACE_PLUS_API_KEY	 | 可选	| 这是你在 Face++ 控制台申请的 API 密钥	 | `7-fZStDJ····` |
+| FACE_PLUS_API_SECRET	 | 可选	| Face++ API密钥对应的Secret | `VTee824E····` |
+
+docker使用环境变量示例：
+```bash
+docker run linzeyi/hivision_idphotos \
+    -e FACE_PLUS_API_KEY=7-fZStDJ····
+```
+
 <br>
 
 # 🌲 友情链接
