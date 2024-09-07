@@ -3,11 +3,8 @@
 .idea
 .vscode/*
 .DS_Store
-app/output/*.jpg
-app/output/*.png
 demo/kb_output/*.jpg
-*.jpg
-*.png
+demo/kb_output/*.png
 # build outputs
 dist
 build
