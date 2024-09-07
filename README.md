@@ -46,12 +46,12 @@
 
 - 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
-- 2024.9.6: 增加新的抠图模型 [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
-- 2024.9.5: 更新 [Restful API 文档](docs/api_CN.md)
-- 2024.9.2: 更新**调整照片 KB 大小**，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
-- 2023.12.1: 更新**API 部署（基于 fastapi）**
-- 2023.6.20: 更新**预设尺寸菜单**
-- 2023.6.19: 更新**排版照**
+- 2024.09.07: 增加人脸检测API选项 - Face++，实现更高精度的人脸检测
+- 2024.09.06: 增加新的抠图模型 [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
+- 2024.09.05: 更新 [Restful API 文档](docs/api_CN.md)
+- 2024.09.02: 更新**调整照片 KB 大小**，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
+- 2023.12.01: 更新**API 部署（基于 fastapi）**
+- 2023.06.20: 更新**预设尺寸菜单**
 
 # Overview
 
@@ -86,9 +86,7 @@ HivisionIDPhoto 旨在开发一种实用的证件照智能制作算法。
 
 环境安装与依赖：
 - Python >= 3.7（项目主要测试在 python 3.10）
-- onnxruntime
-- OpenCV
-- Option: Linux, Windows, MacOS
+- OS: Linux, Windows, MacOS
 
 **1. 克隆项目**
 
@@ -111,7 +109,15 @@ pip install -r requirements-app.txt
 在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx` (24.7MB)，存到项目的`hivision/creator/weights`目录下。
 
 拓展抠图模型权重（均放到`hivision/creator/weights`目录下）：
-- modnet_photographic_portrait_matting.onnx: [MODNet](https://github.com/ZHKKKe/MODNet)官方权重，[下载](https://drive.google.com/drive/folders/1umYmlCulvIFNaqPjwod1SayFmSRHziyR)
+- `modnet_photographic_portrait_matting.onnx`: [MODNet](https://github.com/ZHKKKe/MODNet)官方权重，[下载](https://drive.google.com/drive/folders/1umYmlCulvIFNaqPjwod1SayFmSRHziyR)
+
+**4.（可选）人脸检测模型配置**
+
+
+| 拓展人脸检测模型 | 介绍 | 使用文档 |
+| -- | -- | -- |
+| MTCNN | 离线人脸检测模型，高性能CPU推理，为默认模型，检测精度较低 | 无需配置 |
+| Face++ | 旷视推出的在线人脸检测API，检测精度较高，[官方文档](https://console.faceplusplus.com.cn/documents/4888373) | [使用文档](docs/face++_CN.md)|
 
 
 <br>

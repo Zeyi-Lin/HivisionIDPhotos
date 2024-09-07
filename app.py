@@ -1,7 +1,7 @@
 import os
 import gradio as gr
 from hivision import IDCreator
-from hivision.error import FaceError
+from hivision.error import FaceError, APIError
 from hivision.utils import add_background, resize_image_to_kb
 from hivision.creator.layout_calculator import (
     generate_layout_photo,
@@ -77,7 +77,7 @@ def idphoto_inference(
             "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.": "宽度应不大于长度；长宽不应小于 100，大于 1800",
             "Custom Color": "自定义底色",
             "Custom": "自定义",
-            "The number of faces is not equal to 1": "人脸数量不等于 1",
+            "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author.": "人脸数量不等于 1，请上传单张人脸的图像。如果实际人脸数量为 1，可能是检测模型精度的问题，请在左边更换人脸检测模型或给作者提Github Issue。",
             "Solid Color": "纯色",
             "Up-Down Gradient (White)": "上下渐变 (白)",
             "Center Gradient (White)": "中心渐变 (白)",
@@ -91,7 +91,7 @@ def idphoto_inference(
             "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.": "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.",
             "Custom Color": "Custom Color",
             "Custom": "Custom",
-            "The number of faces is not equal to 1": "The number of faces is not equal to 1",
+            "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author.": "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author.",
             "Solid Color": "Solid Color",
             "Up-Down Gradient (White)": "Up-Down Gradient (White)",
             "Center Gradient (White)": "Center Gradient (White)",
@@ -176,7 +176,19 @@ def idphoto_inference(
             img_output_standard_hd: gr.update(value=None),
             img_output_layout: gr.update(visible=False),
             notification: gr.update(
-                value=text_lang_map[language]["The number of faces is not equal to 1"],
+                value=text_lang_map[language][
+                    "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author."
+                ],
+                visible=True,
+            ),
+        }
+    except APIError as e:
+        result_message = {
+            img_output_standard: gr.update(value=None),
+            img_output_standard_hd: gr.update(value=None),
+            img_output_layout: gr.update(visible=False),
+            notification: gr.update(
+                value=f"Please make sure you have correctly set up the Face++ API Key and Secret.\nAPI Error\nStatus Code is {e.status_code}\nPossible errors are: {e}\n",
                 visible=True,
             ),
         }
@@ -310,7 +322,7 @@ if __name__ == "__main__":
         matting_model_list.remove(DEFAULT_MATTING_MODEL)
         matting_model_list.insert(0, DEFAULT_MATTING_MODEL)
 
-    face_detect_model_list = ["mtcnn", "face++"]
+    face_detect_model_list = ["mtcnn", "face++ (联网API)"]
 
     size_mode_CN = ["尺寸列表", "只换底", "自定义尺寸"]
     size_mode_EN = ["Size List", "Only Change Background", "Custom Size"]

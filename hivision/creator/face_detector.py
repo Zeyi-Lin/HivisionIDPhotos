@@ -9,7 +9,7 @@ r"""
 """
 from mtcnnruntime import MTCNN
 from .context import Context
-from hivision.error import FaceError
+from hivision.error import FaceError, APIError
 from hivision.utils import resize_image_to_kb_base64
 import os
 import cv2
@@ -98,21 +98,27 @@ def detect_face_face_plusplus(ctx: Context):
             )
 
     elif status_code == 401:
-        raise ValueError(
-            f"Face++ Status code {status_code}",
-            "Authentication error: API key and secret do not match.",
+        raise APIError(
+            f"Face++ Status code {status_code} Authentication error: API key and secret do not match.",
+            status_code,
         )
 
     elif status_code == 403:
         reason = response_json.get("error_message", "Unknown authorization error.")
-        raise ValueError(f"Authorization error: {reason}")
+        raise APIError(
+            f"Authorization error: {reason}",
+            status_code,
+        )
 
     elif status_code == 400:
         error_message = response_json.get("error_message", "Bad request.")
-        raise ValueError(f"Bad request error: {error_message}")
+        raise APIError(
+            f"Bad request error: {error_message}",
+            status_code,
+        )
 
     elif status_code == 413:
-        raise ValueError(
-            f"Face++ Status code {status_code}",
-            "Request entity too large: The image exceeds the 2MB limit.",
+        raise APIError(
+            f"Face++ Status code {status_code} Request entity too large: The image exceeds the 2MB limit.",
+            status_code,
         )
