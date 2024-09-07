@@ -379,7 +379,7 @@ python requests_api.py  \
         File inputFile = new File(inputImageDir);
         Map<String, Object> paramMap=new HashMap<>();
         paramMap.put("input_image",inputFile);
-        //包含status、image_base64_standard和image_base64_hd三项
+        //包含status、image_base64
         return HttpUtil.post(url, paramMap);
     }
 ```
