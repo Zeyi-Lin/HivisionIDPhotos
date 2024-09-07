@@ -89,14 +89,14 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 - Python >= 3.7（项目主要测试在 python 3.10）
 - OS: Linux, Windows, MacOS
 
-**1. 克隆项目**
+## 1. 克隆项目
 
 ```bash
 git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
-**2. （重要）安装依赖环境**
+## 2. 安装依赖环境
 
 > 建议 conda 创建一个 python3.10 虚拟环境后，执行以下命令
 
@@ -105,21 +105,29 @@ pip install -r requirements.txt
 pip install -r requirements-app.txt
 ```
 
-**3. 下载权重文件**
+## 3. 下载权重文件
 
-在我们的[Release](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)下载权重文件`hivision_modnet.onnx` (24.7MB)，存到项目的`hivision/creator/weights`目录下。
+**方式一：脚本下载**
 
-拓展抠图模型权重（均放到`hivision/creator/weights`目录下）：
-- `modnet_photographic_portrait_matting.onnx`: [MODNet](https://github.com/ZHKKKe/MODNet)官方权重，[下载](https://drive.google.com/drive/folders/1umYmlCulvIFNaqPjwod1SayFmSRHziyR)
+```bash
+python scripts/download_model.py
+```
 
-**（可选）人脸检测模型配置**
+**方式二：直接下载**
 
+存到项目的`hivision/creator/weights`目录下：
+- `modnet_photographic_portrait_matting.onnx` (24.7MB): [MODNet](https://github.com/ZHKKKe/MODNet)官方权重，[下载](https://drive.google.com/drive/folders/1umYmlCulvIFNaqPjwod1SayFmSRHziyR)
+- `hivision_modnet.onnx` (24.7MB)：对纯色换底适配性更好的抠图模型，[下载](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)
+
+
+## 4. 人脸检测模型配置
+
+> 这是一个可选项
 
 | 拓展人脸检测模型 | 介绍 | 使用文档 |
 | -- | -- | -- |
-| MTCNN | **离线**人脸检测模型，高性能CPU推理，为默认模型，检测精度较低 | 无需配置 |
+| MTCNN | **离线**人脸检测模型，高性能CPU推理，为默认模型，检测精度较低 | Clone此项目后直接使用 |
 | Face++ | 旷视推出的在线人脸检测API，检测精度较高，[官方文档](https://console.faceplusplus.com.cn/documents/4888373) | [使用文档](docs/face++_CN.md)|
-
 
 <br>
 
