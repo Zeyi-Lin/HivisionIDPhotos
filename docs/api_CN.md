@@ -59,7 +59,6 @@ python delopy_api.py
 
 <br>
 
-
 ## cURL 请求示例
 
 cURL 是一个命令行工具，用于使用各种网络协议传输数据。以下是使用 cURL 调用这些 API 的示例。
@@ -99,6 +98,7 @@ curl -X POST "http://127.0.0.1:8080/human_matting" \
 -F "input_image=@demo/images/test.jpg"
 ```
 
+<br>
 
 ## Python 请求示例
 
@@ -171,8 +171,6 @@ response = requests.post(url, files=files).json()
 # response为一个json格式字典，包含status和image_base64
 print(response)
 ```
-
-<br>
 
 ### 2️⃣ Python 脚本请求方法
 
@@ -276,6 +274,8 @@ python requests_api.py  \
 ### 请求失败的情况
 
 - 照片中检测到的人脸大于 1，则失败
+
+<br>
 
 ## Java 请求示例
 
@@ -383,6 +383,8 @@ python requests_api.py  \
         return HttpUtil.post(url, paramMap);
     }
 ```
+
+<br>
 
 ## JavaScript 请求示例
 

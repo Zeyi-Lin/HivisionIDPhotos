@@ -100,6 +100,7 @@ curl -X POST "http://127.0.0.1:8080/human_matting" \
 -F "input_image=@test.jpg"
 ```
 
+<br>
 
 ## Python Request Example
 
@@ -172,8 +173,6 @@ response = requests.post(url, files=files).json()
 # response is a JSON dictionary containing status, image_base64
 print(response)
 ```
-
-<br>
 
 ### 2️⃣ Python Script Request Method
 
@@ -275,10 +274,11 @@ python requests_api.py  \
     -o ./photo_matting.png  \
 ```
 
-
 #### Request Failure Scenarios
 
 - The request fails if more than one face is detected in the photo.
+
+<br>
 
 ## Java Request Example
 
@@ -385,6 +385,8 @@ python requests_api.py  \
         return HttpUtil.post(url, paramMap);
     }
 ```
+
+<br>
 
 ## JavaScript Request Examples
 
