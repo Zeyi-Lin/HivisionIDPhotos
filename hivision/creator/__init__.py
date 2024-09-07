@@ -41,8 +41,7 @@ class IDCreator:
         """
         # 处理者
         self.matting_handler: ContextHandler = extract_human
-        self.detection_handler: ContextHandler = detect_face_face_plusplus
-        # self.detection_handler: ContextHandler = detect_face_mtcnn
+        self.detection_handler: ContextHandler = detect_face_mtcnn
 
         # 上下文
         self.ctx = None
