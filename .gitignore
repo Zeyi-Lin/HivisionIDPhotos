@@ -3,6 +3,7 @@
 .idea
 .vscode/*
 .DS_Store
+.env
 demo/kb_output/*.jpg
 demo/kb_output/*.png
 # build outputs

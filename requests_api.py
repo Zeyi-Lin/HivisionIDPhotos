@@ -13,6 +13,7 @@ MATTING_MODEL = [
     "hivision_modnet",
     "modnet_photographic_portrait_matting",
     "mnn_hivision_modnet",
+    "rmbg-1.4",
 ]
 FACE_DETECT_MODEL = [
     "mtcnn",

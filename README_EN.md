@@ -49,6 +49,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 
 - Online Experience: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
+- 2024.09.08: Added a new background removal model [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4)
 - 2024.09.07: Added **Face Detection API Option** [Face++](docs/face++_EN.md) for higher accuracy face detection
 - 2024.09.06: Added new matting model [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
 - 2024.09.05: Updated [Restful API Documentation](docs/api_EN.md)
@@ -118,6 +119,7 @@ Save in the project's `hivision/creator/weights` directory:
 - `modnet_photographic_portrait_matting.onnx` (24.7MB): Official weights from [MODNet](https://github.com/ZHKKKe/MODNet), [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/modnet_photographic_portrait_matting.onnx)
 - `hivision_modnet.onnx` (24.7MB): A matting model better suited for solid background swapping, [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx)
 - `mnn_hivision_modnet.mnn` (24.7MB): MNN converted matting model by [zjkhahah](https://github.com/zjkhahah), [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/mnn_hivision_modnet.mnn)
+- `rmbg-1.4.onnx` (176.2MB): Open source matting model from [BRIA AI](https://huggingface.co/briaai/RMBG-1.4), [download](https://huggingface.co/briaai/RMBG-1.4/resolve/main/model.pth?download=true) it and rename it to `rmbg-1.4.onnx`.
 
 ## 4. Face Detection Model Configuration
 

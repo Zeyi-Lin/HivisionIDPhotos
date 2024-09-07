@@ -26,6 +26,7 @@ MATTING_MODEL = [
     "hivision_modnet",
     "modnet_photographic_portrait_matting",
     "mnn_hivision_modnet",
+    "rmbg-1.4",
 ]
 FACE_DETECT_MODEL = [
     "mtcnn",
@@ -78,6 +79,8 @@ elif args.matting_model == "modnet_photographic_portrait_matting":
     creator.matting_handler = extract_human_modnet_photographic_portrait_matting
 elif args.matting_model == "mnn_hivision_modnet":
     creator.matting_handler = extract_human_mnn_modnet
+elif args.matting_model == "rmbg-1.4":
+    creator.matting_handler = extract_human_rmbg
 
 # ------------------- 人脸检测模型选择 -------------------
 if args.face_detect_model == "mtcnn":

@@ -154,6 +154,8 @@ def idphoto_inference(
         creator.matting_handler = extract_human_modnet_photographic_portrait_matting
     elif matting_model_option == "mnn_hivision_modnet":
         creator.matting_handler = extract_human_mnn_modnet
+    elif matting_model_option == "rmbg-1.4":
+        creator.matting_handler = extract_human_rmbg
     else:
         creator.matting_handler = extract_human
 
