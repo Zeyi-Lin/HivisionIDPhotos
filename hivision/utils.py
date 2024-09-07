@@ -74,13 +74,20 @@ def resize_image_to_kb(input_image, output_image_path, target_size_kb):
             quality = 1
 
 
-def resize_image_to_kb_base64(input_image, target_size_kb):
+import numpy as np
+from PIL import Image
+import io
+import base64
+
+
+def resize_image_to_kb_base64(input_image, target_size_kb, mode="exact"):
     """
     Resize an image to a target size in KB and return it as a base64 encoded string.
     将图像调整大小至目标文件大小（KB）并返回base64编码的字符串。
 
     :param input_image: Input image as a NumPy array or PIL Image. 输入图像，可以是NumPy数组或PIL图像。
     :param target_size_kb: Target size in KB. 目标文件大小（KB）。
+    :param mode: Mode of resizing ('exact', 'max', 'min'). 模式：'exact'（精确大小）、'max'（不大于）、'min'（不小于）。
 
     :return: Base64 encoded string of the resized image. 调整大小后的图像的base64编码字符串。
     """
@@ -109,19 +116,30 @@ def resize_image_to_kb_base64(input_image, target_size_kb):
         # Get the size of the image in KB
         img_size_kb = len(img_byte_arr.getvalue()) / 1024
 
-        # Check if the image size is within the target size
-        if img_size_kb <= target_size_kb or quality == 1:
+        # Check based on the mode
+        if mode == "exact":
+            # If the image size is equal to the target size, we can return it
+            if img_size_kb == target_size_kb:
+                break
+
             # If the image is smaller than the target size, add padding
-            if img_size_kb < target_size_kb:
+            elif img_size_kb < target_size_kb:
                 padding_size = int(
                     (target_size_kb * 1024) - len(img_byte_arr.getvalue())
                 )
                 padding = b"\x00" * padding_size
                 img_byte_arr.write(padding)
+                break
 
-            # Encode the image data to base64
-            img_base64 = base64.b64encode(img_byte_arr.getvalue()).decode("utf-8")
-            return img_base64
+        elif mode == "max":
+            # If the image size is within the target size, we can return it
+            if img_size_kb <= target_size_kb or quality == 1:
+                break
+
+        elif mode == "min":
+            # If the image size is greater than or equal to the target size, we can return it
+            if img_size_kb >= target_size_kb:
+                break
 
         # Reduce the quality if the image is still too large
         quality -= 5
@@ -129,6 +147,10 @@ def resize_image_to_kb_base64(input_image, target_size_kb):
         # Ensure quality does not go below 1
         if quality < 1:
             quality = 1
+
+    # Encode the image data to base64
+    img_base64 = base64.b64encode(img_byte_arr.getvalue()).decode("utf-8")
+    return img_base64
 
 
 def numpy_2_base64(img: np.ndarray):

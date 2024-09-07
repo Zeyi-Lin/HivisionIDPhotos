@@ -2,7 +2,6 @@ import os
 import cv2
 import argparse
 import numpy as np
-import onnxruntime
 from hivision.error import FaceError
 from hivision.utils import hex_to_rgb, resize_image_to_kb, add_background
 from hivision import IDCreator

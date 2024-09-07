@@ -12,7 +12,7 @@ from typing import Tuple
 import hivision.creator.utils as U
 from .context import Context, ContextHandler, Params, Result
 from .human_matting import extract_human
-from .face_detector import detect_face
+from .face_detector import detect_face_mtcnn, detect_face_face_plusplus
 from .photo_adjuster import adjust_photo
 
 
@@ -41,7 +41,9 @@ class IDCreator:
         """
         # 处理者
         self.matting_handler: ContextHandler = extract_human
-        self.detection_handler: ContextHandler = detect_face
+        self.detection_handler: ContextHandler = detect_face_face_plusplus
+        # self.detection_handler: ContextHandler = detect_face_mtcnn
+
         # 上下文
         self.ctx = None
 

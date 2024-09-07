@@ -19,3 +19,15 @@ class FaceError(Exception):
         """
         super().__init__(err)
         self.face_num = face_num
+
+
+class APIError(Exception):
+    def __init__(self, err, status_code):
+        """
+        API错误
+        Args:
+            err: 错误描述
+            status_code: 告诉此时的错误状态码
+        """
+        super().__init__(err)
+        self.status_code = status_code
