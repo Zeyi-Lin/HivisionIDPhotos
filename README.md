@@ -177,7 +177,7 @@ python inference.py -t human_matting -i demo/images/test.jpg -o ./idphoto_mattin
 输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像）
 
 ```python
-python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 4f83ce -k 30 -r 1
+python inference.py -t add_background -i ./idphoto.png -o ./idphoto_ab.jpg  -c 4f83ce -k 30 -r 1
 ```
 
 ## 4. 得到六寸排版照
@@ -185,7 +185,7 @@ python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 4f
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 
 ```python
-python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
+python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg  --height 413 --width 295 -k 200
 ```
 
 <br>
