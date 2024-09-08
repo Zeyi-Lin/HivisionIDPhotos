@@ -14,7 +14,10 @@ def choose_handler(creator, matting_model_option=None, face_detect_option=None):
     else:
         creator.matting_handler = extract_human
 
-    if face_detect_option == "face_plusplus":
+    if (
+        face_detect_option == "face_plusplus"
+        or face_detect_option == "face++ (联网API)"
+    ):
         creator.detection_handler = detect_face_face_plusplus
     else:
         creator.detection_handler = detect_face_mtcnn
