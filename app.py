@@ -62,10 +62,13 @@ def idphoto_inference(
     matting_model_option,
     face_detect_option,
     head_measure_ratio=0.2,
-    head_height_ratio=0.45,
+    # head_height_ratio=0.45,
     top_distance_max=0.12,
     top_distance_min=0.10,
 ):
+
+    top_distance_min = top_distance_max - 0.02
+
     idphoto_json = {
         "size_mode": mode_option,
         "color_mode": color_option,
@@ -163,7 +166,8 @@ def idphoto_inference(
             change_bg_only=change_bg_only,
             size=idphoto_json["size"],
             head_measure_ratio=head_measure_ratio,
-            head_height_ratio=head_height_ratio,
+            # head_height_ratio=head_height_ratio,
+            head_top_range=(top_distance_max, top_distance_min),
         )
     except FaceError:
         result_message = {
@@ -390,66 +394,86 @@ if __name__ == "__main__":
                         elem_id="matting_model",
                     )
 
-                mode_options = gr.Radio(
-                    choices=size_mode_CN,
-                    label="证件照尺寸选项",
-                    value="尺寸列表",
-                    elem_id="size",
-                )
-
-                # 预设尺寸下拉菜单
-                with gr.Row(visible=True) as size_list_row:
-                    size_list_options = gr.Dropdown(
-                        choices=size_list_CN,
-                        label="预设尺寸",
-                        value=size_list_CN[0],
-                        elem_id="size_list",
+                with gr.Tab("核心参数") as key_parameter_tab:
+                    mode_options = gr.Radio(
+                        choices=size_mode_CN,
+                        label="证件照尺寸选项",
+                        value="尺寸列表",
+                        elem_id="size",
                     )
 
-                with gr.Row(visible=False) as custom_size:
-                    custom_size_height = gr.Number(
-                        value=413, label="height", interactive=True
+                    # 预设尺寸下拉菜单
+                    with gr.Row(visible=True) as size_list_row:
+                        size_list_options = gr.Dropdown(
+                            choices=size_list_CN,
+                            label="预设尺寸",
+                            value=size_list_CN[0],
+                            elem_id="size_list",
+                        )
+
+                    with gr.Row(visible=False) as custom_size:
+                        custom_size_height = gr.Number(
+                            value=413, label="height", interactive=True
+                        )
+                        custom_size_wdith = gr.Number(
+                            value=295, label="width", interactive=True
+                        )
+
+                    # 左：背景色选项
+                    color_options = gr.Radio(
+                        choices=colors_CN, label="背景色", value="蓝色", elem_id="color"
                     )
-                    custom_size_wdith = gr.Number(
-                        value=295, label="width", interactive=True
+
+                    # 左：如果选择「自定义底色」，显示 RGB 输入框
+                    with gr.Row(visible=False) as custom_color:
+                        custom_color_R = gr.Number(value=0, label="R", interactive=True)
+                        custom_color_G = gr.Number(value=0, label="G", interactive=True)
+                        custom_color_B = gr.Number(value=0, label="B", interactive=True)
+
+                    # 左：渲染方式选项
+                    render_options = gr.Radio(
+                        choices=render_CN,
+                        label="渲染方式",
+                        value="纯色",
+                        elem_id="render",
                     )
 
-                # 左：背景色选项
-                color_options = gr.Radio(
-                    choices=colors_CN, label="背景色", value="蓝色", elem_id="color"
-                )
-
-                # 左：如果选择「自定义底色」，显示 RGB 输入框
-                with gr.Row(visible=False) as custom_color:
-                    custom_color_R = gr.Number(value=0, label="R", interactive=True)
-                    custom_color_G = gr.Number(value=0, label="G", interactive=True)
-                    custom_color_B = gr.Number(value=0, label="B", interactive=True)
-
-                # 左：渲染方式选项
-                render_options = gr.Radio(
-                    choices=render_CN,
-                    label="渲染方式",
-                    value="纯色",
-                    elem_id="render",
-                )
-
-                # 左：输出 KB 大小选项
-                image_kb_options = gr.Radio(
-                    choices=image_kb_CN,
-                    label="设置 KB 大小（结果在右边最底的组件下载）",
-                    value="不设置",
-                    elem_id="image_kb",
-                )
-
-                # 自定义 KB 大小，滑动条，最小 10KB，最大 200KB
-                with gr.Row(visible=False) as custom_image_kb:
-                    custom_image_kb_size = gr.Slider(
-                        minimum=10,
-                        maximum=1000,
-                        value=50,
-                        label="KB 大小",
+                with gr.Tab("高级参数") as advance_parameter_tab:
+                    # 面部占照片总比例
+                    head_measure_ratio_option = gr.Slider(
+                        minimum=0.1,
+                        maximum=0.5,
+                        value=0.2,
+                        step=0.02,
+                        label="面部比例",
                         interactive=True,
                     )
+                    # 人像头顶距离照片顶部的比例
+                    top_distance_option = gr.Slider(
+                        minimum=0.02,
+                        maximum=0.5,
+                        value=0.12,
+                        step=0.02,
+                        label="头距顶距离",
+                        interactive=True,
+                    )
+
+                    # 输出照片的KB值
+                    image_kb_options = gr.Radio(
+                        choices=image_kb_CN,
+                        label="设置 KB 大小（结果在右边最底的组件下载）",
+                        value="不设置",
+                        elem_id="image_kb",
+                    )
+                    # 自定义 KB 大小，滑动条，最小 10KB，最大 200KB
+                    with gr.Row(visible=False) as custom_image_kb:
+                        custom_image_kb_size = gr.Slider(
+                            minimum=10,
+                            maximum=1000,
+                            value=50,
+                            label="KB 大小",
+                            interactive=True,
+                        )
 
                 img_but = gr.Button("开始制作")
 
@@ -520,6 +544,10 @@ if __name__ == "__main__":
                         img_output_standard_hd: gr.update(label="高清照"),
                         img_output_layout: gr.update(label="六寸排版照"),
                         file_download: gr.update(label="下载调整 KB 大小后的照片"),
+                        head_measure_ratio_option: gr.update(label="面部比例"),
+                        top_distance_option: gr.update(label="头距顶距离"),
+                        key_parameter_tab: gr.update(label="核心参数"),
+                        advance_parameter_tab: gr.update(label="高级参数"),
                     }
 
                 elif language == "English":
@@ -560,6 +588,10 @@ if __name__ == "__main__":
                         file_download: gr.update(
                             label="Download the photo after adjusting the KB size"
                         ),
+                        head_measure_ratio_option: gr.update(label="Head ratio"),
+                        top_distance_option: gr.update(label="Top distance"),
+                        key_parameter_tab: gr.update(label="Key Parameters"),
+                        advance_parameter_tab: gr.update(label="Advance Parameters"),
                     }
 
             def change_color(colors):
@@ -616,6 +648,10 @@ if __name__ == "__main__":
                 img_output_standard_hd,
                 img_output_layout,
                 file_download,
+                head_measure_ratio_option,
+                top_distance_option,
+                key_parameter_tab,
+                advance_parameter_tab,
             ],
         )
 
@@ -651,6 +687,8 @@ if __name__ == "__main__":
                 language_options,
                 matting_model_options,
                 face_detect_model_options,
+                head_measure_ratio_option,
+                top_distance_option,
             ],
             outputs=[
                 img_output_standard,
