@@ -31,6 +31,9 @@ WEIGHTS = {
         "mnn_hivision_modnet.mnn",
     ),
     "rmbg-1.4": os.path.join(os.path.dirname(__file__), "weights", "rmbg-1.4.onnx"),
+    "birefnet-portrait": os.path.join(
+        os.path.dirname(__file__), "weights", "birefnet-portrait.onnx"
+    ),
 }
 
 ONNX_DEVICE = (
@@ -103,6 +106,14 @@ def extract_human_rmbg(ctx: Context):
     ctx.matting_image = ctx.processing_image.copy()
 
 
+def extract_human_birefnet_portrait(ctx: Context):
+    matting_image = get_birefnet_portrait_matting(
+        ctx.processing_image, WEIGHTS["birefnet-portrait"]
+    )
+    ctx.processing_image = matting_image
+    ctx.matting_image = ctx.processing_image.copy()
+
+
 def hollow_out_fix(src: np.ndarray) -> np.ndarray:
     """
     修补抠图区域，作为抠图模型精度不够的补充
@@ -163,9 +174,6 @@ def read_modnet_image(input_image, ref_size=512):
     im = NUnsqueeze(NTo_Tensor(im))
 
     return im, width, length
-
-
-# sess = None
 
 
 def get_modnet_matting(input_image, checkpoint_path, ref_size=512):
@@ -271,3 +279,61 @@ def get_mnn_modnet_matting(input_image, checkpoint_path, ref_size=512):
     output_image = cv2.merge((b, g, r, mask))
 
     return output_image
+
+
+def get_birefnet_portrait_matting(input_image, checkpoint_path, ref_size=512):
+    from time import time
+
+    if not os.path.exists(checkpoint_path):
+        print(f"Checkpoint file not found: {checkpoint_path}")
+        return None
+
+    def transform_image(image):
+        image = image.resize((1024, 1024))  # Resize to 1024x1024
+        image = (
+            np.array(image, dtype=np.float32) / 255.0
+        )  # Convert to numpy array and normalize to [0, 1]
+        image = (image - [0.485, 0.456, 0.406]) / [0.229, 0.224, 0.225]  # Normalize
+        image = np.transpose(image, (2, 0, 1))  # Change from (H, W, C) to (C, H, W)
+        image = np.expand_dims(image, axis=0)  # Add batch dimension
+        return image.astype(np.float32)  # Ensure the output is float32
+
+    orig_image = Image.fromarray(input_image)
+    input_images = transform_image(
+        orig_image
+    )  # This will already have the correct shape
+
+    # 记录加载onnx模型的开始时间
+    load_start_time = time()
+    onnx_session = load_onnx_model(checkpoint_path)
+    # 记录加载onnx模型的结束时间
+    load_end_time = time()
+
+    # 打印加载onnx模型所花的时间
+    print(f"Loading ONNX model took {load_end_time - load_start_time:.4f} seconds")
+
+    input_name = onnx_session.get_inputs()[0].name
+    print(onnxruntime.get_device(), onnx_session.get_providers())
+
+    time_st = time()
+    pred_onnx = onnx_session.run(None, {input_name: input_images})[
+        -1
+    ]  # Use float32 input
+    pred_onnx = np.squeeze(pred_onnx)  # Use numpy to squeeze
+    result = 1 / (1 + np.exp(-pred_onnx))  # Sigmoid function using numpy
+    print(f"Inference time: {time() - time_st:.4f} seconds")
+
+    # Convert to PIL image
+    im_array = (result * 255).astype(np.uint8)
+    pil_im = Image.fromarray(
+        im_array, mode="L"
+    )  # Ensure mask is single channel (L mode)
+
+    # Resize the mask to match the original image size
+    pil_im = pil_im.resize(orig_image.size, Image.BILINEAR)
+
+    # Paste the mask on the original image
+    new_im = Image.new("RGBA", orig_image.size, (0, 0, 0, 0))
+    new_im.paste(orig_image, mask=pil_im)
+
+    return np.array(new_im)
