@@ -49,13 +49,14 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 
 - Online Experience: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
+
+- 2024.09.09: Added a new **Image Segmentation Model** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) | Gradio adds an advanced parameter settings tab
 - 2024.09.08: Added a new background removal model [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) | ComfyUI Workflow - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) contributed by [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 - 2024.09.07: Added **Face Detection API Option** [Face++](docs/face++_EN.md) for higher accuracy face detection
 - 2024.09.06: Added new matting model [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
 - 2024.09.05: Updated [Restful API Documentation](docs/api_EN.md)
 - 2024.09.02: Updated **Photo Size Adjustment**
 - 2023.12.01: Updated **API Deployment (based on fastapi)**
-- 2023.06.20: Updated **Preset Size Menu**
 
 # Overview
 
@@ -131,6 +132,7 @@ Save in the project's `hivision/creator/weights` directory:
 - `hivision_modnet.onnx` (24.7MB): A matting model better suited for solid background swapping, [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx)
 - `mnn_hivision_modnet.mnn` (24.7MB): MNN converted matting model by [zjkhahah](https://github.com/zjkhahah), [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/mnn_hivision_modnet.mnn)
 - `rmbg-1.4.onnx` (176.2MB): Open source matting model from [BRIA AI](https://huggingface.co/briaai/RMBG-1.4), [download](https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx?download=true) it and rename it to `rmbg-1.4.onnx`.
+- `birefnet-v1-lite.onnx` (224MB): Open-source image segmentation model by [ZhengPeng7](https://github.com/ZhengPeng7/BiRefNet), [download](https://github.com/ZhengPeng7/BiRefNet/releases/download/v1/BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx) and rename it to `birefnet-v1-lite.onnx` after downloading.
 
 ## 4. Face Detection Model Configuration
 

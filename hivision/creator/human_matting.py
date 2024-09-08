@@ -34,8 +34,8 @@ WEIGHTS = {
     # "birefnet-portrait": os.path.join(
     #     os.path.dirname(__file__), "weights", "birefnet-portrait.onnx"
     # ),
-    "birefnet-lite": os.path.join(
-        os.path.dirname(__file__), "weights", "birefnet-lite.onnx"
+    "birefnet-v1-lite": os.path.join(
+        os.path.dirname(__file__), "weights", "birefnet-v1-lite.onnx"
     ),
 }
 
@@ -124,7 +124,7 @@ def extract_human_rmbg(ctx: Context):
 
 def extract_human_birefnet_lite(ctx: Context):
     matting_image = get_birefnet_portrait_matting(
-        ctx.processing_image, WEIGHTS["birefnet-lite"]
+        ctx.processing_image, WEIGHTS["birefnet-v1-lite"]
     )
     ctx.processing_image = matting_image
     ctx.matting_image = ctx.processing_image.copy()

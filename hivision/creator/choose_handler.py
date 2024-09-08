@@ -11,7 +11,7 @@ def choose_handler(creator, matting_model_option=None, face_detect_option=None):
         creator.matting_handler = extract_human_rmbg
     # elif matting_model_option == "birefnet-portrait":
     #     creator.matting_handler = extract_human_birefnet_portrait
-    elif matting_model_option == "birefnet-lite":
+    elif matting_model_option == "birefnet-v1-lite":
         creator.matting_handler = extract_human_birefnet_lite
     else:
         creator.matting_handler = extract_human
