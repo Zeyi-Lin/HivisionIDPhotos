@@ -43,25 +43,30 @@ ONNX_DEVICE = (
 )
 
 
-def load_onnx_model(checkpoint_path):
+def load_onnx_model(checkpoint_path, set_cpu=False):
     providers = (
         ["CUDAExecutionProvider", "CPUExecutionProvider"]
         if ONNX_DEVICE == "CUDAExecutionProvider"
         else ["CPUExecutionProvider"]
     )
 
-    try:
-        sess = onnxruntime.InferenceSession(checkpoint_path, providers=providers)
-    except Exception as e:
-        if ONNX_DEVICE == "CUDAExecutionProvider":
-            print(f"Failed to load model with CUDAExecutionProvider: {e}")
-            print("Falling back to CPUExecutionProvider")
-            # 尝试使用CPU加载模型
-            sess = onnxruntime.InferenceSession(
-                checkpoint_path, providers=["CPUExecutionProvider"]
-            )
-        else:
-            raise e  # 如果是CPU执行失败，重新抛出异常
+    if set_cpu:
+        sess = onnxruntime.InferenceSession(
+            checkpoint_path, providers=["CPUExecutionProvider"]
+        )
+    else:
+        try:
+            sess = onnxruntime.InferenceSession(checkpoint_path, providers=providers)
+        except Exception as e:
+            if ONNX_DEVICE == "CUDAExecutionProvider":
+                print(f"Failed to load model with CUDAExecutionProvider: {e}")
+                print("Falling back to CPUExecutionProvider")
+                # 尝试使用CPU加载模型
+                sess = onnxruntime.InferenceSession(
+                    checkpoint_path, providers=["CPUExecutionProvider"]
+                )
+            else:
+                raise e  # 如果是CPU执行失败，重新抛出异常
 
     return sess
 
