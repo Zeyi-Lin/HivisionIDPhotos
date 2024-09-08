@@ -22,12 +22,16 @@ color_list_dict_CN = {
     "蓝色": (86, 140, 212),
     "白色": (255, 255, 255),
     "红色": (233, 51, 35),
+    "黑色": (0, 0, 0),
+    "深蓝色": (69, 98, 148),
 }
 
 color_list_dict_EN = {
     "Blue": (86, 140, 212),
     "White": (255, 255, 255),
     "Red": (233, 51, 35),
+    "Black": (0, 0, 0),
+    "Dark blue": (69, 98, 148),
 }
 
 
@@ -321,8 +325,8 @@ if __name__ == "__main__":
     size_list_CN = list(size_list_dict_CN.keys())
     size_list_EN = list(size_list_dict_EN.keys())
 
-    colors_CN = ["蓝色", "白色", "红色", "自定义底色"]
-    colors_EN = ["Blue", "White", "Red", "Custom Color"]
+    colors_CN = ["蓝色", "白色", "红色", "黑色", "深蓝色", "自定义底色"]
+    colors_EN = ["Blue", "White", "Red", "Black", "Dark blue", "Custom Color"]
 
     render_CN = ["纯色", "上下渐变 (白)", "中心渐变 (白)"]
     render_EN = ["Solid Color", "Up-Down Gradient (White)", "Center Gradient (White)"]
