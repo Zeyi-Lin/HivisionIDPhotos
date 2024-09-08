@@ -13,8 +13,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install requests
+
       - name: Download models
-        run: python scripts/download_model.py
+        run: python scripts/download_model.py --models all
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
