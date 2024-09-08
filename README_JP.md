@@ -17,6 +17,7 @@
 [![][swanhub-demo-shield]][swanhub-demo-link]
 
 [![][trendshift-shield]][trendshift-link]
+[![][hellogithub-shield]][hellogithub-link]
 
 <img src="assets/demoImage.png" width=900>
 
@@ -26,86 +27,99 @@
 
 > **関連プロジェクト**：
 >
-> - [SwanLab](https://github.com/SwanHubX/SwanLab)：トレーニング用のポートレート切り抜きモデルの分析と監視に使用し、実験室の仲間と協力してコミュニケーションを取ることで、トレーニング効率を大幅に向上させました。
+> - [SwanLab](https://github.com/SwanHubX/SwanLab)：人物切り抜きモデルの訓練を通じて、分析と監視、ラボの仲間との協力と交流を行い、訓練効率を大幅に向上させました。
 
 <br>
 
 # 目次
 
-- [プロジェクトの更新](#-プロジェクトの更新)
-- [概要](#overview)
+- [最近の更新](#-最近の更新)
+- [プロジェクト概要](#-プロジェクト概要)
+- [コミュニティ](#-コミュニティ)
 - [準備作業](#-準備作業)
-- [デモの起動](#-実行-gradio-demo)
-- [Python推論](#-python-推論)
-- [APIサービスのデプロイ](#️-デプロイ-api-サービス)
-- [Dockerデプロイ](#-docker-デプロイ)
-- [リンク集](#-リンク集)
+- [デモの起動](#-デモの起動)
+- [Python推論](#-python推論)
+- [APIサービスのデプロイ](#️-APIサービスのデプロイ)
+- [Dockerデプロイ](#-dockerデプロイ)
 - [お問い合わせ](#-お問い合わせ)
 - [貢献者](#貢献者)
 
 <br>
 
-# 🤩 プロジェクトの更新
+# 🤩 最近の更新
 
 - オンライン体験： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
-- 2024.09.08: 新しい背景除去モデル [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) を追加しました | ComfyUI ワークフロー - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) は [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) によって提供されました
-- 2024.09.07: **顔検出APIオプション** [Face++](docs/face++_EN.md)を追加し、より高精度な顔検出を実現
-- 2024.09.06: 新しい切り抜きモデル [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)を追加
-- 2024.09.05: [Restful API ドキュメント](docs/api_EN.md)を更新
-- 2024.09.02: **写真のKBサイズ調整**を更新、[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
+- 2024.09.09: 新しい**切り抜きモデル** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) を追加 | Gradioに高度なパラメーター設定タブを追加
+- 2024.09.08: 新しい**切り抜きモデル** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) を追加 | **ComfyUIワークフロー** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) AIFSHによる貢献
+- 2024.09.07: **顔検出APIオプション** [Face++](docs/face++_EN.md) を追加し、より高精度な顔検出を実現
+- 2024.09.06: 新しい切り抜きモデル [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet) を追加
+- 2024.09.05: [Restful API ドキュメント](docs/api_EN.md) を更新
+- 2024.09.02: **写真のKBサイズを調整**を更新、[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
 - 2023.12.01: **APIデプロイ（fastapiベース）**を更新
-- 2023.06.20: **プリセットサイズメニュー**を更新
 
-# 概要
+<br>
 
-> 🚀 私たちの仕事に興味を持っていただきありがとうございます。画像分野での他の成果もご覧になりたい場合は、zeyi.lin@swanhub.coまでご連絡ください。
+# プロジェクト概要
+
+> 🚀 私たちの仕事に興味を持っていただきありがとうございます。画像分野における他の成果もぜひご覧ください。お問い合わせは、zeyi.lin@swanhub.co まで。
 
 HivisionIDPhotoは、実用的で体系的な証明写真のスマート制作アルゴリズムを開発することを目的としています。
 
-このアルゴリズムは、さまざまなユーザーの撮影シーンを認識し、切り抜き、証明写真を生成するために、整ったAIモデルのワークフローを利用しています。
+さまざまなユーザー撮影シーンの認識、切り抜きおよび証明写真の生成を実現するために、一連の洗練されたAIモデル作業フローを利用しています。
 
-**HivisionIDPhotoは次のことができます：**
+**HivisionIDPhotoは以下のことができます：**
 
-1. 軽量な切り抜き（完全オフライン、**CPU**のみで高速推論可能）
-2. 異なるサイズ仕様に基づいて、異なる標準証明写真や六寸レイアウト写真を生成
+1. 軽量切り抜き（完全オフラインで、**CPU**のみで迅速に推論可能）
+2. 異なるサイズ仕様に基づいて異なる標準証明写真、六寸レイアウト写真を生成
 3. 完全オフラインまたはエッジクラウド推論をサポート
 4. 美顔（待機中）
-5. スーツの自動変更（待機中）
+5. スマートな正装変更（待機中）
 
 <div align="center">
-<img src="assets/harry.png" width=900>
+<img src="assets/demo.png" width=900>
 </div>
 
 ---
 
-HivisionIDPhotoがあなたの役に立った場合は、このリポジトリにスターを付けるか、友人に推薦して、証明写真の緊急制作問題を解決してください！
+HivisionIDPhotoがあなたに役立つ場合は、このリポジトリをスターしたり、友人に推薦したりして、証明写真の緊急制作の問題を解決してください！
+
+<br>
+
+# 🏠 コミュニティ
+
+私たちは、コミュニティによって構築されたHivisionIDPhotosの興味深いアプリケーションや拡張機能をいくつか共有しています：
+
+- [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)：Windowsクライアントアプリケーション、[zhaoyun0071](https://github.com/zhaoyun0071)によって構築されました
+- [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)：ComfyUI証明写真処理ワークフロー、[AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)によって構築されました 
+
+[![](assets/comfyui.png)](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 
 <br>
 
 # 🔧 準備作業
 
 環境のインストールと依存関係：
-- Python >= 3.7（プロジェクトは主にPython 3.10でテストされています）
+- Python >= 3.7（プロジェクトは主にpython 3.10でテストされています）
 - OS: Linux, Windows, MacOS
 
-## 1. プロジェクトをクローン
+## 1. プロジェクトをクローンする
 
 ```bash
 git clone https://github.com/Zeyi-Lin/HivisionIDPhotos.git
 cd  HivisionIDPhotos
 ```
 
-## 2. 依存環境をインストール
+## 2. 依存環境をインストールする
 
-> condaでpython3.10の仮想環境を作成し、以下のコマンドを実行することをお勧めします。
+> condaでpython3.10の仮想環境を作成することをお勧めします。その後、以下のコマンドを実行してください。
 
 ```bash
 pip install -r requirements.txt
 pip install -r requirements-app.txt
 ```
 
-## 3. 重みファイルをダウンロード
+## 3. 重みファイルをダウンロードする
 
 **方法一：スクリプトでダウンロード**
 
@@ -115,29 +129,41 @@ python scripts/download_model.py --models all
 
 **方法二：直接ダウンロード**
 
-プロジェクトの`hivision/creator/weights`ディレクトリに保存：
-- `modnet_photographic_portrait_matting.onnx` (24.7MB): [MODNet](https://github.com/ZHKKKe/MODNet)公式重み、[ダウンロード](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/modnet_photographic_portrait_matting.onnx)
-- `hivision_modnet.onnx` (24.7MB): 単色背景に適した切り抜きモデル、[ダウンロード](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx)
-- `rmbg-1.4.onnx` (176.2MB): [BRIA AI](https://huggingface.co/briaai/RMBG-1.4)からのオープンソースマッティングモデルです。[ダウンロード](https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx?download=true)して、`rmbg-1.4.onnx`に名前を変更してください。
+プロジェクトの`hivision/creator/weights`ディレクトリに保存します：
+- `modnet_photographic_portrait_matting.onnx` (24.7MB): [MODNet](https://github.com/ZHKKKe/MODNet)公式の重み、[ダウンロード](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/modnet_photographic_portrait_matting.onnx)
+- `hivision_modnet.onnx` (24.7MB): 単色背景に対して適応性の高い切り抜きモデル、[ダウンロード](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx)
+- `rmbg-1.4.onnx` (176.2MB): [BRIA AI](https://huggingface.co/briaai/RMBG-1.4)のオープンソース切り抜きモデル、[ダウンロード](https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx?download=true)後に`rmbg-1.4.onnx`にリネーム
+- `birefnet-v1-lite.onnx`(224MB): [ZhengPeng7](https://github.com/ZhengPeng7/BiRefNet)のオープンソース切り抜きモデル、[ダウンロード](https://github.com/ZhengPeng7/BiRefNet/releases/download/v1/BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx)後に`birefnet-v1-lite.onnx`にリネーム
 
-## 4. 顔検出モデルの設定
-
-> これはオプションです。
+## 4. 顔検出モデルの設定（オプション）
 
 | 拡張顔検出モデル | 説明 | 使用文書 |
 | -- | -- | -- |
-| MTCNN | **オフライン**顔検出モデル、高性能CPU推論、デフォルトモデル、検出精度は低め | このプロジェクトをクローン後に直接使用 |
+| MTCNN | **オフライン**顔検出モデル、高性能CPU推論、デフォルトモデル、検出精度は低い | このプロジェクトをクローン後、直接使用 |
 | Face++ | Megviiが提供するオンライン顔検出API、高精度の検出、[公式文書](https://console.faceplusplus.com.cn/documents/4888373) | [使用文書](docs/face++_EN.md)|
+
+## 5. GPU推論の加速（オプション）
+
+NVIDIA GPUによる推論加速を使用する場合は、CUDAとcuDNNがインストールされていることを確認し、[文書](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)に従って対応する`onnxruntime-gpu`バージョンをインストールします。例：
+
+```bash
+# CUDA 12.x, cuDNN 8
+pip install onnxruntime-gpu==1.18.0
+```
+
+完了後、`birefnet-v1-lite`モデルを呼び出すと、GPUによる推論加速が利用されます。
 
 <br>
 
-# 🚀 Gradioデモの実行
+# 🚀 デモの起動
 
 ```bash
 python app.py
 ```
 
-プログラムを実行すると、ローカルWebページが生成され、そのページで証明写真の操作とインタラクションができます。
+プログラムを実行すると、ローカルWebページが生成され、ページ内で証明写真の操作と対話が可能になります。
+
+<img src="assets/harry.png" width=900>
 
 <br>
 
@@ -147,14 +173,15 @@ python app.py
 
 - `-i`: 入力画像パス
 - `-o`: 保存画像パス
-- `-t`: 推論タイプ、idphoto、human_matting、add_background、generate_layout_photosから選択
-- `--matting_model`: 人物切り抜きモデルの重み選択、`hivision_modnet`、`modnet_photographic_portrait_matting`が選択可能
+- `-t`: 推論タイプ、idphoto、human_matting、add_background、generate_layout_photosから選択可能
+- `--matting_model`: 人物切り抜きモデル重みの選択
+- `--face_detect_model`: 顔検出モデルの選択
 
-詳細なパラメータは、`python inference.py --help`で確認できます。
+詳しいパラメータは、`python inference.py --help`で確認できます。
 
 ## 1. 証明写真の制作
 
-1枚の写真を入力し、1枚の標準証明写真と1枚の高解像度証明写真の4チャンネル透明pngを取得
+1枚の写真を入力し、1枚の標準証明写真と1枚の高解像度証明写真の4チャンネル透明PNGを得る。
 
 ```python
 python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
@@ -168,133 +195,79 @@ python inference.py -t human_matting -i demo/images/test.jpg -o ./idphoto_mattin
 
 ## 3. 透明画像に背景色を追加
 
-1枚の4チャンネル透明pngを入力し、1枚の背景色を追加した画像を取得
+1枚の4チャンネル透明PNGを入力し、背景色を追加した画像を得る。
 
 ```python
-python inference.py -t add_background -i ./idphoto.png -o ./idhoto_ab.jpg  -c 4f83ce -k 30 -r 1
+python inference.py -t add_background -i ./idphoto.png -o ./idphoto_ab.jpg  -c 4f83ce -k 30 -r 1
 ```
 
-## 4. 六寸レイアウト写真の生成
+## 4. 六寸レイアウト写真を得る
 
-1枚の3チャンネル写真を入力し、1枚の六寸レイアウト写真を取得
+1枚の3チャンネル写真を入力し、1枚の六寸レイアウト写真を得る。
 
 ```python
-python inference.py -t generate_layout_photos -i ./idhoto_ab.jpg -o ./idhoto_layout.jpg  --height 413 --width 295 -k 200
+python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg  --height 413 --width 295 -k 200
 ```
 
 <br>
 
 # ⚡️ APIサービスのデプロイ
 
-## バックエンドの起動
+## バックエンドを起動
 
 ```
 python deploy_api.py
 ```
 
-## APIサービスのリクエスト - Pythonリクエスト
+## APIサービスにリクエスト
 
-> リクエスト方法については[API文書](docs/api_EN.md)を参照してください。これには[cURL](docs/api_EN.md#curl-request-examples)、[Python](docs/api_EN.md#python-request-example)、[Java](docs/api_EN.md#java-request-example)、[Javascript](docs/api_EN.md#javascript-request-examples)リクエスト例が含まれます。
-
-### 1. 証明写真の制作
-
-1枚の写真を入力し、1枚の標準証明写真と1枚の高解像度証明写真の4チャンネル透明pngを取得
-
-```python
-import requests
-
-url = "http://127.0.0.1:8080/idphoto"
-input_image_path = "demo/images/test.jpg"
-
-files = {"input_image": open(input_image_path, "rb")}
-data = {"height": 413, "width": 295}
-
-response = requests.post(url, files=files, data=data).json()
-
-# responseはstatus、image_base64_standard、image_base64_hdの3項目を含むjson形式の辞書です
-print(response)
-
-```
-
-### 2. 背景色の追加
-
-1枚の4チャンネル透明pngを入力し、1枚の背景色を追加した画像を取得
-
-```python
-import requests
-
-url = "http://127.0.0.1:8080/add_background"
-input_image_path = "test.png"
-
-files = {"input_image": open(input_image_path, "rb")}
-data = {"color": '638cce', 'kb': None}
-
-response = requests.post(url, files=files, data=data).json()
-
-# responseはstatusとimage_base64を含むjson形式の辞書です
-print(response)
-```
-
-### 3. 六寸レイアウト写真の生成
-
-1枚の3チャンネル写真を入力し、1枚の六寸レイアウト写真を取得
-
-```python
-import requests
-
-url = "http://127.0.0.1:8080/generate_layout_photos"
-input_image_path = "test.jpg"
-
-files = {"input_image": open(input_image_path, "rb")}
-data = {"height": 413, "width": 295, "kb": 200}
-
-response = requests.post(url, files=files, data=data).json()
-
-# responseはstatusとimage_base64を含むjson形式の辞書です
-print(response)
-```
+詳細なリクエスト方法は[APIドキュメント](docs/api_EN.md)を参照してください。以下のリクエスト例が含まれます：
+- [cURL](docs/api_EN.md#curl-request-examples)
+- [Python](docs/api_EN.md#python-request-example)
+- [Java](docs/api_EN.md#java-request-example)
+- [Javascript](docs/api_EN.md#javascript-request-examples)
 
 <br>
 
 # 🐳 Dockerデプロイ
 
-## 1. イメージのプルまたは構築
+## 1. イメージをプルまたはビルドする
 
-> 以下の3つの方法のいずれかを選択
+> 以下の方法から3つを選択してください。
 
-**方法一：最新イメージをプル：**
+**方法一：最新のイメージをプル：**
 
 ```bash
 docker pull linzeyi/hivision_idphotos
 ```
 
-**方法二：Dockerfileから直接イメージを構築：**
+**方法二：Dockerfileから直接イメージをビルド：**
 
-モデル重みファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)を`hivision/creator/weights`に置いた後、プロジェクトのルートディレクトリで実行：
+モデル重みファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)を`hivision/creator/weights`に配置したことを確認した後、プロジェクトのルートディレクトリで実行：
 
 ```bash
 docker build -t linzeyi/hivision_idphotos .
 ```
 
-**方法三：Docker composeで構築：**
+**方法三：Docker composeでビルド：**
 
-モデル重みファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)を`hivision/creator/weights`に置いた後、プロジェクトのルートディレクトリで実行：
+モデル重みファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)を`hivision/creator/weights`に配置したことを確認した後、プロジェクトのルートディレクトリで実行：
 
 ```bash
 docker compose build
 ```
 
-## 2. サービスの実行
+## 2. サービスを実行
 
-**Gradioデモサービスの起動**
+**Gradioデモサービスを起動**
 
-以下のコマンドを実行し、ローカルで[http://127.0.0.1:7860](http://127.0.0.1:7860/)にアクセスすれば使用できます。
+次のコマンドを実行し、ローカルで [http://127.0.0.1:7860](http://127.0.0.1:7860/) にアクセスすると使用可能です。
 
 ```bash
 docker run -d -p 7860:7860 linzeyi/hivision_idphotos
 ```
 
-**APIバックエンドサービスの起動**
+**APIバックエンドサービスを起動**
 
 ```bash
 docker run -d -p 8080:8080 linzeyi/hivision_idphotos python3 deploy_api.py
@@ -308,14 +281,14 @@ docker compose up -d
 
 ## 環境変数
 
-本プロジェクトはいくつかの追加設定オプションを提供しており、環境変数を使用して設定できます：
+本プロジェクトは、いくつかの追加設定項目を提供し、環境変数を使用して設定します：
 
-| 環境変数 | タイプ | 説明 | 例 |
+| 環境変数 | タイプ	| 説明 | 例 |
 |--|--|--|--|
-| FACE_PLUS_API_KEY | オプション | これはFace++コンソールで申請したAPIキーです | `7-fZStDJ····` |
-| FACE_PLUS_API_SECRET | オプション | Face++ APIキーに対応するSecret | `VTee824E····` |
+| FACE_PLUS_API_KEY	 | オプション	| これはFace++コンソールで申請したAPIキーです。	 | `7-fZStDJ····` |
+| FACE_PLUS_API_SECRET	 | オプション	| Face++ APIキーに対応するSecret | `VTee824E····` |
 
-dockerでの環境変数の使用例：
+dockerでの環境変数使用例：
 ```bash
 docker run  -d -p 7860:7860 \
     -e FACE_PLUS_API_KEY=7-fZStDJ···· \
@@ -325,13 +298,7 @@ docker run  -d -p 7860:7860 \
 
 <br>
 
-# 🌲 リンク集
-
-- [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)
-
-<br>
-
-# 📖 引用プロジェクト
+# 📖 プロジェクトの引用
 
 1. MTCNN:
 
@@ -361,15 +328,15 @@ docker run  -d -p 7860:7860 \
 
 # 💻 開発のヒント
 
-**1. プリセットサイズを変更するには？**
+**1. 予め設定されたサイズを変更する方法は？**
 
-[size_list_CN.csv](demo/size_list_CN.csv)を変更後、再度app.pyを実行すればOKです。第一列はサイズ名、第二列は高さ、第三列は幅です。
+[size_list_CN.csv](demo/size_list_CN.csv)を変更した後、再度`app.py`を実行すればOKです。第一列がサイズ名、第二列が高さ、第三列が幅です。
 
 <br>
 
 # 📧 お問い合わせ
 
-ご不明な点がございましたら、zeyi.lin@swanhub.coまでメールしてください。
+ご不明な点がございましたら、zeyi.lin@swanhub.coまでメールをお送りください。
 
 <br>
 
