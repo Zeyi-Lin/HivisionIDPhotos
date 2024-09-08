@@ -62,10 +62,13 @@ def idphoto_inference(
     matting_model_option,
     face_detect_option,
     head_measure_ratio=0.2,
-    head_height_ratio=0.45,
+    # head_height_ratio=0.45,
     top_distance_max=0.12,
     top_distance_min=0.10,
 ):
+
+    top_distance_min = top_distance_max - 0.02
+
     idphoto_json = {
         "size_mode": mode_option,
         "color_mode": color_option,
@@ -163,7 +166,7 @@ def idphoto_inference(
             change_bg_only=change_bg_only,
             size=idphoto_json["size"],
             head_measure_ratio=head_measure_ratio,
-            head_height_ratio=head_height_ratio,
+            # head_height_ratio=head_height_ratio,
             head_top_range=(top_distance_max, top_distance_min),
         )
     except FaceError:
@@ -436,7 +439,26 @@ if __name__ == "__main__":
                     )
 
                 with gr.Tab("高级参数"):
-                    # 左：输出 KB 大小选项
+                    # 面部占照片总比例
+                    head_measure_ratio_option = gr.Slider(
+                        minimum=0.1,
+                        maximum=0.5,
+                        value=0.2,
+                        step=0.02,
+                        label="面部比例",
+                        interactive=True,
+                    )
+                    # 人像头顶距离照片顶部的比例
+                    top_distance_option = gr.Slider(
+                        minimum=0.02,
+                        maximum=0.5,
+                        value=0.12,
+                        step=0.02,
+                        label="头距顶距离",
+                        interactive=True,
+                    )
+
+                    # 输出照片的KB值
                     image_kb_options = gr.Radio(
                         choices=image_kb_CN,
                         label="设置 KB 大小（结果在右边最底的组件下载）",
@@ -452,15 +474,6 @@ if __name__ == "__main__":
                             label="KB 大小",
                             interactive=True,
                         )
-                    # 面部占照片总比例
-                    head_measure_ratio_option = gr.Slider(
-                        minimum=0.1,
-                        maximum=0.5,
-                        value=0.2,
-                        step=0.02,
-                        label="面部比例",
-                        interactive=True,
-                    )
 
                 img_but = gr.Button("开始制作")
 
@@ -663,6 +676,7 @@ if __name__ == "__main__":
                 matting_model_options,
                 face_detect_model_options,
                 head_measure_ratio_option,
+                top_distance_option,
             ],
             outputs=[
                 img_output_standard,
