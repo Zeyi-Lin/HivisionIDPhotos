@@ -49,7 +49,7 @@
 
 - 온라인 체험: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
-- 2024.09.08: 새로운 배경 제거 모델 [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) 추가됨
+- 2024.09.08: 새로운 배경 제거 모델 [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4)가 추가되었습니다 | ComfyUI 워크플로우 - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)는 [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)에 의해 제공되었습니다.
 - 2024.09.07: **얼굴 인식 API 옵션** [Face++](docs/face++_EN.md) 추가, 더 높은 정확도의 얼굴 인식 구현
 - 2024.09.06: 새로운 배경 제거 모델 [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet) 추가
 - 2024.09.05: [Restful API 문서](docs/api_EN.md) 업데이트
@@ -119,7 +119,7 @@ python scripts/download_model.py
 - `modnet_photographic_portrait_matting.onnx` (24.7MB): [MODNet](https://github.com/ZHKKKe/MODNet) 공식 가중치, [다운로드](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/modnet_photographic_portrait_matting.onnx)
 - `hivision_modnet.onnx` (24.7MB): 단색 배경 교체에 더 적합한 배경 제거 모델, [다운로드](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx)
 - `mnn_hivision_modnet.mnn` (24.7MB): mnn 변환된 배경 제거 모델 by [zjkhahah](https://github.com/zjkhahah), [다운로드](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/mnn_hivision_modnet.mnn)
-- `rmbg-1.4.onnx` (176.2MB): [BRIA AI](https://huggingface.co/briaai/RMBG-1.4)에서 제공하는 오픈 소스 매트팅 모델입니다. [다운로드](https://huggingface.co/briaai/RMBG-1.4/resolve/main/model.pth?download=true) 후 `rmbg-1.4.onnx`로 이름을 변경해 주세요.
+- `rmbg-1.4.onnx` (176.2MB): [BRIA AI](https://huggingface.co/briaai/RMBG-1.4)에서 제공하는 오픈 소스 매트팅 모델입니다. [다운로드](https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx?download=true) 후 `rmbg-1.4.onnx`로 이름을 변경해 주세요.
 
 ## 4. 얼굴 인식 모델 설정
 
