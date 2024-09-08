@@ -118,7 +118,6 @@ python scripts/download_model.py --models all
 프로젝트의 `hivision/creator/weights` 디렉토리에 저장:
 - `modnet_photographic_portrait_matting.onnx` (24.7MB): [MODNet](https://github.com/ZHKKKe/MODNet) 공식 가중치, [다운로드](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/modnet_photographic_portrait_matting.onnx)
 - `hivision_modnet.onnx` (24.7MB): 단색 배경 교체에 더 적합한 배경 제거 모델, [다운로드](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx)
-- `mnn_hivision_modnet.mnn` (24.7MB): mnn 변환된 배경 제거 모델 by [zjkhahah](https://github.com/zjkhahah), [다운로드](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/mnn_hivision_modnet.mnn)
 - `rmbg-1.4.onnx` (176.2MB): [BRIA AI](https://huggingface.co/briaai/RMBG-1.4)에서 제공하는 오픈 소스 매트팅 모델입니다. [다운로드](https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx?download=true) 후 `rmbg-1.4.onnx`로 이름을 변경해 주세요.
 
 ## 4. 얼굴 인식 모델 설정

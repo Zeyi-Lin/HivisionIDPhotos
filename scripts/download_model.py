@@ -68,12 +68,16 @@ def main(models_to_download):
             "url": "https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/modnet_photographic_portrait_matting.onnx",
             "format": "onnx",
         },
-        "mnn_hivision_modnet": {
-            "url": "https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/mnn_hivision_modnet.mnn",
-            "format": "mnn",
-        },
+        # "mnn_hivision_modnet": {
+        #     "url": "https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/mnn_hivision_modnet.mnn",
+        #     "format": "mnn",
+        # },
         "rmbg-1.4": {
             "url": "https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx?download=true",
+            "format": "onnx",
+        },
+        "birefnet-v1-lite": {
+            "url": "https://github.com/ZhengPeng7/BiRefNet/releases/download/v1/BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx",
             "format": "onnx",
         },
     }
@@ -95,8 +99,9 @@ if __name__ == "__main__":
     MODEL_CHOICES = [
         "hivision_modnet",
         "modnet_photographic_portrait_matting",
-        "mnn_hivision_modnet",
+        # "mnn_hivision_modnet",
         "rmbg-1.4",
+        "birefnet-lite",
         "all",
     ]
 

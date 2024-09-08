@@ -14,6 +14,7 @@ MATTING_MODEL = [
     "modnet_photographic_portrait_matting",
     "mnn_hivision_modnet",
     "rmbg-1.4",
+    "birefnet-v1-lite",
 ]
 FACE_DETECT_MODEL = [
     "mtcnn",
