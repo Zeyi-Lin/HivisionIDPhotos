@@ -444,7 +444,7 @@ if __name__ == "__main__":
                         minimum=0.1,
                         maximum=0.5,
                         value=0.2,
-                        step=0.02,
+                        step=0.01,
                         label="面部比例",
                         interactive=True,
                     )
@@ -453,7 +453,7 @@ if __name__ == "__main__":
                         minimum=0.02,
                         maximum=0.5,
                         value=0.12,
-                        step=0.02,
+                        step=0.01,
                         label="头距顶距离",
                         interactive=True,
                     )

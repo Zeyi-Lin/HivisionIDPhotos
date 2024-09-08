@@ -14,6 +14,7 @@ from .tensor2numpy import NNormalize, NTo_Tensor, NUnsqueeze
 from .context import Context
 import cv2
 import os
+from time import time
 
 
 WEIGHTS = {
@@ -31,9 +32,6 @@ WEIGHTS = {
         "mnn_hivision_modnet.mnn",
     ),
     "rmbg-1.4": os.path.join(os.path.dirname(__file__), "weights", "rmbg-1.4.onnx"),
-    # "birefnet-portrait": os.path.join(
-    #     os.path.dirname(__file__), "weights", "birefnet-portrait.onnx"
-    # ),
     "birefnet-v1-lite": os.path.join(
         os.path.dirname(__file__), "weights", "birefnet-v1-lite.onnx"
     ),
@@ -44,6 +42,11 @@ ONNX_DEVICE = (
     if onnxruntime.get_device() == "GPU"
     else "CPUExecutionProvider"
 )
+
+HIVISION_MODNET_SESS = None
+MODNET_PHOTOGRAPHIC_PORTRAIT_MATTING_SESS = None
+RMBG_SESS = None
+BIREFNET_V1_LITE_SESS = None
 
 
 def load_onnx_model(checkpoint_path, set_cpu=False):
@@ -193,18 +196,21 @@ def read_modnet_image(input_image, ref_size=512):
 
 
 def get_modnet_matting(input_image, checkpoint_path, ref_size=512):
+    global HIVISION_MODNET_SESS
+
     if not os.path.exists(checkpoint_path):
         print(f"Checkpoint file not found: {checkpoint_path}")
         return None
 
-    sess = load_onnx_model(checkpoint_path, set_cpu=True)
+    if HIVISION_MODNET_SESS is None:
+        HIVISION_MODNET_SESS = load_onnx_model(checkpoint_path, set_cpu=True)
 
-    input_name = sess.get_inputs()[0].name
-    output_name = sess.get_outputs()[0].name
+    input_name = HIVISION_MODNET_SESS.get_inputs()[0].name
+    output_name = HIVISION_MODNET_SESS.get_outputs()[0].name
 
     im, width, length = read_modnet_image(input_image=input_image, ref_size=ref_size)
 
-    matte = sess.run([output_name], {input_name: im})
+    matte = HIVISION_MODNET_SESS.run([output_name], {input_name: im})
     matte = (matte[0] * 255).astype("uint8")
     matte = np.squeeze(matte)
     mask = cv2.resize(matte, (width, length), interpolation=cv2.INTER_AREA)
@@ -216,6 +222,8 @@ def get_modnet_matting(input_image, checkpoint_path, ref_size=512):
 
 
 def get_rmbg_matting(input_image: np.ndarray, checkpoint_path, ref_size=1024):
+    global RMBG_SESS
+
     if not os.path.exists(checkpoint_path):
         print(f"Checkpoint file not found: {checkpoint_path}")
         return None
@@ -226,7 +234,8 @@ def get_rmbg_matting(input_image: np.ndarray, checkpoint_path, ref_size=1024):
         image = image.resize(model_input_size, Image.BILINEAR)
         return image
 
-    sess = load_onnx_model(checkpoint_path, set_cpu=True)
+    if RMBG_SESS is None:
+        RMBG_SESS = load_onnx_model(checkpoint_path, set_cpu=True)
 
     orig_image = Image.fromarray(input_image)
     image = resize_rmbg_image(orig_image)
@@ -237,7 +246,7 @@ def get_rmbg_matting(input_image: np.ndarray, checkpoint_path, ref_size=1024):
     im_np = (im_np - 0.5) / 0.5  # Normalize to [-1, 1]
 
     # Inference
-    result = sess.run(None, {sess.get_inputs()[0].name: im_np})[0]
+    result = RMBG_SESS.run(None, {RMBG_SESS.get_inputs()[0].name: im_np})[0]
 
     # Post process
     result = np.squeeze(result)
@@ -298,7 +307,7 @@ def get_mnn_modnet_matting(input_image, checkpoint_path, ref_size=512):
 
 
 def get_birefnet_portrait_matting(input_image, checkpoint_path, ref_size=512):
-    from time import time
+    global BIREFNET_V1_LITE_SESS
 
     if not os.path.exists(checkpoint_path):
         print(f"Checkpoint file not found: {checkpoint_path}")
@@ -321,18 +330,21 @@ def get_birefnet_portrait_matting(input_image, checkpoint_path, ref_size=512):
 
     # 记录加载onnx模型的开始时间
     load_start_time = time()
-    onnx_session = load_onnx_model(checkpoint_path, set_cpu=True)
+
+    if BIREFNET_V1_LITE_SESS is None:
+        BIREFNET_V1_LITE_SESS = load_onnx_model(checkpoint_path, set_cpu=True)
+
     # 记录加载onnx模型的结束时间
     load_end_time = time()
 
     # 打印加载onnx模型所花的时间
     print(f"Loading ONNX model took {load_end_time - load_start_time:.4f} seconds")
 
-    input_name = onnx_session.get_inputs()[0].name
-    print(onnxruntime.get_device(), onnx_session.get_providers())
+    input_name = BIREFNET_V1_LITE_SESS.get_inputs()[0].name
+    print(onnxruntime.get_device(), BIREFNET_V1_LITE_SESS.get_providers())
 
     time_st = time()
-    pred_onnx = onnx_session.run(None, {input_name: input_images})[
+    pred_onnx = BIREFNET_V1_LITE_SESS.run(None, {input_name: input_images})[
         -1
     ]  # Use float32 input
     pred_onnx = np.squeeze(pred_onnx)  # Use numpy to squeeze
