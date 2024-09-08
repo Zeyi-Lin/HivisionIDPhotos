@@ -394,7 +394,7 @@ if __name__ == "__main__":
                         elem_id="matting_model",
                     )
 
-                with gr.Tab("核心参数"):
+                with gr.Tab("核心参数") as key_parameter_tab:
                     mode_options = gr.Radio(
                         choices=size_mode_CN,
                         label="证件照尺寸选项",
@@ -438,7 +438,7 @@ if __name__ == "__main__":
                         elem_id="render",
                     )
 
-                with gr.Tab("高级参数"):
+                with gr.Tab("高级参数") as advance_parameter_tab:
                     # 面部占照片总比例
                     head_measure_ratio_option = gr.Slider(
                         minimum=0.1,
@@ -544,6 +544,10 @@ if __name__ == "__main__":
                         img_output_standard_hd: gr.update(label="高清照"),
                         img_output_layout: gr.update(label="六寸排版照"),
                         file_download: gr.update(label="下载调整 KB 大小后的照片"),
+                        head_measure_ratio_option: gr.update(label="面部比例"),
+                        top_distance_option: gr.update(label="头距顶距离"),
+                        key_parameter_tab: gr.update(label="核心参数"),
+                        advance_parameter_tab: gr.update(label="高级参数"),
                     }
 
                 elif language == "English":
@@ -584,6 +588,10 @@ if __name__ == "__main__":
                         file_download: gr.update(
                             label="Download the photo after adjusting the KB size"
                         ),
+                        head_measure_ratio_option: gr.update(label="Head ratio"),
+                        top_distance_option: gr.update(label="Top distance"),
+                        key_parameter_tab: gr.update(label="Key Parameters"),
+                        advance_parameter_tab: gr.update(label="Advance Parameters"),
                     }
 
             def change_color(colors):
@@ -640,6 +648,10 @@ if __name__ == "__main__":
                 img_output_standard_hd,
                 img_output_layout,
                 file_download,
+                head_measure_ratio_option,
+                top_distance_option,
+                key_parameter_tab,
+                advance_parameter_tab,
             ],
         )
 
