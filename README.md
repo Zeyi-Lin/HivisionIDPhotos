@@ -136,14 +136,23 @@ python scripts/download_model.py --models all
 - `birefnet-v1-lite.onnx`(224MB): [ZhengPeng7](https://github.com/ZhengPeng7/BiRefNet) 开源的抠图模型，[下载](https://github.com/ZhengPeng7/BiRefNet/releases/download/v1/BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx)后重命名为`birefnet-v1-lite.onnx`
 
 
-## 4. 人脸检测模型配置
-
-> 这是一个可选项
+## 4. 人脸检测模型配置（可选）
 
 | 拓展人脸检测模型 | 介绍 | 使用文档 |
 | -- | -- | -- |
 | MTCNN | **离线**人脸检测模型，高性能CPU推理，为默认模型，检测精度较低 | Clone此项目后直接使用 |
 | Face++ | 旷视推出的在线人脸检测API，检测精度较高，[官方文档](https://console.faceplusplus.com.cn/documents/4888373) | [使用文档](docs/face++_CN.md)|
+
+## 5. GPU推理加速（可选）
+
+如需使用英伟达GPU加速推理，在确保你已经安装CUDA与cuDNN后，根据[文档](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)找到对应的`onnxruntime-gpu`版本安装，如：
+
+```bash
+# CUDA 12.x, cuDNN 8
+pip install onnxruntime-gpu==1.18.0
+```
+
+完成后，调用如`birefnet-v1-lite`模型将会利用GPU加速推理。
 
 <br>
 
