@@ -33,6 +33,35 @@ WEIGHTS = {
     "rmbg-1.4": os.path.join(os.path.dirname(__file__), "weights", "rmbg-1.4.onnx"),
 }
 
+ONNX_DEVICE = (
+    "CUDAExecutionProvider"
+    if onnxruntime.get_device() == "GPU"
+    else "CPUExecutionProvider"
+)
+
+
+def load_onnx_model(checkpoint_path):
+    providers = (
+        ["CUDAExecutionProvider", "CPUExecutionProvider"]
+        if ONNX_DEVICE == "CUDAExecutionProvider"
+        else ["CPUExecutionProvider"]
+    )
+
+    try:
+        sess = onnxruntime.InferenceSession(checkpoint_path, providers=providers)
+    except Exception as e:
+        if ONNX_DEVICE == "CUDAExecutionProvider":
+            print(f"Failed to load model with CUDAExecutionProvider: {e}")
+            print("Falling back to CPUExecutionProvider")
+            # 尝试使用CPU加载模型
+            sess = onnxruntime.InferenceSession(
+                checkpoint_path, providers=["CPUExecutionProvider"]
+            )
+        else:
+            raise e  # 如果是CPU执行失败，重新抛出异常
+
+    return sess
+
 
 def extract_human(ctx: Context):
     """
@@ -140,9 +169,11 @@ def read_modnet_image(input_image, ref_size=512):
 
 
 def get_modnet_matting(input_image, checkpoint_path, ref_size=512):
-    # global sess
-    # if sess is None:
-    sess = onnxruntime.InferenceSession(checkpoint_path)
+    if not os.path.exists(checkpoint_path):
+        print(f"Checkpoint file not found: {checkpoint_path}")
+        return None
+
+    sess = load_onnx_model(checkpoint_path)
 
     input_name = sess.get_inputs()[0].name
     output_name = sess.get_outputs()[0].name
@@ -161,13 +192,17 @@ def get_modnet_matting(input_image, checkpoint_path, ref_size=512):
 
 
 def get_rmbg_matting(input_image: np.ndarray, checkpoint_path, ref_size=1024):
+    if not os.path.exists(checkpoint_path):
+        print(f"Checkpoint file not found: {checkpoint_path}")
+        return None
+
     def resize_rmbg_image(image):
         image = image.convert("RGB")
         model_input_size = (ref_size, ref_size)
         image = image.resize(model_input_size, Image.BILINEAR)
         return image
 
-    sess = onnxruntime.InferenceSession(checkpoint_path)
+    sess = load_onnx_model(checkpoint_path)
 
     orig_image = Image.fromarray(input_image)
     image = resize_rmbg_image(orig_image)
@@ -203,6 +238,10 @@ def get_rmbg_matting(input_image: np.ndarray, checkpoint_path, ref_size=1024):
 
 
 def get_mnn_modnet_matting(input_image, checkpoint_path, ref_size=512):
+    if not os.path.exists(checkpoint_path):
+        print(f"Checkpoint file not found: {checkpoint_path}")
+        return None
+
     try:
         import MNN.expr as expr
         import MNN.nn as nn
@@ -210,6 +249,7 @@ def get_mnn_modnet_matting(input_image, checkpoint_path, ref_size=512):
         raise ImportError(
             "The MNN module is not installed or there was an import error. Please ensure that the MNN library is installed by using the command 'pip install mnn'."
         ) from e
+
     config = {}
     config["precision"] = "low"  # 当硬件支持（armv8.2）时使用fp16推理
     config["backend"] = 0  # CPU
