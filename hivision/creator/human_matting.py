@@ -31,8 +31,11 @@ WEIGHTS = {
         "mnn_hivision_modnet.mnn",
     ),
     "rmbg-1.4": os.path.join(os.path.dirname(__file__), "weights", "rmbg-1.4.onnx"),
-    "birefnet-portrait": os.path.join(
-        os.path.dirname(__file__), "weights", "birefnet-portrait.onnx"
+    # "birefnet-portrait": os.path.join(
+    #     os.path.dirname(__file__), "weights", "birefnet-portrait.onnx"
+    # ),
+    "birefnet-lite": os.path.join(
+        os.path.dirname(__file__), "weights", "birefnet-lite.onnx"
     ),
 }
 
@@ -111,9 +114,17 @@ def extract_human_rmbg(ctx: Context):
     ctx.matting_image = ctx.processing_image.copy()
 
 
-def extract_human_birefnet_portrait(ctx: Context):
+# def extract_human_birefnet_portrait(ctx: Context):
+#     matting_image = get_birefnet_portrait_matting(
+#         ctx.processing_image, WEIGHTS["birefnet-portrait"]
+#     )
+#     ctx.processing_image = matting_image
+#     ctx.matting_image = ctx.processing_image.copy()
+
+
+def extract_human_birefnet_lite(ctx: Context):
     matting_image = get_birefnet_portrait_matting(
-        ctx.processing_image, WEIGHTS["birefnet-portrait"]
+        ctx.processing_image, WEIGHTS["birefnet-lite"]
     )
     ctx.processing_image = matting_image
     ctx.matting_image = ctx.processing_image.copy()
