@@ -332,7 +332,8 @@ def get_birefnet_portrait_matting(input_image, checkpoint_path, ref_size=512):
     load_start_time = time()
 
     if BIREFNET_V1_LITE_SESS is None:
-        BIREFNET_V1_LITE_SESS = load_onnx_model(checkpoint_path, set_cpu=True)
+        print("首次加载birefnet-v1-lite模型...")
+        BIREFNET_V1_LITE_SESS = load_onnx_model(checkpoint_path)
 
     # 记录加载onnx模型的结束时间
     load_end_time = time()
