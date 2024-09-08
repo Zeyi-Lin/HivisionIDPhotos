@@ -118,7 +118,6 @@ python scripts/download_model.py --models all
 プロジェクトの`hivision/creator/weights`ディレクトリに保存：
 - `modnet_photographic_portrait_matting.onnx` (24.7MB): [MODNet](https://github.com/ZHKKKe/MODNet)公式重み、[ダウンロード](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/modnet_photographic_portrait_matting.onnx)
 - `hivision_modnet.onnx` (24.7MB): 単色背景に適した切り抜きモデル、[ダウンロード](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx)
-- `mnn_hivision_modnet.mnn` (24.7MB): mnn変換後の切り抜きモデル by [zjkhahah](https://github.com/zjkhahah)、[ダウンロード](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/mnn_hivision_modnet.mnn)
 - `rmbg-1.4.onnx` (176.2MB): [BRIA AI](https://huggingface.co/briaai/RMBG-1.4)からのオープンソースマッティングモデルです。[ダウンロード](https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx?download=true)して、`rmbg-1.4.onnx`に名前を変更してください。
 
 ## 4. 顔検出モデルの設定

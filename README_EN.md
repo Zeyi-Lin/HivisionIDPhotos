@@ -130,7 +130,6 @@ python scripts/download_model.py --models all
 Save in the project's `hivision/creator/weights` directory:
 - `modnet_photographic_portrait_matting.onnx` (24.7MB): Official weights from [MODNet](https://github.com/ZHKKKe/MODNet), [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/modnet_photographic_portrait_matting.onnx)
 - `hivision_modnet.onnx` (24.7MB): A matting model better suited for solid background swapping, [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx)
-- `mnn_hivision_modnet.mnn` (24.7MB): MNN converted matting model by [zjkhahah](https://github.com/zjkhahah), [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/mnn_hivision_modnet.mnn)
 - `rmbg-1.4.onnx` (176.2MB): Open source matting model from [BRIA AI](https://huggingface.co/briaai/RMBG-1.4), [download](https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx?download=true) it and rename it to `rmbg-1.4.onnx`.
 - `birefnet-v1-lite.onnx` (224MB): Open-source image segmentation model by [ZhengPeng7](https://github.com/ZhengPeng7/BiRefNet), [download](https://github.com/ZhengPeng7/BiRefNet/releases/download/v1/BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx) and rename it to `birefnet-v1-lite.onnx` after downloading.
 
