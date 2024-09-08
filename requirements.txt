@@ -3,3 +3,4 @@ onnxruntime>=1.15.0
 numpy<=1.26.4
 requests
 mtcnn-runtime
+tqdm
