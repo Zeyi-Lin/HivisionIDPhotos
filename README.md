@@ -78,8 +78,10 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 
 <div align="center">
 <img src="assets/demo.png" width=900>
+
 </div>
 
+![alt text](image.png)
 ---
 
 如果 HivisionIDPhoto 对你有帮助，请 star 这个 repo 或推荐给你的朋友，解决证件照应急制作问题！
