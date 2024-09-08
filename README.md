@@ -33,20 +33,20 @@
 
 # 目录
 
-- [项目更新](#-项目更新)
-- [Overview](#overview)
+- [最近更新](#-最近更新)
+- [项目简介](#-项目简介)
+- [社区](#-社区)
 - [准备工作](#-准备工作)
 - [Demo启动](#-运行-gradio-demo)
 - [Python推理](#-python-推理)
 - [API服务部署](#️-部署-api-服务)
 - [Docker部署](#-docker-部署)
-- [友情链接](#-友情链接)
 - [联系我们](#-联系我们)
 - [贡献者](#贡献者)
 
 <br>
 
-# 🤩 项目更新
+# 🤩 最近更新
 
 - 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
@@ -58,7 +58,9 @@
 - 2023.12.01: 更新**API 部署（基于 fastapi）**
 - 2023.06.20: 更新**预设尺寸菜单**
 
-# Overview
+<br>
+
+# 项目简介
 
 > 🚀 谢谢你对我们的工作感兴趣。您可能还想查看我们在图像领域的其他成果，欢迎来信:zeyi.lin@swanhub.co.
 
@@ -78,13 +80,18 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 <img src="assets/harry.png" width=900>
 </div>
 
-<!-- <div align="center">
-<img src="assets/gradio-image.jpeg" width=900>
-</div> -->
-
 ---
 
 如果 HivisionIDPhoto 对你有帮助，请 star 这个 repo 或推荐给你的朋友，解决证件照应急制作问题！
+
+<br>
+
+# 🏠 社区
+
+我们分享了一些由社区构建的HivisionIDPhotos的有趣应用和扩展：
+
+- [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)：ComfyUI证件照处理工作流，由 [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) 构建 
+- [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)：Windows客户端应用，由 [zhaoyun0071](https://github.com/zhaoyun0071) 构建
 
 <br>
 
@@ -276,13 +283,6 @@ docker run  -d -p 7860:7860 \
     -e FACE_PLUS_API_SECRET=VTee824E···· \
     linzeyi/hivision_idphotos 
 ```
-
-<br>
-
-# 🌲 友情链接
-
-- [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
-- [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)
 
 <br>
 
