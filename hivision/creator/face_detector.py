@@ -65,6 +65,8 @@ def detect_face_face_plusplus(ctx: Context):
     api_key = os.getenv("FACE_PLUS_API_KEY")
     api_secret = os.getenv("FACE_PLUS_API_SECRET")
 
+    print("调用了face++")
+
     image = ctx.origin_image
     # 将图片转为 base64, 且不大于2MB（Face++ API接口限制）
     image_base64 = resize_image_to_kb_base64(image, 2000, mode="max")
