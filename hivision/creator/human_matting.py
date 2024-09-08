@@ -197,7 +197,7 @@ def get_modnet_matting(input_image, checkpoint_path, ref_size=512):
         print(f"Checkpoint file not found: {checkpoint_path}")
         return None
 
-    sess = load_onnx_model(checkpoint_path)
+    sess = load_onnx_model(checkpoint_path, set_cpu=True)
 
     input_name = sess.get_inputs()[0].name
     output_name = sess.get_outputs()[0].name
@@ -226,7 +226,7 @@ def get_rmbg_matting(input_image: np.ndarray, checkpoint_path, ref_size=1024):
         image = image.resize(model_input_size, Image.BILINEAR)
         return image
 
-    sess = load_onnx_model(checkpoint_path)
+    sess = load_onnx_model(checkpoint_path, set_cpu=True)
 
     orig_image = Image.fromarray(input_image)
     image = resize_rmbg_image(orig_image)
@@ -321,7 +321,7 @@ def get_birefnet_portrait_matting(input_image, checkpoint_path, ref_size=512):
 
     # 记录加载onnx模型的开始时间
     load_start_time = time()
-    onnx_session = load_onnx_model(checkpoint_path)
+    onnx_session = load_onnx_model(checkpoint_path, set_cpu=True)
     # 记录加载onnx模型的结束时间
     load_end_time = time()
 
