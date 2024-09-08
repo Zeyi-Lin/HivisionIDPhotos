@@ -110,7 +110,7 @@ pip install -r requirements-app.txt
 **Option 1: Script Download**
 
 ```bash
-python scripts/download_model.py
+python scripts/download_model.py --models all
 ```
 
 **Option 2: Direct Download**

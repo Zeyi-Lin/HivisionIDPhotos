@@ -110,7 +110,7 @@ pip install -r requirements-app.txt
 **方法一：スクリプトでダウンロード**
 
 ```bash
-python scripts/download_model.py
+python scripts/download_model.py --models all
 ```
 
 **方法二：直接ダウンロード**

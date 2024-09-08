@@ -115,7 +115,7 @@ pip install -r requirements-app.txt
 **方式一：脚本下载**
 
 ```bash
-python scripts/download_model.py
+python scripts/download_model.py --models all
 ```
 
 **方式二：直接下载**
