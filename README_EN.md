@@ -35,11 +35,11 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 - [Project Updates](#-project-updates)
 - [Overview](#overview)
 - [Preparation](#-preparation)
+- [Community]()
 - [Running Demo](#-running-gradio-demo)
 - [Python Inference](#-python-inference)
 - [API Service Deployment](#️-deploying-api-service)
 - [Docker Deployment](#-docker-deployment)
-- [Links](#-links)
 - [Contact Us](#-contact-us)
 - [Contributors](#contributors)
 
@@ -80,6 +80,17 @@ It utilizes a complete AI model workflow to recognize various user photo scenari
 ---
 
 If HivisionIDPhoto is helpful to you, please star this repo or recommend it to your friends to solve urgent ID photo creation issues!
+
+<br>
+
+# 🏠 Community
+
+We share some interesting applications and extensions of HivisionIDPhotos built by the community:
+
+- [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI): A Windows client application built by [zhaoyun0071](https://github.com/zhaoyun0071)
+- [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI): ComfyUI workflow for ID photo processing, built by [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
+
+[![](assets/comfyui.png)](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 
 <br>
 
@@ -323,12 +334,6 @@ docker run  -d -p 7860:7860 \
     -e FACE_PLUS_API_SECRET=VTee824E···· \
     linzeyi/hivision_idphotos 
 ```
-
-<br>
-
-# 🌲 Links
-
-- [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)
 
 <br>
 
