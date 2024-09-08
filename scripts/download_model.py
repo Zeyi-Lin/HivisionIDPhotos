@@ -1,6 +1,7 @@
 import os
 import requests
 import argparse
+from tqdm import tqdm  # 导入 tqdm 库
 
 # 获取当前脚本所在目录的上一级目录
 base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -11,9 +12,20 @@ def download_file(url, save_path):
         print(f"Begin downloading: {url}")
         response = requests.get(url, stream=True)
         response.raise_for_status()  # 检查请求是否成功
-        with open(save_path, "wb") as file:
+
+        # 获取文件总大小
+        total_size = int(response.headers.get("content-length", 0))
+        # 使用 tqdm 显示进度条
+        with open(save_path, "wb") as file, tqdm(
+            total=total_size,
+            unit="B",
+            unit_scale=True,
+            unit_divisor=1024,
+            desc=os.path.basename(save_path),
+        ) as bar:
             for chunk in response.iter_content(chunk_size=8192):
                 file.write(chunk)
+                bar.update(len(chunk))  # 更新进度条
         print(f"Download completed. Save to: {save_path}")
     except requests.exceptions.RequestException as e:
         print(f"Download failed: {e}")
