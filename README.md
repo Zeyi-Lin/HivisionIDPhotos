@@ -77,7 +77,7 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 5. 智能换正装（waiting）
 
 <div align="center">
-<img src="assets/harry.png" width=900>
+<img src="assets/demo.png" width=900>
 </div>
 
 ---
@@ -154,6 +154,8 @@ python app.py
 ```
 
 运行程序将生成一个本地 Web 页面，在页面中可完成证件照的操作与交互。
+
+<img src="assets/harry.png" width=900>
 
 <br>
 
