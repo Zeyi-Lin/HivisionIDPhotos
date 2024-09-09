@@ -31,5 +31,6 @@ RUN echo "==> Clean up..."  && \
 # 指定工作目录
 
 EXPOSE 7860
+EXPOSE 8080
 
-CMD [ "python3", "app.py", "--host", "0.0.0.0", "--port", "7860"]
+CMD [ "python3", "-u", "app.py", "--host", "0.0.0.0", "--port", "7860"]

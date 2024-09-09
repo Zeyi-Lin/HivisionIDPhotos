@@ -3,6 +3,25 @@ import base64
 import argparse
 import os
 
+INFERENCE_TYPE = [
+    "idphoto",
+    "human_matting",
+    "add_background",
+    "generate_layout_photos",
+]
+MATTING_MODEL = [
+    "hivision_modnet",
+    "modnet_photographic_portrait_matting",
+    "mnn_hivision_modnet",
+    "rmbg-1.4",
+    "birefnet-v1-lite",
+]
+FACE_DETECT_MODEL = [
+    "mtcnn",
+    "face_plusplus",
+]
+RENDER = [0, 1, 2]
+
 
 def base64_save(_base64_image_data, save_path):
     # 解码 Base64 数据并保存为 PNG 文件
@@ -19,9 +38,20 @@ def file_2_base64(file_path):
 
 
 # 发送请求到 /idphoto 接口
-def request_idphoto(file_path, height, width):
+def request_idphoto(
+    file_path,
+    height,
+    width,
+    human_matting_model="hivision_idphotos",
+    face_detector_model="mtcnn",
+):
     files = {"input_image": open(file_path, "rb")}
-    data = {"height": int(height), "width": int(width)}
+    data = {
+        "height": int(height),
+        "width": int(width),
+        "human_matting_model": human_matting_model,
+        "face_detector_model": face_detector_model,
+    }
     response = requests.post(url, files=files, data=data)
     return response.json()
 
@@ -42,6 +72,17 @@ def request_generate_layout_photos(file_path, height, width, kb=None):
     return response.json()
 
 
+# 发送请求到 /human_matting 接口
+def request_human_matting(
+    file_path,
+    human_matting_model="hivision_idphotos",
+):
+    files = {"input_image": open(file_path, "rb")}
+    data = {"human_matting_model": human_matting_model}
+    response = requests.post(url, files=files, data=data)
+    return response.json()
+
+
 # 示例调用
 if __name__ == "__main__":
 
@@ -51,7 +92,6 @@ if __name__ == "__main__":
     parser.add_argument(
         "-u", "--url", help="API 服务的 URL", default="http://localhost:8080"
     )
-
     parser.add_argument(
         "-t",
         "--type",
@@ -66,16 +106,38 @@ if __name__ == "__main__":
     parser.add_argument(
         "-k", "--kb", help="输出照片的 KB 值，仅对换底和制作排版照生效", default=None
     )
-    args = parser.parse_args()
+    parser.add_argument(
+        "-r",
+        "--render",
+        type=int,
+        help="底色合成的模式，有 0:纯色、1:上下渐变、2:中心渐变 可选",
+        choices=RENDER,
+        default=0,
+    )
+    parser.add_argument(
+        "--matting_model",
+        help="抠图模型权重",
+        default="hivision_modnet",
+        choices=MATTING_MODEL,
+    )
+    parser.add_argument(
+        "--face_detector_model",
+        help="人脸检测模型",
+        default="mtcnn",
+        choices=FACE_DETECT_MODEL,
+    )
 
+    args = parser.parse_args()
     url = f"{args.url}/{args.type}"  # 替换为实际的接口 URL
-    # color = hex_to_rgb(args.color)
-    # color = (color[2], color[1], color[0])
 
     if args.type == "idphoto":
         # 调用 /idphoto 接口
         idphoto_response = request_idphoto(
-            args.input_image_dir, int(args.height), int(args.width)
+            args.input_image_dir,
+            int(args.height),
+            int(args.width),
+            human_matting_model=args.matting_model,
+            face_detector_model=args.face_detector_model,
         )
 
         if idphoto_response["status"]:
@@ -111,6 +173,20 @@ if __name__ == "__main__":
             args.input_image_dir, int(args.height), int(args.width), args.kb
         )
         base64_image_data = generate_layout_response["image_base64"]
+        base64_save(base64_image_data, args.output_image_dir)
+
+        print(f"请求{args.type}接口成功，已保存图像。")
+
+    elif args.type == "human_matting":
+        # 调用 /human_matting 接口
+        human_matting_response = request_human_matting(
+            args.input_image_dir, args.matting_model
+        )
+        base64_image_data = human_matting_response["image_base64"]
+
+        file_name, file_extension = os.path.splitext(args.output_image_dir)
+
+        # 解码 Base64 数据并保存为 PNG 文件
         base64_save(base64_image_data, args.output_image_dir)
 
         print(f"请求{args.type}接口成功，已保存图像。")

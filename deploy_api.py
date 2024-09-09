@@ -1,16 +1,15 @@
 from fastapi import FastAPI, UploadFile, Form
-import onnxruntime
 from hivision import IDCreator
 from hivision.error import FaceError
 from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
+from hivision.creator.choose_handler import choose_handler
 from hivision.utils import add_background, resize_image_to_kb_base64, hex_to_rgb
 import base64
 import numpy as np
 import cv2
-import os
 
 app = FastAPI()
 creator = IDCreator()
@@ -30,6 +29,8 @@ async def idphoto_inference(
     input_image: UploadFile,
     height: str = Form(...),
     width: str = Form(...),
+    human_matting_model: str = Form("hivision_modnet"),
+    face_detect_model: str = Form("mtcnn"),
     head_measure_ratio=0.2,
     head_height_ratio=0.45,
     top_distance_max=0.12,
@@ -39,6 +40,9 @@ async def idphoto_inference(
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    # ------------------- 选择抠图与人脸检测模型 -------------------
+    choose_handler(creator, human_matting_model, face_detect_model)
 
     # 将字符串转为元组
     size = (int(height), int(width))
@@ -62,11 +66,45 @@ async def idphoto_inference(
     return result_message
 
 
+# 人像抠图接口
+@app.post("/human_matting")
+async def idphoto_inference(
+    input_image: UploadFile,
+    human_matting_model: str = Form("hivision_modnet"),
+):
+    image_bytes = await input_image.read()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    # ------------------- 选择抠图与人脸检测模型 -------------------
+    choose_handler(creator, human_matting_model, None)
+
+    try:
+        result = creator(
+            img,
+            change_bg_only=True,
+        )
+    except FaceError:
+        result_message = {"status": False}
+
+    else:
+        result_message = {
+            "status": True,
+            "image_base64": numpy_2_base64(result.standard),
+        }
+    return result_message
+
+
 # 透明图像添加纯色背景接口
 @app.post("/add_background")
 async def photo_add_background(
-    input_image: UploadFile, color: str = Form(...), kb: str = Form(None)
+    input_image: UploadFile,
+    color: str = Form(...),
+    kb: str = Form(None),
+    render: int = Form(0),
 ):
+    render_choice = ["pure_color", "updown_gradient", "center_gradient"]
+
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
@@ -74,7 +112,11 @@ async def photo_add_background(
     color = hex_to_rgb(color)
     color = (color[2], color[1], color[0])
 
-    result_image = add_background(img, bgr=color).astype(np.uint8)
+    result_image = add_background(
+        img,
+        bgr=color,
+        mode=render_choice[render],
+    ).astype(np.uint8)
 
     if kb:
         result_image = cv2.cvtColor(result_image, cv2.COLOR_RGB2BGR)
@@ -83,7 +125,6 @@ async def photo_add_background(
         result_image_base64 = numpy_2_base64(result_image)
 
     # try:
-
     result_messgae = {
         "status": True,
         "image_base64": result_image_base64,

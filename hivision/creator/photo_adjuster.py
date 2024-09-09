@@ -21,7 +21,7 @@ def adjust_photo(ctx: Context):
     standard_size = ctx.params.size
     params = ctx.params
     x, y = face_rect[0], face_rect[1]
-    w, h = face_rect[2] - x + 1, face_rect[3] - y + 1
+    w, h = face_rect[2], face_rect[3]
     height, width = ctx.processing_image.shape[:2]
     width_height_ratio = standard_size[0] / standard_size[1]
     # Step2. 计算高级参数

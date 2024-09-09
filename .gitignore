@@ -1,10 +1,11 @@
 *.pyc
-**/__pycache__
+**/__pycache__/
 .idea
 .vscode/*
 .DS_Store
-app/output/*.jpg
+.env
 demo/kb_output/*.jpg
+demo/kb_output/*.png
 # build outputs
 dist
 build
@@ -12,5 +13,8 @@ build
 *.pth
 *.pt
 *.onnx
+*.mnn
 test/temp/*
 !test/temp/.gitkeep
+
+.python-version

@@ -1,16 +1,13 @@
 import os
 import gradio as gr
 from hivision import IDCreator
-from hivision.error import FaceError
+from hivision.error import FaceError, APIError
 from hivision.utils import add_background, resize_image_to_kb
 from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
-from hivision.creator.human_matting import (
-    extract_human_modnet_photographic_portrait_matting,
-    extract_human,
-)
+from hivision.creator.choose_handler import choose_handler
 import pathlib
 import numpy as np
 from demo.utils import csv_to_size_list
@@ -26,12 +23,16 @@ color_list_dict_CN = {
     "蓝色": (86, 140, 212),
     "白色": (255, 255, 255),
     "红色": (233, 51, 35),
+    "黑色": (0, 0, 0),
+    "深蓝色": (69, 98, 148),
 }
 
 color_list_dict_EN = {
     "Blue": (86, 140, 212),
     "White": (255, 255, 255),
     "Red": (233, 51, 35),
+    "Black": (0, 0, 0),
+    "Dark blue": (69, 98, 148),
 }
 
 
@@ -62,11 +63,15 @@ def idphoto_inference(
     matting_model_option,
     watermark_option,
     watermark_text,
+    face_detect_option,
     head_measure_ratio=0.2,
-    head_height_ratio=0.45,
+    # head_height_ratio=0.45,
     top_distance_max=0.12,
     top_distance_min=0.10,
 ):
+
+    top_distance_min = top_distance_max - 0.02
+
     idphoto_json = {
         "size_mode": mode_option,
         "color_mode": color_option,
@@ -81,7 +86,7 @@ def idphoto_inference(
             "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.": "宽度应不大于长度；长宽不应小于 100，大于 1800",
             "Custom Color": "自定义底色",
             "Custom": "自定义",
-            "The number of faces is not equal to 1": "人脸数量不等于 1",
+            "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author.": "人脸数量不等于 1，请上传单张人脸的图像。如果实际人脸数量为 1，可能是检测模型精度的问题，请在左边更换人脸检测模型或给作者提Github Issue。",
             "Solid Color": "纯色",
             "Up-Down Gradient (White)": "上下渐变 (白)",
             "Center Gradient (White)": "中心渐变 (白)",
@@ -95,7 +100,7 @@ def idphoto_inference(
             "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.": "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.",
             "Custom Color": "Custom Color",
             "Custom": "Custom",
-            "The number of faces is not equal to 1": "The number of faces is not equal to 1",
+            "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author.": "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author.",
             "Solid Color": "Solid Color",
             "Up-Down Gradient (White)": "Up-Down Gradient (White)",
             "Center Gradient (White)": "Center Gradient (White)",
@@ -154,10 +159,7 @@ def idphoto_inference(
         idphoto_json["custom_image_kb"] = None
 
     creator = IDCreator()
-    if matting_model_option == "modnet_photographic_portrait_matting":
-        creator.matting_handler = extract_human_modnet_photographic_portrait_matting
-    else:
-        creator.matting_handler = extract_human
+    choose_handler(creator, matting_model_option, face_detect_option)
 
     change_bg_only = idphoto_json["size_mode"] in ["只换底", "Only Change Background"]
     # 生成证件照
@@ -167,19 +169,33 @@ def idphoto_inference(
             change_bg_only=change_bg_only,
             size=idphoto_json["size"],
             head_measure_ratio=head_measure_ratio,
-            head_height_ratio=head_height_ratio,
+            # head_height_ratio=head_height_ratio,
+            head_top_range=(top_distance_max, top_distance_min),
         )
     except FaceError:
         result_message = {
             img_output_standard: gr.update(value=None),
             img_output_standard_hd: gr.update(value=None),
+            img_output_layout: gr.update(visible=False),
             notification: gr.update(
-                value=text_lang_map[language]["The number of faces is not equal to 1"],
+                value=text_lang_map[language][
+                    "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author."
+                ],
+                visible=True,
+            ),
+        }
+    except APIError as e:
+        result_message = {
+            img_output_standard: gr.update(value=None),
+            img_output_standard_hd: gr.update(value=None),
+            img_output_layout: gr.update(visible=False),
+            notification: gr.update(
+                value=f"Please make sure you have correctly set up the Face++ API Key and Secret.\nAPI Error\nStatus Code is {e.status_code}\nPossible errors are: {e}\n",
                 visible=True,
             ),
         }
     else:
-        (result_image_hd, result_image_standard, _, _) = result
+        (result_image_standard, result_image_hd, _, _) = result
         if idphoto_json["render_mode"] == text_lang_map[language]["Solid Color"]:
             result_image_standard = np.uint8(
                 add_background(result_image_standard, bgr=idphoto_json["color_bgr"])
@@ -334,6 +350,12 @@ if __name__ == "__main__":
     argparser.add_argument(
         "--host", type=str, default="127.0.0.1", help="The host of the server"
     )
+    argparser.add_argument(
+        "--root_path",
+        type=str,
+        default=None,
+        help="The root path of the server, default is None (='/'), e.g. '/myapp'",
+    )
 
     args = argparser.parse_args()
 
@@ -342,8 +364,14 @@ if __name__ == "__main__":
     matting_model_list = [
         os.path.splitext(file)[0]
         for file in os.listdir(os.path.join(root_dir, "hivision/creator/weights"))
-        if file.endswith(".onnx")
+        if file.endswith(".onnx") or file.endswith(".mnn")
     ]
+    DEFAULT_MATTING_MODEL = "modnet_photographic_portrait_matting"
+    if DEFAULT_MATTING_MODEL in matting_model_list:
+        matting_model_list.remove(DEFAULT_MATTING_MODEL)
+        matting_model_list.insert(0, DEFAULT_MATTING_MODEL)
+
+    face_detect_model_list = ["mtcnn", "face++ (联网API)"]
 
     size_mode_CN = ["尺寸列表", "只换底", "自定义尺寸"]
     size_mode_EN = ["Size List", "Only Change Background", "Custom Size"]
@@ -351,8 +379,8 @@ if __name__ == "__main__":
     size_list_CN = list(size_list_dict_CN.keys())
     size_list_EN = list(size_list_dict_EN.keys())
 
-    colors_CN = ["蓝色", "白色", "红色", "自定义底色"]
-    colors_EN = ["Blue", "White", "Red", "Custom Color"]
+    colors_CN = ["蓝色", "白色", "红色", "黑色", "深蓝色", "自定义底色"]
+    colors_EN = ["Blue", "White", "Red", "Black", "Dark blue", "Custom Color"]
 
     watermark_CN = ["不添加", "添加"]
     watermark_EN = ["Not Add", "Add"]
@@ -390,7 +418,7 @@ if __name__ == "__main__":
             content = f.read()
         return content
 
-    demo = gr.Blocks(css=css)
+    demo = gr.Blocks(title="HivisionIDPhotos", css=css)
 
     with demo:
         gr.HTML(load_description(os.path.join(root_dir, "assets/title.md")))
@@ -406,47 +434,62 @@ if __name__ == "__main__":
                         value="中文",
                         elem_id="language",
                     )
+                    face_detect_model_options = gr.Dropdown(
+                        choices=face_detect_model_list,
+                        label="人脸检测模型",
+                        value=face_detect_model_list[0],
+                        elem_id="matting_model",
+                    )
                     matting_model_options = gr.Dropdown(
                         choices=matting_model_list,
-                        label="Matting Model",
-                        value="hivision_modnet",
+                        label="抠图模型",
+                        value=matting_model_list[0],
                         elem_id="matting_model",
                     )
 
-                mode_options = gr.Radio(
-                    choices=size_mode_CN,
-                    label="证件照尺寸选项",
-                    value="尺寸列表",
-                    elem_id="size",
-                )
-
-                # 预设尺寸下拉菜单
-                with gr.Row(visible=True) as size_list_row:
-                    size_list_options = gr.Dropdown(
-                        choices=size_list_CN,
-                        label="预设尺寸",
-                        value=size_list_CN[0],
-                        elem_id="size_list",
+                with gr.Tab("核心参数") as key_parameter_tab:
+                    mode_options = gr.Radio(
+                        choices=size_mode_CN,
+                        label="证件照尺寸选项",
+                        value="尺寸列表",
+                        elem_id="size",
                     )
 
-                with gr.Row(visible=False) as custom_size:
-                    custom_size_height = gr.Number(
-                        value=413, label="height", interactive=True
-                    )
-                    custom_size_wdith = gr.Number(
-                        value=295, label="width", interactive=True
+                    # 预设尺寸下拉菜单
+                    with gr.Row(visible=True) as size_list_row:
+                        size_list_options = gr.Dropdown(
+                            choices=size_list_CN,
+                            label="预设尺寸",
+                            value=size_list_CN[0],
+                            elem_id="size_list",
+                        )
+
+                    with gr.Row(visible=False) as custom_size:
+                        custom_size_height = gr.Number(
+                            value=413, label="height", interactive=True
+                        )
+                        custom_size_wdith = gr.Number(
+                            value=295, label="width", interactive=True
+                        )
+
+                    # 左：背景色选项
+                    color_options = gr.Radio(
+                        choices=colors_CN, label="背景色", value="蓝色", elem_id="color"
                     )
 
-                # 左：背景色选项
-                color_options = gr.Radio(
-                    choices=colors_CN, label="背景色", value="蓝色", elem_id="color"
-                )
+                    # 左：如果选择「自定义底色」，显示 RGB 输入框
+                    with gr.Row(visible=False) as custom_color:
+                        custom_color_R = gr.Number(value=0, label="R", interactive=True)
+                        custom_color_G = gr.Number(value=0, label="G", interactive=True)
+                        custom_color_B = gr.Number(value=0, label="B", interactive=True)
 
-                # 左：如果选择「自定义底色」，显示 RGB 输入框
-                with gr.Row(visible=False) as custom_color:
-                    custom_color_R = gr.Number(value=0, label="R", interactive=True)
-                    custom_color_G = gr.Number(value=0, label="G", interactive=True)
-                    custom_color_B = gr.Number(value=0, label="B", interactive=True)
+                    # 左：渲染方式选项
+                    render_options = gr.Radio(
+                        choices=render_CN,
+                        label="渲染方式",
+                        value="纯色",
+                        elem_id="render",
+                    )
 
                 # 左: 水印
                 watermark_options = gr.Radio(
@@ -494,6 +537,43 @@ if __name__ == "__main__":
                         interactive=True,
                     )
 
+                with gr.Tab("高级参数") as advance_parameter_tab:
+                    # 面部占照片总比例
+                    head_measure_ratio_option = gr.Slider(
+                        minimum=0.1,
+                        maximum=0.5,
+                        value=0.2,
+                        step=0.01,
+                        label="面部比例",
+                        interactive=True,
+                    )
+                    # 人像头顶距离照片顶部的比例
+                    top_distance_option = gr.Slider(
+                        minimum=0.02,
+                        maximum=0.5,
+                        value=0.12,
+                        step=0.01,
+                        label="头距顶距离",
+                        interactive=True,
+                    )
+
+                    # 输出照片的KB值
+                    image_kb_options = gr.Radio(
+                        choices=image_kb_CN,
+                        label="设置 KB 大小（结果在右边最底的组件下载）",
+                        value="不设置",
+                        elem_id="image_kb",
+                    )
+                    # 自定义 KB 大小，滑动条，最小 10KB，最大 200KB
+                    with gr.Row(visible=False) as custom_image_kb:
+                        custom_image_kb_size = gr.Slider(
+                            minimum=10,
+                            maximum=1000,
+                            value=50,
+                            label="KB 大小",
+                            interactive=True,
+                        )
+
                 img_but = gr.Button("开始制作")
 
                 # 案例图片
@@ -513,9 +593,15 @@ if __name__ == "__main__":
             with gr.Column():
                 notification = gr.Text(label="状态", visible=False)
                 with gr.Row():
-                    img_output_standard = gr.Image(label="标准照", height=350)
-                    img_output_standard_hd = gr.Image(label="高清照", height=350)
-                img_output_layout = gr.Image(label="六寸排版照", height=350)
+                    img_output_standard = gr.Image(
+                        label="标准照", height=350, format="jpeg"
+                    )
+                    img_output_standard_hd = gr.Image(
+                        label="高清照", height=350, format="jpeg"
+                    )
+                img_output_layout = gr.Image(
+                    label="六寸排版照", height=350, format="jpeg"
+                )
                 file_download = gr.File(label="下载调整 KB 大小后的照片", visible=False)
 
             # ---------------- 设置隐藏/显示组件 ----------------
@@ -549,12 +635,18 @@ if __name__ == "__main__":
                             choices=image_kb_CN,
                             value="不设置",
                         ),
+                        matting_model_options: gr.update(label="抠图模型"),
+                        face_detect_model_options: gr.update(label="人脸检测模型"),
                         custom_image_kb_size: gr.update(label="KB 大小"),
                         notification: gr.update(label="状态"),
                         img_output_standard: gr.update(label="标准照"),
                         img_output_standard_hd: gr.update(label="高清照"),
                         img_output_layout: gr.update(label="六寸排版照"),
                         file_download: gr.update(label="下载调整 KB 大小后的照片"),
+                        head_measure_ratio_option: gr.update(label="面部比例"),
+                        top_distance_option: gr.update(label="头距顶距离"),
+                        key_parameter_tab: gr.update(label="核心参数"),
+                        advance_parameter_tab: gr.update(label="高级参数"),
                     }
 
                 elif language == "English":
@@ -585,6 +677,8 @@ if __name__ == "__main__":
                             choices=image_kb_EN,
                             value="Not Set",
                         ),
+                        matting_model_options: gr.update(label="Matting model"),
+                        face_detect_model_options: gr.update(label="Face detect model"),
                         custom_image_kb_size: gr.update(label="KB size"),
                         notification: gr.update(label="Status"),
                         img_output_standard: gr.update(label="Standard photo"),
@@ -593,6 +687,10 @@ if __name__ == "__main__":
                         file_download: gr.update(
                             label="Download the photo after adjusting the KB size"
                         ),
+                        head_measure_ratio_option: gr.update(label="Head ratio"),
+                        top_distance_option: gr.update(label="Top distance"),
+                        key_parameter_tab: gr.update(label="Key Parameters"),
+                        advance_parameter_tab: gr.update(label="Advance Parameters"),
                     }
 
             def change_color(colors):
@@ -641,12 +739,18 @@ if __name__ == "__main__":
                 img_but,
                 render_options,
                 image_kb_options,
+                matting_model_options,
+                face_detect_model_options,
                 custom_image_kb_size,
                 notification,
                 img_output_standard,
                 img_output_standard_hd,
                 img_output_layout,
                 file_download,
+                head_measure_ratio_option,
+                top_distance_option,
+                key_parameter_tab,
+                advance_parameter_tab,
             ],
         )
 
@@ -683,6 +787,9 @@ if __name__ == "__main__":
                 matting_model_options,
                 watermark_options,
                 watermark_text_options,
+                face_detect_model_options,
+                head_measure_ratio_option,
+                top_distance_option,
             ],
             outputs=[
                 img_output_standard,
@@ -693,5 +800,10 @@ if __name__ == "__main__":
             ],
         )
 
-    demo.launch(server_name=args.host, server_port=args.port)
-
+    demo.launch(
+        server_name=args.host,
+        server_port=args.port,
+        show_api=False,
+        favicon_path=os.path.join(root_dir, "assets/hivision_logo.png"),
+        root_path=args.root_path,
+    )
