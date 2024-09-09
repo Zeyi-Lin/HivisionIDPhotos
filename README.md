@@ -23,11 +23,9 @@
 
 👋 加入我们的[微信群][wechat-link]
 
-<br>
-
 </div>
 
-> **项目**：
+> **相关项目**：
 >
 > - [SwanLab](https://github.com/SwanHubX/SwanLab)：训练人像抠图模型全程用它来分析和监控，以及和实验室同学协作交流，大幅提升了训练效率。
 
