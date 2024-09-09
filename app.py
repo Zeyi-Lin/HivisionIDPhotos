@@ -248,16 +248,28 @@ def idphoto_inference(
                 input_width=idphoto_json["size"][1],
             )
 
-            result_layout_image = gr.update(
-                value=generate_layout_image(
-                    add_watermark(result_image_standard, watermark_text),
-                    typography_arr,
-                    typography_rotate,
-                    height=idphoto_json["size"][0],
-                    width=idphoto_json["size"][1],
-                ),
-                visible=True,
-            )
+            if watermark_option == "添加" or watermark_option == "Add":
+                result_layout_image = gr.update(
+                    value=generate_layout_image(
+                        add_watermark(result_image_standard, watermark_text),
+                        typography_arr,
+                        typography_rotate,
+                        height=idphoto_json["size"][0],
+                        width=idphoto_json["size"][1],
+                    ),
+                    visible=True,
+                )
+            else:
+                result_layout_image = gr.update(
+                    value=generate_layout_image(
+                        result_image_standard,
+                        typography_arr,
+                        typography_rotate,
+                        height=idphoto_json["size"][0],
+                        width=idphoto_json["size"][1],
+                    ),
+                    visible=True,
+                )
 
         # 如果输出 KB 大小选择的是自定义
         if idphoto_json["custom_image_kb"]:
@@ -299,14 +311,15 @@ def idphoto_inference(
 
     return result_message
 
+
 # Add this function to handle watermark addition
 def add_watermark(image, text):
     if not text.strip():
         return image
 
     img = Image.fromarray(image)
-    img = img.convert('RGBA')
-    
+    img = img.convert("RGBA")
+
     font_size = 30
     try:
         font = ImageFont.truetype("arial.ttf", font_size)
@@ -319,13 +332,15 @@ def add_watermark(image, text):
     text_height = bbox[3] - bbox[1]
 
     # 创建一个新的图像来绘制倾斜的水印
-    watermark = Image.new('RGBA', (img.width * 3, img.height * 3), (0, 0, 0, 0))
+    watermark = Image.new("RGBA", (img.width * 3, img.height * 3), (0, 0, 0, 0))
     watermark_draw = ImageDraw.Draw(watermark)
 
     # 在更大的画布上重复绘制水印文本
     for y in range(-img.height, watermark.height, text_height * 3):
         for x in range(-img.width, watermark.width, text_width * 3):
-            watermark_draw.text((x, y), text, font=font, fill=(255, 255, 255, 64))  # 半透明白色 (255, 255, 255, 64)
+            watermark_draw.text(
+                (x, y), text, font=font, fill=(255, 255, 255, 64)
+            )  # 半透明白色 (255, 255, 255, 64)
 
     # 旋转水印
     rotated_watermark = watermark.rotate(45, expand=True)
@@ -335,12 +350,15 @@ def add_watermark(image, text):
     crop_top = (rotated_watermark.height - img.height) // 2
     crop_right = crop_left + img.width
     crop_bottom = crop_top + img.height
-    cropped_watermark = rotated_watermark.crop((crop_left, crop_top, crop_right, crop_bottom))
+    cropped_watermark = rotated_watermark.crop(
+        (crop_left, crop_top, crop_right, crop_bottom)
+    )
 
     # 将水印叠加到原始图像上
     img = Image.alpha_composite(img, cropped_watermark)
 
-    return np.array(img.convert('RGB'))
+    return np.array(img.convert("RGB"))
+
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
@@ -491,52 +509,6 @@ if __name__ == "__main__":
                         elem_id="render",
                     )
 
-                # 左: 水印
-                watermark_options = gr.Radio(
-                    choices=watermark_CN, label="水印", value="不添加", elem_id="watermark"
-                )
-
-                # 左：水印文字
-                watermark_text_options = gr.Text(
-                    max_length=5,
-                    label="水印文字(最多5)", value="", elem_id="watermark_text", visible=False
-                )
-
-                def update_watermark_text_visibility(choice):
-                    return gr.update(visible=choice == "添加")
-
-                watermark_options.change(
-                    fn=update_watermark_text_visibility,
-                    inputs=[watermark_options],
-                    outputs=[watermark_text_options]
-                )
-
-                # 左：渲染方式选项
-                render_options = gr.Radio(
-                    choices=render_CN,
-                    label="渲染方式",
-                    value="纯色",
-                    elem_id="render",
-                )
-
-                # 左：输出 KB 大小选项
-                image_kb_options = gr.Radio(
-                    choices=image_kb_CN,
-                    label="设置 KB 大小（结果在右边最底的组件下载）",
-                    value="不设置",
-                    elem_id="image_kb",
-                )
-
-                # 自定义 KB 大小，滑动条，最小 10KB，最大 200KB
-                with gr.Row(visible=False) as custom_image_kb:
-                    custom_image_kb_size = gr.Slider(
-                        minimum=10,
-                        maximum=1000,
-                        value=50,
-                        label="KB 大小",
-                        interactive=True,
-                    )
-
                 with gr.Tab("高级参数") as advance_parameter_tab:
                     # 面部占照片总比例
                     head_measure_ratio_option = gr.Slider(
@@ -573,6 +545,33 @@ if __name__ == "__main__":
                             label="KB 大小",
                             interactive=True,
                         )
+
+                with gr.Tab("水印") as key_parameter_tab:
+                    # 左: 水印
+                    watermark_options = gr.Radio(
+                        choices=watermark_CN,
+                        label="水印",
+                        value="不添加",
+                        elem_id="watermark",
+                    )
+
+                    # 左：水印文字
+                    watermark_text_options = gr.Text(
+                        max_length=5,
+                        label="水印文字(最多5)",
+                        value="",
+                        elem_id="watermark_text",
+                        visible=False,
+                    )
+
+                    def update_watermark_text_visibility(choice):
+                        return gr.update(visible=choice == "添加")
+
+                    watermark_options.change(
+                        fn=update_watermark_text_visibility,
+                        inputs=[watermark_options],
+                        outputs=[watermark_text_options],
+                    )
 
                 img_but = gr.Button("开始制作")
 
