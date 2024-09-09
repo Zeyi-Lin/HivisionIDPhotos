@@ -192,13 +192,15 @@ python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --widt
 
 ## 2. 人像抠图
 
+输入 1 张照片，获得 1张 4 通道透明 png
+
 ```python
 python inference.py -t human_matting -i demo/images/test.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
 ```
 
 ## 3. 透明图增加底色
 
-输入 1 张 4 通道透明 png，获得 1 张增加了底色的图像）
+输入 1 张 4 通道透明 png，获得 1 张增加了底色的 3通道图像
 
 ```python
 python inference.py -t add_background -i ./idphoto.png -o ./idphoto_ab.jpg  -c 4f83ce -k 30 -r 1
