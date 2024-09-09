@@ -128,6 +128,8 @@ def generate_layout_image(
         input_image = cv2.resize(input_image, (width, height))
     if typography_rotate:
         input_image = cv2.transpose(input_image)
+        input_image = cv2.flip(input_image, 0)  # 0 表示垂直镜像
+
         height, width = width, height
     for arr in typography_arr:
         locate_x, locate_y = arr[0], arr[1]
