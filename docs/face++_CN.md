@@ -26,7 +26,7 @@
     2. 输入以下命令并按回车：
        ```cmd
        set FACE_PLUS_API_KEY="您的API_KEY"
-       set FACE_PLUS_API_KEY="您的API_SECRET"
+       set FACE_PLUS_API_SECRET="您的API_SECRET"
        ```
 
 - **Linux / macOS**:
@@ -34,7 +34,7 @@
     2. 输入以下命令并按回车：
        ```bash
        export FACE_PLUS_API_KEY="你的API_KEY"
-       export FACE_PLUS_API_KEY="你的API_SECRET"
+       export FACE_PLUS_API_SECRET="你的API_SECRET"
        ```
 
 > **注意**: 您可能需要在启动应用程序之前运行上述命令，或者将这些命令添加到您的 shell 配置文件（例如 `.bashrc` 或 `.bash_profile`）中，以便每次启动终端时自动加载。
