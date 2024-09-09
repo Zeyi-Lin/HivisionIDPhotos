@@ -18,7 +18,7 @@
 在请求 API 之前，请先运行后端服务
 
 ```bash
-python delopy_api.py
+python deploy_api.py
 ```
 
 <br>

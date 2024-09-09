@@ -18,7 +18,7 @@
 Before making API requests, please start the backend service
 
 ```bash
-python delopy_api.py
+python deploy_api.py
 ```
 
 <br>
