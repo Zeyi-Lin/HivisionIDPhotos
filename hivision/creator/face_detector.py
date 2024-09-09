@@ -11,12 +11,14 @@ from mtcnnruntime import MTCNN
 from .context import Context
 from hivision.error import FaceError, APIError
 from hivision.utils import resize_image_to_kb_base64
+from hivision.creator.retinaface import retinaface_detect_faces
 import requests
 import cv2
 import os
 
 
 mtcnn = None
+base_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 def detect_face_mtcnn(ctx: Context, scale: int = 2):
@@ -124,3 +126,25 @@ def detect_face_face_plusplus(ctx: Context):
             f"Face++ Status code {status_code} Request entity too large: The image exceeds the 2MB limit.",
             status_code,
         )
+
+
+def detect_face_retinaface(ctx: Context):
+    """
+    基于RetinaFace模型的人脸检测处理器，只进行人脸数量的检测
+    :param ctx: 上下文，此时已获取到原始图和抠图结果，但是我们只需要原始图
+    :raise FaceError: 人脸检测错误，多个人脸或者没有人脸
+    """
+    faces_dets = retinaface_detect_faces(
+        ctx.origin_image,
+        os.path.join(base_dir, "retinaface/weights/retinaface-resnet50.onnx"),
+    )
+    faces_num = len(faces_dets)
+    if faces_num != 1:
+        raise FaceError("Expected 1 face, but got {}".format(faces_num), faces_num)
+    face_det = faces_dets[0]
+    ctx.face = (
+        face_det[0],
+        face_det[1],
+        face_det[2] - face_det[0] + 1,
+        face_det[3] - face_det[1] + 1,
+    )

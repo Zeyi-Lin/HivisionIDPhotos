@@ -1,10 +1,8 @@
-import gradio as gr
 import numpy as np
 import cv2
 import onnxruntime as ort
-import time
-from hivision.plugin.retinaface.box_utils import decode, decode_landm
-from hivision.plugin.retinaface.prior_box import PriorBox
+from hivision.creator.retinaface.box_utils import decode, decode_landm
+from hivision.creator.retinaface.prior_box import PriorBox
 import argparse
 
 
@@ -71,7 +69,7 @@ def load_model_ort(model_path):
     return ort_session
 
 
-def detect_faces(image, model_path):
+def retinaface_detect_faces(image, model_path: str):
     cfg = {
         "name": "Resnet50",
         "min_sizes": [[16, 32], [64, 128], [256, 512]],
@@ -111,7 +109,7 @@ def detect_faces(image, model_path):
     inputs = {"input": img}
     loc, conf, landms = retinaface.run(None, inputs)
 
-    tic = time.time()
+    # tic = time.time()
     priorbox = PriorBox(cfg, image_size=(im_height, im_width))
     priors = priorbox.forward()
 
@@ -163,22 +161,27 @@ def detect_faces(image, model_path):
     landms = landms[: args.keep_top_k, :]
 
     dets = np.concatenate((dets, landms), axis=1)
-    print("post processing time: {:.4f}s".format(time.time() - tic))
+    # print("post processing time: {:.4f}s".format(time.time() - tic))
 
-    return len(dets)
+    return dets
 
 
-# Create Gradio interface
-iface = gr.Interface(
-    fn=detect_faces,
-    inputs=[
-        gr.Image(type="numpy", label="上传图片", height=400),  # Set the height to 400
-        gr.Textbox(value="./FaceDetector.onnx", label="ONNX模型路径"),
-    ],
-    outputs=gr.Number(label="检测到的人脸数量"),
-    title="人脸检测",
-    description="上传图片并提供ONNX模型路径以检测人脸数量。",
-)
+if __name__ == "__main__":
+    import gradio as gr
 
-# Launch the Gradio app
-iface.launch()
+    # Create Gradio interface
+    iface = gr.Interface(
+        fn=retinaface_detect_faces,
+        inputs=[
+            gr.Image(
+                type="numpy", label="上传图片", height=400
+            ),  # Set the height to 400
+            gr.Textbox(value="./FaceDetector.onnx", label="ONNX模型路径"),
+        ],
+        outputs=gr.Number(label="检测到的人脸数量"),
+        title="人脸检测",
+        description="上传图片并提供ONNX模型路径以检测人脸数量。",
+    )
+
+    # Launch the Gradio app
+    iface.launch()
