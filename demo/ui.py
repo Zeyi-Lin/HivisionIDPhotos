@@ -1,6 +1,8 @@
 import gradio as gr
 import os
 import pathlib
+from demo.locals import LOCALES
+from hivision.creator.choose_handler import HUMAN_MATTING_MODELS, FACE_DETECT_MODELS
 
 
 def load_description(fp):
@@ -9,31 +11,14 @@ def load_description(fp):
     return content
 
 
-def create_ui(processor, root_dir):
-    size_list_dict_CN, size_list_dict_EN, color_list_dict_CN, color_list_dict_EN = (
-        processor.size_list_dict_CN,
-        processor.size_list_dict_EN,
-        processor.color_list_dict_CN,
-        processor.color_list_dict_EN,
-    )
+def create_ui(processor, root_dir, human_matting_models: list):
+    DEFAULT_LANG = "zh"
+    DEFAULT_HUMAN_MATTING_MODEL = "modnet_photographic_portrait_matting"
+    DEFAULT_FACE_DETECT_MODEL = "mtcnn"
 
-    size_mode_CN = ["尺寸列表", "只换底", "自定义尺寸"]
-    size_mode_EN = ["Size List", "Only Change Background", "Custom Size"]
-
-    size_list_CN = list(size_list_dict_CN.keys())
-    size_list_EN = list(size_list_dict_EN.keys())
-
-    colors_CN = ["蓝色", "白色", "红色", "黑色", "深蓝色", "自定义底色"]
-    colors_EN = ["Blue", "White", "Red", "Black", "Dark blue", "Custom Color"]
-
-    watermark_CN = ["不添加", "添加"]
-    watermark_EN = ["Not Add", "Add"]
-
-    render_CN = ["纯色", "上下渐变 (白)", "中心渐变 (白)"]
-    render_EN = ["Solid Color", "Up-Down Gradient (White)", "Center Gradient (White)"]
-
-    image_kb_CN = ["不设置", "自定义"]
-    image_kb_EN = ["Not Set", "Custom"]
+    if DEFAULT_HUMAN_MATTING_MODEL in human_matting_models:
+        human_matting_models.remove(DEFAULT_HUMAN_MATTING_MODEL)
+        human_matting_models.insert(0, DEFAULT_HUMAN_MATTING_MODEL)
 
     css = """
         #col-left {
@@ -68,30 +53,28 @@ def create_ui(processor, root_dir):
 
                 with gr.Row():
                     # 语言选择器
-                    language = ["中文", "English"]
+                    language = ["zh", "en"]
                     language_options = gr.Dropdown(
                         choices=language,
                         label="Language",
-                        value="中文",
-                        elem_id="language",
+                        value=DEFAULT_LANG,
                     )
 
                     face_detect_model_options = gr.Dropdown(
-                        choices=["mtcnn", "face++ (联网API)"],
-                        label="人脸检测模型",
+                        choices=FACE_DETECT_MODELS,
+                        label=LOCALES["face_model"][DEFAULT_LANG]["label"],
                         value="mtcnn",
-                        elem_id="matting_model",
                     )
+
                     matting_model_options = gr.Dropdown(
-                        choices=["modnet_photographic_portrait_matting"],
-                        label="抠图模型",
+                        choices=human_matting_models,
+                        label=LOCALES["matting_model"][DEFAULT_LANG]["label"],
                         value="modnet_photographic_portrait_matting",
-                        elem_id="matting_model",
                     )
 
                 with gr.Tab("核心参数") as key_parameter_tab:
                     mode_options = gr.Radio(
-                        choices=size_mode_CN,
+                        choices=LOCALES["size_mode"][DEFAULT_LANG]["choices"],
                         label="证件照尺寸选项",
                         value="尺寸列表",
                         elem_id="size",
@@ -99,9 +82,9 @@ def create_ui(processor, root_dir):
 
                     with gr.Row(visible=True) as size_list_row:
                         size_list_options = gr.Dropdown(
-                            choices=size_list_CN,
+                            choices=LOCALES["size_list"][DEFAULT_LANG]["choices"],
                             label="预设尺寸",
-                            value=size_list_CN[0],
+                            value=LOCALES["size_list"][DEFAULT_LANG]["choices"][0],
                             elem_id="size_list",
                         )
 
@@ -114,7 +97,9 @@ def create_ui(processor, root_dir):
                         )
 
                     color_options = gr.Radio(
-                        choices=colors_CN, label="背景色", value="蓝色", elem_id="color"
+                        choices=LOCALES["bg_color"][DEFAULT_LANG]["choices"],
+                        label=LOCALES["bg_color"][DEFAULT_LANG]["label"],
+                        value=LOCALES["bg_color"][DEFAULT_LANG]["choices"][0],
                     )
 
                     with gr.Row(visible=False) as custom_color:
@@ -123,19 +108,20 @@ def create_ui(processor, root_dir):
                         custom_color_B = gr.Number(value=0, label="B", interactive=True)
 
                     render_options = gr.Radio(
-                        choices=render_CN,
-                        label="渲染方式",
-                        value="纯色",
-                        elem_id="render",
+                        choices=LOCALES["render"][DEFAULT_LANG]["choices"],
+                        label=LOCALES["render"][DEFAULT_LANG]["label"],
+                        value=LOCALES["render"][DEFAULT_LANG]["choices"][0],
                     )
 
-                with gr.Tab("高级参数") as advance_parameter_tab:
+                with gr.Tab(
+                    LOCALES["advance_param"][DEFAULT_LANG]["label"]
+                ) as advance_parameter_tab:
                     head_measure_ratio_option = gr.Slider(
                         minimum=0.1,
                         maximum=0.5,
                         value=0.2,
                         step=0.01,
-                        label="面部比例",
+                        label=LOCALES["head_measure_ratio"][DEFAULT_LANG]["label"],
                         interactive=True,
                     )
                     top_distance_option = gr.Slider(
@@ -143,15 +129,14 @@ def create_ui(processor, root_dir):
                         maximum=0.5,
                         value=0.12,
                         step=0.01,
-                        label="头距顶距离",
+                        label=LOCALES["top_distance"][DEFAULT_LANG]["label"],
                         interactive=True,
                     )
 
                     image_kb_options = gr.Radio(
-                        choices=image_kb_CN,
-                        label="设置 KB 大小（结果在右边最底的组件下载）",
-                        value="不设置",
-                        elem_id="image_kb",
+                        choices=LOCALES["image_kb"][DEFAULT_LANG]["choices"],
+                        label=LOCALES["image_kb"][DEFAULT_LANG]["label"],
+                        value=LOCALES["image_kb"][DEFAULT_LANG]["choices"][0],
                     )
 
                     with gr.Row(visible=False) as custom_image_kb:
@@ -159,29 +144,31 @@ def create_ui(processor, root_dir):
                             minimum=10,
                             maximum=1000,
                             value=50,
-                            label="KB 大小",
+                            label=LOCALES["image_kb_size"][DEFAULT_LANG]["label"],
                             interactive=True,
                         )
 
-                with gr.Tab("水印") as watermark_parameter_tab:
+                with gr.Tab(
+                    LOCALES["watermark_tab"][DEFAULT_LANG]["label"]
+                ) as watermark_parameter_tab:
                     watermark_options = gr.Radio(
-                        choices=watermark_CN,
-                        label="水印",
-                        value="不添加",
-                        elem_id="watermark",
+                        choices=LOCALES["watermark_switch"][DEFAULT_LANG]["choices"],
+                        label=LOCALES["watermark_switch"][DEFAULT_LANG]["label"],
+                        value=LOCALES["watermark_switch"][DEFAULT_LANG]["choices"][0],
                     )
 
                     with gr.Row():
                         watermark_text_options = gr.Text(
-                            max_length=10,
-                            label="水印文字",
-                            value="Hello",
-                            placeholder="请输入水印文字（最多10个字符）",
-                            elem_id="watermark_text",
+                            max_length=20,
+                            label=LOCALES["watermark_text"][DEFAULT_LANG]["label"],
+                            value=LOCALES["watermark_text"][DEFAULT_LANG]["value"],
+                            placeholder=LOCALES["watermark_text"][DEFAULT_LANG][
+                                "placeholder"
+                            ],
                             interactive=False,
                         )
                         watermark_text_color = gr.ColorPicker(
-                            label="水印颜色",
+                            label=LOCALES["watermark_color"][DEFAULT_LANG]["label"],
                             interactive=False,
                             value="#FFFFFF",
                         )
@@ -190,7 +177,7 @@ def create_ui(processor, root_dir):
                         minimum=10,
                         maximum=100,
                         value=20,
-                        label="文字大小",
+                        label=LOCALES["watermark_size"][DEFAULT_LANG]["label"],
                         interactive=False,
                         step=1,
                     )
@@ -199,7 +186,7 @@ def create_ui(processor, root_dir):
                         minimum=0,
                         maximum=1,
                         value=0.15,
-                        label="水印透明度",
+                        label=LOCALES["watermark_opacity"][DEFAULT_LANG]["label"],
                         interactive=False,
                         step=0.01,
                     )
@@ -208,7 +195,7 @@ def create_ui(processor, root_dir):
                         minimum=0,
                         maximum=360,
                         value=30,
-                        label="水印角度",
+                        label=LOCALES["watermark_angle"][DEFAULT_LANG]["label"],
                         interactive=False,
                         step=1,
                     )
@@ -217,19 +204,26 @@ def create_ui(processor, root_dir):
                         minimum=10,
                         maximum=200,
                         value=25,
-                        label="水印间距",
+                        label=LOCALES["watermark_space"][DEFAULT_LANG]["label"],
                         interactive=False,
                         step=1,
                     )
 
-                    def update_watermark_text_visibility(choice):
+                    def update_watermark_text_visibility(choice, language):
                         return [
-                            gr.update(interactive=(choice == "添加" or choice == "Add"))
+                            gr.update(
+                                interactive=(
+                                    choice
+                                    == LOCALES["watermark_switch"][language]["choices"][
+                                        1
+                                    ]
+                                )
+                            )
                         ] * 6
 
                     watermark_options.change(
                         fn=update_watermark_text_visibility,
-                        inputs=[watermark_options],
+                        inputs=[watermark_options, language_options],
                         outputs=[
                             watermark_text_options,
                             watermark_text_color,
@@ -240,7 +234,7 @@ def create_ui(processor, root_dir):
                         ],
                     )
 
-                img_but = gr.Button("开始制作")
+                img_but = gr.Button(LOCALES["button"][DEFAULT_LANG]["label"])
 
                 example_images = gr.Examples(
                     inputs=[img_input],
@@ -256,126 +250,122 @@ def create_ui(processor, root_dir):
 
             # ---------------- 右半边 UI ----------------
             with gr.Column():
-                notification = gr.Text(label="状态", visible=False)
+                notification = gr.Text(
+                    label=LOCALES["notification"][DEFAULT_LANG]["label"], visible=False
+                )
                 with gr.Row():
                     img_output_standard = gr.Image(
-                        label="标准照", height=350, format="jpeg"
+                        label=LOCALES["standard_photo"][DEFAULT_LANG]["label"],
+                        height=350,
+                        format="jpeg",
                     )
                     img_output_standard_hd = gr.Image(
-                        label="高清照", height=350, format="jpeg"
+                        label=LOCALES["hd_photo"][DEFAULT_LANG]["label"],
+                        height=350,
+                        format="jpeg",
                     )
                 img_output_layout = gr.Image(
-                    label="六寸排版照", height=350, format="jpeg"
+                    label=LOCALES["layout_photo"][DEFAULT_LANG]["label"],
+                    height=350,
+                    format="jpeg",
                 )
-                file_download = gr.File(label="下载调整 KB 大小后的照片", visible=False)
+                file_download = gr.File(
+                    label=LOCALES["download"][DEFAULT_LANG]["label"], visible=False
+                )
 
             # ---------------- 设置隐藏/显示组件 ----------------
             def change_language(language):
-                if language == "中文":
-                    return {
-                        size_list_options: gr.update(
-                            label="预设尺寸",
-                            choices=size_list_CN,
-                            value=size_list_CN[0],
-                        ),
-                        mode_options: gr.update(
-                            label="证件照尺寸选项",
-                            choices=size_mode_CN,
-                            value="尺寸列表",
-                        ),
-                        color_options: gr.update(
-                            label="背景色",
-                            choices=colors_CN,
-                            value="蓝色",
-                        ),
-                        img_but: gr.update(value="开始制作"),
-                        render_options: gr.update(
-                            label="渲染方式",
-                            choices=render_CN,
-                            value="纯色",
-                        ),
-                        image_kb_options: gr.update(
-                            label="设置 KB 大小（结果在右边最底的组件下载）",
-                            choices=image_kb_CN,
-                            value="不设置",
-                        ),
-                        matting_model_options: gr.update(label="抠图模型"),
-                        face_detect_model_options: gr.update(label="人脸检测模型"),
-                        custom_image_kb_size: gr.update(label="KB 大小"),
-                        notification: gr.update(label="状态"),
-                        img_output_standard: gr.update(label="标准照"),
-                        img_output_standard_hd: gr.update(label="高清照"),
-                        img_output_layout: gr.update(label="六寸排版照"),
-                        file_download: gr.update(label="下载调整 KB 大小后的照片"),
-                        head_measure_ratio_option: gr.update(label="面部比例"),
-                        top_distance_option: gr.update(label="头距顶距离"),
-                        key_parameter_tab: gr.update(label="核心参数"),
-                        advance_parameter_tab: gr.update(label="高级参数"),
-                        watermark_parameter_tab: gr.update(label="水印"),
-                        watermark_text_options: gr.update(label="水印文字"),
-                        watermark_text_color: gr.update(label="水印颜色"),
-                        watermark_text_size: gr.update(label="文字大小"),
-                        watermark_text_opacity: gr.update(label="水印透明度"),
-                        watermark_text_angle: gr.update(label="水印角度"),
-                        watermark_text_space: gr.update(label="水印间距"),
-                        watermark_options: gr.update(
-                            label="水印", value="不添加", choices=watermark_CN
-                        ),
-                    }
-
-                elif language == "English":
-                    return {
-                        size_list_options: gr.update(
-                            label="Default size",
-                            choices=size_list_EN,
-                            value=size_list_EN[0],
-                        ),
-                        mode_options: gr.update(
-                            label="ID photo size options",
-                            choices=size_mode_EN,
-                            value="Size List",
-                        ),
-                        color_options: gr.update(
-                            label="Background color",
-                            choices=colors_EN,
-                            value="Blue",
-                        ),
-                        img_but: gr.update(value="Start"),
-                        render_options: gr.update(
-                            label="Rendering mode",
-                            choices=render_EN,
-                            value="Solid Color",
-                        ),
-                        image_kb_options: gr.update(
-                            label="Set KB size (Download in the bottom right)",
-                            choices=image_kb_EN,
-                            value="Not Set",
-                        ),
-                        matting_model_options: gr.update(label="Matting model"),
-                        face_detect_model_options: gr.update(label="Face detect model"),
-                        custom_image_kb_size: gr.update(label="KB size"),
-                        notification: gr.update(label="Status"),
-                        img_output_standard: gr.update(label="Standard photo"),
-                        img_output_standard_hd: gr.update(label="HD photo"),
-                        img_output_layout: gr.update(label="Layout photo"),
-                        file_download: gr.update(
-                            label="Download the photo after adjusting the KB size"
-                        ),
-                        head_measure_ratio_option: gr.update(label="Head ratio"),
-                        top_distance_option: gr.update(label="Top distance"),
-                        key_parameter_tab: gr.update(label="Key Parameters"),
-                        advance_parameter_tab: gr.update(label="Advance Parameters"),
-                        watermark_parameter_tab: gr.update(label="Watermark"),
-                        watermark_text_options: gr.update(label="Text"),
-                        watermark_text_color: gr.update(label="Color"),
-                        watermark_text_size: gr.update(label="Size"),
-                        watermark_text_opacity: gr.update(label="Opacity"),
-                        watermark_text_angle: gr.update(label="Angle"),
-                        watermark_text_space: gr.update(label="Space"),
-                        watermark_options: gr.update(
-                            label="Watermark", value="Not Add", choices=watermark_EN
-                        ),
-                    }
+                return {
+                    face_detect_model_options: gr.update(
+                        label=LOCALES["face_model"][language]["label"]
+                    ),
+                    matting_model_options: gr.update(
+                        label=LOCALES["matting_model"][language]["label"]
+                    ),
+                    size_list_options: gr.update(
+                        label=LOCALES["size_list"][language]["label"],
+                        choices=LOCALES["size_list"][language]["choices"],
+                        value=LOCALES["size_list"][language]["choices"][0],
+                    ),
+                    mode_options: gr.update(
+                        label=LOCALES["size_mode"][language]["label"],
+                        choices=LOCALES["size_mode"][language]["choices"],
+                        value=LOCALES["size_mode"][language]["choices"][0],
+                    ),
+                    color_options: gr.update(
+                        label=LOCALES["bg_color"][language]["label"],
+                        choices=LOCALES["bg_color"][language]["choices"],
+                        value=LOCALES["bg_color"][language]["choices"][0],
+                    ),
+                    img_but: gr.update(value=LOCALES["button"][language]["label"]),
+                    render_options: gr.update(
+                        label=LOCALES["render"][language]["label"],
+                        choices=LOCALES["render"][language]["choices"],
+                        value=LOCALES["render"][language]["choices"][0],
+                    ),
+                    image_kb_options: gr.update(
+                        label=LOCALES["image_kb_size"][language]["label"],
+                        choices=LOCALES["image_kb"][language]["choices"],
+                        value=LOCALES["image_kb"][language]["choices"][0],
+                    ),
+                    custom_image_kb_size: gr.update(
+                        label=LOCALES["image_kb"][language]["label"]
+                    ),
+                    notification: gr.update(
+                        label=LOCALES["notification"][language]["label"]
+                    ),
+                    img_output_standard: gr.update(
+                        label=LOCALES["standard_photo"][language]["label"]
+                    ),
+                    img_output_standard_hd: gr.update(
+                        label=LOCALES["hd_photo"][language]["label"]
+                    ),
+                    img_output_layout: gr.update(
+                        label=LOCALES["layout_photo"][language]["label"]
+                    ),
+                    file_download: gr.update(
+                        label=LOCALES["download"][language]["label"]
+                    ),
+                    head_measure_ratio_option: gr.update(
+                        label=LOCALES["head_measure_ratio"][language]["label"]
+                    ),
+                    top_distance_option: gr.update(
+                        label=LOCALES["top_distance"][language]["label"]
+                    ),
+                    key_parameter_tab: gr.update(
+                        label=LOCALES["key_param"][language]["label"]
+                    ),
+                    advance_parameter_tab: gr.update(
+                        label=LOCALES["advance_param"][language]["label"]
+                    ),
+                    watermark_parameter_tab: gr.update(
+                        label=LOCALES["watermark_tab"][language]["label"]
+                    ),
+                    watermark_text_options: gr.update(
+                        label=LOCALES["watermark_text"][language]["label"],
+                        placeholder=LOCALES["watermark_text"][language]["placeholder"],
+                    ),
+                    watermark_text_color: gr.update(
+                        label=LOCALES["watermark_color"][language]["label"]
+                    ),
+                    watermark_text_size: gr.update(
+                        label=LOCALES["watermark_size"][language]["label"]
+                    ),
+                    watermark_text_opacity: gr.update(
+                        label=LOCALES["watermark_opacity"][language]["label"]
+                    ),
+                    watermark_text_angle: gr.update(
+                        label=LOCALES["watermark_angle"][language]["label"]
+                    ),
+                    watermark_text_space: gr.update(
+                        label=LOCALES["watermark_space"][language]["label"]
+                    ),
+                    watermark_options: gr.update(
+                        label=LOCALES["watermark_switch"][language]["label"],
+                        choices=LOCALES["watermark_switch"][language]["choices"],
+                        value=LOCALES["watermark_switch"][language]["choices"][0],
+                    ),
+                }
 
             def change_color(colors):
                 if colors == "自定义底色" or colors == "Custom Color":

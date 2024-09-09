@@ -11,21 +11,10 @@ from demo.utils import add_watermark, range_check
 import gradio as gr
 import os
 import time
+from demo.locals import LOCALES
 
 
 class IDPhotoProcessor:
-    def __init__(
-        self,
-        size_list_dict_CN,
-        size_list_dict_EN,
-        color_list_dict_CN,
-        color_list_dict_EN,
-    ):
-        self.size_list_dict_CN = size_list_dict_CN
-        self.size_list_dict_EN = size_list_dict_EN
-        self.color_list_dict_CN = color_list_dict_CN
-        self.color_list_dict_EN = color_list_dict_EN
-
     def process(
         self,
         input_image,
@@ -64,7 +53,7 @@ class IDPhotoProcessor:
         }
 
         text_lang_map = {
-            "中文": {
+            "zh": {
                 "Size List": "尺寸列表",
                 "Custom Size": "自定义尺寸",
                 "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.": "宽度应不大于长度；长宽不应小于 100，大于 1800",
@@ -78,7 +67,7 @@ class IDPhotoProcessor:
                 "Not Set": "不设置",
                 "Only Change Background": "只换底",
             },
-            "English": {
+            "en": {
                 "Size List": "Size List",
                 "Custom Size": "Custom Size",
                 "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.": "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.",
@@ -96,10 +85,9 @@ class IDPhotoProcessor:
 
         # 如果尺寸模式选择的是尺寸列表
         if idphoto_json["size_mode"] == text_lang_map[language]["Size List"]:
-            if language == "中文":
-                idphoto_json["size"] = self.size_list_dict_CN[size_list_option]
-            else:
-                idphoto_json["size"] = self.size_list_dict_EN[size_list_option]
+            idphoto_json["size"] = LOCALES["size_list"][language]["develop"][
+                size_list_option
+            ]
         # 如果尺寸模式选择的是自定义尺寸
         elif idphoto_json["size_mode"] == text_lang_map[language]["Custom Size"]:
             id_height = int(custom_size_height)
@@ -134,11 +122,9 @@ class IDPhotoProcessor:
                 range_check(custom_color_B),
             )
         else:
-            if language == "中文":
-                idphoto_json["color_bgr"] = self.color_list_dict_CN[color_option]
-            else:
-                idphoto_json["color_bgr"] = self.color_list_dict_EN[color_option]
-
+            idphoto_json["color_bgr"] = LOCALES["bg_color"][language]["develop"][
+                color_option
+            ]
         # 如果输出 KB 大小选择的是自定义
         if idphoto_json["image_kb_mode"] == text_lang_map[language]["Custom"]:
             idphoto_json["custom_image_kb"] = custom_image_kb

@@ -3,12 +3,8 @@ from demo.utils import csv_to_size_list
 
 
 def load_configuration(root_dir):
-    size_list_dict_CN = csv_to_size_list(
-        os.path.join(root_dir, "demo/size_list_CN.csv")
-    )
-    size_list_dict_EN = csv_to_size_list(
-        os.path.join(root_dir, "demo/size_list_EN.csv")
-    )
+    size_list_dict_CN = csv_to_size_list(os.path.join(root_dir, "size_list_CN.csv"))
+    size_list_dict_EN = csv_to_size_list(os.path.join(root_dir, "size_list_EN.csv"))
 
     color_list_dict_CN = {
         "蓝色": (86, 140, 212),

@@ -1,8 +1,20 @@
 import argparse
 import os
-from demo.config import load_configuration
 from demo.processor import IDPhotoProcessor
 from demo.ui import create_ui
+from hivision.creator.choose_handler import HUMAN_MATTING_MODELS
+
+root_dir = os.path.dirname(os.path.abspath(__file__))
+
+HUMAN_MATTING_MODELS_EXIST = [
+    os.path.splitext(file)[0]
+    for file in os.listdir(os.path.join(root_dir, "hivision/creator/weights"))
+    if file.endswith(".onnx") or file.endswith(".mnn")
+]
+# 在HUMAN_MATTING_MODELS中的模型才会被加载到Gradio中显示
+HUMAN_MATTING_MODELS = [
+    model for model in HUMAN_MATTING_MODELS if model in HUMAN_MATTING_MODELS_EXIST
+]
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
@@ -20,15 +32,9 @@ if __name__ == "__main__":
     )
     args = argparser.parse_args()
 
-    root_dir = os.path.dirname(os.path.abspath(__file__))
-    size_list_dict_CN, size_list_dict_EN, color_list_dict_CN, color_list_dict_EN = (
-        load_configuration(root_dir)
-    )
-    processor = IDPhotoProcessor(
-        size_list_dict_CN, size_list_dict_EN, color_list_dict_CN, color_list_dict_EN
-    )
+    processor = IDPhotoProcessor()
 
-    demo = create_ui(processor, root_dir)
+    demo = create_ui(processor, root_dir, HUMAN_MATTING_MODELS_EXIST)
     demo.launch(
         server_name=args.host,
         server_port=args.port,
