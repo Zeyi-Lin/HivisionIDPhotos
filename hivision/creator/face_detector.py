@@ -7,7 +7,12 @@ r"""
 @Description:
     人脸检测器
 """
-from mtcnnruntime import MTCNN
+try:
+    from mtcnnruntime import MTCNN
+except ImportError:
+    raise ImportError(
+        "Please install mtcnn-runtime by running `pip install mtcnn-runtime`"
+    )
 from .context import Context
 from hivision.error import FaceError, APIError
 from hivision.utils import resize_image_to_kb_base64
