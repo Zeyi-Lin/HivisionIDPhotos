@@ -287,7 +287,7 @@ python requests_api.py  \
     -u http://127.0.0.1:8080  \
     -t human_matting  \
     -i ./photo.jpg  \
-    -o ./photo_matting.png
+    -o ./photo_matting.png \
     --human_matting_model hivision_modnet
 ```
 
