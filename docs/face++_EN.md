@@ -49,3 +49,7 @@ python app.py
 ```
 
 ![alt text](../assets/face++.png)
+
+## Explanation of error codes
+
+https://console.faceplusplus.com.cn/documents/4888373

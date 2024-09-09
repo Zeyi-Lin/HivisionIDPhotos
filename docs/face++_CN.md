@@ -48,3 +48,7 @@ python app.py
 ```
 
 ![alt text](../assets/face++.png)
+
+## 错误码的解释
+
+https://console.faceplusplus.com.cn/documents/4888373
