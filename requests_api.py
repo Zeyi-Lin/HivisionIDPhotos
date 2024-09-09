@@ -43,14 +43,14 @@ def request_idphoto(
     height,
     width,
     human_matting_model="hivision_idphotos",
-    face_detector_model="mtcnn",
+    face_detect_model="mtcnn",
 ):
     files = {"input_image": open(file_path, "rb")}
     data = {
         "height": int(height),
         "width": int(width),
         "human_matting_model": human_matting_model,
-        "face_detector_model": face_detector_model,
+        "face_detect_model": face_detect_model,
     }
     response = requests.post(url, files=files, data=data)
     return response.json()
@@ -115,13 +115,13 @@ if __name__ == "__main__":
         default=0,
     )
     parser.add_argument(
-        "--matting_model",
+        "--human_matting_model",
         help="抠图模型权重",
         default="hivision_modnet",
         choices=MATTING_MODEL,
     )
     parser.add_argument(
-        "--face_detector_model",
+        "--face_detect_model",
         help="人脸检测模型",
         default="mtcnn",
         choices=FACE_DETECT_MODEL,
@@ -136,8 +136,8 @@ if __name__ == "__main__":
             args.input_image_dir,
             int(args.height),
             int(args.width),
-            human_matting_model=args.matting_model,
-            face_detector_model=args.face_detector_model,
+            human_matting_model=args.human_matting_model,
+            face_detect_model=args.face_detect_model,
         )
 
         if idphoto_response["status"]:
@@ -180,7 +180,7 @@ if __name__ == "__main__":
     elif args.type == "human_matting":
         # 调用 /human_matting 接口
         human_matting_response = request_human_matting(
-            args.input_image_dir, args.matting_model
+            args.input_image_dir, args.human_matting_model
         )
         base64_image_data = human_matting_response["image_base64"]
 
