@@ -12,7 +12,9 @@ import pathlib
 import numpy as np
 from demo.utils import csv_to_size_list
 import argparse
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
+from hivision.plugin.watermark import Watermarker, WatermarkerStyles
+
 
 # 获取尺寸列表
 root_dir = os.path.dirname(os.path.abspath(__file__))
@@ -63,6 +65,11 @@ def idphoto_inference(
     matting_model_option,
     watermark_option,
     watermark_text,
+    watermark_text_color,
+    watermark_text_size,
+    watermark_text_opacity,
+    watermark_text_angle,
+    watermark_text_space,
     face_detect_option,
     head_measure_ratio=0.2,
     # head_height_ratio=0.45,
@@ -237,11 +244,13 @@ def idphoto_inference(
                 )
             )
 
+        # 如果只换底，就不生成排版照
         if (
             idphoto_json["size_mode"]
             == text_lang_map[language]["Only Change Background"]
         ):
             result_layout_image = gr.update(visible=False)
+        # 如果是尺寸列表或自定义尺寸，则生成排版照
         else:
             typography_arr, typography_rotate = generate_layout_photo(
                 input_height=idphoto_json["size"][0],
@@ -251,7 +260,15 @@ def idphoto_inference(
             if watermark_option == "添加" or watermark_option == "Add":
                 result_layout_image = gr.update(
                     value=generate_layout_image(
-                        add_watermark(result_image_standard, watermark_text),
+                        add_watermark(
+                            image=result_image_standard,
+                            text=watermark_text,
+                            size=watermark_text_size,
+                            opacity=watermark_text_opacity,
+                            angle=watermark_text_angle,
+                            space=watermark_text_space,
+                            color=watermark_text_color,
+                        ),
                         typography_arr,
                         typography_rotate,
                         height=idphoto_json["size"][0],
@@ -289,8 +306,24 @@ def idphoto_inference(
 
         # Add watermark if selected
         if watermark_option == "添加" or watermark_option == "Add":
-            result_image_standard = add_watermark(result_image_standard, watermark_text)
-            result_image_hd = add_watermark(result_image_hd, watermark_text)
+            result_image_standard = add_watermark(
+                image=result_image_standard,
+                text=watermark_text,
+                size=watermark_text_size,
+                opacity=watermark_text_opacity,
+                angle=watermark_text_angle,
+                space=watermark_text_space,
+                color=watermark_text_color,
+            )
+            result_image_hd = add_watermark(
+                image=result_image_hd,
+                text=watermark_text,
+                size=watermark_text_size,
+                opacity=watermark_text_opacity,
+                angle=watermark_text_angle,
+                space=watermark_text_space,
+                color=watermark_text_color,
+            )
 
         if output_image_path:
             result_message = {
@@ -313,51 +346,23 @@ def idphoto_inference(
 
 
 # Add this function to handle watermark addition
-def add_watermark(image, text):
-    if not text.strip():
-        return image
-
-    img = Image.fromarray(image)
-    img = img.convert("RGBA")
-
-    font_size = 30
-    try:
-        font = ImageFont.truetype("arial.ttf", font_size)
-    except IOError:
-        font = ImageFont.load_default()
-
-    # 计算水印文本的大小
-    bbox = font.getbbox(text)
-    text_width = bbox[2] - bbox[0]
-    text_height = bbox[3] - bbox[1]
-
-    # 创建一个新的图像来绘制倾斜的水印
-    watermark = Image.new("RGBA", (img.width * 3, img.height * 3), (0, 0, 0, 0))
-    watermark_draw = ImageDraw.Draw(watermark)
-
-    # 在更大的画布上重复绘制水印文本
-    for y in range(-img.height, watermark.height, text_height * 3):
-        for x in range(-img.width, watermark.width, text_width * 3):
-            watermark_draw.text(
-                (x, y), text, font=font, fill=(255, 255, 255, 64)
-            )  # 半透明白色 (255, 255, 255, 64)
-
-    # 旋转水印
-    rotated_watermark = watermark.rotate(45, expand=True)
-
-    # 将旋转后的水印裁剪到原始图像大小
-    crop_left = (rotated_watermark.width - img.width) // 2
-    crop_top = (rotated_watermark.height - img.height) // 2
-    crop_right = crop_left + img.width
-    crop_bottom = crop_top + img.height
-    cropped_watermark = rotated_watermark.crop(
-        (crop_left, crop_top, crop_right, crop_bottom)
+def add_watermark(
+    image: np.ndarray, text, size=50, opacity=0.5, angle=45, color="#8B8B1B", space=75
+):
+    image = Image.fromarray(image)
+    # 创建 Watermarker 实例
+    watermarker = Watermarker(
+        input_image=image,
+        text=text,
+        style=WatermarkerStyles.STRIPED,
+        angle=angle,
+        color=color,
+        opacity=opacity,
+        size=size,
+        space=space,
     )
-
-    # 将水印叠加到原始图像上
-    img = Image.alpha_composite(img, cropped_watermark)
-
-    return np.array(img.convert("RGB"))
+    # 返回带水印的图片
+    return np.array(watermarker.image.convert("RGB"))
 
 
 if __name__ == "__main__":
@@ -546,7 +551,7 @@ if __name__ == "__main__":
                             interactive=True,
                         )
 
-                with gr.Tab("水印") as key_parameter_tab:
+                with gr.Tab("水印") as watermark_parameter_tab:
                     # 左: 水印
                     watermark_options = gr.Radio(
                         choices=watermark_CN,
@@ -555,22 +560,79 @@ if __name__ == "__main__":
                         elem_id="watermark",
                     )
 
-                    # 左：水印文字
-                    watermark_text_options = gr.Text(
-                        max_length=5,
-                        label="水印文字(最多5)",
-                        value="",
-                        elem_id="watermark_text",
-                        visible=False,
+                    with gr.Row():
+                        # 左：水印文字
+                        watermark_text_options = gr.Text(
+                            max_length=10,
+                            label="水印文字",
+                            value="Hello",
+                            placeholder="请输入水印文字（最多10个字符）",
+                            elem_id="watermark_text",
+                            interactive=False,
+                        )
+                        # 水印颜色
+                        watermark_text_color = gr.ColorPicker(
+                            label="水印颜色",
+                            interactive=False,
+                            value="#FFFFFF",
+                        )
+
+                    # 文字大小
+                    watermark_text_size = gr.Slider(
+                        minimum=10,
+                        maximum=100,
+                        value=20,
+                        label="文字大小",
+                        interactive=False,
+                        step=1,
+                    )
+
+                    # 文字透明度
+                    watermark_text_opacity = gr.Slider(
+                        minimum=0,
+                        maximum=1,
+                        value=0.15,
+                        label="水印透明度",
+                        interactive=False,
+                        step=0.01,
+                    )
+
+                    # 文字角度
+                    watermark_text_angle = gr.Slider(
+                        minimum=0,
+                        maximum=360,
+                        value=30,
+                        label="水印角度",
+                        interactive=False,
+                        step=1,
+                    )
+
+                    # 文字间距
+                    watermark_text_space = gr.Slider(
+                        minimum=10,
+                        maximum=200,
+                        value=25,
+                        label="水印间距",
+                        interactive=False,
+                        step=1,
                     )
 
                     def update_watermark_text_visibility(choice):
-                        return gr.update(visible=choice == "添加")
+                        return [
+                            gr.update(interactive=(choice == "添加" or choice == "Add"))
+                        ] * 6
 
                     watermark_options.change(
                         fn=update_watermark_text_visibility,
                         inputs=[watermark_options],
-                        outputs=[watermark_text_options],
+                        outputs=[
+                            watermark_text_options,
+                            watermark_text_color,
+                            watermark_text_size,
+                            watermark_text_opacity,
+                            watermark_text_angle,
+                            watermark_text_space,
+                        ],
                     )
 
                 img_but = gr.Button("开始制作")
@@ -646,6 +708,16 @@ if __name__ == "__main__":
                         top_distance_option: gr.update(label="头距顶距离"),
                         key_parameter_tab: gr.update(label="核心参数"),
                         advance_parameter_tab: gr.update(label="高级参数"),
+                        watermark_parameter_tab: gr.update(label="水印"),
+                        watermark_text_options: gr.update(label="水印文字"),
+                        watermark_text_color: gr.update(label="水印颜色"),
+                        watermark_text_size: gr.update(label="文字大小"),
+                        watermark_text_opacity: gr.update(label="水印透明度"),
+                        watermark_text_angle: gr.update(label="水印角度"),
+                        watermark_text_space: gr.update(label="水印间距"),
+                        watermark_options: gr.update(
+                            label="水印", value="不添加", choices=watermark_CN
+                        ),
                     }
 
                 elif language == "English":
@@ -690,6 +762,16 @@ if __name__ == "__main__":
                         top_distance_option: gr.update(label="Top distance"),
                         key_parameter_tab: gr.update(label="Key Parameters"),
                         advance_parameter_tab: gr.update(label="Advance Parameters"),
+                        watermark_parameter_tab: gr.update(label="Watermark"),
+                        watermark_text_options: gr.update(label="Text"),
+                        watermark_text_color: gr.update(label="Color"),
+                        watermark_text_size: gr.update(label="Size"),
+                        watermark_text_opacity: gr.update(label="Opacity"),
+                        watermark_text_angle: gr.update(label="Angle"),
+                        watermark_text_space: gr.update(label="Space"),
+                        watermark_options: gr.update(
+                            label="Watermark", value="Not Add", choices=watermark_EN
+                        ),
                     }
 
             def change_color(colors):
@@ -750,6 +832,14 @@ if __name__ == "__main__":
                 top_distance_option,
                 key_parameter_tab,
                 advance_parameter_tab,
+                watermark_parameter_tab,
+                watermark_text_options,
+                watermark_text_color,
+                watermark_text_size,
+                watermark_text_opacity,
+                watermark_text_angle,
+                watermark_text_space,
+                watermark_options,
             ],
         )
 
@@ -786,6 +876,11 @@ if __name__ == "__main__":
                 matting_model_options,
                 watermark_options,
                 watermark_text_options,
+                watermark_text_color,
+                watermark_text_size,
+                watermark_text_opacity,
+                watermark_text_angle,
+                watermark_text_space,
                 face_detect_model_options,
                 head_measure_ratio_option,
                 top_distance_option,
