@@ -19,6 +19,7 @@ import os
 
 mtcnn = None
 base_dir = os.path.dirname(os.path.abspath(__file__))
+RETINAFCE_SESS = None
 
 
 def detect_face_mtcnn(ctx: Context, scale: int = 2):
@@ -134,10 +135,30 @@ def detect_face_retinaface(ctx: Context):
     :param ctx: 上下文，此时已获取到原始图和抠图结果，但是我们只需要原始图
     :raise FaceError: 人脸检测错误，多个人脸或者没有人脸
     """
-    faces_dets = retinaface_detect_faces(
-        ctx.origin_image,
-        os.path.join(base_dir, "retinaface/weights/retinaface-resnet50.onnx"),
-    )
+    from time import time
+
+    global RETINAFCE_SESS
+
+    if RETINAFCE_SESS is None:
+        print("首次加载RetinaFace模型...")
+        # 计算用时
+        tic = time()
+        faces_dets, sess = retinaface_detect_faces(
+            ctx.origin_image,
+            os.path.join(base_dir, "retinaface/weights/retinaface-resnet50.onnx"),
+            sess=None,
+        )
+        RETINAFCE_SESS = sess
+        print("首次RetinaFace模型推理用时: {:.4f}s".format(time() - tic))
+    else:
+        tic = time()
+        faces_dets, _ = retinaface_detect_faces(
+            ctx.origin_image,
+            os.path.join(base_dir, "retinaface/weights/retinaface-resnet50.onnx"),
+            sess=RETINAFCE_SESS,
+        )
+        print("二次RetinaFace模型推理用时: {:.4f}s".format(time() - tic))
+
     faces_num = len(faces_dets)
     if faces_num != 1:
         raise FaceError("Expected 1 face, but got {}".format(faces_num), faces_num)

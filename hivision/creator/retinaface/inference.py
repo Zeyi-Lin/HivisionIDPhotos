@@ -69,7 +69,7 @@ def load_model_ort(model_path):
     return ort_session
 
 
-def retinaface_detect_faces(image, model_path: str):
+def retinaface_detect_faces(image, model_path: str, sess=None):
     cfg = {
         "name": "Resnet50",
         "min_sizes": [[16, 32], [64, 128], [256, 512]],
@@ -91,7 +91,10 @@ def retinaface_detect_faces(image, model_path: str):
     }
 
     # Load ONNX model
-    retinaface = load_model_ort(model_path)
+    if sess is None:
+        retinaface = load_model_ort(model_path)
+    else:
+        retinaface = sess
 
     resize = 1
 
@@ -163,7 +166,7 @@ def retinaface_detect_faces(image, model_path: str):
     dets = np.concatenate((dets, landms), axis=1)
     # print("post processing time: {:.4f}s".format(time.time() - tic))
 
-    return dets
+    return dets, retinaface
 
 
 if __name__ == "__main__":
