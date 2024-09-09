@@ -50,7 +50,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 
 - Online Experience: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
-- 2024.09.09: Added new **Matting Model** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) | Gradio added advanced parameter settings tab
+- 2024.09.09: Added a new **Background Removal Model** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) | Gradio added **Advanced Parameter Settings** and **Watermark** tabs
 - 2024.09.08: Added new **Matting Model** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) | **ComfyUI Workflow** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) contributed by [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 - 2024.09.07: Added **Face Detection API Option** [Face++](docs/face++_EN.md), achieving higher precision in face detection
 - 2024.09.06: Added new matting model [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
@@ -328,9 +328,10 @@ docker run  -d -p 7860:7860 \
 
 # 💻 Development Tips
 
-**1. How to Modify Preset Sizes?**
+**1. How to modify preset sizes and colors?**
 
-Modify [size_list_EN.csv](demo/size_list_EN.csv) and then run `app.py` again, where the first column is the size name, the second column is the height, and the third column is the width.
+- Size: After modifying [size_list_EN.csv](demo/assets/size_list_EN.csv), run `app.py` again. The first column is the size name, the second column is the height, and the third column is the width.
+- Color: After modifying [color_list_EN.csv](demo/assets/color_list_EN.csv), run `app.py` again. The first column is the color name, and the second column is the Hex value.
 
 <br>
 

@@ -72,9 +72,7 @@ class IDPhotoProcessor:
                     gr.update(value=None),  # img_output_standard_hd
                     None,  # img_output_layout (assuming it should be None or not updated)
                     gr.update(  # notification
-                        value=text_lang_map[language][
-                            "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800."
-                        ],
+                        value=LOCALES["size_mode"][language]["custom_size_eror"],
                         visible=True,
                     ),
                     None,  # file_download (assuming it should be None or not updated)
@@ -92,9 +90,14 @@ class IDPhotoProcessor:
                 range_check(custom_color_B),
             )
         else:
-            idphoto_json["color_bgr"] = LOCALES["bg_color"][language]["develop"][
-                color_option
-            ]
+            hex_color = idphoto_json["color_bgr"] = LOCALES["bg_color"][language][
+                "develop"
+            ][color_option]
+            # 转为 RGB
+            idphoto_json["color_bgr"] = tuple(
+                int(hex_color[i : i + 2], 16) for i in (0, 2, 4)
+            )
+
         # 如果输出 KB 大小选择的是自定义
         if (
             idphoto_json["image_kb_mode"]

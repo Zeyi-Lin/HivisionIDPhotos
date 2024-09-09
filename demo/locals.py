@@ -17,8 +17,8 @@ from demo.config import load_configuration
 import os
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
-size_list_dict_CN = csv_to_size_list(os.path.join(base_dir, "size_list_CN.csv"))
-size_list_dict_EN = csv_to_size_list(os.path.join(base_dir, "size_list_EN.csv"))
+size_list_dict_CN = csv_to_size_list(os.path.join(base_dir, "assets/size_list_CN.csv"))
+size_list_dict_EN = csv_to_size_list(os.path.join(base_dir, "assets/size_list_EN.csv"))
 (
     size_list_config_CN,
     size_list_config_EN,
@@ -64,10 +64,12 @@ LOCALES = {
         "en": {
             "label": "ID photo size options",
             "choices": ["Size List", "Only Change Background", "Custom Size"],
+            "custom_size_eror": "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.",
         },
         "zh": {
             "label": "证件照尺寸选项",
             "choices": ["尺寸列表", "只换底", "自定义尺寸"],
+            "custom_size_eror": "宽度不应大于长度；长度和宽度不应小于100，不大于1800。",
         },
     },
     "size_list": {
@@ -85,12 +87,12 @@ LOCALES = {
     "bg_color": {
         "en": {
             "label": "Background color",
-            "choices": ["Blue", "White", "Red", "Black", "Dark blue", "Custom Color"],
+            "choices": list(color_list_dict_EN.keys()) + ["Custom"],
             "develop": color_list_dict_EN,
         },
         "zh": {
             "label": "背景颜色",
-            "choices": ["蓝色", "白色", "红色", "黑色", "深蓝色", "自定义底色"],
+            "choices": list(color_list_dict_CN.keys()) + ["自定义底色"],
             "develop": color_list_dict_CN,
         },
     },

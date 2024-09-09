@@ -50,7 +50,7 @@
 
 - オンライン体験： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
-- 2024.09.09: 新しい**切り抜きモデル** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) を追加 | Gradioに高度なパラメーター設定タブを追加
+- 2024.09.09: 新しい**背景除去モデル** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) を追加 | Gradioに**高度なパラメータ設定**および**ウォーターマーク**タブを追加
 - 2024.09.08: 新しい**切り抜きモデル** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) を追加 | **ComfyUIワークフロー** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) AIFSHによる貢献
 - 2024.09.07: **顔検出APIオプション** [Face++](docs/face++_EN.md) を追加し、より高精度な顔検出を実現
 - 2024.09.06: 新しい切り抜きモデル [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet) を追加
@@ -328,9 +328,10 @@ docker run  -d -p 7860:7860 \
 
 # 💻 開発のヒント
 
-**1. 予め設定されたサイズを変更する方法は？**
+**1. どのようにデフォルトのサイズと色を変更しますか？**
 
-[size_list_CN.csv](demo/size_list_CN.csv)を変更した後、再度`app.py`を実行すればOKです。第一列がサイズ名、第二列が高さ、第三列が幅です。
+- サイズ：`size_list_EN.csv`を修正した後、再度`app.py`を実行すれば、第一列がサイズ名、第二列が高さ、第三列が幅になります。
+- 色：`color_list_EN.csv`を修正した後、再度`app.py`を実行すれば、第一列が色名、第二列がHex値になります。
 
 <br>
 

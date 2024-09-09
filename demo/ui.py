@@ -2,7 +2,7 @@ import gradio as gr
 import os
 import pathlib
 from demo.locals import LOCALES
-from hivision.creator.choose_handler import HUMAN_MATTING_MODELS, FACE_DETECT_MODELS
+from hivision.creator.choose_handler import FACE_DETECT_MODELS
 
 
 def load_description(fp):
@@ -63,21 +63,22 @@ def create_ui(processor, root_dir, human_matting_models: list):
                     face_detect_model_options = gr.Dropdown(
                         choices=FACE_DETECT_MODELS,
                         label=LOCALES["face_model"][DEFAULT_LANG]["label"],
-                        value="mtcnn",
+                        value=DEFAULT_FACE_DETECT_MODEL,
                     )
 
                     matting_model_options = gr.Dropdown(
                         choices=human_matting_models,
                         label=LOCALES["matting_model"][DEFAULT_LANG]["label"],
-                        value="modnet_photographic_portrait_matting",
+                        value=human_matting_models[0],
                     )
 
-                with gr.Tab("核心参数") as key_parameter_tab:
+                with gr.Tab(
+                    LOCALES["key_param"][DEFAULT_LANG]["label"]
+                ) as key_parameter_tab:
                     mode_options = gr.Radio(
                         choices=LOCALES["size_mode"][DEFAULT_LANG]["choices"],
-                        label="证件照尺寸选项",
-                        value="尺寸列表",
-                        elem_id="size",
+                        label=LOCALES["size_mode"][DEFAULT_LANG]["label"],
+                        value=LOCALES["size_mode"][DEFAULT_LANG]["choices"][0],
                     )
 
                     with gr.Row(visible=True) as size_list_row:

@@ -50,7 +50,7 @@
 
 - 온라인 체험: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
-- 2024.09.09: 새로운 **컷아웃 모델** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) 추가 | Gradio에 고급 매개변수 설정 탭 추가
+- 2024.09.09: 새로운 **배경 제거 모델** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) 추가 | Gradio에 **고급 매개변수 설정** 및 **워터마크** 탭 추가
 - 2024.09.08: 새로운 **컷아웃 모델** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) 추가 | **ComfyUI 워크플로우** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) AIFSH의 기여
 - 2024.09.07: **얼굴 검출 API 옵션** [Face++](docs/face++_EN.md) 추가 및 보다 높은 정확도의 얼굴 검출 구현
 - 2024.09.06: 새로운 컷아웃 모델 [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet) 추가
@@ -328,9 +328,10 @@ docker run  -d -p 7860:7860 \
 
 # 💻 개발 팁
 
-**1. 미리 설정된 사이즈를 변경하는 방법은?**
+**1. 기본 크기와 색상을 어떻게 수정하나요?**
 
-[size_list_CN.csv](demo/size_list_CN.csv)를 변경한 후, 다시 `app.py`를 실행하면 됩니다. 첫 번째 열이 사이즈 이름, 두 번째 열이 높이, 세 번째 열이 너비입니다.
+- 크기: [size_list_EN.csv](demo/assets/size_list_EN.csv) 파일을 수정한 후 `app.py`를 다시 실행하면 됩니다. 첫 번째 열은 크기 이름, 두 번째 열은 높이, 세 번째 열은 너비입니다.
+- 색상: [color_list_EN.csv](demo/assets/color_list_EN.csv) 파일을 수정한 후 `app.py`를 다시 실행하면 됩니다. 첫 번째 열은 색상 이름, 두 번째 열은 Hex 값입니다.
 
 <br>
 
