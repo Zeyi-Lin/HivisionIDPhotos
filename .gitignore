@@ -2,6 +2,7 @@
 **/__pycache__/
 .idea
 .vscode/*
+.history
 .DS_Store
 .env
 demo/kb_output/*.jpg
