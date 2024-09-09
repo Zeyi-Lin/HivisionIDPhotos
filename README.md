@@ -330,10 +330,15 @@ docker run  -d -p 7860:7860 \
 
 # 💻 开发小贴士
 
-**1. 如何修改预设尺寸和颜色？**
+## 如何修改预设尺寸和颜色？
 
 - 尺寸：修改[size_list_CN.csv](demo/assets/size_list_CN.csv)后再次运行 `app.py` 即可，其中第一列为尺寸名，第二列为高度，第三列为宽度。
 - 颜色：修改[color_list_CN.csv](demo/assets/color_list_CN.csv)后再次运行 `app.py` 即可，其中第一列为颜色名，第二列为Hex值。
+
+## 如何修改水印字体？
+
+1. 将字体文件放到`hivision/plugin/font`文件夹下
+2. 修改`hivision/plugin/watermark.py`的`font_file`参数值为字体文件名
 
 <br>
 

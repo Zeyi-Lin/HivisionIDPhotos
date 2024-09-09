@@ -328,10 +328,15 @@ docker run  -d -p 7860:7860 \
 
 # 💻 Development Tips
 
-**1. How to modify preset sizes and colors?**
+## How to modify preset sizes and colors?
 
 - Size: After modifying [size_list_EN.csv](demo/assets/size_list_EN.csv), run `app.py` again. The first column is the size name, the second column is the height, and the third column is the width.
 - Color: After modifying [color_list_EN.csv](demo/assets/color_list_EN.csv), run `app.py` again. The first column is the color name, and the second column is the Hex value.
+
+## How to Change the Watermark Font?
+
+1. Place the font file in the `hivision/plugin/font` folder.
+2. Change the `font_file` parameter value in `hivision/plugin/watermark.py` to the name of the font file.
 
 <br>
 

@@ -328,10 +328,15 @@ docker run  -d -p 7860:7860 \
 
 # 💻 개발 팁
 
-**1. 기본 크기와 색상을 어떻게 수정하나요?**
+## 기본 크기와 색상을 어떻게 수정하나요?**
 
 - 크기: [size_list_EN.csv](demo/assets/size_list_EN.csv) 파일을 수정한 후 `app.py`를 다시 실행하면 됩니다. 첫 번째 열은 크기 이름, 두 번째 열은 높이, 세 번째 열은 너비입니다.
 - 색상: [color_list_EN.csv](demo/assets/color_list_EN.csv) 파일을 수정한 후 `app.py`를 다시 실행하면 됩니다. 첫 번째 열은 색상 이름, 두 번째 열은 Hex 값입니다.
+
+## 워터마크 폰트 변경 방법
+
+1. 폰트 파일을 `hivision/plugin/font` 폴더에 배치합니다.
+2. `hivision/plugin/watermark.py`의 `font_file` 매개변수 값을 폰트 파일 이름으로 변경합니다.
 
 <br>
 
