@@ -17,8 +17,6 @@ def create_ui(processor, root_dir):
         processor.color_list_dict_EN,
     )
 
-    language = ["中文", "English"]
-
     size_mode_CN = ["尺寸列表", "只换底", "自定义尺寸"]
     size_mode_EN = ["Size List", "Only Change Background", "Custom Size"]
 
@@ -69,13 +67,15 @@ def create_ui(processor, root_dir):
                 img_input = gr.Image(height=400)
 
                 with gr.Row():
+                    # 语言选择器
+                    language = ["中文", "English"]
                     language_options = gr.Dropdown(
                         choices=language,
                         label="Language",
                         value="中文",
                         elem_id="language",
                     )
-                    # Add face_detect_model_options and matting_model_options
+
                     face_detect_model_options = gr.Dropdown(
                         choices=["mtcnn", "face++ (联网API)"],
                         label="人脸检测模型",
