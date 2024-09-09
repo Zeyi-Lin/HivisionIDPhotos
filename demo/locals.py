@@ -136,7 +136,7 @@ LOCALES = {
             "label": "KB 大小",
         },
     },
-    "render": {
+    "render_mode": {
         "en": {
             "label": "Render mode",
             "choices": [
@@ -227,9 +227,11 @@ LOCALES = {
     "notification": {
         "en": {
             "label": "notification",
+            "face_error": "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author.",
         },
         "zh": {
             "label": "通知",
+            "face_error": "人脸数不等于1，请上传单人照片。如果实际人脸数为1，可能是检测模型的准确度问题，请切换左侧不同的人脸检测模型或提出Github Issue通知作者。",
         },
     },
     "standard_photo": {

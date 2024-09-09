@@ -108,9 +108,9 @@ def create_ui(processor, root_dir, human_matting_models: list):
                         custom_color_B = gr.Number(value=0, label="B", interactive=True)
 
                     render_options = gr.Radio(
-                        choices=LOCALES["render"][DEFAULT_LANG]["choices"],
-                        label=LOCALES["render"][DEFAULT_LANG]["label"],
-                        value=LOCALES["render"][DEFAULT_LANG]["choices"][0],
+                        choices=LOCALES["render_mode"][DEFAULT_LANG]["choices"],
+                        label=LOCALES["render_mode"][DEFAULT_LANG]["label"],
+                        value=LOCALES["render_mode"][DEFAULT_LANG]["choices"][0],
                     )
 
                 with gr.Tab(
@@ -299,9 +299,9 @@ def create_ui(processor, root_dir, human_matting_models: list):
                     ),
                     img_but: gr.update(value=LOCALES["button"][language]["label"]),
                     render_options: gr.update(
-                        label=LOCALES["render"][language]["label"],
-                        choices=LOCALES["render"][language]["choices"],
-                        value=LOCALES["render"][language]["choices"][0],
+                        label=LOCALES["render_mode"][language]["label"],
+                        choices=LOCALES["render_mode"][language]["choices"],
+                        value=LOCALES["render_mode"][language]["choices"][0],
                     ),
                     image_kb_options: gr.update(
                         label=LOCALES["image_kb_size"][language]["label"],

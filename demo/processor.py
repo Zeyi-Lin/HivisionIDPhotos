@@ -50,46 +50,16 @@ class IDPhotoProcessor:
             "color_mode": color_option,
             "render_mode": render_option,
             "image_kb_mode": image_kb_options,
-        }
-
-        text_lang_map = {
-            "zh": {
-                "Size List": "尺寸列表",
-                "Custom Size": "自定义尺寸",
-                "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.": "宽度应不大于长度；长宽不应小于 100，大于 1800",
-                "Custom Color": "自定义底色",
-                "Custom": "自定义",
-                "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author.": "人脸数量不等于 1，请上传单张人脸的图像。如果实际人脸数量为 1，可能是检测模型精度的问题，请在左边更换人脸检测模型或给作者提Github Issue。",
-                "Solid Color": "纯色",
-                "Up-Down Gradient (White)": "上下渐变 (白)",
-                "Center Gradient (White)": "中心渐变 (白)",
-                "Set KB size (Download in the bottom right)": "设置 KB 大小（结果在右边最底的组件下载）",
-                "Not Set": "不设置",
-                "Only Change Background": "只换底",
-            },
-            "en": {
-                "Size List": "Size List",
-                "Custom Size": "Custom Size",
-                "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.": "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.",
-                "Custom Color": "Custom Color",
-                "Custom": "Custom",
-                "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author.": "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author.",
-                "Solid Color": "Solid Color",
-                "Up-Down Gradient (White)": "Up-Down Gradient (White)",
-                "Center Gradient (White)": "Center Gradient (White)",
-                "Set KB size (Download in the bottom right)": "Set KB size (Download in the bottom right)",
-                "Not Set": "Not Set",
-                "Only Change Background": "Only Change Background",
-            },
+            "custom_image_kb": None,
         }
 
         # 如果尺寸模式选择的是尺寸列表
-        if idphoto_json["size_mode"] == text_lang_map[language]["Size List"]:
+        if idphoto_json["size_mode"] == LOCALES["size_mode"][language]["choices"][0]:
             idphoto_json["size"] = LOCALES["size_list"][language]["develop"][
                 size_list_option
             ]
         # 如果尺寸模式选择的是自定义尺寸
-        elif idphoto_json["size_mode"] == text_lang_map[language]["Custom Size"]:
+        elif idphoto_json["size_mode"] == LOCALES["size_mode"][language]["choices"][2]:
             id_height = int(custom_size_height)
             id_width = int(custom_size_width)
             if (
@@ -115,7 +85,7 @@ class IDPhotoProcessor:
             idphoto_json["size"] = (None, None)
 
         # 如果颜色模式选择的是自定义底色
-        if idphoto_json["color_mode"] == text_lang_map[language]["Custom Color"]:
+        if idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-1]:
             idphoto_json["color_bgr"] = (
                 range_check(custom_color_R),
                 range_check(custom_color_G),
@@ -126,18 +96,19 @@ class IDPhotoProcessor:
                 color_option
             ]
         # 如果输出 KB 大小选择的是自定义
-        if idphoto_json["image_kb_mode"] == text_lang_map[language]["Custom"]:
+        if (
+            idphoto_json["image_kb_mode"]
+            == LOCALES["image_kb"][language]["choices"][-1]
+        ):
             idphoto_json["custom_image_kb"] = custom_image_kb
-        else:
-            idphoto_json["custom_image_kb"] = None
 
         creator = IDCreator()
         choose_handler(creator, matting_model_option, face_detect_option)
 
-        change_bg_only = idphoto_json["size_mode"] in [
-            "只换底",
-            "Only Change Background",
-        ]
+        # 是否只换底
+        change_bg_only = (
+            idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1]
+        )
 
         try:
             result = creator(
@@ -153,9 +124,7 @@ class IDPhotoProcessor:
                 gr.update(value=None),  # img_output_standard_hd
                 gr.update(visible=False),  # img_output_layout
                 gr.update(  # notification
-                    value=text_lang_map[language][
-                        "The number of faces is not equal to 1, please upload an image with a single face. If the actual number of faces is 1, it may be an issue with the accuracy of the detection model. Please switch to a different face detection model on the left or raise a Github Issue to notify the author."
-                    ],
+                    value=LOCALES["notification"][language]["face_error"],
                     visible=True,
                 ),
                 None,  # file_download (assuming it should be None or have no update)
@@ -167,7 +136,7 @@ class IDPhotoProcessor:
                 gr.update(value=None),  # img_output_standard_hd
                 gr.update(visible=False),  # img_output_layout
                 gr.update(  # notification
-                    value=f"Please make sure you have correctly set up the Face++ API Key and Secret.\nAPI Error\nStatus Code is {e.status_code}\nPossible errors are: {e}\n",
+                    value=LOCALES["notification"][language]["face_error"],
                     visible=True,
                 ),
                 None,  # file_download (assuming it should be None or have no update)
@@ -175,7 +144,10 @@ class IDPhotoProcessor:
 
         else:
             (result_image_standard, result_image_hd, _, _) = result
-            if idphoto_json["render_mode"] == text_lang_map[language]["Solid Color"]:
+            if (
+                idphoto_json["render_mode"]
+                == LOCALES["render_mode"][language]["choices"][0]
+            ):
                 result_image_standard = np.uint8(
                     add_background(result_image_standard, bgr=idphoto_json["color_bgr"])
                 )
@@ -184,7 +156,7 @@ class IDPhotoProcessor:
                 )
             elif (
                 idphoto_json["render_mode"]
-                == text_lang_map[language]["Up-Down Gradient (White)"]
+                == LOCALES["render_mode"][language]["choices"][1]
             ):
                 result_image_standard = np.uint8(
                     add_background(
@@ -217,10 +189,7 @@ class IDPhotoProcessor:
                 )
 
             # 如果只换底，就不生成排版照
-            if (
-                idphoto_json["size_mode"]
-                == text_lang_map[language]["Only Change Background"]
-            ):
+            if change_bg_only:
                 result_layout_image = gr.update(visible=False)
             else:
                 typography_arr, typography_rotate = generate_layout_photo(
@@ -228,7 +197,10 @@ class IDPhotoProcessor:
                     input_width=idphoto_json["size"][1],
                 )
 
-                if watermark_option == "添加" or watermark_option == "Add":
+                if (
+                    watermark_option
+                    == LOCALES["watermark_switch"][language]["choices"][1]
+                ):
                     result_layout_image = gr.update(
                         value=generate_layout_image(
                             add_watermark(
@@ -259,18 +231,8 @@ class IDPhotoProcessor:
                         visible=True,
                     )
 
-            if idphoto_json["custom_image_kb"]:
-                print("调整 kb 大小到", idphoto_json["custom_image_kb"], "kb")
-                output_image_path = f"{os.path.join(os.path.dirname(__file__), 'demo/kb_output')}/{int(time.time())}.jpg"
-                resize_image_to_kb(
-                    result_image_standard,
-                    output_image_path,
-                    idphoto_json["custom_image_kb"],
-                )
-            else:
-                output_image_path = None
-
-            if watermark_option == "添加" or watermark_option == "Add":
+            # 如果添加水印
+            if watermark_option == LOCALES["watermark_switch"][language]["choices"][1]:
                 result_image_standard = add_watermark(
                     image=result_image_standard,
                     text=watermark_text,
@@ -290,6 +252,19 @@ class IDPhotoProcessor:
                     color=watermark_text_color,
                 )
 
+            # 如果输出 KB 大小选择的是自定义
+            if idphoto_json["custom_image_kb"]:
+                print("调整 kb 大小到", idphoto_json["custom_image_kb"], "kb")
+                output_image_path = f"{os.path.join(os.path.dirname(os.path.dirname(__file__)), 'demo/kb_output')}/{int(time.time())}.jpg"
+                resize_image_to_kb(
+                    result_image_standard,
+                    output_image_path,
+                    idphoto_json["custom_image_kb"],
+                )
+            else:
+                output_image_path = None
+
+            # 返回结果
             if output_image_path:
                 return [
                     result_image_standard,  # img_output_standard
