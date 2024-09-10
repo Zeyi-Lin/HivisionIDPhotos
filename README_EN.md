@@ -50,13 +50,13 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 
 - Online Experience: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
+- 2024.09.10: Added a new **face detection model** Retinaface-resnet50, which offers higher detection accuracy at a slightly slower speed compared to mtcnn. Recommended for use.
 - 2024.09.09: Added a new **Background Removal Model** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) | Gradio added **Advanced Parameter Settings** and **Watermark** tabs
 - 2024.09.08: Added new **Matting Model** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) | **ComfyUI Workflow** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) contributed by [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 - 2024.09.07: Added **Face Detection API Option** [Face++](docs/face++_EN.md), achieving higher precision in face detection
 - 2024.09.06: Added new matting model [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
 - 2024.09.05: Updated [Restful API Documentation](docs/api_EN.md)
 - 2024.09.02: Updated **Adjust Photo KB Size**, [DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
-- 2023.12.01: Updated **API Deployment (based on fastapi)**
 
 <br>
 
@@ -140,6 +140,7 @@ Store in the project's `hivision/creator/weights` directory:
 | Extended Face Detection Model | Description | Documentation |
 | -- | -- | -- |
 | MTCNN | **Offline** face detection model, high-performance CPU inference, default model, lower detection accuracy | Use it directly after cloning this project |
+| RetinaFace | **Offline** face detection model, moderate CPU inference speed (in seconds), and high accuracy | [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/retinaface-resnet50.onnx) and place it in the `hivision/creator/retinaface/weights` directory |
 | Face++ | Online face detection API launched by Megvii, higher detection accuracy, [official documentation](https://console.faceplusplus.com.cn/documents/4888373) | [Usage Documentation](docs/face++_EN.md)|
 
 ## 5. GPU Inference Acceleration (Optional)

@@ -52,13 +52,13 @@
 
 - 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
+- 2024.09.10: 增加新的**人脸检测模型** Retinaface-resnet50，以稍弱于mtcnn的速度换取更高的检测精度，推荐使用
 - 2024.09.09: 增加新的**抠图模型** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) | Gradio增加**高级参数设置**和**水印**选项卡
 - 2024.09.08: 增加新的**抠图模型** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) | **ComfyUI工作流** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) 贡献 by [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 - 2024.09.07: 增加**人脸检测API选项** [Face++](docs/face++_CN.md)，实现更高精度的人脸检测
 - 2024.09.06: 增加新的抠图模型 [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
 - 2024.09.05: 更新 [Restful API 文档](docs/api_CN.md)
 - 2024.09.02: 更新**调整照片 KB 大小**，[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
-- 2023.12.01: 更新**API 部署（基于 fastapi）**
 
 <br>
 
@@ -142,7 +142,8 @@ python scripts/download_model.py --models all
 
 | 拓展人脸检测模型 | 介绍 | 使用文档 |
 | -- | -- | -- |
-| MTCNN | **离线**人脸检测模型，高性能CPU推理，为默认模型，检测精度较低 | Clone此项目后直接使用 |
+| MTCNN | **离线**人脸检测模型，高性能CPU推理（毫秒级），为默认模型，检测精度较低 | Clone此项目后直接使用 |
+| RetinaFace | **离线**人脸检测模型，CPU推理速度中等（秒级），精度较高| [下载](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/retinaface-resnet50.onnx)后放到`hivision/creator/retinaface/weights`目录下 |
 | Face++ | 旷视推出的在线人脸检测API，检测精度较高，[官方文档](https://console.faceplusplus.com.cn/documents/4888373) | [使用文档](docs/face++_CN.md)|
 
 ## 5. GPU推理加速（可选）
