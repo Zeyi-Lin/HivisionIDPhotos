@@ -28,6 +28,7 @@ MATTING_MODEL = [
 FACE_DETECT_MODEL = [
     "mtcnn",
     "face_plusplus",
+    "retinaface-resnet50",
 ]
 RENDER = [0, 1, 2]
 
