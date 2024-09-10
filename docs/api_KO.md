@@ -1,22 +1,22 @@
-# API Docs
+# API 문서
 
-English / [中文](api_CN.md) / [日本語](api_JP.md) / [한국어](api_KO.md)
+[English](api_EN.md) / [中文](api_CN.md) / [日本語](api_JP.md) / 한국어
 
 
-## Table of Contents
+## 목차
 
-- [Getting Started: Start the Backend Service](#getting-started-start-the-backend-service)
-- [API Function Descriptions](#api-function-descriptions)
-- [cURL Request Examples](#curl-request-examples)
-- [Python Request Examples](#python-request-examples)
-  - [Python Requests Method](#1️⃣-python-requests-method)
-  - [Python Script Method](#2️⃣-python-script-method)
-- [Java Request Examples](#java-request-examples)
-- [JavaScript Request Examples](#javascript-request-examples)
+- [시작하기: 백엔드 서비스 시작하기](#시작하기-백엔드-서비스-시작하기)
+- [인터페이스 기능 설명](#인터페이스-기능-설명)
+- [cURL 요청 예시](#curl-요청-예시)
+- [Python 요청 예시](#python-요청-예시)
+  - [Python Requests 요청 방법](#1️⃣-python-requests-요청-방법)
+  - [Python 스크립트 요청 방법](#2️⃣-python-스크립트-요청-방법)
+- [Java 요청 예시](#java-요청-예시)
+- [JavaScript 요청 예시](#javascript-요청-예시)
 
-## Getting Started: Start the Backend Service
+## 시작하기: 백엔드 서비스 시작하기
 
-Before making API requests, please start the backend service
+API를 요청하기 전에 백엔드 서비스를 먼저 실행하세요.
 
 ```bash
 python deploy_api.py
@@ -24,47 +24,47 @@ python deploy_api.py
 
 <br>
 
-## API Function Descriptions
+## 인터페이스 기능 설명
 
-### 1. Generate ID Photo (Transparent Background)
+### 1. 증명사진 생성(투명 배경)
 
-API Name: `idphoto`
+인터페이스 이름: `idphoto`
 
-The logic of the `Generate ID Photo` API is to send an RGB image and output a standard ID photo and a high-definition ID photo:
+`증명사진 생성` 인터페이스의 논리는 RGB 이미지를 전송하고 표준 증명사진과 고해상도 증명사진을 출력하는 것입니다:
 
-- **High-definition ID Photo**: The ID photo created based on the aspect ratio of `size`, with the filename being `output_image_dir` with the `_hd` suffix added.
-- **Standard ID Photo**: The size is equal to `size`, scaled from the high-definition ID photo, with the filename being `output_image_dir`.
+- **고해상도 증명사진**: `size`의 가로 세로 비율에 따라 제작된 증명사진, 파일 이름은 `output_image_dir`에 `_hd` 접미사를 추가한 것입니다.
+- **표준 증명사진**: 크기가 `size`와 같으며, 고해상도 증명사진에서 축소된 것입니다, 파일 이름은 `output_image_dir`입니다.
 
-It is important to note that both generated photos are transparent (RGBA four-channel images). To generate a complete ID photo, the following `Add Background Color` API is needed.
+생성된 두 장의 사진은 모두 투명합니다(RGBA 4채널 이미지), 완전한 증명사진을 생성하려면 아래의 `배경색 추가` 인터페이스가 필요합니다.
 
-> Q: Why is it designed this way?  
-> A: Because in actual products, users often switch background colors to preview effects frequently. Providing a transparent background image allows for a better experience with color composition done by frontend JS code.
+> 질문: 왜 이렇게 디자인했나요?  
+> 답변: 실제 제품에서는 사용자가 배경색 미리보기를 자주 변경하므로, 투명 배경 이미지를 제공하고 프론트엔드 js 코드로 색상을 합성하는 것이 더 나은 경험을 제공합니다.
 
-### 2. Add Background Color
+### 2. 배경색 추가
 
-API Name: `add_background`
+인터페이스 이름: `add_background`
 
-The logic of the `Add Background Color` API is to send an RGBA image and add a background color based on `color`, resulting in a JPG image.
+`배경색 추가` 인터페이스의 논리는 RGBA 이미지를 전송하고 `color`에 따라 배경색을 추가하여 JPG 이미지를 합성하는 것입니다.
 
-### 3. Generate Six-Inch Layout Photo
+### 3. 6인치 레이아웃 사진 생성
 
-API Name: `generate_layout_photos`
+인터페이스 이름: `generate_layout_photos`
 
-The logic of the `Generate Six-Inch Layout Photo` API is to send an RGB image (typically the ID photo after adding background color) and arrange the photos based on `size`, resulting in a six-inch layout photo.
+`6인치 레이아웃 사진 생성` 인터페이스의 논리는 RGB 이미지를 전송하고(일반적으로 배경색 추가 후의 증명사진), `size`에 따라 사진을 배치한 다음 6인치 레이아웃 사진을 생성하는 것입니다.
 
-### 4. Human Matting
+### 4. 인물 추출
 
-API Name: `human_matting`
+인터페이스 이름: `human_matting`
 
-The logic of the `Human Matting` API is to send an RGB image and output a standard matting portrait and a high-definition matting portrait (with no background fill).
+`인물 추출` 인터페이스의 논리는 RGB 이미지를 전송하고 표준 인물 사진과 고해상도 인물 사진(배경이 없는)을 출력하는 것입니다.
 
 <br>
 
-## cURL Request Examples
+## cURL 요청 예시
 
-cURL is a command-line tool for transferring data using various network protocols. Below are examples of using cURL to call these APIs.
+cURL은 다양한 네트워크 프로토콜을 사용하여 데이터를 전송하는 명령줄 도구입니다. 다음은 cURL을 사용하여 이 API를 호출하는 예시입니다.
 
-### 1. Generate ID Photo (Transparent Background)
+### 1. 증명사진 생성(투명 배경)
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/idphoto" \
@@ -75,7 +75,7 @@ curl -X POST "http://127.0.0.1:8080/idphoto" \
 -F "face_detect_model=mtcnn"
 ```
 
-### 2. Add Background Color
+### 2. 배경색 추가
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/add_background" \
@@ -85,7 +85,7 @@ curl -X POST "http://127.0.0.1:8080/add_background" \
 -F "render=0"
 ```
 
-### 3. Generate Six-Inch Layout Photo
+### 3. 6인치 레이아웃 사진 생성
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
@@ -95,7 +95,7 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 -F "kb=200"
 ```
 
-### 4. Human Matting
+### 4. 인물 추출
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/human_matting" \
@@ -105,11 +105,11 @@ curl -X POST "http://127.0.0.1:8080/human_matting" \
 
 <br>
 
-## Python Request Examples
+## Python 요청 예시
 
-### 1️⃣ Python Requests Method
+### 1️⃣ Python Requests 요청 방법
 
-#### 1. Generate ID Photo (Transparent Background)
+#### 1. 증명사진 생성(투명 배경)
 
 ```python
 import requests
@@ -122,11 +122,12 @@ data = {"height": 413, "width": 295, "human_matting_model": "hivision_modnet", "
 
 response = requests.post(url, files=files, data=data).json()
 
-# response is a JSON formatted dictionary containing status, image_base64_standard, and image_base64_hd
+# response는 status, image_base64_standard 및 image_base64_hd를 포함하는 JSON 형식의 사전입니다.
 print(response)
+
 ```
 
-#### 2. Add Background Color
+#### 2. 배경색 추가
 
 ```python
 import requests
@@ -139,11 +140,11 @@ data = {"color": '638cce', "kb": None, "render": 0}
 
 response = requests.post(url, files=files, data=data).json()
 
-# response is a JSON formatted dictionary containing status and image_base64
+# response는 status와 image_base64를 포함하는 JSON 형식의 사전입니다.
 print(response)
 ```
 
-#### 3. Generate Six-Inch Layout Photo
+#### 3. 6인치 레이아웃 사진 생성
 
 ```python
 import requests
@@ -156,11 +157,11 @@ data = {"height": 413, "width": 295, "kb": 200}
 
 response = requests.post(url, files=files, data=data).json()
 
-# response is a JSON formatted dictionary containing status and image_base64
+# response는 status와 image_base64를 포함하는 JSON 형식의 사전입니다.
 print(response)
 ```
 
-#### 4. Human Matting
+#### 4. 인물 추출
 
 ```python
 import requests
@@ -173,73 +174,73 @@ data = {"human_matting_model": "hivision_modnet"}
 
 response = requests.post(url, files=files, data=data).json()
 
-# response is a JSON formatted dictionary containing status and image_base64
+# response는 status와 image_base64를 포함하는 JSON 형식의 사전입니다.
 print(response)
 ```
 
-### 2️⃣ Python Script Method
+### 2️⃣ Python 스크립트 요청 방법
 
 ```bash
 python requests_api.py -u <URL> -t <TYPE> -i <INPUT_IMAGE_DIR> -o <OUTPUT_IMAGE_DIR> [--height <HEIGHT>] [--width <WIDTH>] [-c <COLOR>] [-k <KB>]
 ```
 
-#### Parameter Descriptions
+#### 매개변수 설명
 
-##### Basic Parameters
+##### 기본 매개변수
 
 - `-u`, `--url`
 
-  - **Description**: The URL of the API service.
-  - **Default Value**: `http://127.0.0.1:8080`
+  - **설명**: API 서비스의 URL입니다.
+  - **기본값**: `http://127.0.0.1:8080`
 
 - `-t`, `--type`
 
-  - **Description**: The type of API request.
-  - **Default Value**: `idphoto`
+  - **설명**: 요청 API의 종류입니다.
+  - **기본값**: `idphoto`
 
 - `-i`, `--input_image_dir`
 
-  - **Description**: The path to the input image.
-  - **Required**: Yes
-  - **Example**: `./input_images/photo.jpg`
+  - **설명**: 입력 이미지 경로입니다.
+  - **필수**: 예
+  - **예시**: `./input_images/photo.jpg`
 
 - `-o`, `--output_image_dir`
-  - **Description**: The path to save the image.
-  - **Required**: Yes
-  - **Example**: `./output_images/processed_photo.jpg`
+  - **설명**: 저장 이미지 경로입니다.
+  - **필수**: 예
+  - **예시**: `./output_images/processed_photo.jpg`
 
-##### Optional Parameters
+##### 선택적 매개변수
 
 - `--face_detect_model`
-  - **Description**: Face detection model
-  - **Default Value**: mtcnn
+  - **설명**: 얼굴 인식 모델입니다.
+  - **기본값**: mtcnn
 
 - `--human_matting_model`
-  - **Description**: Human matting model
-  - **Default Value**: hivision_modnet
+  - **설명**: 인물 추출 모델입니다.
+  - **기본값**: hivision_modnet
 
 - `--height`
-  - **Description**: The height of the output size for the standard ID photo.
-  - **Default Value**: 413
+  - **설명**: 표준 증명사진의 출력 사이즈 높이입니다.
+  - **기본값**: 413
 
 - `--width`
-  - **Description**: The width of the output size for the standard ID photo.
-  - **Default Value**: 295
+  - **설명**: 표준 증명사진의 출력 사이즈 너비입니다.
+  - **기본값**: 295
 
 - `-c`, `--color`
-  - **Description**: Add background color to the transparent image, format as Hex (e.g., #638cce), only effective when type is `add_background`
-  - **Default Value**: `638cce`
+  - **설명**: 투명 이미지에 배경색을 추가합니다, 형식은 Hex(#638cce)입니다, type이 `add_background`일 때만 유효합니다.
+  - **기본값**: `638cce`
 
 - `-k`, `--kb`
-  - **Description**: The KB value of the output photo, only effective when type is `add_background` or `generate_layout_photos`, no setting when the value is None.
-  - **Default Value**: `None`
-  - **Example**: 50
+  - **설명**: 출력 사진의 KB 값입니다, type이 `add_background`와 `generate_layout_photos`일 때만 유효하며, 값이 None일 때는 설정하지 않습니다.
+  - **기본값**: `None`
+  - **예시**: 50
 
 - `-r`, `--render`
-  - **Description**: The rendering method for adding background color to the transparent image, only effective when type is `add_background` or `generate_layout_photos`
-  - **Default Value**: 0
+  - **설명**: 투명 이미지에 배경색을 추가할 때의 렌더링 방식입니다, type이 `add_background`와 `generate_layout_photos`일 때만 유효합니다.
+  - **기본값**: 0
 
-### 1. Generate ID Photo (Transparent Background)
+### 1. 증명사진 생성(투명 배경)
 
 ```bash
 python requests_api.py  \
@@ -253,7 +254,7 @@ python requests_api.py  \
     --human_matting_model hivision_modnet
 ```
 
-### 2. Add Background Color
+### 2. 배경색 추가
 
 ```bash
 python requests_api.py  \
@@ -266,7 +267,7 @@ python requests_api.py  \
     -r 0
 ```
 
-### 3. Generate Six-Inch Layout Photo
+### 3. 6인치 레이아웃 사진 생성
 
 ```bash
 python requests_api.py  \
@@ -279,7 +280,8 @@ python requests_api.py  \
     -k 200
 ```
 
-### 4. Human Matting
+
+### 4. 인물 추출
 
 ```bash
 python requests_api.py  \
@@ -290,15 +292,15 @@ python requests_api.py  \
     --human_matting_model hivision_modnet
 ```
 
-### Failure Cases
+### 요청 실패의 경우
 
-- If more than one face is detected in the photo, the request will fail.
+- 사진에서 감지된 얼굴이 1개 이상일 경우 실패합니다.
 
 <br>
 
-## Java Request Examples
+## Java 요청 예시
 
-### Add Maven Dependencies
+### Maven 의존성 추가
 
 ```java
 <dependency>
@@ -314,102 +316,102 @@ python requests_api.py  \
 </dependency>
 ```
 
-### Run Code
+### 코드 실행
 
-#### 1. Generate ID Photo (Transparent Background)
+#### 1. 증명사진 생성(투명 배경)
 
 ```java
 /**
-    * Generate ID Photo (Transparent Background) /idphoto API
-    * @param inputImageDir File path
+    * 증명사진 생성(투명 배경)  /idphoto 인터페이스
+    * @param inputImageDir 파일 주소
     * @return
     * @throws IOException
     */
 public static String requestIdPhoto(String inputImageDir) throws IOException {
     String url = BASE_URL+"/idphoto";
-    // Create file object
+    // 파일 객체 생성
     File inputFile = new File(inputImageDir);
     Map<String, Object> paramMap=new HashMap<>();
     paramMap.put("input_image",inputFile);
     paramMap.put("height","413");
     paramMap.put("width","295");
-    // Contains status, image_base64_standard, and image_base64_hd
+    // status, image_base64_standard 및 image_base64_hd를 포함합니다.
     return HttpUtil.post(url, paramMap);
 }
 ```
 
-#### 2. Add Background Color
+#### 2. 배경색 추가
 
 ```java
 /**
-    * Add Background Color /add_background API
-    * @param inputImageDir File path
+    * 배경색 추가  /add_background 인터페이스
+    * @param inputImageDir 파일 주소
     * @return
     * @throws IOException
     */
 public static String requestAddBackground(String inputImageDir) throws IOException {
     String url = BASE_URL+"/add_background";
-    // Create file object
+    // 파일 객체 생성
     File inputFile = new File(inputImageDir);
     Map<String, Object> paramMap=new HashMap<>();
     paramMap.put("input_image",inputFile);
     paramMap.put("color","638cce");
     paramMap.put("kb","200");
-    // response is a JSON formatted dictionary containing status and image_base64
+    // response는 status와 image_base64를 포함하는 JSON 형식의 사전입니다.
     return HttpUtil.post(url, paramMap);
 }
 ```
 
-#### 3. Generate Six-Inch Layout Photo
+#### 3. 6인치 레이아웃 사진 생성
 
 ```java
 /**
-    * Generate Six-Inch Layout Photo /generate_layout_photos API
-    * @param inputImageDir File path
+    * 6인치 레이아웃 사진 생성  /generate_layout_photos 인터페이스
+    * @param inputImageDir 파일 주소
     * @return
     * @throws IOException
     */
 public static String requestGenerateLayoutPhotos(String inputImageDir) throws IOException {
     String url = BASE_URL+"/generate_layout_photos";
-    // Create file object
+    // 파일 객체 생성
     File inputFile = new File(inputImageDir);
     Map<String, Object> paramMap=new HashMap<>();
     paramMap.put("input_image",inputFile);
     paramMap.put("height","413");
     paramMap.put("width","295");
     paramMap.put("kb","200");
-    // response is a JSON formatted dictionary containing status and image_base64
+    // response는 status와 image_base64를 포함하는 JSON 형식의 사전입니다.
     return HttpUtil.post(url, paramMap);
 }
 ```
 
-#### 4. Human Matting
+#### 4. 인물 추출
 
 ```java
 /**
-    * Generate Human Matting Photo /human_matting API
-    * @param inputImageDir File path
+    * 인물 추출 사진 생성  /human_matting 인터페이스
+    * @param inputImageDir 파일 주소
     * @return
     * @throws IOException
     */
 public static String requestHumanMattingPhotos(String inputImageDir) throws IOException {
     String url = BASE_URL+"/human_matting";
-    // Create file object
+    // 파일 객체 생성
     File inputFile = new File(inputImageDir);
     Map<String, Object> paramMap=new HashMap<>();
     paramMap.put("input_image",inputFile);
-    // Contains status and image_base64
+    // status와 image_base64를 포함합니다.
     return HttpUtil.post(url, paramMap);
 }
 ```
 
 <br>
 
-## JavaScript Request Examples
+## JavaScript 요청 예시
 
-In JavaScript, we can use the `fetch` API to send HTTP requests. Below are examples of how to call these APIs using JavaScript.
+JavaScript에서는 `fetch` API를 사용하여 HTTP 요청을 보낼 수 있습니다. 다음은 JavaScript를 사용하여 이 API를 호출하는 예시입니다.
 
-### 1. Generate ID Photo (Transparent Background)
+### 1. 증명사진 생성(투명 배경)
 
 ```javascript
 async function generateIdPhoto(inputImagePath, height, width) {
@@ -429,13 +431,13 @@ async function generateIdPhoto(inputImagePath, height, width) {
     return result;
 }
 
-// Example call
+// 예시 호출
 generateIdPhoto("images/test.jpg", 413, 295).then(response => {
     console.log(response);
 });
 ```
 
-### 2. Add Background Color
+### 2. 배경색 추가
 
 ```javascript
 async function addBackground(inputImagePath, color, kb) {
@@ -455,13 +457,13 @@ async function addBackground(inputImagePath, color, kb) {
     return result;
 }
 
-// Example call
+// 예시 호출
 addBackground("test.png", "638cce", 200).then(response => {
     console.log(response);
 });
 ```
 
-### 3. Generate Six-Inch Layout Photo
+### 3. 6인치 레이아웃 사진 생성
 
 ```javascript
 async function generateLayoutPhotos(inputImagePath, height, width, kb) {
@@ -482,13 +484,13 @@ async function generateLayoutPhotos(inputImagePath, height, width, kb) {
     return result;
 }
 
-// Example call
+// 예시 호출
 generateLayoutPhotos("test.jpg", 413, 295, 200).then(response => {
     console.log(response);
 });
 ```
 
-### 4. Human Matting
+### 4. 인물 추출
 
 ```javascript
 async function uploadImage(inputImagePath) {
@@ -501,12 +503,12 @@ async function uploadImage(inputImagePath) {
         body: formData
     });
 
-    const result = await response.json(); // Assume the response is in JSON format
+    const result = await response.json(); // 응답이 JSON 형식이라고 가정합니다.
     console.log(result);
     return result;
 }
 
-// Example call
+// 예시 호출
 uploadImage("demo/images/test.jpg").then(response => {
     console.log(response);
 });

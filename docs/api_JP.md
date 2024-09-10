@@ -1,22 +1,21 @@
 # API Docs
 
-English / [中文](api_CN.md) / [日本語](api_JP.md) / [한국어](api_KO.md)
+[English](api_EN.md) / [中文](api_CN.md) / 日本語 / [한국어](api_KO.md)
 
+## 目次
 
-## Table of Contents
+- [始める前に：バックエンドサービスを起動する](#始める前にバックエンドサービスを起動する)
+- [インターフェース機能説明](#インターフェース機能説明)
+- [cURL リクエスト例](#curl-リクエスト例)
+- [Python リクエスト例](#python-リクエスト例)
+  - [Python Requests リクエスト方法](#1️⃣-python-requests-リクエスト方法)
+  - [Python スクリプトリクエスト方法](#2️⃣-python-スクリプトリクエスト方法)
+- [Java リクエスト例](#java-リクエスト例)
+- [Javascript リクエスト例](#javascript-リクエスト例)
 
-- [Getting Started: Start the Backend Service](#getting-started-start-the-backend-service)
-- [API Function Descriptions](#api-function-descriptions)
-- [cURL Request Examples](#curl-request-examples)
-- [Python Request Examples](#python-request-examples)
-  - [Python Requests Method](#1️⃣-python-requests-method)
-  - [Python Script Method](#2️⃣-python-script-method)
-- [Java Request Examples](#java-request-examples)
-- [JavaScript Request Examples](#javascript-request-examples)
+## 始める前に：バックエンドサービスを起動する
 
-## Getting Started: Start the Backend Service
-
-Before making API requests, please start the backend service
+API をリクエストする前に、バックエンドサービスを実行してください。
 
 ```bash
 python deploy_api.py
@@ -24,47 +23,47 @@ python deploy_api.py
 
 <br>
 
-## API Function Descriptions
+## インターフェース機能説明
 
-### 1. Generate ID Photo (Transparent Background)
+### 1.証明写真を生成する（透明な背景）
 
-API Name: `idphoto`
+インターフェース名：`idphoto`
 
-The logic of the `Generate ID Photo` API is to send an RGB image and output a standard ID photo and a high-definition ID photo:
+`証明写真を生成する`インターフェースのロジックは、RGB画像を送信し、標準の証明写真と高解像度の証明写真を出力します：
 
-- **High-definition ID Photo**: The ID photo created based on the aspect ratio of `size`, with the filename being `output_image_dir` with the `_hd` suffix added.
-- **Standard ID Photo**: The size is equal to `size`, scaled from the high-definition ID photo, with the filename being `output_image_dir`.
+- **高解像度の証明写真**：`size`のアスペクト比に基づいて作成された証明写真で、ファイル名は`output_image_dir`に`_hd`という接尾辞が追加されます。
+- **標準の証明写真**：サイズは`size`と等しく、高解像度の証明写真からスケーリングされ、ファイル名は`output_image_dir`です。
 
-It is important to note that both generated photos are transparent (RGBA four-channel images). To generate a complete ID photo, the following `Add Background Color` API is needed.
+生成される2枚の写真はどちらも透明です（RGBA 4チャンネル画像）ので、完全な証明写真を生成するには、以下の`背景色を追加する`インターフェースが必要です。
 
-> Q: Why is it designed this way?  
-> A: Because in actual products, users often switch background colors to preview effects frequently. Providing a transparent background image allows for a better experience with color composition done by frontend JS code.
+> 質問：なぜこのように設計されているのですか？  
+> 答え：実際の製品では、ユーザーが頻繁に背景色を切り替えてプレビュー効果を確認するため、透明な背景画像を直接提供し、フロントエンドのjsコードで色を合成する方がより良い体験となります。
 
-### 2. Add Background Color
+### 2.背景色を追加する
 
-API Name: `add_background`
+インターフェース名：`add_background`
 
-The logic of the `Add Background Color` API is to send an RGBA image and add a background color based on `color`, resulting in a JPG image.
+`背景色を追加する`インターフェースのロジックは、RGBA画像を送信し、`color`に基づいて背景色を追加し、JPG画像を合成します。
 
-### 3. Generate Six-Inch Layout Photo
+### 3.六寸レイアウト写真を生成する
 
-API Name: `generate_layout_photos`
+インターフェース名：`generate_layout_photos`
 
-The logic of the `Generate Six-Inch Layout Photo` API is to send an RGB image (typically the ID photo after adding background color) and arrange the photos based on `size`, resulting in a six-inch layout photo.
+`六寸レイアウト写真を生成する`インターフェースのロジックは、RGB画像（一般的には背景色を追加した後の証明写真）を送信し、`size`に基づいて写真を配置し、六寸レイアウト写真を生成します。
 
-### 4. Human Matting
+### 4.人物切り抜き
 
-API Name: `human_matting`
+インターフェース名：`human_matting`
 
-The logic of the `Human Matting` API is to send an RGB image and output a standard matting portrait and a high-definition matting portrait (with no background fill).
+`人物切り抜き`インターフェースのロジックは、RGB画像を送信し、標準の切り抜き人物写真と高解像度の切り抜き人物写真（背景が何も填充されていない）を出力します。
 
 <br>
 
-## cURL Request Examples
+## cURL リクエスト例
 
-cURL is a command-line tool for transferring data using various network protocols. Below are examples of using cURL to call these APIs.
+cURLは、さまざまなネットワークプロトコルを使用してデータを転送するためのコマンドラインツールです。以下は、cURLを使用してこれらのAPIを呼び出す例です。
 
-### 1. Generate ID Photo (Transparent Background)
+### 1. 証明写真を生成する（透明な背景）
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/idphoto" \
@@ -75,7 +74,7 @@ curl -X POST "http://127.0.0.1:8080/idphoto" \
 -F "face_detect_model=mtcnn"
 ```
 
-### 2. Add Background Color
+### 2. 背景色を追加する
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/add_background" \
@@ -85,7 +84,7 @@ curl -X POST "http://127.0.0.1:8080/add_background" \
 -F "render=0"
 ```
 
-### 3. Generate Six-Inch Layout Photo
+### 3. 六寸レイアウト写真を生成する
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
@@ -95,7 +94,7 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 -F "kb=200"
 ```
 
-### 4. Human Matting
+### 4. 人物切り抜き
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/human_matting" \
@@ -105,11 +104,11 @@ curl -X POST "http://127.0.0.1:8080/human_matting" \
 
 <br>
 
-## Python Request Examples
+## Python リクエスト例
 
-### 1️⃣ Python Requests Method
+### 1️⃣ Python Requests リクエスト方法
 
-#### 1. Generate ID Photo (Transparent Background)
+#### 1.証明写真を生成する（透明な背景）
 
 ```python
 import requests
@@ -122,11 +121,12 @@ data = {"height": 413, "width": 295, "human_matting_model": "hivision_modnet", "
 
 response = requests.post(url, files=files, data=data).json()
 
-# response is a JSON formatted dictionary containing status, image_base64_standard, and image_base64_hd
+# responseはjson形式の辞書で、status、image_base64_standard、image_base64_hdの3項目を含みます
 print(response)
+
 ```
 
-#### 2. Add Background Color
+#### 2.背景色を追加する
 
 ```python
 import requests
@@ -139,11 +139,11 @@ data = {"color": '638cce', "kb": None, "render": 0}
 
 response = requests.post(url, files=files, data=data).json()
 
-# response is a JSON formatted dictionary containing status and image_base64
+# responseはjson形式の辞書で、statusとimage_base64を含みます
 print(response)
 ```
 
-#### 3. Generate Six-Inch Layout Photo
+#### 3.六寸レイアウト写真を生成する
 
 ```python
 import requests
@@ -156,11 +156,11 @@ data = {"height": 413, "width": 295, "kb": 200}
 
 response = requests.post(url, files=files, data=data).json()
 
-# response is a JSON formatted dictionary containing status and image_base64
+# responseはjson形式の辞書で、statusとimage_base64を含みます
 print(response)
 ```
 
-#### 4. Human Matting
+#### 4.人物切り抜き
 
 ```python
 import requests
@@ -173,73 +173,73 @@ data = {"human_matting_model": "hivision_modnet"}
 
 response = requests.post(url, files=files, data=data).json()
 
-# response is a JSON formatted dictionary containing status and image_base64
+# responseはjson形式の辞書で、statusとimage_base64を含みます
 print(response)
 ```
 
-### 2️⃣ Python Script Method
+### 2️⃣ Python スクリプトリクエスト方法
 
 ```bash
 python requests_api.py -u <URL> -t <TYPE> -i <INPUT_IMAGE_DIR> -o <OUTPUT_IMAGE_DIR> [--height <HEIGHT>] [--width <WIDTH>] [-c <COLOR>] [-k <KB>]
 ```
 
-#### Parameter Descriptions
+#### パラメータ説明
 
-##### Basic Parameters
+##### 基本パラメータ
 
 - `-u`, `--url`
 
-  - **Description**: The URL of the API service.
-  - **Default Value**: `http://127.0.0.1:8080`
+  - **説明**: APIサービスのURL。
+  - **デフォルト値**: `http://127.0.0.1:8080`
 
 - `-t`, `--type`
 
-  - **Description**: The type of API request.
-  - **Default Value**: `idphoto`
+  - **説明**: APIをリクエストする種類。
+  - **デフォルト値**: `idphoto`
 
 - `-i`, `--input_image_dir`
 
-  - **Description**: The path to the input image.
-  - **Required**: Yes
-  - **Example**: `./input_images/photo.jpg`
+  - **説明**: 入力画像のパス。
+  - **必須**: はい
+  - **例**: `./input_images/photo.jpg`
 
 - `-o`, `--output_image_dir`
-  - **Description**: The path to save the image.
-  - **Required**: Yes
-  - **Example**: `./output_images/processed_photo.jpg`
+  - **説明**: 画像の保存パス。
+  - **必須**: はい
+  - **例**: `./output_images/processed_photo.jpg`
 
-##### Optional Parameters
+##### オプションパラメータ
 
 - `--face_detect_model`
-  - **Description**: Face detection model
-  - **Default Value**: mtcnn
+  - **説明**: 顔検出モデル
+  - **デフォルト値**: mtcnn
 
 - `--human_matting_model`
-  - **Description**: Human matting model
-  - **Default Value**: hivision_modnet
+  - **説明**: 人物切り抜きモデル
+  - **デフォルト値**: hivision_modnet
 
-- `--height`
-  - **Description**: The height of the output size for the standard ID photo.
-  - **Default Value**: 413
+- `--height`,
+  - **説明**: 標準証明写真の出力サイズの高さ。
+  - **デフォルト値**: 413
 
-- `--width`
-  - **Description**: The width of the output size for the standard ID photo.
-  - **Default Value**: 295
+- `--width`,
+  - **説明**: 標準証明写真の出力サイズの幅。
+  - **デフォルト値**: 295
 
 - `-c`, `--color`
-  - **Description**: Add background color to the transparent image, format as Hex (e.g., #638cce), only effective when type is `add_background`
-  - **Default Value**: `638cce`
+  - **説明**: 透明画像に背景色を追加する、形式はHex（例：#638cce）、typeが`add_background`のときのみ有効
+  - **デフォルト値**: `638cce`
 
 - `-k`, `--kb`
-  - **Description**: The KB value of the output photo, only effective when type is `add_background` or `generate_layout_photos`, no setting when the value is None.
-  - **Default Value**: `None`
-  - **Example**: 50
+  - **説明**: 出力写真のKB値、typeが`add_background`と`generate_layout_photos`のときのみ有効、値がNoneのときは設定しません。
+  - **デフォルト値**: `None`
+  - **例**: 50
 
 - `-r`, `--render`
-  - **Description**: The rendering method for adding background color to the transparent image, only effective when type is `add_background` or `generate_layout_photos`
-  - **Default Value**: 0
+  - **説明**: 透明画像に背景色を追加する際のレンダリング方式、typeが`add_background`と`generate_layout_photos`のときのみ有効
+  - **デフォルト値**: 0
 
-### 1. Generate ID Photo (Transparent Background)
+### 1.証明写真を生成する（透明な背景）
 
 ```bash
 python requests_api.py  \
@@ -253,7 +253,7 @@ python requests_api.py  \
     --human_matting_model hivision_modnet
 ```
 
-### 2. Add Background Color
+### 2.背景色を追加する
 
 ```bash
 python requests_api.py  \
@@ -266,7 +266,7 @@ python requests_api.py  \
     -r 0
 ```
 
-### 3. Generate Six-Inch Layout Photo
+### 3.六寸レイアウト写真を生成する
 
 ```bash
 python requests_api.py  \
@@ -279,7 +279,7 @@ python requests_api.py  \
     -k 200
 ```
 
-### 4. Human Matting
+### 4.人物切り抜き
 
 ```bash
 python requests_api.py  \
@@ -290,15 +290,15 @@ python requests_api.py  \
     --human_matting_model hivision_modnet
 ```
 
-### Failure Cases
+### リクエスト失敗の状況
 
-- If more than one face is detected in the photo, the request will fail.
+- 写真に検出された顔が1つを超える場合、失敗します。
 
 <br>
 
-## Java Request Examples
+## Java リクエスト例
 
-### Add Maven Dependencies
+### Maven依存関係を追加
 
 ```java
 <dependency>
@@ -314,102 +314,102 @@ python requests_api.py  \
 </dependency>
 ```
 
-### Run Code
+### コードを実行する
 
-#### 1. Generate ID Photo (Transparent Background)
+#### 1.証明写真を生成する（透明な背景）
 
 ```java
 /**
-    * Generate ID Photo (Transparent Background) /idphoto API
-    * @param inputImageDir File path
+    * 証明写真を生成する（透明な背景） /idphoto インターフェース
+    * @param inputImageDir ファイルのパス
     * @return
     * @throws IOException
     */
 public static String requestIdPhoto(String inputImageDir) throws IOException {
     String url = BASE_URL+"/idphoto";
-    // Create file object
+    // ファイルオブジェクトを作成
     File inputFile = new File(inputImageDir);
     Map<String, Object> paramMap=new HashMap<>();
     paramMap.put("input_image",inputFile);
     paramMap.put("height","413");
     paramMap.put("width","295");
-    // Contains status, image_base64_standard, and image_base64_hd
+    // status、image_base64_standard、image_base64_hdの3項目を含みます
     return HttpUtil.post(url, paramMap);
 }
 ```
 
-#### 2. Add Background Color
+#### 2.背景色を追加する
 
 ```java
 /**
-    * Add Background Color /add_background API
-    * @param inputImageDir File path
+    * 背景色を追加する /add_background インターフェース
+    * @param inputImageDir ファイルのパス
     * @return
     * @throws IOException
     */
 public static String requestAddBackground(String inputImageDir) throws IOException {
     String url = BASE_URL+"/add_background";
-    // Create file object
+    // ファイルオブジェクトを作成
     File inputFile = new File(inputImageDir);
     Map<String, Object> paramMap=new HashMap<>();
     paramMap.put("input_image",inputFile);
     paramMap.put("color","638cce");
     paramMap.put("kb","200");
-    // response is a JSON formatted dictionary containing status and image_base64
+    // responseはjson形式の辞書で、statusとimage_base64を含みます
     return HttpUtil.post(url, paramMap);
 }
 ```
 
-#### 3. Generate Six-Inch Layout Photo
+#### 3.六寸レイアウト写真を生成する
 
 ```java
 /**
-    * Generate Six-Inch Layout Photo /generate_layout_photos API
-    * @param inputImageDir File path
+    * 六寸レイアウト写真を生成する /generate_layout_photos インターフェース
+    * @param inputImageDir ファイルのパス
     * @return
     * @throws IOException
     */
 public static String requestGenerateLayoutPhotos(String inputImageDir) throws IOException {
     String url = BASE_URL+"/generate_layout_photos";
-    // Create file object
+    // ファイルオブジェクトを作成
     File inputFile = new File(inputImageDir);
     Map<String, Object> paramMap=new HashMap<>();
     paramMap.put("input_image",inputFile);
     paramMap.put("height","413");
     paramMap.put("width","295");
     paramMap.put("kb","200");
-    // response is a JSON formatted dictionary containing status and image_base64
+    // responseはjson形式の辞書で、statusとimage_base64を含みます
     return HttpUtil.post(url, paramMap);
 }
 ```
 
-#### 4. Human Matting
+#### 4.人物切り抜き
 
 ```java
 /**
-    * Generate Human Matting Photo /human_matting API
-    * @param inputImageDir File path
+    * 人物切り抜き写真を生成する /human_matting インターフェース
+    * @param inputImageDir ファイルのパス
     * @return
     * @throws IOException
     */
 public static String requestHumanMattingPhotos(String inputImageDir) throws IOException {
     String url = BASE_URL+"/human_matting";
-    // Create file object
+    // ファイルオブジェクトを作成
     File inputFile = new File(inputImageDir);
     Map<String, Object> paramMap=new HashMap<>();
     paramMap.put("input_image",inputFile);
-    // Contains status and image_base64
+    // status、image_base64を含みます
     return HttpUtil.post(url, paramMap);
 }
 ```
 
 <br>
 
-## JavaScript Request Examples
+## JavaScript リクエスト例
 
-In JavaScript, we can use the `fetch` API to send HTTP requests. Below are examples of how to call these APIs using JavaScript.
+JavaScriptでは、`fetch` APIを使用してHTTPリクエストを送信できます。以下は、JavaScriptでこれらのAPIを呼び出す方法の例です。
 
-### 1. Generate ID Photo (Transparent Background)
+### 1. 証明写真を生成する（透明な背景）
 
 ```javascript
 async function generateIdPhoto(inputImagePath, height, width) {
@@ -429,13 +429,13 @@ async function generateIdPhoto(inputImagePath, height, width) {
     return result;
 }
 
-// Example call
+// サンプル呼び出し
 generateIdPhoto("images/test.jpg", 413, 295).then(response => {
     console.log(response);
 });
 ```
 
-### 2. Add Background Color
+### 2. 背景色を追加する
 
 ```javascript
 async function addBackground(inputImagePath, color, kb) {
@@ -455,13 +455,13 @@ async function addBackground(inputImagePath, color, kb) {
     return result;
 }
 
-// Example call
+// サンプル呼び出し
 addBackground("test.png", "638cce", 200).then(response => {
     console.log(response);
 });
 ```
 
-### 3. Generate Six-Inch Layout Photo
+### 3. 六寸レイアウト写真を生成する
 
 ```javascript
 async function generateLayoutPhotos(inputImagePath, height, width, kb) {
@@ -482,13 +482,13 @@ async function generateLayoutPhotos(inputImagePath, height, width, kb) {
     return result;
 }
 
-// Example call
+// サンプル呼び出し
 generateLayoutPhotos("test.jpg", 413, 295, 200).then(response => {
     console.log(response);
 });
 ```
 
-### 4. Human Matting
+### 4. 人物切り抜き
 
 ```javascript
 async function uploadImage(inputImagePath) {
@@ -501,12 +501,12 @@ async function uploadImage(inputImagePath) {
         body: formData
     });
 
-    const result = await response.json(); // Assume the response is in JSON format
+    const result = await response.json(); // 応答がJSON形式であると仮定
     console.log(result);
     return result;
 }
 
-// Example call
+// サンプル呼び出し
 uploadImage("demo/images/test.jpg").then(response => {
     console.log(response);
 });
