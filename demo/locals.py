@@ -252,6 +252,14 @@ LOCALES = {
             "label": "高清照",
         },
     },
+    "hd_photo_png": {
+        "en": {
+            "label": "Matting photo",
+        },
+        "zh": {
+            "label": "透明图",
+        },
+    },
     "layout_photo": {
         "en": {
             "label": "Layout photo",
