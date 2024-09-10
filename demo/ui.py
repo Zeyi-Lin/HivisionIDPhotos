@@ -16,11 +16,14 @@ def create_ui(
 ):
     DEFAULT_LANG = "zh"
     DEFAULT_HUMAN_MATTING_MODEL = "modnet_photographic_portrait_matting"
-    DEFAULT_FACE_DETECT_MODEL = "mtcnn"
+    DEFAULT_FACE_DETECT_MODEL = "retinaface-resnet50"
 
     if DEFAULT_HUMAN_MATTING_MODEL in human_matting_models:
         human_matting_models.remove(DEFAULT_HUMAN_MATTING_MODEL)
         human_matting_models.insert(0, DEFAULT_HUMAN_MATTING_MODEL)
+
+    if DEFAULT_FACE_DETECT_MODEL not in face_detect_models:
+        DEFAULT_FACE_DETECT_MODEL = "mtcnn"
 
     demo = gr.Blocks(title="HivisionIDPhotos")
 
