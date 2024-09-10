@@ -22,29 +22,7 @@ def create_ui(
         human_matting_models.remove(DEFAULT_HUMAN_MATTING_MODEL)
         human_matting_models.insert(0, DEFAULT_HUMAN_MATTING_MODEL)
 
-    css = """
-        #col-left {
-            margin: 0 auto;
-            max-width: 430px;
-        }
-        #col-mid {
-            margin: 0 auto;
-            max-width: 430px;
-        }
-        #col-right {
-            margin: 0 auto;
-            max-width: 430px;
-        }
-        #col-showcase {
-            margin: 0 auto;
-            max-width: 1100px;
-        }
-        #button {
-            color: blue;
-        }
-        """
-
-    demo = gr.Blocks(title="HivisionIDPhotos", css=css)
+    demo = gr.Blocks(title="HivisionIDPhotos")
 
     with demo:
         gr.HTML(load_description(os.path.join(root_dir, "assets/title.md")))
@@ -237,7 +215,9 @@ def create_ui(
                         ],
                     )
 
-                img_but = gr.Button(LOCALES["button"][DEFAULT_LANG]["label"])
+                img_but = gr.Button(
+                    LOCALES["button"][DEFAULT_LANG]["label"], elem_id="btn"
+                )
 
                 example_images = gr.Examples(
                     inputs=[img_input],
@@ -267,6 +247,13 @@ def create_ui(
                         height=350,
                         format="jpeg",
                     )
+                    img_output_standard_hd_png = gr.Image(
+                        label=LOCALES["hd_photo_png"][DEFAULT_LANG]["label"],
+                        height=350,
+                        format="png",
+                        elem_id="hd_photo_png",
+                    )
+
                 img_output_layout = gr.Image(
                     label=LOCALES["layout_photo"][DEFAULT_LANG]["label"],
                     height=350,
@@ -322,6 +309,9 @@ def create_ui(
                     ),
                     img_output_standard_hd: gr.update(
                         label=LOCALES["hd_photo"][language]["label"]
+                    ),
+                    img_output_standard_hd_png: gr.update(
+                        label=LOCALES["hd_photo_png"][language]["label"]
                     ),
                     img_output_layout: gr.update(
                         label=LOCALES["layout_photo"][language]["label"]
@@ -422,6 +412,7 @@ def create_ui(
                     notification,
                     img_output_standard,
                     img_output_standard_hd,
+                    img_output_standard_hd_png,
                     img_output_layout,
                     file_download,
                     head_measure_ratio_option,
@@ -484,6 +475,7 @@ def create_ui(
                 outputs=[
                     img_output_standard,
                     img_output_standard_hd,
+                    img_output_standard_hd_png,
                     img_output_layout,
                     notification,
                     file_download,
