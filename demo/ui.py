@@ -11,7 +11,9 @@ def load_description(fp):
     return content
 
 
-def create_ui(processor, root_dir, human_matting_models: list):
+def create_ui(
+    processor, root_dir, human_matting_models: list, face_detect_models: list
+):
     DEFAULT_LANG = "zh"
     DEFAULT_HUMAN_MATTING_MODEL = "modnet_photographic_portrait_matting"
     DEFAULT_FACE_DETECT_MODEL = "mtcnn"
@@ -61,7 +63,7 @@ def create_ui(processor, root_dir, human_matting_models: list):
                     )
 
                     face_detect_model_options = gr.Dropdown(
-                        choices=FACE_DETECT_MODELS,
+                        choices=face_detect_models,
                         label=LOCALES["face_model"][DEFAULT_LANG]["label"],
                         value=DEFAULT_FACE_DETECT_MODEL,
                     )

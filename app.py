@@ -16,6 +16,18 @@ HUMAN_MATTING_MODELS = [
     model for model in HUMAN_MATTING_MODELS if model in HUMAN_MATTING_MODELS_EXIST
 ]
 
+FACE_DETECT_MODELS = ["face++ (联网Online API)", "mtcnn"]
+FACE_DETECT_MODELS_EXPAND = (
+    ["retinaface-resnet50"]
+    if os.path.exists(
+        os.path.join(
+            root_dir, "hivision/creator/retinaface/weights/retinaface-resnet50.onnx"
+        )
+    )
+    else []
+)
+FACE_DETECT_MODELS += FACE_DETECT_MODELS_EXPAND
+
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
@@ -34,7 +46,9 @@ if __name__ == "__main__":
 
     processor = IDPhotoProcessor()
 
-    demo = create_ui(processor, root_dir, HUMAN_MATTING_MODELS_EXIST)
+    demo = create_ui(
+        processor, root_dir, HUMAN_MATTING_MODELS_EXIST, FACE_DETECT_MODELS
+    )
     demo.launch(
         server_name=args.host,
         server_port=args.port,

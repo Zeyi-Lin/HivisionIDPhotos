@@ -32,14 +32,14 @@ def download_file(url, save_path):
 
 
 def download_models(model_urls):
-    # 指定下载保存的目录
-    save_dir = "hivision/creator/weights"
-
-    # 创建目录（如果不存在的话）
-    os.makedirs(os.path.join(base_path, save_dir), exist_ok=True)
-
     # 下载每个模型
     for model_name, model_info in model_urls.items():
+        # 指定下载保存的目录
+        save_dir = model_info["location"]
+
+        # 创建目录（如果不存在的话）
+        os.makedirs(os.path.join(base_path, save_dir), exist_ok=True)
+
         url = model_info["url"]
         file_format = model_info["format"]
 
@@ -63,10 +63,12 @@ def main(models_to_download):
         "hivision_modnet": {
             "url": "https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx",
             "format": "onnx",
+            "location": "hivision/creator/weights",
         },
         "modnet_photographic_portrait_matting": {
             "url": "https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/modnet_photographic_portrait_matting.onnx",
             "format": "onnx",
+            "location": "hivision/creator/weights",
         },
         # "mnn_hivision_modnet": {
         #     "url": "https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/mnn_hivision_modnet.mnn",
@@ -75,10 +77,17 @@ def main(models_to_download):
         "rmbg-1.4": {
             "url": "https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx?download=true",
             "format": "onnx",
+            "location": "hivision/creator/weights",
         },
         "birefnet-v1-lite": {
             "url": "https://github.com/ZhengPeng7/BiRefNet/releases/download/v1/BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx",
             "format": "onnx",
+            "location": "hivision/creator/weights",
+        },
+        "retinaface-resnet50": {
+            "url": "https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/retinaface-resnet50.onnx",
+            "format": "onnx",
+            "location": "hivision/creator/retinaface/weights",
         },
     }
 

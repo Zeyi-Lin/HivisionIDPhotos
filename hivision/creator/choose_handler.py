@@ -9,7 +9,7 @@ HUMAN_MATTING_MODELS = [
     "rmbg-1.4",
 ]
 
-FACE_DETECT_MODELS = ["face++ (联网Online API)", "mtcnn"]
+FACE_DETECT_MODELS = ["face++ (联网Online API)", "mtcnn", "retinaface-resnet50"]
 
 
 def choose_handler(creator, matting_model_option=None, face_detect_option=None):
@@ -29,5 +29,7 @@ def choose_handler(creator, matting_model_option=None, face_detect_option=None):
         or face_detect_option == "face++ (联网Online API)"
     ):
         creator.detection_handler = detect_face_face_plusplus
+    elif face_detect_option == "retinaface-resnet50":
+        creator.detection_handler = detect_face_retinaface
     else:
         creator.detection_handler = detect_face_mtcnn
