@@ -148,7 +148,10 @@ class IDPhotoProcessor:
 
         else:
             (result_image_standard, result_image_hd, _, _) = result
+
+            result_image_standard_png = np.uint8(result_image_standard)
             result_image_hd_png = np.uint8(result_image_hd)
+
             if (
                 idphoto_json["render_mode"]
                 == LOCALES["render_mode"][language]["choices"][0]
@@ -274,6 +277,7 @@ class IDPhotoProcessor:
                 return [
                     result_image_standard,  # img_output_standard
                     result_image_hd,  # img_output_standard_hd
+                    result_image_standard_png,  # img_output_standard_hd_png
                     result_image_hd_png,  # img_output_standard_hd_png
                     result_layout_image,  # img_output_layout
                     gr.update(visible=False),  # notification
@@ -283,6 +287,7 @@ class IDPhotoProcessor:
                 return [
                     result_image_standard,  # img_output_standard
                     result_image_hd,  # img_output_standard_hd
+                    result_image_standard_png,  # img_output_standard_hd_png
                     result_image_hd_png,  # img_output_standard_hd_png
                     result_layout_image,  # img_output_layout
                     gr.update(visible=False),  # notification

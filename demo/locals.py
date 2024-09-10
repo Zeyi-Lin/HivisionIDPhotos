@@ -252,12 +252,20 @@ LOCALES = {
             "label": "高清照",
         },
     },
-    "hd_photo_png": {
+    "standard_photo_png": {
         "en": {
-            "label": "Matting photo",
+            "label": "Matting Standard photo",
         },
         "zh": {
-            "label": "透明图",
+            "label": "透明标准照",
+        },
+    },
+    "hd_photo_png": {
+        "en": {
+            "label": "Matting HD photo",
+        },
+        "zh": {
+            "label": "透明高清照",
         },
     },
     "layout_photo": {
@@ -274,6 +282,14 @@ LOCALES = {
         },
         "zh": {
             "label": "下载调整 KB 大小后的照片",
+        },
+    },
+    "matting_image": {
+        "en": {
+            "label": "Matting image",
+        },
+        "zh": {
+            "label": "抠图图像",
         },
     },
 }

@@ -247,21 +247,33 @@ def create_ui(
                         height=350,
                         format="jpeg",
                     )
-                    img_output_standard_hd_png = gr.Image(
-                        label=LOCALES["hd_photo_png"][DEFAULT_LANG]["label"],
-                        height=350,
-                        format="png",
-                        elem_id="hd_photo_png",
-                    )
 
                 img_output_layout = gr.Image(
                     label=LOCALES["layout_photo"][DEFAULT_LANG]["label"],
                     height=350,
                     format="jpeg",
                 )
+
                 file_download = gr.File(
                     label=LOCALES["download"][DEFAULT_LANG]["label"], visible=False
                 )
+
+                with gr.Accordion(
+                    LOCALES["matting_image"][DEFAULT_LANG]["label"], open=False
+                ) as matting_image_accordion:
+                    with gr.Row():
+                        img_output_standard_png = gr.Image(
+                            label=LOCALES["standard_photo_png"][DEFAULT_LANG]["label"],
+                            height=350,
+                            format="png",
+                            elem_id="standard_photo_png",
+                        )
+                        img_output_standard_hd_png = gr.Image(
+                            label=LOCALES["hd_photo_png"][DEFAULT_LANG]["label"],
+                            height=350,
+                            format="png",
+                            elem_id="hd_photo_png",
+                        )
 
             # ---------------- 设置隐藏/显示组件 ----------------
             def change_language(language):
@@ -310,6 +322,9 @@ def create_ui(
                     img_output_standard_hd: gr.update(
                         label=LOCALES["hd_photo"][language]["label"]
                     ),
+                    img_output_standard_png: gr.update(
+                        label=LOCALES["standard_photo_png"][language]["label"]
+                    ),
                     img_output_standard_hd_png: gr.update(
                         label=LOCALES["hd_photo_png"][language]["label"]
                     ),
@@ -357,6 +372,9 @@ def create_ui(
                         label=LOCALES["watermark_switch"][language]["label"],
                         choices=LOCALES["watermark_switch"][language]["choices"],
                         value=LOCALES["watermark_switch"][language]["choices"][0],
+                    ),
+                    matting_image_accordion: gr.update(
+                        label=LOCALES["matting_image"][language]["label"]
                     ),
                 }
 
@@ -412,6 +430,7 @@ def create_ui(
                     notification,
                     img_output_standard,
                     img_output_standard_hd,
+                    img_output_standard_png,
                     img_output_standard_hd_png,
                     img_output_layout,
                     file_download,
@@ -427,6 +446,7 @@ def create_ui(
                     watermark_text_angle,
                     watermark_text_space,
                     watermark_options,
+                    matting_image_accordion,
                 ],
             )
 
@@ -475,6 +495,7 @@ def create_ui(
                 outputs=[
                     img_output_standard,
                     img_output_standard_hd,
+                    img_output_standard_png,
                     img_output_standard_hd_png,
                     img_output_layout,
                     notification,
