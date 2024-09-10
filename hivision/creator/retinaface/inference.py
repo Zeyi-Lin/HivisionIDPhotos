@@ -3,7 +3,6 @@ import cv2
 import onnxruntime as ort
 from hivision.creator.retinaface.box_utils import decode, decode_landm
 from hivision.creator.retinaface.prior_box import PriorBox
-import argparse
 
 
 def py_cpu_nms(dets, thresh):
@@ -37,31 +36,15 @@ def py_cpu_nms(dets, thresh):
     return keep
 
 
-parser = argparse.ArgumentParser(description="Retinaface")
-
-parser.add_argument(
-    "--network", default="resnet50", help="Backbone network mobile0.25 or resnet50"
-)
-parser.add_argument(
-    "--cpu", action="store_true", default=False, help="Use cpu inference"
-)
-parser.add_argument(
-    "--confidence_threshold", default=0.8, type=float, help="confidence_threshold"
-)
-parser.add_argument("--top_k", default=5000, type=int, help="top_k")
-parser.add_argument("--nms_threshold", default=0.2, type=float, help="nms_threshold")
-parser.add_argument("--keep_top_k", default=750, type=int, help="keep_top_k")
-parser.add_argument(
-    "-s",
-    "--save_image",
-    action="store_true",
-    default=True,
-    help="show detection results",
-)
-parser.add_argument(
-    "--vis_thres", default=0.6, type=float, help="visualization_threshold"
-)
-args = parser.parse_args()
+# 替换掉 argparse 的部分，直接使用普通变量
+network = "resnet50"
+use_cpu = False
+confidence_threshold = 0.8
+top_k = 5000
+nms_threshold = 0.2
+keep_top_k = 750
+save_image = True
+vis_thres = 0.6
 
 
 def load_model_ort(model_path):
@@ -112,7 +95,6 @@ def retinaface_detect_faces(image, model_path: str, sess=None):
     inputs = {"input": img}
     loc, conf, landms = retinaface.run(None, inputs)
 
-    # tic = time.time()
     priorbox = PriorBox(cfg, image_size=(im_height, im_width))
     priors = priorbox.forward()
 
@@ -141,30 +123,28 @@ def retinaface_detect_faces(image, model_path: str, sess=None):
     landms = landms * scale1 / resize
 
     # ignore low scores
-    inds = np.where(scores > args.confidence_threshold)[0]
+    inds = np.where(scores > confidence_threshold)[0]
     boxes = boxes[inds]
     landms = landms[inds]
     scores = scores[inds]
 
     # keep top-K before NMS
-    order = scores.argsort()[::-1][: args.top_k]
+    order = scores.argsort()[::-1][:top_k]
     boxes = boxes[order]
     landms = landms[order]
     scores = scores[order]
 
     # do NMS
     dets = np.hstack((boxes, scores[:, np.newaxis])).astype(np.float32, copy=False)
-    keep = py_cpu_nms(dets, args.nms_threshold)
-    # keep = nms(dets, args.nms_threshold,force_cpu=args.cpu)
+    keep = py_cpu_nms(dets, nms_threshold)
     dets = dets[keep, :]
     landms = landms[keep]
 
     # keep top-K faster NMS
-    dets = dets[: args.keep_top_k, :]
-    landms = landms[: args.keep_top_k, :]
+    dets = dets[:keep_top_k, :]
+    landms = landms[:keep_top_k, :]
 
     dets = np.concatenate((dets, landms), axis=1)
-    # print("post processing time: {:.4f}s".format(time.time() - tic))
 
     return dets, retinaface
 
