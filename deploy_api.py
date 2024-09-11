@@ -252,6 +252,54 @@ async def set_kb(
     return result_messgae
 
 
+# 证件照智能裁剪接口
+@app.post("/idphoto_crop")
+async def idphoto_crop_inference(
+    input_image: UploadFile,
+    height: int = Form(413),
+    width: int = Form(295),
+    face_detect_model: str = Form("mtcnn"),
+    hd: bool = Form(True),
+    head_measure_ratio: float = 0.2,
+    head_height_ratio: float = 0.45,
+    top_distance_max: float = 0.12,
+    top_distance_min: float = 0.10,
+):
+
+    image_bytes = await input_image.read()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)  # 读取图像(4通道)
+
+    # ------------------- 选择抠图与人脸检测模型 -------------------
+    choose_handler(creator, face_detect_option=face_detect_model)
+
+    # 将字符串转为元组
+    size = (int(height), int(width))
+    try:
+        result = creator(
+            img,
+            size=size,
+            head_measure_ratio=head_measure_ratio,
+            head_height_ratio=head_height_ratio,
+            head_top_range=(top_distance_max, top_distance_min),
+            crop_only=True,
+        )
+    except FaceError:
+        result_message = {"status": False}
+    # 如果检测到人脸数量等于1, 则返回标准证和高清照结果（png 4通道图像）
+    else:
+        result_message = {
+            "status": True,
+            "image_base64_standard": numpy_2_base64(result.standard),
+        }
+
+        # 如果hd为True, 则增加高清照结果（png 4通道图像）
+        if hd:
+            result_message["image_base64_hd"] = numpy_2_base64(result.hd)
+
+    return result_message
+
+
 if __name__ == "__main__":
     import uvicorn
 

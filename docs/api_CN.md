@@ -42,19 +42,19 @@ python deploy_api.py
 
 接口名：`add_background`
 
-`添加背景色`接口的逻辑是发送一张 RGBA 图像，根据`color`添加背景色，合成一张 JPG 图像。
+`添加背景色`接口的逻辑是接收一张 RGBA 图像（透明图），根据`color`添加背景色，合成一张 JPG 图像。
 
 ### 3.生成六寸排版照
 
 接口名：`generate_layout_photos`
 
-`生成六寸排版照`接口的逻辑是发送一张 RGB 图像（一般为添加背景色之后的证件照），根据`size`进行照片排布，然后生成一张六寸排版照。
+`生成六寸排版照`接口的逻辑是接收一张 RGB 图像（一般为添加背景色之后的证件照），根据`size`进行照片排布，然后生成一张六寸排版照。
 
 ### 4.人像抠图
 
 接口名：`human_matting`
 
-`人像抠图`接口的逻辑是发送一张 RGB 图像，输出一张标准抠图人像照和高清抠图人像照（无任何背景填充）。
+`人像抠图`接口的逻辑是接收一张 RGB 图像，输出一张标准抠图人像照和高清抠图人像照（无任何背景填充）。
 
 ### 5.图像加水印
 
@@ -68,6 +68,12 @@ python deploy_api.py
 接口名：`set_kb`
 
 `设置图像KB大小`接口的功能是接收一张图像和目标文件大小（以KB为单位），如果设置的KB值小于原文件，则调整压缩率；如果设置的KB值大于源文件，则通过给文件头添加信息的方式调大KB值，目标是让图像的最终大小与设置的KB值一致。
+
+### 7.证件照裁切
+
+接口名：`idphoto_crop`
+
+`证件照裁切`接口的功能是接收一张 RBGA 图像（透明图），输出一张标准证件照和一张高清证件照。
 
 <br>
 
@@ -135,6 +141,18 @@ curl -X 'POST' \
   -F 'kb=50'
 ```
 
+### 7. 证件照裁切
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:8080/idphoto_crop?head_measure_ratio=0.2&head_height_ratio=0.45&top_distance_max=0.12&top_distance_min=0.1' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'input_image=@idphoto_matting.png;type=image/png' \
+  -F 'height=413' \
+  -F 'width=295' \
+  -F 'face_detect_model=mtcnn' \
+  -F 'hd=true'
+```
 
 <br>
 
@@ -236,7 +254,8 @@ else:
 ```
 
 ### 6. 设置图像KB大小
-```bash
+
+```python
 import requests
 
 # 设置请求的 URL
@@ -249,6 +268,44 @@ data = {"kb": 50}
 
 # 发送 POST 请求
 response = requests.post(url, files=files, data=data)
+
+# 检查响应
+if response.ok:
+    # 输出响应内容
+    print(response.json())
+else:
+    # 输出错误信息
+    print(f"Request failed with status code {response.status_code}: {response.text}")
+```
+
+### 7. 证件照裁切
+
+```python
+import requests
+
+# 设置请求的 URL
+url = "http://127.0.0.1:8080/idphoto_crop"
+
+# 设置请求参数
+params = {
+    "head_measure_ratio": 0.2,
+    "head_height_ratio": 0.45,
+    "top_distance_max": 0.12,
+    "top_distance_min": 0.1,
+}
+
+# 设置文件和其他表单数据
+input_image_path = "idphoto_matting.png"
+files = {"input_image": ("idphoto_matting.png", open(input_image_path, "rb"), "image/png")}
+data = {
+    "height": 413,
+    "width": 295,
+    "face_detect_model": "mtcnn",
+    "hd": "true"
+}
+
+# 发送 POST 请求
+response = requests.post(url, params=params, files=files, data=data)
 
 # 检查响应
 if response.ok:

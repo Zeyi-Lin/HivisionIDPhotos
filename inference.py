@@ -19,6 +19,7 @@ INFERENCE_TYPE = [
     "add_background",
     "generate_layout_photos",
     "watermark",
+    "idphoto_crop",
 ]
 MATTING_MODEL = [
     "hivision_modnet",
@@ -149,3 +150,20 @@ elif args.type == "generate_layout_photos":
         )
     else:
         cv2.imwrite(args.output_image_dir, result_layout_image)
+
+# 如果模式是证件照裁切
+elif args.type == "idphoto_crop":
+    # 将字符串转为元组
+    size = (int(args.height), int(args.width))
+    try:
+        result = creator(input_image, size=size, crop_only=True)
+    except FaceError:
+        print("人脸数量不等于 1，请上传单张人脸的图像。")
+    else:
+        # 保存标准照
+        cv2.imwrite(args.output_image_dir, result.standard)
+
+        # 保存高清照
+        file_name, file_extension = os.path.splitext(args.output_image_dir)
+        new_file_name = file_name + "_hd" + file_extension
+        cv2.imwrite(new_file_name, result.hd)
