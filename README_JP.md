@@ -50,6 +50,7 @@
 
 - オンライン体験： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
+- 2024.09.11: Gradioデモに**透過画像表示とダウンロード**機能を追加しました。
 - 2024.09.09: 新しい**背景除去モデル** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) を追加 | Gradioに**高度なパラメータ設定**および**ウォーターマーク**タブを追加
 - 2024.09.08: 新しい**切り抜きモデル** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) を追加 | **ComfyUIワークフロー** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) AIFSHによる貢献
 - 2024.09.07: **顔検出APIオプション** [Face++](docs/face++_EN.md) を追加し、より高精度な顔検出を実現
