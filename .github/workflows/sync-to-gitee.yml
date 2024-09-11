@@ -16,7 +16,7 @@ jobs:
 
     - name: Push to Gitee
       run: |
-        git config --global user.name ${{ secrets.GITEE_USERNAME }}
-        git config --global user.email ${{ secrets.GITEE_EMAIL }}
-        git remote add gitee https://${{ secrets.GITEE_USERNAME }}:${{ secrets.GITEE_TOKEN }}@gitee.com/${{ secrets.GITEE_USERNAME }}/HivisionIDPhotos.git
+        git config --global user.name ${{ vars.GITEE_USERNAME }}
+        git config --global user.email ${{ vars.GITEE_EMAIL }}
+        git remote add gitee https://${{ vars.GITEE_USERNAME }}:${{ secrets.GITEE_TOKEN }}@gitee.com/${{ vars.GITEE_USERNAME }}/HivisionIDPhotos.git
         git push -f gitee master:master
