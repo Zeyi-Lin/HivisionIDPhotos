@@ -27,14 +27,14 @@ def numpy_2_base64(img: np.ndarray):
 @app.post("/idphoto")
 async def idphoto_inference(
     input_image: UploadFile,
-    height: int = Form(413),
-    width: int = Form(295),
+    height: str = Form(...),
+    width: str = Form(...),
     human_matting_model: str = Form("hivision_modnet"),
     face_detect_model: str = Form("mtcnn"),
-    head_measure_ratio: float = 0.2,
-    head_height_ratio: float = 0.45,
-    top_distance_max: float = 0.12,
-    top_distance_min: float = 0.10,
+    head_measure_ratio=0.2,
+    head_height_ratio=0.45,
+    top_distance_max=0.12,
+    top_distance_min=0.10,
 ):
 
     image_bytes = await input_image.read()
@@ -52,7 +52,6 @@ async def idphoto_inference(
             size=size,
             head_measure_ratio=head_measure_ratio,
             head_height_ratio=head_height_ratio,
-            head_top_range=(top_distance_max, top_distance_min),
         )
     except FaceError:
         result_message = {"status": False}
@@ -101,7 +100,7 @@ async def idphoto_inference(
 async def photo_add_background(
     input_image: UploadFile,
     color: str = Form(...),
-    kb: int = Form(None),
+    kb: str = Form(None),
     render: int = Form(0),
 ):
     render_choice = ["pure_color", "updown_gradient", "center_gradient"]
@@ -147,7 +146,7 @@ async def generate_layout_photos(
     input_image: UploadFile,
     height: str = Form(...),
     width: str = Form(...),
-    kb: int = Form(None),
+    kb: str = Form(None),
 ):
     # try:
     image_bytes = await input_image.read()
@@ -181,6 +180,39 @@ async def generate_layout_photos(
     #     result_messgae = {
     #         "status": False,
     #     }
+
+    return result_messgae
+
+
+# 透明图像添加纯色背景接口
+@app.post("/watermark")
+async def watermark(
+    input_image: UploadFile,
+    text: str = Form("Hello"),
+    size: int = 20,
+    opacity: float = 0.5,
+    angle: int = 30,
+    color: str = "#000000",
+    space: int = 25,
+):
+    from demo.utils import add_watermark
+
+    image_bytes = await input_image.read()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    try:
+        result_image = add_watermark(img, text, size, opacity, angle, color, space)
+
+        result_messgae = {
+            "status": True,
+            "image_base64": numpy_2_base64(result_image),
+        }
+    except Exception as e:
+        result_messgae = {
+            "status": False,
+            "error": e,
+        }
 
     return result_messgae
 
