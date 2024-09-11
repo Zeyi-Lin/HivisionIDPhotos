@@ -52,6 +52,7 @@ async def idphoto_inference(
             size=size,
             head_measure_ratio=head_measure_ratio,
             head_height_ratio=head_height_ratio,
+            head_top_range=(top_distance_max, top_distance_min),
         )
     except FaceError:
         result_message = {"status": False}
