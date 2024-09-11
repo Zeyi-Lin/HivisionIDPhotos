@@ -75,12 +75,6 @@ def resize_image_to_kb(input_image, output_image_path, target_size_kb):
             quality = 1
 
 
-import numpy as np
-from PIL import Image
-import io
-import base64
-
-
 def resize_image_to_kb_base64(input_image, target_size_kb, mode="exact"):
     """
     Resize an image to a target size in KB and return it as a base64 encoded string.
@@ -154,11 +148,18 @@ def resize_image_to_kb_base64(input_image, target_size_kb, mode="exact"):
     return img_base64
 
 
-def numpy_2_base64(img: np.ndarray):
+def numpy_2_base64(img: np.ndarray) -> str:
     _, buffer = cv2.imencode(".png", img)
     base64_image = base64.b64encode(buffer).decode("utf-8")
 
     return base64_image
+
+
+def base64_2_numpy(base64_image: str) -> np.ndarray:
+    img = base64.b64decode(base64_image)
+    img = np.frombuffer(img, np.uint8)
+
+    return img
 
 
 def save_numpy_image(numpy_img, file_path):

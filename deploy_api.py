@@ -221,6 +221,33 @@ async def watermark(
     return result_messgae
 
 
+# 设置照片KB值接口(RGB图)
+@app.post("/set_kb")
+async def set_kb(
+    input_image: UploadFile,
+    kb: int = Form(50),
+):
+    image_bytes = await input_image.read()
+    nparr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    try:
+        result_image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+        result_image_base64 = resize_image_to_kb_base64(result_image, int(kb))
+
+        result_messgae = {
+            "status": True,
+            "image_base64": result_image_base64,
+        }
+    except Exception as e:
+        result_messgae = {
+            "status": False,
+            "error": e,
+        }
+
+    return result_messgae
+
+
 if __name__ == "__main__":
     import uvicorn
 
