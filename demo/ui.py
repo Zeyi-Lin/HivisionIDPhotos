@@ -2,7 +2,12 @@ import gradio as gr
 import os
 import pathlib
 from demo.locals import LOCALES
-from hivision.creator.choose_handler import FACE_DETECT_MODELS
+from demo.processor import IDPhotoProcessor
+
+"""
+只裁切模式:
+1. 如果重新上传了照片，然后点击按钮，第一次会调用不裁切的模式，第二次会调用裁切的模式
+"""
 
 
 def load_description(fp):
@@ -12,7 +17,10 @@ def load_description(fp):
 
 
 def create_ui(
-    processor, root_dir, human_matting_models: list, face_detect_models: list
+    processor: IDPhotoProcessor,
+    root_dir: str,
+    human_matting_models: list,
+    face_detect_models: list,
 ):
     DEFAULT_LANG = "zh"
     DEFAULT_HUMAN_MATTING_MODEL = "modnet_photographic_portrait_matting"
@@ -34,6 +42,10 @@ def create_ui(
             with gr.Column():
                 img_input = gr.Image(height=400)
 
+                def crop_only_false():
+                    # print("crop_only_false")
+                    processor.crop_only = False
+
                 with gr.Row():
                     # 语言选择器
                     language = ["zh", "en"]
@@ -54,6 +66,11 @@ def create_ui(
                         label=LOCALES["matting_model"][DEFAULT_LANG]["label"],
                         value=human_matting_models[0],
                     )
+
+                    # 重新上传照片、选择人脸检测模型、选择抠图模型时，重置裁切模式
+                    img_input.change(crop_only_false)
+                    face_detect_model_options.change(crop_only_false)
+                    matting_model_options.change(crop_only_false)
 
                 with gr.Tab(
                     LOCALES["key_param"][DEFAULT_LANG]["label"]
