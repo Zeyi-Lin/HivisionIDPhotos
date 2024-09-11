@@ -27,14 +27,14 @@ def numpy_2_base64(img: np.ndarray):
 @app.post("/idphoto")
 async def idphoto_inference(
     input_image: UploadFile,
-    height: str = Form(...),
-    width: str = Form(...),
+    height: int = Form(413),
+    width: int = Form(295),
     human_matting_model: str = Form("hivision_modnet"),
     face_detect_model: str = Form("mtcnn"),
-    head_measure_ratio=0.2,
-    head_height_ratio=0.45,
-    top_distance_max=0.12,
-    top_distance_min=0.10,
+    head_measure_ratio: float = 0.2,
+    head_height_ratio: float = 0.45,
+    top_distance_max: float = 0.12,
+    top_distance_min: float = 0.10,
 ):
 
     image_bytes = await input_image.read()
@@ -101,7 +101,7 @@ async def idphoto_inference(
 async def photo_add_background(
     input_image: UploadFile,
     color: str = Form(...),
-    kb: str = Form(None),
+    kb: int = Form(None),
     render: int = Form(0),
 ):
     render_choice = ["pure_color", "updown_gradient", "center_gradient"]
@@ -147,7 +147,7 @@ async def generate_layout_photos(
     input_image: UploadFile,
     height: str = Form(...),
     width: str = Form(...),
-    kb: str = Form(None),
+    kb: int = Form(None),
 ):
     # try:
     image_bytes = await input_image.read()
