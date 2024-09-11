@@ -83,7 +83,8 @@ curl -X POST "http://127.0.0.1:8080/idphoto" \
 -F "height=413" \
 -F "width=295" \
 -F "human_matting_model=hivision_modnet" \
--F "face_detect_model=mtcnn"
+-F "face_detect_model=mtcnn" \
+-F "hd=true"
 ```
 
 ### 2. 添加背景色
@@ -148,7 +149,7 @@ url = "http://127.0.0.1:8080/idphoto"
 input_image_path = "demo/images/test0.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
-data = {"height": 413, "width": 295, "human_matting_model": "hivision_modnet", "face_detect_model": "mtcnn"}
+data = {"height": 413, "width": 295, "human_matting_model": "hivision_modnet", "face_detect_model": "mtcnn", "hd": True}
 
 response = requests.post(url, files=files, data=data).json()
 
