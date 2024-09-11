@@ -14,12 +14,8 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Push to Gitee
-      env:
-        GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
-        GITEE_USERNAME: ${{ secrets.GITEE_USERNAME }}
-        GITEE_EMAIL: ${{ secrets.GITEE_EMAIL }}
       run: |
-        git config --global user.name ${GITEE_USERNAME}
-        git config --global user.email ${GITEE_EMAIL}
-        git remote add gitee https://${GITEE_USERNAME}:${GITEE_TOKEN}@gitee.com/${GITEE_USERNAME}/HivisionIDPhotos.git
+        git config --global user.name ${{ secrets.GITEE_USERNAME }}
+        git config --global user.email ${{ secrets.GITEE_EMAIL }}
+        git remote add gitee https://${{ secrets.GITEE_USERNAME }}:${{ secrets.GITEE_TOKEN }}@gitee.com/${{ secrets.GITEE_USERNAME }}/HivisionIDPhotos.git
         git push -f gitee master:master
