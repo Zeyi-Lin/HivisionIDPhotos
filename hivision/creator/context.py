@@ -16,15 +16,19 @@ class Params:
         self,
         size: Tuple[int, int] = (413, 295),
         change_bg_only: bool = False,
+        crop_only: bool = False,
         head_measure_ratio: float = 0.2,
         head_height_ratio: float = 0.45,
         head_top_range: float = (0.12, 0.1),
+        face: Tuple[int, int, int, int] = None,
     ):
         self.__size = size
         self.__change_bg_only = change_bg_only
+        self.__crop_only = crop_only
         self.__head_measure_ratio = head_measure_ratio
         self.__head_height_ratio = head_height_ratio
         self.__head_top_range = head_top_range
+        self.__face = face
 
     @property
     def size(self):
@@ -46,17 +50,28 @@ class Params:
     def head_top_range(self):
         return self.__head_top_range
 
+    @property
+    def crop_only(self):
+        return self.__crop_only
+
+    @property
+    def face(self):
+        return self.__face
+
 
 class Result:
     def __init__(
         self,
         standard: np.ndarray,
         hd: np.ndarray,
+        matting: np.ndarray,
         clothing_params: Optional[dict],
         typography_params: Optional[dict],
+        face: Optional[Tuple[int, int, int, int, float]],
     ):
         self.standard = standard
         self.hd = hd
+        self.matting = matting
         self.clothing_params = clothing_params
         """
         服装参数，仅换底时为 None
@@ -65,10 +80,18 @@ class Result:
         """
         排版参数，仅换底时为 None
         """
+        self.face = face
 
     def __iter__(self):
         return iter(
-            [self.standard, self.hd, self.clothing_params, self.typography_params]
+            [
+                self.standard,
+                self.hd,
+                self.matting,
+                self.clothing_params,
+                self.typography_params,
+                self.face,
+            ]
         )
 
 
