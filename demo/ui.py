@@ -43,10 +43,8 @@ def create_ui(
                 img_input = gr.Image(height=400)
 
                 def crop_only_false():
-                    print("crop_only_false")
+                    # print("crop_only_false")
                     processor.crop_only = False
-
-                img_input.change(crop_only_false)  # 重新上传照片时，重置裁切模式
 
                 with gr.Row():
                     # 语言选择器
@@ -68,6 +66,11 @@ def create_ui(
                         label=LOCALES["matting_model"][DEFAULT_LANG]["label"],
                         value=human_matting_models[0],
                     )
+
+                    # 重新上传照片、选择人脸检测模型、选择抠图模型时，重置裁切模式
+                    img_input.change(crop_only_false)
+                    face_detect_model_options.change(crop_only_false)
+                    matting_model_options.change(crop_only_false)
 
                 with gr.Tab(
                     LOCALES["key_param"][DEFAULT_LANG]["label"]
