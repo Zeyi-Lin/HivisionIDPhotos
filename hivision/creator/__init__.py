@@ -51,6 +51,7 @@ class IDCreator:
         image: np.ndarray,
         size: Tuple[int, int] = (413, 295),
         change_bg_only: bool = False,
+        crop_only: bool = False,
         head_measure_ratio: float = 0.2,
         head_height_ratio: float = 0.45,
         head_top_range: float = (0.12, 0.1),
@@ -73,6 +74,7 @@ class IDCreator:
             head_measure_ratio=head_measure_ratio,
             head_height_ratio=head_height_ratio,
             head_top_range=head_top_range,
+            crop_only=crop_only,
         )
         self.ctx = Context(params)
         ctx = self.ctx
@@ -82,18 +84,26 @@ class IDCreator:
         )  # 将输入图片 resize 到最大边长为 2000
         ctx.origin_image = ctx.processing_image.copy()
         self.before_all and self.before_all(ctx)
+
         # 1. 人像抠图
-        self.matting_handler(ctx)
-        self.after_matting and self.after_matting(ctx)
+        if not ctx.params.crop_only:
+            self.matting_handler(ctx)
+            self.after_matting and self.after_matting(ctx)
+        else:
+            ctx.matting_image = ctx.processing_image
+
+        # 如果仅换底，则直接返回抠图结果
         if ctx.params.change_bg_only:
             ctx.result = Result(
                 standard=ctx.matting_image,
                 hd=ctx.matting_image,
+                matting=ctx.matting_image,
                 clothing_params=None,
                 typography_params=None,
             )
             self.after_all and self.after_all(ctx)
             return ctx.result
+
         # 2. 人脸检测
         self.detection_handler(ctx)
         self.after_detect and self.after_detect(ctx)
@@ -104,6 +114,7 @@ class IDCreator:
         ctx.result = Result(
             standard=result_image_standard,
             hd=result_image_hd,
+            matting=ctx.matting_image,
             clothing_params=clothing_params,
             typography_params=typography_params,
         )
