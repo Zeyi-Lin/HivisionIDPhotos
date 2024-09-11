@@ -191,7 +191,7 @@ python app.py
 输入 1 张照片，获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
 
 ```python
-python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
+python inference.py -i demo/images/test0.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
 ## 2. 人像抠图
@@ -199,7 +199,7 @@ python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --widt
 输入 1 张照片，获得 1张 4 通道透明 png
 
 ```python
-python inference.py -t human_matting -i demo/images/test.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
+python inference.py -t human_matting -i demo/images/test0.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
 ```
 
 ## 3. 透明图增加底色
@@ -217,6 +217,15 @@ python inference.py -t add_background -i ./idphoto.png -o ./idphoto_ab.jpg  -c 4
 ```python
 python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg  --height 413 --width 295 -k 200
 ```
+
+## 5. 证件照裁剪
+
+输入 1 张 4 通道照片（抠图好的图像），获得 1 张标准证件照和 1 张高清证件照的 4 通道透明 png
+
+```python
+python inference.py -t idphoto_crop -i ./idphoto_matting.png -o ./idphoto_crop.png --height 413 --width 295
+```
+
 
 <br>
 
