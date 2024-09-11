@@ -55,6 +55,7 @@ class IDCreator:
         head_measure_ratio: float = 0.2,
         head_height_ratio: float = 0.45,
         head_top_range: float = (0.12, 0.1),
+        face: Tuple[int, int, int, int] = None,
     ) -> Result:
         """
         证件照处理函数
@@ -75,6 +76,7 @@ class IDCreator:
             head_height_ratio=head_height_ratio,
             head_top_range=head_top_range,
             crop_only=crop_only,
+            face=face,
         )
         self.ctx = Context(params)
         ctx = self.ctx
@@ -100,12 +102,16 @@ class IDCreator:
                 matting=ctx.matting_image,
                 clothing_params=None,
                 typography_params=None,
+                face=None,
             )
             self.after_all and self.after_all(ctx)
             return ctx.result
 
         # 2. 人脸检测
-        self.detection_handler(ctx)
+        if not ctx.params.face:
+            self.detection_handler(ctx)
+        else:
+            ctx.face = ctx.params.face
         self.after_detect and self.after_detect(ctx)
         # 3. 图像调整
         result_image_hd, result_image_standard, clothing_params, typography_params = (
@@ -117,6 +123,7 @@ class IDCreator:
             matting=ctx.matting_image,
             clothing_params=clothing_params,
             typography_params=typography_params,
+            face=ctx.face,
         )
         self.after_all and self.after_all(ctx)
         return ctx.result

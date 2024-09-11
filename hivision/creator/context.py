@@ -20,6 +20,7 @@ class Params:
         head_measure_ratio: float = 0.2,
         head_height_ratio: float = 0.45,
         head_top_range: float = (0.12, 0.1),
+        face: Tuple[int, int, int, int] = None,
     ):
         self.__size = size
         self.__change_bg_only = change_bg_only
@@ -27,6 +28,7 @@ class Params:
         self.__head_measure_ratio = head_measure_ratio
         self.__head_height_ratio = head_height_ratio
         self.__head_top_range = head_top_range
+        self.__face = face
 
     @property
     def size(self):
@@ -52,6 +54,10 @@ class Params:
     def crop_only(self):
         return self.__crop_only
 
+    @property
+    def face(self):
+        return self.__face
+
 
 class Result:
     def __init__(
@@ -61,6 +67,7 @@ class Result:
         matting: np.ndarray,
         clothing_params: Optional[dict],
         typography_params: Optional[dict],
+        face: Optional[Tuple[int, int, int, int, float]],
     ):
         self.standard = standard
         self.hd = hd
@@ -73,6 +80,7 @@ class Result:
         """
         排版参数，仅换底时为 None
         """
+        self.face = face
 
     def __iter__(self):
         return iter(
@@ -82,6 +90,7 @@ class Result:
                 self.matting,
                 self.clothing_params,
                 self.typography_params,
+                self.face,
             ]
         )
 

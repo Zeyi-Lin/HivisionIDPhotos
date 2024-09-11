@@ -119,12 +119,12 @@ class IDPhotoProcessor:
 
         # 如果不是只裁切模式，则清空抠图缓存
         if not self.crop_only:
-            print("--清空缓存")
+            # print("--清空缓存")
             self.matting_cache = None
+            self.face_detect_cache = None
 
         try:
             if self.matting_cache is None:
-                print("不是缓存")
                 result = creator(
                     input_image,
                     change_bg_only=change_bg_only,
@@ -133,8 +133,9 @@ class IDPhotoProcessor:
                     head_top_range=(top_distance_max, top_distance_min),
                 )
                 self.matting_cache = result.matting
-            else:
-                print("使用缓存")
+                self.face_detect_cache = result.face
+            # 如果第一次点了只换底，第二次选了尺寸
+            elif self.matting_cache is not None and self.face_detect_cache is None:
                 result = creator(
                     self.matting_cache,
                     change_bg_only=change_bg_only,
@@ -142,6 +143,19 @@ class IDPhotoProcessor:
                     head_measure_ratio=head_measure_ratio,
                     head_top_range=(top_distance_max, top_distance_min),
                     crop_only=True,
+                )
+                self.face_detect_cache = result.face
+
+            else:
+                # print("使用缓存")
+                result = creator(
+                    self.matting_cache,
+                    change_bg_only=change_bg_only,
+                    size=idphoto_json["size"],
+                    head_measure_ratio=head_measure_ratio,
+                    head_top_range=(top_distance_max, top_distance_min),
+                    crop_only=True,
+                    face=self.face_detect_cache,
                 )
         except FaceError:
             return [
@@ -169,7 +183,7 @@ class IDPhotoProcessor:
             ]
 
         else:
-            (result_image_standard, result_image_hd, _, _, _) = result
+            (result_image_standard, result_image_hd, _, _, _, _) = result
 
             result_image_standard_png = np.uint8(result_image_standard)
             result_image_hd_png = np.uint8(result_image_hd)
