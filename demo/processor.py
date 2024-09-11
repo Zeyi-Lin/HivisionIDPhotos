@@ -15,10 +15,6 @@ from demo.locals import LOCALES
 
 
 class IDPhotoProcessor:
-    def __init__(self):
-        self.crop_only = False
-        self.matting_cache = None
-
     def process(
         self,
         input_image,
@@ -119,46 +115,14 @@ class IDPhotoProcessor:
             idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1]
         )
 
-        # 如果不是只裁切模式，则清空抠图缓存
-        if not self.crop_only:
-            # print("--清空缓存")
-            self.matting_cache = None
-            self.face_detect_cache = None
-
         try:
-            if self.matting_cache is None:
-                result = creator(
-                    input_image,
-                    change_bg_only=change_bg_only,
-                    size=idphoto_json["size"],
-                    head_measure_ratio=head_measure_ratio,
-                    head_top_range=(top_distance_max, top_distance_min),
-                )
-                self.matting_cache = result.matting
-                self.face_detect_cache = result.face
-            # 如果第一次点了只换底，第二次选了尺寸
-            elif self.matting_cache is not None and self.face_detect_cache is None:
-                result = creator(
-                    self.matting_cache,
-                    change_bg_only=change_bg_only,
-                    size=idphoto_json["size"],
-                    head_measure_ratio=head_measure_ratio,
-                    head_top_range=(top_distance_max, top_distance_min),
-                    crop_only=True,
-                )
-                self.face_detect_cache = result.face
-
-            else:
-                # print("使用缓存")
-                result = creator(
-                    self.matting_cache,
-                    change_bg_only=change_bg_only,
-                    size=idphoto_json["size"],
-                    head_measure_ratio=head_measure_ratio,
-                    head_top_range=(top_distance_max, top_distance_min),
-                    crop_only=True,
-                    face=self.face_detect_cache,
-                )
+            result = creator(
+                input_image,
+                change_bg_only=change_bg_only,
+                size=idphoto_json["size"],
+                head_measure_ratio=head_measure_ratio,
+                head_top_range=(top_distance_max, top_distance_min),
+            )
         except FaceError:
             return [
                 gr.update(value=None),  # img_output_standard
@@ -312,9 +276,6 @@ class IDPhotoProcessor:
                 )
             else:
                 output_image_path = None
-
-            # 设置crop_only模式为True，会在Gradio的上传图像组件变化时重新设置为False
-            self.crop_only = True
 
             # 返回结果
             if output_image_path:

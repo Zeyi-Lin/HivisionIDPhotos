@@ -108,11 +108,9 @@ class IDCreator:
             return ctx.result
 
         # 2. 人脸检测
-        if not ctx.params.face:
-            self.detection_handler(ctx)
-        else:
-            ctx.face = ctx.params.face
+        self.detection_handler(ctx)
         self.after_detect and self.after_detect(ctx)
+
         # 3. 图像调整
         result_image_hd, result_image_standard, clothing_params, typography_params = (
             adjust_photo(ctx)
