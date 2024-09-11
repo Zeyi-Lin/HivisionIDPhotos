@@ -42,7 +42,6 @@
 - [Python推理](#-python-推理)
 - [API服务部署](#️-部署-api-服务)
 - [Docker部署](#-docker-部署)
-- [群晖docker部署](#-docker-部署2)
 - [联系我们](#-联系我们)
 - [Q&A](#qa)
 - [贡献者](#贡献者)
@@ -97,6 +96,8 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)：ComfyUI证件照处理工作流，由 [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) 构建 
 
 [![](assets/comfyui.png)](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
+
+- [HivisionIDPhotos-NAS](https://github.com/ONG-Leo/HivisionIDPhotos-NAS): 群晖NAS部署中文教程，由 [ONG-Leo](https://github.com/ONG-Leo) 贡献
 
 <br>
 
@@ -332,11 +333,6 @@ docker run  -d -p 7860:7860 \
 ```
 
 <br>
-
-# 群晖docker部署
-    
-    教程链接：https://github.com/ONG-Leo/HivisionIDPhotos-NAS
-![image](https://github.com/user-attachments/assets/75f34d18-2d91-4355-8fba-207668476bca)
 
 
 # Q&A
