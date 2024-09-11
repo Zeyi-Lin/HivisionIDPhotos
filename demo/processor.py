@@ -70,6 +70,8 @@ class IDPhotoProcessor:
                 return [
                     gr.update(value=None),  # img_output_standard
                     gr.update(value=None),  # img_output_standard_hd
+                    gr.update(value=None),  # img_output_standard_png
+                    gr.update(value=None),  # img_output_standard_hd_png
                     None,  # img_output_layout (assuming it should be None or not updated)
                     gr.update(  # notification
                         value=LOCALES["size_mode"][language]["custom_size_eror"],
@@ -125,6 +127,8 @@ class IDPhotoProcessor:
             return [
                 gr.update(value=None),  # img_output_standard
                 gr.update(value=None),  # img_output_standard_hd
+                gr.update(value=None),  # img_output_standard_png
+                gr.update(value=None),  # img_output_standard_hd_png
                 gr.update(visible=False),  # img_output_layout
                 gr.update(  # notification
                     value=LOCALES["notification"][language]["face_error"],
@@ -137,6 +141,7 @@ class IDPhotoProcessor:
             return [
                 gr.update(value=None),  # img_output_standard
                 gr.update(value=None),  # img_output_standard_hd
+                gr.update(value=None),  # img_output_standard_png
                 gr.update(value=None),  # img_output_standard_hd_png
                 gr.update(visible=False),  # img_output_layout
                 gr.update(  # notification
@@ -277,7 +282,7 @@ class IDPhotoProcessor:
                 return [
                     result_image_standard,  # img_output_standard
                     result_image_hd,  # img_output_standard_hd
-                    result_image_standard_png,  # img_output_standard_hd_png
+                    result_image_standard_png,  # img_output_standard_png
                     result_image_hd_png,  # img_output_standard_hd_png
                     result_layout_image,  # img_output_layout
                     gr.update(visible=False),  # notification
@@ -287,7 +292,7 @@ class IDPhotoProcessor:
                 return [
                     result_image_standard,  # img_output_standard
                     result_image_hd,  # img_output_standard_hd
-                    result_image_standard_png,  # img_output_standard_hd_png
+                    result_image_standard_png,  # img_output_standard_png
                     result_image_hd_png,  # img_output_standard_hd_png
                     result_layout_image,  # img_output_layout
                     gr.update(visible=False),  # notification
