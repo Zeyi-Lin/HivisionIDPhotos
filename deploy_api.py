@@ -78,7 +78,7 @@ async def idphoto_inference(
 
 # 人像抠图接口
 @app.post("/human_matting")
-async def idphoto_inference(
+async def human_matting_inference(
     input_image: UploadFile,
     human_matting_model: str = Form("hivision_modnet"),
 ):
