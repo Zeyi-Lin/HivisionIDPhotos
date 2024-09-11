@@ -50,6 +50,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 
 - Online Experience: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
+- 2024.09.11: Added **transparent image display and download** feature to Gradio Demo.
 - 2024.09.10: Added a new **face detection model** Retinaface-resnet50, which offers higher detection accuracy at a slightly slower speed compared to mtcnn. Recommended for use.
 - 2024.09.09: Added a new **Background Removal Model** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) | Gradio added **Advanced Parameter Settings** and **Watermark** tabs
 - 2024.09.08: Added new **Matting Model** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) | **ComfyUI Workflow** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) contributed by [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
