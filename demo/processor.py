@@ -1,13 +1,13 @@
 import numpy as np
 from hivision import IDCreator
 from hivision.error import FaceError, APIError
-from hivision.utils import add_background, resize_image_to_kb
+from hivision.utils import add_background, resize_image_to_kb, add_watermark
 from hivision.creator.layout_calculator import (
     generate_layout_photo,
     generate_layout_image,
 )
 from hivision.creator.choose_handler import choose_handler
-from demo.utils import add_watermark, range_check
+from demo.utils import range_check
 import gradio as gr
 import os
 import time

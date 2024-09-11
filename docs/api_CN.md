@@ -9,8 +9,6 @@
 - [接口功能说明](#接口功能说明)
 - [cURL 请求示例](#curl-请求示例)
 - [Python 请求示例](#python-请求示例)
-  - [Python Requests 请求方法](#1️⃣-python-requests-请求方法)
-  - [Python 脚本请求方法](#2️⃣-python-脚本请求方法)
 - [Java 请求示例](#java-请求示例)
 - [Javascript 请求示例](#javascript-请求示例)
 
@@ -103,11 +101,20 @@ curl -X POST "http://127.0.0.1:8080/human_matting" \
 -F "human_matting_model=hivision_modnet"
 ```
 
+### 5. 图片加水印
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:8080/watermark?size=20&opacity=0.5&angle=30&color=%23000000&space=25' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'input_image=@demo/images/test0.jpg;type=image/jpeg' \
+  -F 'text=Hello'
+```
+
+
 <br>
 
 ## Python 请求示例
-
-### 1️⃣ Python Requests 请求方法
 
 #### 1.生成证件照(底透明)
 
@@ -178,123 +185,31 @@ response = requests.post(url, files=files, data=data).json()
 print(response)
 ```
 
-### 2️⃣ Python 脚本请求方法
+#### 5.图片加水印
 
-```bash
-python requests_api.py -u <URL> -t <TYPE> -i <INPUT_IMAGE_DIR> -o <OUTPUT_IMAGE_DIR> [--height <HEIGHT>] [--width <WIDTH>] [-c <COLOR>] [-k <KB>]
+```python
+import requests
+
+# 设置请求的 URL 和参数
+url = "http://127.0.0.1:8080/watermark"
+params = {"size": 20, "opacity": 0.5, "angle": 30, "color": "#000000", "space": 25}
+
+# 设置文件和其他表单数据
+input_image_path = "demo/images/test0.jpg"
+files = {"input_image": open(input_image_path, "rb")}
+data = {"text": "Hello"}
+
+# 发送 POST 请求
+response = requests.post(url, params=params, files=files, data=data)
+
+# 检查响应
+if response.ok:
+    # 输出响应内容
+    print(response.json())
+else:
+    # 输出错误信息
+    print(f"Request failed with status code {response.status_code}: {response.text}")
 ```
-
-#### 参数说明
-
-##### 基本参数
-
-- `-u`, `--url`
-
-  - **描述**: API 服务的 URL。
-  - **默认值**: `http://127.0.0.1:8080`
-
-- `-t`, `--type`
-
-  - **描述**: 请求 API 的种类。
-  - **默认值**: `idphoto`
-
-- `-i`, `--input_image_dir`
-
-  - **描述**: 输入图像路径。
-  - **必需**: 是
-  - **示例**: `./input_images/photo.jpg`
-
-- `-o`, `--output_image_dir`
-  - **描述**: 保存图像路径。
-  - **必需**: 是
-  - **示例**: `./output_images/processed_photo.jpg`
-
-##### 可选参数
-
-- `--face_detect_model`
-  - **描述**: 人脸检测模型
-  - **默认值**: mtcnn
-
-- `--human_matting_model`
-  - **描述**: 人像抠图模型
-  - **默认值**: hivision_modnet
-
-- `--height`,
-  - **描述**: 标准证件照的输出尺寸的高度。
-  - **默认值**: 413
-
-- `--width`,
-  - **描述**: 标准证件照的输出尺寸的宽度。
-  - **默认值**: 295
-
-- `-c`, `--color`
-  - **描述**: 给透明图增加背景色，格式为 Hex（如#638cce），仅在 type 为`add_background`时生效
-  - **默认值**: `638cce`
-
-- `-k`, `--kb`
-  - **描述**: 输出照片的 KB 值，仅在 type 为`add_background`和`generate_layout_photos`时生效，值为 None 时不做设置。
-  - **默认值**: `None`
-  - **示例**: 50
-
-- `-r`, `--render`
-  - **描述**: 给透明图增加背景色时的渲染方式，仅在 type 为`add_background`和`generate_layout_photos`时生效
-  - **默认值**: 0
-
-### 1.生成证件照(底透明)
-
-```bash
-python requests_api.py  \
-    -u http://127.0.0.1:8080 \
-    -t idphoto \
-    -i ./photo.jpg \
-    -o ./idphoto.png \
-    --height 413 \
-    --width 295 \
-    --face_detect_model mtcnn \
-    --human_matting_model hivision_modnet
-```
-
-### 2.添加背景色
-
-```bash
-python requests_api.py  \
-    -u http://127.0.0.1:8080  \
-    -t add_background  \
-    -i ./idphoto.png  \
-    -o ./idphoto_with_background.jpg  \
-    -c 638cce  \
-    -k 50 \
-    -r 0
-```
-
-### 3.生成六寸排版照
-
-```bash
-python requests_api.py  \
-    -u http://127.0.0.1:8080  \
-    -t generate_layout_photos  \
-    -i ./idphoto_with_background.jpg  \
-    -o ./layout_photo.jpg  \
-    --height 413  \
-    --width 295 \
-    -k 200
-```
-
-
-### 4.人像抠图
-
-```bash
-python requests_api.py  \
-    -u http://127.0.0.1:8080  \
-    -t human_matting  \
-    -i ./photo.jpg  \
-    -o ./photo_matting.png \
-    --human_matting_model hivision_modnet
-```
-
-### 请求失败的情况
-
-- 照片中检测到的人脸大于 1，则失败
 
 <br>
 
@@ -322,11 +237,11 @@ python requests_api.py  \
 
 ```java
 /**
-    * 生成证件照(底透明)  /idphoto 接口
-    * @param inputImageDir 文件地址
-    * @return
-    * @throws IOException
-    */
+* 生成证件照(底透明)  /idphoto 接口
+* @param inputImageDir 文件地址
+* @return
+* @throws IOException
+*/
 public static String requestIdPhoto(String inputImageDir) throws IOException {
     String url = BASE_URL+"/idphoto";
     // 创建文件对象
@@ -344,11 +259,11 @@ public static String requestIdPhoto(String inputImageDir) throws IOException {
 
 ```java
 /**
-    * 添加背景色  /add_background 接口
-    * @param inputImageDir 文件地址
-    * @return
-    * @throws IOException
-    */
+* 添加背景色  /add_background 接口
+* @param inputImageDir 文件地址
+* @return
+* @throws IOException
+*/
 public static String requestAddBackground(String inputImageDir) throws IOException {
     String url = BASE_URL+"/add_background";
     // 创建文件对象
@@ -366,11 +281,11 @@ public static String requestAddBackground(String inputImageDir) throws IOExcepti
 
 ```java
 /**
-    * 生成六寸排版照  /generate_layout_photos 接口
-    * @param inputImageDir 文件地址
-    * @return
-    * @throws IOException
-    */
+* 生成六寸排版照  /generate_layout_photos 接口
+* @param inputImageDir 文件地址
+* @return
+* @throws IOException
+*/
 public static String requestGenerateLayoutPhotos(String inputImageDir) throws IOException {
     String url = BASE_URL+"/generate_layout_photos";
     // 创建文件对象
@@ -389,11 +304,11 @@ public static String requestGenerateLayoutPhotos(String inputImageDir) throws IO
 
 ```java
 /**
-    * 生成人像抠图照  /human_matting 接口
-    * @param inputImageDir 文件地址
-    * @return
-    * @throws IOException
-    */
+* 生成人像抠图照  /human_matting 接口
+* @param inputImageDir 文件地址
+* @return
+* @throws IOException
+*/
 public static String requestHumanMattingPhotos(String inputImageDir) throws IOException {
     String url = BASE_URL+"/human_matting";
     // 创建文件对象
@@ -401,6 +316,37 @@ public static String requestHumanMattingPhotos(String inputImageDir) throws IOEx
     Map<String, Object> paramMap=new HashMap<>();
     paramMap.put("input_image",inputFile);
     //包含status、image_base64
+    return HttpUtil.post(url, paramMap);
+}
+```
+
+### 5.图像加水印
+
+```java
+/**
+ * 添加水印到图片 /watermark 接口
+ * @param inputImageDir 文件地址
+ * @param text 水印文本
+ * @param size 水印文字大小
+ * @param opacity 水印透明度
+ * @param angle 水印旋转角度
+ * @param color 水印颜色
+ * @param space 水印间距
+ * @return
+ * @throws IOException
+ */
+public static String requestAddWatermark(String inputImageDir, String text, int size, double opacity, int angle, String color, int space) throws IOException {
+    String url = BASE_URL + "/watermark?size=" + size + "&opacity=" + opacity + "&angle=" + angle + "&color=" + color + "&space=" + space;
+    
+    // 创建文件对象
+    File inputFile = new File(inputImageDir);
+    
+    // 创建参数映射
+    Map<String, Object> paramMap = new HashMap<>();
+    paramMap.put("input_image", inputFile);
+    paramMap.put("text", text);
+    
+    // 发送POST请求并返回响应
     return HttpUtil.post(url, paramMap);
 }
 ```
@@ -512,4 +458,43 @@ async function uploadImage(inputImagePath) {
 uploadImage("demo/images/test0.jpg").then(response => {
     console.log(response);
 });
+```
+
+### 5.图像加水印
+
+```javascript
+async function sendMultipartRequest() {
+    const url = "http://127.0.0.1:8080/watermark?size=20&opacity=0.5&angle=30&color=%23000000&space=25";
+
+    const formData = new FormData();
+    formData.append("text", "Hello");
+
+    // Assuming you have a file input element with id 'fileInput'
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput.files.length > 0) {
+        formData.append("input_image", fileInput.files[0]);
+    }
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json'
+            },
+            body: formData
+        });
+
+        if (response.ok) {
+            const jsonResponse = await response.json();
+            console.log(jsonResponse);
+        } else {
+            console.error('Request failed:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Call the function to send request
+sendMultipartRequest();
 ```
