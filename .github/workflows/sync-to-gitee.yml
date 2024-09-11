@@ -1,0 +1,25 @@
+name: Sync to Gitee
+
+on:
+  push:
+    branches:
+      - master  # 或者你想要同步的其他分支
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Push to Gitee
+      env:
+        GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        GITEE_USERNAME: ${{ secrets.GITEE_USERNAME }}
+        GITEE_EMAIL: ${{ secrets.GITEE_EMAIL }}
+      run: |
+        git config --global user.name ${GITEE_USERNAME}
+        git config --global user.email ${GITEE_EMAIL}
+        git remote add gitee https://${GITEE_USERNAME}:${GITEE_TOKEN}@gitee.com/${GITEE_USERNAME}/HivisionIDPhotos.git
+        git push -f gitee master:master
