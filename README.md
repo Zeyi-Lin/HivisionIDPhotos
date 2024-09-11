@@ -42,6 +42,7 @@
 - [Python推理](#-python-推理)
 - [API服务部署](#️-部署-api-服务)
 - [Docker部署](#-docker-部署)
+- [群晖docker部署](#-docker-部署2)
 - [联系我们](#-联系我们)
 - [Q&A](#qa)
 - [贡献者](#贡献者)
@@ -331,6 +332,12 @@ docker run  -d -p 7860:7860 \
 ```
 
 <br>
+
+# 群晖docker部署
+    
+    教程链接：https://github.com/ONG-Leo/HivisionIDPhotos-NAS
+![image](https://github.com/user-attachments/assets/75f34d18-2d91-4355-8fba-207668476bca)
+
 
 # Q&A
 
