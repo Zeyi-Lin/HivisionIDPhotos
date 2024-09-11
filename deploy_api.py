@@ -6,7 +6,12 @@ from hivision.creator.layout_calculator import (
     generate_layout_image,
 )
 from hivision.creator.choose_handler import choose_handler
-from hivision.utils import add_background, resize_image_to_kb_base64, hex_to_rgb
+from hivision.utils import (
+    add_background,
+    resize_image_to_kb_base64,
+    hex_to_rgb,
+    add_watermark,
+)
 import base64
 import numpy as np
 import cv2
@@ -196,8 +201,6 @@ async def watermark(
     color: str = "#000000",
     space: int = 25,
 ):
-    from demo.utils import add_watermark
-
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)

@@ -10,6 +10,7 @@ from hivision.creator.layout_calculator import (
     generate_layout_image,
 )
 from hivision.creator.choose_handler import choose_handler
+from hivision.utils import hex_to_rgb, resize_image_to_kb
 
 
 INFERENCE_TYPE = [
@@ -17,6 +18,7 @@ INFERENCE_TYPE = [
     "human_matting",
     "add_background",
     "generate_layout_photos",
+    "watermark",
 ]
 MATTING_MODEL = [
     "hivision_modnet",

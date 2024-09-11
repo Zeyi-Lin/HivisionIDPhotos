@@ -12,6 +12,7 @@ import io
 import numpy as np
 import cv2
 import base64
+from hivision.plugin.watermark import Watermarker, WatermarkerStyles
 
 
 def resize_image_to_kb(input_image, output_image_path, target_size_kb):
@@ -273,3 +274,20 @@ def add_background(input_image, bgr=(0, 0, 0), mode="pure_color"):
     )
 
     return output
+
+
+def add_watermark(
+    image, text, size=50, opacity=0.5, angle=45, color="#8B8B1B", space=75
+):
+    image = Image.fromarray(image)
+    watermarker = Watermarker(
+        input_image=image,
+        text=text,
+        style=WatermarkerStyles.STRIPED,
+        angle=angle,
+        color=color,
+        opacity=opacity,
+        size=size,
+        space=space,
+    )
+    return np.array(watermarker.image.convert("RGB"))
