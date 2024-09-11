@@ -56,6 +56,19 @@ python deploy_api.py
 
 `人像抠图`接口的逻辑是发送一张 RGB 图像，输出一张标准抠图人像照和高清抠图人像照（无任何背景填充）。
 
+### 5.图像加水印
+
+接口名：`watermark`
+
+`图像加水印`接口的功能是接收一个水印文本，然后在原图上添加指定的水印。用户可以指定水印的位置、透明度和大小等属性，以便将水印无缝地融合到原图中。
+
+
+### 6.设置图像KB大小
+
+接口名：`set_kb`
+
+`设置图像KB大小`接口的功能是接收一张图像和目标文件大小（以KB为单位），如果设置的KB值小于原文件，则调整压缩率；如果设置的KB值大于源文件，则通过给文件头添加信息的方式调大KB值，目标是让图像的最终大小与设置的KB值一致。
+
 <br>
 
 ## cURL 请求示例
@@ -109,6 +122,16 @@ curl -X 'POST' \
   -H 'Content-Type: multipart/form-data' \
   -F 'input_image=@demo/images/test0.jpg;type=image/jpeg' \
   -F 'text=Hello'
+```
+
+### 6. 设置图像KB大小
+```bash
+curl -X 'POST' \
+  'http://127.0.0.1:8080/set_kb' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'input_image=@demo/images/test0.jpg;type=image/jpeg' \
+  -F 'kb=50'
 ```
 
 
@@ -201,6 +224,30 @@ data = {"text": "Hello"}
 
 # 发送 POST 请求
 response = requests.post(url, params=params, files=files, data=data)
+
+# 检查响应
+if response.ok:
+    # 输出响应内容
+    print(response.json())
+else:
+    # 输出错误信息
+    print(f"Request failed with status code {response.status_code}: {response.text}")
+```
+
+### 6. 设置图像KB大小
+```bash
+import requests
+
+# 设置请求的 URL
+url = "http://127.0.0.1:8080/set_kb"
+
+# 设置文件和其他表单数据
+input_image_path = "demo/images/test0.jpg"
+files = {"input_image": open(input_image_path, "rb")}
+data = {"kb": 50}
+
+# 发送 POST 请求
+response = requests.post(url, files=files, data=data)
 
 # 检查响应
 if response.ok:
