@@ -68,7 +68,7 @@ cURL은 다양한 네트워크 프로토콜을 사용하여 데이터를 전송�
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/idphoto" \
--F "input_image=@demo/images/test.jpg" \
+-F "input_image=@demo/images/test0.jpg" \
 -F "height=413" \
 -F "width=295" \
 -F "human_matting_model=hivision_modnet" \
@@ -99,7 +99,7 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 
 ```bash
 curl -X POST "http://127.0.0.1:8080/human_matting" \
--F "input_image=@demo/images/test.jpg" \
+-F "input_image=@demo/images/test0.jpg" \
 -F "human_matting_model=hivision_modnet"
 ```
 
@@ -115,7 +115,7 @@ curl -X POST "http://127.0.0.1:8080/human_matting" \
 import requests
 
 url = "http://127.0.0.1:8080/idphoto"
-input_image_path = "images/test.jpg"
+input_image_path = "images/test0.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
 data = {"height": 413, "width": 295, "human_matting_model": "hivision_modnet", "face_detect_model": "mtcnn"}
@@ -432,7 +432,7 @@ async function generateIdPhoto(inputImagePath, height, width) {
 }
 
 // 예시 호출
-generateIdPhoto("images/test.jpg", 413, 295).then(response => {
+generateIdPhoto("images/test0.jpg", 413, 295).then(response => {
     console.log(response);
 });
 ```
@@ -509,7 +509,7 @@ async function uploadImage(inputImagePath) {
 }
 
 // 예시 호출
-uploadImage("demo/images/test.jpg").then(response => {
+uploadImage("demo/images/test0.jpg").then(response => {
     console.log(response);
 });
 ```
