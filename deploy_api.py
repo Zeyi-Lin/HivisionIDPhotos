@@ -32,14 +32,15 @@ def numpy_2_base64(img: np.ndarray):
 @app.post("/idphoto")
 async def idphoto_inference(
     input_image: UploadFile,
-    height: str = Form(...),
-    width: str = Form(...),
+    height: int = Form(413),
+    width: int = Form(295),
     human_matting_model: str = Form("hivision_modnet"),
     face_detect_model: str = Form("mtcnn"),
-    head_measure_ratio=0.2,
-    head_height_ratio=0.45,
-    top_distance_max=0.12,
-    top_distance_min=0.10,
+    hd: bool = Form(True),
+    head_measure_ratio: float = 0.2,
+    head_height_ratio: float = 0.45,
+    top_distance_max: float = 0.12,
+    top_distance_min: float = 0.10,
 ):
 
     image_bytes = await input_image.read()
@@ -66,15 +67,18 @@ async def idphoto_inference(
         result_message = {
             "status": True,
             "image_base64_standard": numpy_2_base64(result.standard),
-            "image_base64_hd": numpy_2_base64(result.hd),
         }
+
+        # 如果hd为True, 则增加高清照结果（png 4通道图像）
+        if hd:
+            result_message["image_base64_hd"] = numpy_2_base64(result.hd)
 
     return result_message
 
 
 # 人像抠图接口
 @app.post("/human_matting")
-async def idphoto_inference(
+async def human_matting_inference(
     input_image: UploadFile,
     human_matting_model: str = Form("hivision_modnet"),
 ):
@@ -105,8 +109,8 @@ async def idphoto_inference(
 @app.post("/add_background")
 async def photo_add_background(
     input_image: UploadFile,
-    color: str = Form(...),
-    kb: str = Form(None),
+    color: str = Form("000000"),
+    kb: int = Form(50),
     render: int = Form(0),
 ):
     render_choice = ["pure_color", "updown_gradient", "center_gradient"]
@@ -150,9 +154,9 @@ async def photo_add_background(
 @app.post("/generate_layout_photos")
 async def generate_layout_photos(
     input_image: UploadFile,
-    height: str = Form(...),
-    width: str = Form(...),
-    kb: str = Form(None),
+    height: int = Form(413),
+    width: int = Form(295),
+    kb: int = Form(50),
 ):
     # try:
     image_bytes = await input_image.read()
