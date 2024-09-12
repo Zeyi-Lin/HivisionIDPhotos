@@ -99,6 +99,7 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 [![](assets/comfyui.png)](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 
 - [HivisionIDPhotos-NAS](https://github.com/ONG-Leo/HivisionIDPhotos-NAS): 群晖NAS部署中文教程，由 [ONG-Leo](https://github.com/ONG-Leo) 贡献
+- [zjzWx](https://github.com/no1xuan/zjzWx): 精美的开源证件照微信小程序项目，由 [no1xuan](https://github.com/no1xuan) 贡献
 
 <br>
 
