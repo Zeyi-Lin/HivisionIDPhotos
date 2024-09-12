@@ -21,6 +21,7 @@ class Params:
         head_height_ratio: float = 0.45,
         head_top_range: float = (0.12, 0.1),
         face: Tuple[int, int, int, int] = None,
+        whitening_strength: int = 0,
     ):
         self.__size = size
         self.__change_bg_only = change_bg_only
@@ -29,6 +30,7 @@ class Params:
         self.__head_height_ratio = head_height_ratio
         self.__head_top_range = head_top_range
         self.__face = face
+        self.__whitening_strength = whitening_strength
 
     @property
     def size(self):
@@ -57,6 +59,10 @@ class Params:
     @property
     def face(self):
         return self.__face
+
+    @property
+    def whitening_strength(self):
+        return self.__whitening_strength
 
 
 class Result:

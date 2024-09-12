@@ -63,6 +63,7 @@ def create_ui(
                         value=human_matting_models[0],
                     )
 
+                # TAB1 - 关键参数
                 with gr.Tab(
                     LOCALES["key_param"][DEFAULT_LANG]["label"]
                 ) as key_parameter_tab:
@@ -105,6 +106,7 @@ def create_ui(
                         value=LOCALES["render_mode"][DEFAULT_LANG]["choices"][0],
                     )
 
+                # TAB2 - 高级参数
                 with gr.Tab(
                     LOCALES["advance_param"][DEFAULT_LANG]["label"]
                 ) as advance_parameter_tab:
@@ -140,6 +142,20 @@ def create_ui(
                             interactive=True,
                         )
 
+                # TAB3 - 美颜
+                with gr.Tab(
+                    LOCALES["beauty_tab"][DEFAULT_LANG]["label"]
+                ) as beauty_parameter_tab:
+                    whitening_option = gr.Slider(
+                        label=LOCALES["whitening_strength"][DEFAULT_LANG]["label"],
+                        minimum=0,
+                        maximum=10,
+                        value=2,
+                        step=1,
+                        interactive=True,
+                    )
+
+                # TAB4 - 水印
                 with gr.Tab(
                     LOCALES["watermark_tab"][DEFAULT_LANG]["label"]
                 ) as watermark_parameter_tab:
@@ -387,6 +403,12 @@ def create_ui(
                     matting_image_accordion: gr.update(
                         label=LOCALES["matting_image"][language]["label"]
                     ),
+                    beauty_parameter_tab: gr.update(
+                        label=LOCALES["beauty_tab"][language]["label"]
+                    ),
+                    whitening_option: gr.update(
+                        label=LOCALES["whitening_strength"][language]["label"]
+                    ),
                 }
 
             def change_color(colors):
@@ -425,6 +447,7 @@ def create_ui(
                     return {custom_image_kb: gr.update(visible=False)}
 
             # ---------------- 绑定事件 ----------------
+            # 语言切换
             language_options.input(
                 change_language,
                 inputs=[language_options],
@@ -458,6 +481,8 @@ def create_ui(
                     watermark_text_space,
                     watermark_options,
                     matting_image_accordion,
+                    beauty_parameter_tab,
+                    whitening_option,
                 ],
             )
 
@@ -502,6 +527,7 @@ def create_ui(
                     face_detect_model_options,
                     head_measure_ratio_option,
                     top_distance_option,
+                    whitening_option,
                 ],
                 outputs=[
                     img_output_standard,
