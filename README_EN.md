@@ -155,6 +155,10 @@ pip install onnxruntime-gpu==1.18.0
 
 After completing this, calling models like `birefnet-v1-lite` will utilize GPU acceleration for inference.
 
+TIPS: After installing `CUDA` and `CUDNN`, you also need to check whether the version of the local onnxruntime package is compatible. If you install the latest version of cuda, you only need to execute `pip install --upgrade onnxruntime`.
+
+TIPS2: You may also need to install torch. When installing, it also needs to be compatible with the version of cuda. Cuda can be downward compatible. For example, if your cuda version is 12.6 but the highest version matched by torch is 12.4. Installing version 12.4 on your computer is also possible.
+
 <br>
 
 # 🚀 Run Gradio Demo
