@@ -52,8 +52,16 @@ make_whiter = MakeWhiter(default_lut)
 
 def make_whitening(image, strength):
     image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-    output_image = make_whiter.run(image, strength)
-    return cv2.cvtColor(output_image, cv2.COLOR_BGR2RGB)
+
+    iteration = strength // 10
+    bias = strength % 10
+
+    for i in range(iteration):
+        image = make_whiter.run(image, 10)
+
+    image = make_whiter.run(image, bias)
+
+    return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
 
 def make_whitening_png(image, strength):
@@ -71,10 +79,10 @@ def make_whitening_png(image, strength):
 # 启动Gradio应用
 if __name__ == "__main__":
     demo = gr.Interface(
-        fn=make_whitening_png,
+        fn=make_whitening,
         inputs=[
             gr.Image(type="pil", image_mode="RGBA", label="Input Image"),
-            gr.Slider(0, 10, step=1, label="Whitening Strength"),
+            gr.Slider(0, 30, step=1, label="Whitening Strength"),
         ],
         outputs=gr.Image(type="pil"),
         title="Image Whitening Demo",

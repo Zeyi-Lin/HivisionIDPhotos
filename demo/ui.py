@@ -149,7 +149,7 @@ def create_ui(
                     whitening_option = gr.Slider(
                         label=LOCALES["whitening_strength"][DEFAULT_LANG]["label"],
                         minimum=0,
-                        maximum=10,
+                        maximum=15,
                         value=2,
                         step=1,
                         interactive=True,
