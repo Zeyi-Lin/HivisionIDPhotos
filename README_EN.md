@@ -19,7 +19,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 [![][trendshift-shield]][trendshift-link]
 [![][hellogithub-shield]][hellogithub-link]
 
-<img src="assets/demoImage.png" width=900>
+<img src="assets/demoImage.jpg" width=900>
 
 </div>
 

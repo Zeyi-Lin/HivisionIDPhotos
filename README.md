@@ -19,7 +19,7 @@
 [![][trendshift-shield]][trendshift-link]
 [![][hellogithub-shield]][hellogithub-link]
 
-<img src="assets/demoImage.png" width=900>
+<img src="assets/demoImage.jpg" width=900>
 
 👋 加入我们的[微信群][wechat-link]
 
