@@ -160,6 +160,10 @@ pip install onnxruntime-gpu==1.18.0
 
 完成后，调用如`birefnet-v1-lite`模型将会利用GPU加速推理。
 
+TIPS: 安装 `CUDA` and `CUDNN` 后 你还要 check 本地的`onnxruntime`包的版本与其相符合。如果安装的是最新版 cuda 那你只需要执行`pip install --upgrade onnxruntime`
+
+TIPS2: 你可能还需要安装 `torch` 安装时也需要和 cuda 的版本想符合，cuda 可以向下兼容 比如你的 cuda 版本为 12.6 但是 torch 所匹配最高版本为 12.4 在你电脑安装 12.4 版本也是可以的
+
 <br>
 
 # 🚀 运行 Gradio Demo
