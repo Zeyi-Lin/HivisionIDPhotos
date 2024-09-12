@@ -7,6 +7,7 @@
 .env
 demo/kb_output/*.jpg
 demo/kb_output/*.png
+**/flagged/
 # build outputs
 dist
 build

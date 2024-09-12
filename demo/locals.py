@@ -292,4 +292,20 @@ LOCALES = {
             "label": "抠图图像",
         },
     },
+    "beauty_tab": {
+        "en": {
+            "label": "Beauty",
+        },
+        "zh": {
+            "label": "美颜",
+        },
+    },
+    "whitening_strength": {
+        "en": {
+            "label": "whitening strength",
+        },
+        "zh": {
+            "label": "美白强度",
+        },
+    },
 }
