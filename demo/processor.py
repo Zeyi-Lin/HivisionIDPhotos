@@ -41,7 +41,7 @@ class IDPhotoProcessor:
         face_detect_option,
         head_measure_ratio=0.2,
         top_distance_max=0.12,
-        top_distance_min=0.10,
+        whitening_strength=0,
     ):
         top_distance_min = top_distance_max - 0.02
 
@@ -115,6 +115,7 @@ class IDPhotoProcessor:
             idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1]
         )
 
+        # 生成证件照
         try:
             result = creator(
                 input_image,
@@ -122,7 +123,9 @@ class IDPhotoProcessor:
                 size=idphoto_json["size"],
                 head_measure_ratio=head_measure_ratio,
                 head_top_range=(top_distance_max, top_distance_min),
+                whitening_strength=whitening_strength,
             )
+        # 如果检测到人脸数量不等于1
         except FaceError:
             return [
                 gr.update(value=None),  # img_output_standard
@@ -136,7 +139,7 @@ class IDPhotoProcessor:
                 ),
                 None,  # file_download (assuming it should be None or have no update)
             ]
-
+        # 如果 API 错误
         except APIError as e:
             return [
                 gr.update(value=None),  # img_output_standard
@@ -150,13 +153,14 @@ class IDPhotoProcessor:
                 ),
                 None,  # file_download (assuming it should be None or have no update)
             ]
-
+        # 证件照生成正常
         else:
             (result_image_standard, result_image_hd, _, _, _, _) = result
 
             result_image_standard_png = np.uint8(result_image_standard)
             result_image_hd_png = np.uint8(result_image_hd)
 
+            # 纯色渲染
             if (
                 idphoto_json["render_mode"]
                 == LOCALES["render_mode"][language]["choices"][0]
@@ -167,6 +171,7 @@ class IDPhotoProcessor:
                 result_image_hd = np.uint8(
                     add_background(result_image_hd, bgr=idphoto_json["color_bgr"])
                 )
+            # 上下渐变渲染
             elif (
                 idphoto_json["render_mode"]
                 == LOCALES["render_mode"][language]["choices"][1]
@@ -185,6 +190,7 @@ class IDPhotoProcessor:
                         mode="updown_gradient",
                     )
                 )
+            # 中心渐变渲染
             else:
                 result_image_standard = np.uint8(
                     add_background(
