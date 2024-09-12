@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-import onnxruntime as ort
+import onnxruntime
 from hivision.creator.retinaface.box_utils import decode, decode_landm
 from hivision.creator.retinaface.prior_box import PriorBox
 
@@ -46,10 +46,39 @@ keep_top_k = 750
 save_image = True
 vis_thres = 0.6
 
+ONNX_DEVICE = (
+    "CUDAExecutionProvider"
+    if onnxruntime.get_device() == "GPU"
+    else "CPUExecutionProvider"
+)
 
-def load_model_ort(model_path):
-    ort_session = ort.InferenceSession(model_path)
-    return ort_session
+
+def load_onnx_model(checkpoint_path, set_cpu=False):
+    providers = (
+        ["CUDAExecutionProvider", "CPUExecutionProvider"]
+        if ONNX_DEVICE == "CUDAExecutionProvider"
+        else ["CPUExecutionProvider"]
+    )
+
+    if set_cpu:
+        sess = onnxruntime.InferenceSession(
+            checkpoint_path, providers=["CPUExecutionProvider"]
+        )
+    else:
+        try:
+            sess = onnxruntime.InferenceSession(checkpoint_path, providers=providers)
+        except Exception as e:
+            if ONNX_DEVICE == "CUDAExecutionProvider":
+                print(f"Failed to load model with CUDAExecutionProvider: {e}")
+                print("Falling back to CPUExecutionProvider")
+                # 尝试使用CPU加载模型
+                sess = onnxruntime.InferenceSession(
+                    checkpoint_path, providers=["CPUExecutionProvider"]
+                )
+            else:
+                raise e  # 如果是CPU执行失败，重新抛出异常
+
+    return sess
 
 
 def retinaface_detect_faces(image, model_path: str, sess=None):
@@ -75,7 +104,7 @@ def retinaface_detect_faces(image, model_path: str, sess=None):
 
     # Load ONNX model
     if sess is None:
-        retinaface = load_model_ort(model_path)
+        retinaface = load_onnx_model(model_path, set_cpu=False)
     else:
         retinaface = sess
 
