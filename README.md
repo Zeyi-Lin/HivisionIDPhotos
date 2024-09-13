@@ -385,7 +385,9 @@ docker run  -d -p 7860:7860 \
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
 
+# Lincese
 
+This repository is licensed under the [Apache-2.0 License](LICENSE).
 
 [github-stars-shield]: https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos?color=ffcb47&labelColor=black&style=flat-square
 [github-stars-link]: https://github.com/zeyi-lin/hivisionidphotos/stargazers
