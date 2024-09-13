@@ -44,6 +44,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 - [Contact Us](#-contact-us)
 - [Contributors](#contributors)
 - [Thanks for support](#thanks-for-support)
+- [License](#lincese)
 
 <br>
 

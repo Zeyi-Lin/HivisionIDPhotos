@@ -386,6 +386,8 @@ docker run  -d -p 7860:7860 \
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
 
+<br>
+
 # Lincese
 
 This repository is licensed under the [Apache-2.0 License](LICENSE).

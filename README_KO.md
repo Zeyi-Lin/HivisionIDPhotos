@@ -358,9 +358,19 @@ docker run  -d -p 7860:7860 \
 
 <br>
 
-# StarHistory
+# Thanks for support
+
+[![Stargazers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/stars/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/stargazers)
+
+[![Forkers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/forks/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/network/members)
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
+
+<br>
+
+# Lincese
+
+This repository is licensed under the [Apache-2.0 License](LICENSE).
 
 [github-stars-shield]: https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos?color=ffcb47&labelColor=black&style=flat-square
 [github-stars-link]: https://github.com/zeyi-lin/hivisionidphotos/stargazers
