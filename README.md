@@ -45,6 +45,7 @@
 - [联系我们](#-联系我们)
 - [Q&A](#qa)
 - [贡献者](#贡献者)
+- [感谢支持](#感谢支持)
 
 <br>
 
@@ -376,9 +377,15 @@ docker run  -d -p 7860:7860 \
 
 <br>
 
-# StarHistory
+# 感谢支持
+
+[![Stargazers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/stars/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/stargazers)
+
+[![Forkers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/forks/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/network/members)
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
+
+
 
 [github-stars-shield]: https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos?color=ffcb47&labelColor=black&style=flat-square
 [github-stars-link]: https://github.com/zeyi-lin/hivisionidphotos/stargazers
