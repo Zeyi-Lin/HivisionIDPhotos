@@ -49,7 +49,7 @@
 
 # 🤩 最近の更新
 
-- オンライン体験： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
+- オンライン体験： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
 
 - 2024.09.12: Gradioデモに**ホワイトニング**機能を追加 | APIインターフェースに**ウォーターマーク追加**、**写真のKBサイズ設定**、**証明写真のトリミング**を追加
 - 2024.09.11: Gradioデモに**透過画像表示とダウンロード**機能を追加しました。
