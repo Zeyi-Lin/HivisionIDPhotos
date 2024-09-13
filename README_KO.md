@@ -51,14 +51,13 @@
 - 온라인 체험: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
 
+- 2024.09.12: Gradio 데모에 **미백** 기능 추가 | API 인터페이스에 **워터마크 추가**, **사진 KB 크기 설정**, **증명사진 자르기** 추가
 - 2024.09.11: Gradio Demo에 **투명 이미지 표시 및 다운로드** 기능 추가
 - 2024.09.09: 새로운 **배경 제거 모델** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) 추가 | Gradio에 **고급 매개변수 설정** 및 **워터마크** 탭 추가
 - 2024.09.08: 새로운 **컷아웃 모델** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) 추가 | **ComfyUI 워크플로우** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) AIFSH의 기여
 - 2024.09.07: **얼굴 검출 API 옵션** [Face++](docs/face++_EN.md) 추가 및 보다 높은 정확도의 얼굴 검출 구현
 - 2024.09.06: 새로운 컷아웃 모델 [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet) 추가
 - 2024.09.05: [Restful API 문서](docs/api_EN.md) 업데이트
-- 2024.09.02: **사진의 KB 크기 조정** 업데이트, [DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
-- 2023.12.01: **API 배포(fastapi 기반)** 업데이트
 
 <br>
 
@@ -175,40 +174,50 @@ python app.py
 
 - `-i`: 입력 이미지 경로
 - `-o`: 저장 이미지 경로
-- `-t`: 추론 유형, idphoto, human_matting, add_background, generate_layout_photos 중 선택 가능
-- `--matting_model`: 인물 컷아웃 모델 가중치 선택
-- `--face_detect_model`: 얼굴 검출 모델 선택
+- `-t`: 추론 유형, idphoto, human_matting, add_background, generate_layout_photos 중 선택
+- `--matting_model`: 인물 마스크 모델 가중치 선택
+- `--face_detect_model`: 얼굴 감지 모델 선택
 
-자세한 매개변수는 `python inference.py --help`에서 확인할 수 있습니다.
+더 많은 매개변수는 `python inference.py --help`를 통해 확인할 수 있습니다.
 
 ## 1. 증명사진 제작
 
-1장의 사진을 입력하여 1장의 표준 증명사진과 1장의 고해상도 증명사진의 4채널 투명 PNG를 얻습니다.
+1장의 사진을 입력하여 1장의 표준 증명사진과 1장의 고화질 증명사진의 4채널 투명 PNG를 얻습니다.
 
 ```python
-python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
+python inference.py -i demo/images/test0.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
-## 2. 인물 컷아웃
+## 2. 인물 마스크
+
+1장의 사진을 입력하여 1장의 4채널 투명 PNG를 얻습니다.
 
 ```python
-python inference.py -t human_matting -i demo/images/test.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
+python inference.py -t human_matting -i demo/images/test0.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
 ```
 
 ## 3. 투명 이미지에 배경색 추가
 
-1장의 4채널 투명 PNG를 입력하여 배경색이 추가된 이미지를 얻습니다.
+1장의 4채널 투명 PNG를 입력하여 1장의 배경색이 추가된 3채널 이미지를 얻습니다.
 
 ```python
 python inference.py -t add_background -i ./idphoto.png -o ./idphoto_ab.jpg  -c 4f83ce -k 30 -r 1
 ```
 
-## 4. 육寸 레이아웃 사진 얻기
+## 4. 6인치 배치 사진 생성
 
-1장의 3채널 사진을 입력하여 1장의 육寸 레이아웃 사진을 얻습니다.
+1장의 3채널 사진을 입력하여 1장의 6인치 배치 사진을 얻습니다.
 
 ```python
 python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg  --height 413 --width 295 -k 200
+```
+
+## 5. 증명사진 자르기
+
+1장의 4채널 사진(마스크 처리된 이미지)을 입력하여 1장의 표준 증명사진과 1장의 고화질 증명사진의 4채널 투명 PNG를 얻습니다.
+
+```python
+python inference.py -t idphoto_crop -i ./idphoto_matting.png -o ./idphoto_crop.png --height 413 --width 295
 ```
 
 <br>

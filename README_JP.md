@@ -50,14 +50,13 @@
 
 - オンライン体験： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
 
+- 2024.09.12: Gradioデモに**ホワイトニング**機能を追加 | APIインターフェースに**ウォーターマーク追加**、**写真のKBサイズ設定**、**証明写真のトリミング**を追加
 - 2024.09.11: Gradioデモに**透過画像表示とダウンロード**機能を追加しました。
 - 2024.09.09: 新しい**背景除去モデル** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) を追加 | Gradioに**高度なパラメータ設定**および**ウォーターマーク**タブを追加
 - 2024.09.08: 新しい**切り抜きモデル** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) を追加 | **ComfyUIワークフロー** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) AIFSHによる貢献
 - 2024.09.07: **顔検出APIオプション** [Face++](docs/face++_EN.md) を追加し、より高精度な顔検出を実現
 - 2024.09.06: 新しい切り抜きモデル [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet) を追加
 - 2024.09.05: [Restful API ドキュメント](docs/api_EN.md) を更新
-- 2024.09.02: **写真のKBサイズを調整**を更新、[DockerHub](https://hub.docker.com/r/linzeyi/hivision_idphotos/tags)
-- 2023.12.01: **APIデプロイ（fastapiベース）**を更新
 
 <br>
 
@@ -170,44 +169,54 @@ python app.py
 
 # 🚀 Python推論
 
-コアパラメータ：
+核心パラメータ：
 
-- `-i`: 入力画像パス
-- `-o`: 保存画像パス
+- `-i`: 入力画像のパス
+- `-o`: 保存画像のパス
 - `-t`: 推論タイプ、idphoto、human_matting、add_background、generate_layout_photosから選択可能
-- `--matting_model`: 人物切り抜きモデル重みの選択
+- `--matting_model`: 人物切り抜きモデルの重み選択
 - `--face_detect_model`: 顔検出モデルの選択
 
-詳しいパラメータは、`python inference.py --help`で確認できます。
+詳細なパラメータは`python inference.py --help`で確認できます。
 
-## 1. 証明写真の制作
+## 1. 証明写真の作成
 
-1枚の写真を入力し、1枚の標準証明写真と1枚の高解像度証明写真の4チャンネル透明PNGを得る。
+1枚の写真を入力し、1枚の標準証明写真と1枚の高解像度証明写真の4チャンネル透明PNGを取得します。
 
 ```python
-python inference.py -i demo/images/test.jpg -o ./idphoto.png --height 413 --width 295
+python inference.py -i demo/images/test0.jpg -o ./idphoto.png --height 413 --width 295
 ```
 
 ## 2. 人物切り抜き
 
+1枚の写真を入力し、1枚の4チャンネル透明PNGを取得します。
+
 ```python
-python inference.py -t human_matting -i demo/images/test.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
+python inference.py -t human_matting -i demo/images/test0.jpg -o ./idphoto_matting.png --matting_model hivision_modnet
 ```
 
 ## 3. 透明画像に背景色を追加
 
-1枚の4チャンネル透明PNGを入力し、背景色を追加した画像を得る。
+1枚の4チャンネル透明PNGを入力し、背景色を追加した3チャンネル画像を取得します。
 
 ```python
-python inference.py -t add_background -i ./idphoto.png -o ./idphoto_ab.jpg  -c 4f83ce -k 30 -r 1
+python inference.py -t add_background -i ./idphoto.png -o ./idphoto_ab.jpg -c 4f83ce -k 30 -r 1
 ```
 
-## 4. 六寸レイアウト写真を得る
+## 4. 六寸レイアウト写真の取得
 
-1枚の3チャンネル写真を入力し、1枚の六寸レイアウト写真を得る。
+1枚の3チャンネル写真を入力し、1枚の六寸レイアウト写真を取得します。
 
 ```python
-python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg  --height 413 --width 295 -k 200
+python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg --height 413 --width 295 -k 200
+```
+
+## 5. 証明写真のトリミング
+
+1枚の4チャンネル写真（切り抜き済みの画像）を入力し、1枚の標準証明写真と1枚の高解像度証明写真の4チャンネル透明PNGを取得します。
+
+```python
+python inference.py -t idphoto_crop -i ./idphoto_matting.png -o ./idphoto_crop.png --height 413 --width 295
 ```
 
 <br>
