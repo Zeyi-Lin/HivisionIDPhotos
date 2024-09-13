@@ -43,6 +43,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 - [Docker Deployment](#-docker-deployment)
 - [Contact Us](#-contact-us)
 - [Contributors](#contributors)
+- [Thanks for support](#thanks-for-support)
 
 <br>
 
@@ -360,9 +361,17 @@ If you have any questions, please email zeyi.lin@swanhub.co
 
 <br>
 
-# StarHistory
+# Thanks for support
+
+[![Stargazers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/stars/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/stargazers)
+
+[![Forkers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/forks/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/network/members)
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
+
+# Lincese
+
+This repository is licensed under the [Apache-2.0 License](LICENSE).
 
 [github-stars-shield]: https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos?color=ffcb47&labelColor=black&style=flat-square
 [github-stars-link]: https://github.com/zeyi-lin/hivisionidphotos/stargazers
