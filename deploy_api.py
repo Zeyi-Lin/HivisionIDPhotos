@@ -25,7 +25,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # 允许的请求来源
     allow_credentials=True,  # 允许携带 Cookie
-    allow_methods=["*"],  # 允许的请求方法，例如：GET, POST 等，也可以指定 ["GET", "POST"]
+    allow_methods=[
+        "*"
+    ],  # 允许的请求方法，例如：GET, POST 等，也可以指定 ["GET", "POST"]
     allow_headers=["*"],  # 允许的请求头，也可以指定具体的头部
 )
 
@@ -35,22 +37,22 @@ def numpy_2_base64(img: np.ndarray):
     retval, buffer = cv2.imencode(".png", img)
     base64_image = base64.b64encode(buffer).decode("utf-8")
 
-    return base64_image
+    return "data:image/png;base64," + base64_image
 
 
 # 证件照智能制作接口
 @app.post("/idphoto")
 async def idphoto_inference(
-        input_image: UploadFile,
-        height: int = Form(413),
-        width: int = Form(295),
-        human_matting_model: str = Form("hivision_modnet"),
-        face_detect_model: str = Form("mtcnn"),
-        hd: bool = Form(True),
-        head_measure_ratio: float = 0.2,
-        head_height_ratio: float = 0.45,
-        top_distance_max: float = 0.12,
-        top_distance_min: float = 0.10,
+    input_image: UploadFile,
+    height: int = Form(413),
+    width: int = Form(295),
+    human_matting_model: str = Form("hivision_modnet"),
+    face_detect_model: str = Form("mtcnn"),
+    hd: bool = Form(True),
+    head_measure_ratio: float = 0.2,
+    head_height_ratio: float = 0.45,
+    top_distance_max: float = 0.12,
+    top_distance_min: float = 0.10,
 ):
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
@@ -88,8 +90,8 @@ async def idphoto_inference(
 # 人像抠图接口
 @app.post("/human_matting")
 async def human_matting_inference(
-        input_image: UploadFile,
-        human_matting_model: str = Form("hivision_modnet"),
+    input_image: UploadFile,
+    human_matting_model: str = Form("hivision_modnet"),
 ):
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
@@ -117,10 +119,10 @@ async def human_matting_inference(
 # 透明图像添加纯色背景接口
 @app.post("/add_background")
 async def photo_add_background(
-        input_image: UploadFile,
-        color: str = Form("000000"),
-        kb: int = Form(50),
-        render: int = Form(0),
+    input_image: UploadFile,
+    color: str = Form("000000"),
+    kb: int = Form(50),
+    render: int = Form(0),
 ):
     render_choice = ["pure_color", "updown_gradient", "center_gradient"]
 
@@ -162,10 +164,10 @@ async def photo_add_background(
 # 六寸排版照生成接口
 @app.post("/generate_layout_photos")
 async def generate_layout_photos(
-        input_image: UploadFile,
-        height: int = Form(413),
-        width: int = Form(295),
-        kb: int = Form(50),
+    input_image: UploadFile,
+    height: int = Form(413),
+    width: int = Form(295),
+    kb: int = Form(50),
 ):
     # try:
     image_bytes = await input_image.read()
@@ -206,13 +208,13 @@ async def generate_layout_photos(
 # 透明图像添加纯色背景接口
 @app.post("/watermark")
 async def watermark(
-        input_image: UploadFile,
-        text: str = Form("Hello"),
-        size: int = 20,
-        opacity: float = 0.5,
-        angle: int = 30,
-        color: str = "#000000",
-        space: int = 25,
+    input_image: UploadFile,
+    text: str = Form("Hello"),
+    size: int = 20,
+    opacity: float = 0.5,
+    angle: int = 30,
+    color: str = "#000000",
+    space: int = 25,
 ):
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
@@ -237,8 +239,8 @@ async def watermark(
 # 设置照片KB值接口(RGB图)
 @app.post("/set_kb")
 async def set_kb(
-        input_image: UploadFile,
-        kb: int = Form(50),
+    input_image: UploadFile,
+    kb: int = Form(50),
 ):
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
@@ -264,15 +266,15 @@ async def set_kb(
 # 证件照智能裁剪接口
 @app.post("/idphoto_crop")
 async def idphoto_crop_inference(
-        input_image: UploadFile,
-        height: int = Form(413),
-        width: int = Form(295),
-        face_detect_model: str = Form("mtcnn"),
-        hd: bool = Form(True),
-        head_measure_ratio: float = 0.2,
-        head_height_ratio: float = 0.45,
-        top_distance_max: float = 0.12,
-        top_distance_min: float = 0.10,
+    input_image: UploadFile,
+    height: int = Form(413),
+    width: int = Form(295),
+    face_detect_model: str = Form("mtcnn"),
+    hd: bool = Form(True),
+    head_measure_ratio: float = 0.2,
+    head_height_ratio: float = 0.45,
+    top_distance_max: float = 0.12,
+    top_distance_min: float = 0.10,
 ):
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
