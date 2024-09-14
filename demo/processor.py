@@ -55,8 +55,12 @@ class IDPhotoProcessor:
     ):
         # 初始化参数
         top_distance_min = top_distance_max - 0.02
+        # 得到render_option在LOCALES["render_mode"][language]["choices"]中的索引
+        render_option_index = LOCALES["render_mode"][language]["choices"].index(
+            render_option
+        )
         idphoto_json = self._initialize_idphoto_json(
-            mode_option, color_option, render_option, image_kb_options
+            mode_option, color_option, render_option_index, image_kb_options
         )
 
         # 处理尺寸模式
@@ -296,7 +300,7 @@ class IDPhotoProcessor:
     def _render_background(self, result_image_standard, result_image_hd, idphoto_json):
         """渲染背景"""
         render_modes = {0: "pure_color", 1: "updown_gradient", 2: "center_gradient"}
-        render_mode = render_modes.get(idphoto_json["render_mode"], "pure_color")
+        render_mode = render_modes[idphoto_json["render_mode"]]
 
         result_image_standard = np.uint8(
             add_background(
