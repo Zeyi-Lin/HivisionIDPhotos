@@ -395,7 +395,11 @@ class IDPhotoProcessor:
                 result_image_standard,
                 output_image_path,
                 idphoto_json["custom_image_kb"],
-                dpi=idphoto_json["custom_image_dpi"],
+                dpi=(
+                    idphoto_json["custom_image_dpi"]
+                    if idphoto_json["custom_image_dpi"]
+                    else 300
+                ),
             )
             return output_image_path
         # 如果只设置了dpi
