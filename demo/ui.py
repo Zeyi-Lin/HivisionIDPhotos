@@ -472,19 +472,24 @@ def create_ui(
                     ),
                 }
 
+            def change_visibility(option, lang, locales_key, custom_component):
+                return {
+                    custom_component: gr.update(
+                        visible=option == LOCALES[locales_key][lang]["choices"][-1]
+                    )
+                }
+
             def change_color(colors, lang):
-                if colors == LOCALES["bg_color"][lang]["choices"][-1]:
-                    return {custom_color: gr.update(visible=True)}
-                else:
-                    return {custom_color: gr.update(visible=False)}
+                return change_visibility(colors, lang, "bg_color", custom_color)
 
             def change_size_mode(size_option_item, lang):
-                if size_option_item == LOCALES["size_mode"][lang]["choices"][2]:
+                choices = LOCALES["size_mode"][lang]["choices"]
+                if size_option_item == choices[2]:
                     return {
                         custom_size: gr.update(visible=True),
                         size_list_row: gr.update(visible=False),
                     }
-                elif size_option_item == LOCALES["size_mode"][lang]["choices"][1]:
+                elif size_option_item == choices[1]:
                     return {
                         custom_size: gr.update(visible=False),
                         size_list_row: gr.update(visible=False),
@@ -496,16 +501,14 @@ def create_ui(
                     }
 
             def change_image_kb(image_kb_option, lang):
-                if image_kb_option == LOCALES["image_kb"][lang]["choices"][1]:
-                    return {custom_image_kb_size: gr.update(visible=True)}
-                else:
-                    return {custom_image_kb_size: gr.update(visible=False)}
+                return change_visibility(
+                    image_kb_option, lang, "image_kb", custom_image_kb_size
+                )
 
             def change_image_dpi(image_dpi_option, lang):
-                if image_dpi_option == LOCALES["image_dpi"][lang]["choices"][1]:
-                    return {custom_image_dpi_size: gr.update(visible=True)}
-                else:
-                    return {custom_image_dpi_size: gr.update(visible=False)}
+                return change_visibility(
+                    image_dpi_option, lang, "image_dpi", custom_image_dpi_size
+                )
 
             # ---------------- 绑定事件 ----------------
             # 语言切换
