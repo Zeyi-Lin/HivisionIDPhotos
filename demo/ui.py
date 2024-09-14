@@ -434,7 +434,7 @@ def create_ui(
                 }
 
             def change_color(colors, lang):
-                if colors == LOCALES["bg_color"][lang]["choices"][1]:
+                if colors == LOCALES["bg_color"][lang]["choices"][-1]:
                     return {custom_color: gr.update(visible=True)}
                 else:
                     return {custom_color: gr.update(visible=False)}
