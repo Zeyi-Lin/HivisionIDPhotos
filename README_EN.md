@@ -53,7 +53,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 
 - Online Experience: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
 
-- 2024.09.14: Gradio Demo adds **Custom DPI** feature
+- 2024.09.14: Gradio Demo adds **Custom DPI** feature, adds Japanese and Korean support
 - 2024.09.12: Gradio Demo adds **Whitening** feature | API interface adds **Watermark**, **Set Photo KB Size**, **ID Photo Cropping**
 - 2024.09.11: Added **transparent image display and download** feature to Gradio Demo.
 - 2024.09.10: Added a new **face detection model** Retinaface-resnet50, which offers higher detection accuracy at a slightly slower speed compared to mtcnn. Recommended for use.
