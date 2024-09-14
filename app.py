@@ -31,6 +31,8 @@ FACE_DETECT_MODELS_EXPAND = (
 )
 FACE_DETECT_MODELS += FACE_DETECT_MODELS_EXPAND
 
+LANGUAGE = ["zh", "en", "ru", "ko"]
+
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
@@ -50,7 +52,11 @@ if __name__ == "__main__":
     processor = IDPhotoProcessor()
 
     demo = create_ui(
-        processor, root_dir, HUMAN_MATTING_MODELS_EXIST, FACE_DETECT_MODELS
+        processor,
+        root_dir,
+        HUMAN_MATTING_MODELS_EXIST,
+        FACE_DETECT_MODELS,
+        LANGUAGE,
     )
     demo.launch(
         server_name=args.host,
