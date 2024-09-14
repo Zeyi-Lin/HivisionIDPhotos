@@ -31,7 +31,7 @@ FACE_DETECT_MODELS_EXPAND = (
 )
 FACE_DETECT_MODELS += FACE_DETECT_MODELS_EXPAND
 
-LANGUAGE = ["zh", "en", "ru", "ko"]
+LANGUAGE = ["zh", "en", "ko", "ja"]
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
