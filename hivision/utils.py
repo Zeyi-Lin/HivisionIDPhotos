@@ -1,12 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-r"""
-@DATE: 2024/9/5 21:52
-@File: utils.py
-@IDE: pycharm
-@Description:
-    hivision提供的工具函数
-"""
 from PIL import Image
 import io
 import numpy as np
@@ -15,7 +8,30 @@ import base64
 from hivision.plugin.watermark import Watermarker, WatermarkerStyles
 
 
-def resize_image_to_kb(input_image, output_image_path, target_size_kb):
+def save_image_dpi_to_bytes(image, output_image_path, dpi=300):
+    """
+    设置图像的DPI（每英寸点数）并返回字节流
+
+    :param image: numpy.ndarray, 输入的图像数组
+    :param output_image_path: Path to save the resized image. 保存调整大小后的图像的路径。
+    :param dpi: int, 要设置的DPI值，默认为300
+    """
+    image = Image.fromarray(image)
+    # 创建一个字节流对象
+    byte_stream = io.BytesIO()
+    # 将图像保存到字节流
+    image.save(byte_stream, format="PNG", dpi=(dpi, dpi))
+    # 获取字节流的内容
+    image_bytes = byte_stream.getvalue()
+
+    # Save the image to the output path
+    with open(output_image_path, "wb") as f:
+        f.write(image_bytes)
+
+    return image_bytes
+
+
+def resize_image_to_kb(input_image, output_image_path, target_size_kb, dpi=300):
     """
     Resize an image to a target size in KB.
     将图像调整大小至目标文件大小（KB）。
@@ -47,7 +63,7 @@ def resize_image_to_kb(input_image, output_image_path, target_size_kb):
         img_byte_arr = io.BytesIO()
 
         # Save the image to the BytesIO object with the current quality
-        img.save(img_byte_arr, format="JPEG", quality=quality)
+        img.save(img_byte_arr, format="JPEG", quality=quality, dpi=(dpi, dpi))
 
         # Get the size of the image in KB
         img_size_kb = len(img_byte_arr.getvalue()) / 1024

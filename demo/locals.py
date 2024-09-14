@@ -138,6 +138,24 @@ LOCALES = {
             "label": "KB 大小",
         },
     },
+    "image_dpi": {
+        "en": {
+            "label": "Set DPI",
+            "choices": ["Not Set", "Custom"],
+        },
+        "zh": {
+            "label": "设置 DPI 大小",
+            "choices": ["不设置", "自定义"],
+        },
+    },
+    "image_dpi_size": {
+        "en": {
+            "label": "DPI size",
+        },
+        "zh": {
+            "label": "DPI 大小",
+        },
+    },
     "render_mode": {
         "en": {
             "label": "Render mode",
@@ -278,10 +296,10 @@ LOCALES = {
     },
     "download": {
         "en": {
-            "label": "Download the photo after adjusting the KB size",
+            "label": "Download the photo after adjusting the DPI or KB size",
         },
         "zh": {
-            "label": "下载调整 KB 大小后的照片",
+            "label": "下载调整 DPI 或 KB 大小后的照片",
         },
     },
     "matting_image": {
