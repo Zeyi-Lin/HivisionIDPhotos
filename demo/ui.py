@@ -507,6 +507,8 @@ def create_ui(
                     matting_image_accordion,
                     beauty_parameter_tab,
                     whitening_option,
+                    image_dpi_options,
+                    custom_image_dpi_size,
                 ],
             )
 
