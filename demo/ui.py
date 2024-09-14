@@ -21,8 +21,9 @@ def create_ui(
     root_dir: str,
     human_matting_models: list,
     face_detect_models: list,
+    language: list,
 ):
-    DEFAULT_LANG = "zh"
+    DEFAULT_LANG = language[0]
     DEFAULT_HUMAN_MATTING_MODEL = "modnet_photographic_portrait_matting"
     DEFAULT_FACE_DETECT_MODEL = "retinaface-resnet50"
 
@@ -44,7 +45,6 @@ def create_ui(
 
                 with gr.Row():
                     # 语言选择器
-                    language = ["zh", "en"]
                     language_options = gr.Dropdown(
                         choices=language,
                         label="Language",
@@ -433,21 +433,19 @@ def create_ui(
                     ),
                 }
 
-            def change_color(colors):
-                if colors == LOCALES["bg_color"][DEFAULT_LANG]["choices"][1]:
+            def change_color(colors, lang):
+                if colors == LOCALES["bg_color"][lang]["choices"][1]:
                     return {custom_color: gr.update(visible=True)}
                 else:
                     return {custom_color: gr.update(visible=False)}
 
-            def change_size_mode(size_option_item):
-                if size_option_item == LOCALES["size_mode"][DEFAULT_LANG]["choices"][2]:
+            def change_size_mode(size_option_item, lang):
+                if size_option_item == LOCALES["size_mode"][lang]["choices"][2]:
                     return {
                         custom_size: gr.update(visible=True),
                         size_list_row: gr.update(visible=False),
                     }
-                elif (
-                    size_option_item == LOCALES["size_mode"][DEFAULT_LANG]["choices"][1]
-                ):
+                elif size_option_item == LOCALES["size_mode"][lang]["choices"][1]:
                     return {
                         custom_size: gr.update(visible=False),
                         size_list_row: gr.update(visible=False),
@@ -458,14 +456,14 @@ def create_ui(
                         size_list_row: gr.update(visible=True),
                     }
 
-            def change_image_kb(image_kb_option):
-                if image_kb_option == LOCALES["image_kb"][DEFAULT_LANG]["choices"][1]:
+            def change_image_kb(image_kb_option, lang):
+                if image_kb_option == LOCALES["image_kb"][lang]["choices"][1]:
                     return {custom_image_kb_size: gr.update(visible=True)}
                 else:
                     return {custom_image_kb_size: gr.update(visible=False)}
 
-            def change_image_dpi(image_dpi_option):
-                if image_dpi_option == LOCALES["image_dpi"][DEFAULT_LANG]["choices"][1]:
+            def change_image_dpi(image_dpi_option, lang):
+                if image_dpi_option == LOCALES["image_dpi"][lang]["choices"][1]:
                     return {custom_image_dpi_size: gr.update(visible=True)}
                 else:
                     return {custom_image_dpi_size: gr.update(visible=False)}
@@ -513,24 +511,26 @@ def create_ui(
             )
 
             color_options.input(
-                change_color, inputs=[color_options], outputs=[custom_color]
+                change_color,
+                inputs=[color_options, language_options],
+                outputs=[custom_color],
             )
 
             mode_options.input(
                 change_size_mode,
-                inputs=[mode_options],
+                inputs=[mode_options, language_options],
                 outputs=[custom_size, size_list_row],
             )
 
             image_kb_options.input(
                 change_image_kb,
-                inputs=[image_kb_options],
+                inputs=[image_kb_options, language_options],
                 outputs=[custom_image_kb_size],
             )
 
             image_dpi_options.input(
                 change_image_dpi,
-                inputs=[image_dpi_options],
+                inputs=[image_dpi_options, language_options],
                 outputs=[custom_image_dpi_size],
             )
 
