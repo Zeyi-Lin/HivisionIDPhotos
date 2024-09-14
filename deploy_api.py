@@ -121,7 +121,7 @@ async def human_matting_inference(
 async def photo_add_background(
     input_image: UploadFile,
     color: str = Form("000000"),
-    kb: int = Form(50),
+    kb: int = Form(None),
     render: int = Form(0),
 ):
     render_choice = ["pure_color", "updown_gradient", "center_gradient"]
@@ -167,7 +167,7 @@ async def generate_layout_photos(
     input_image: UploadFile,
     height: int = Form(413),
     width: int = Form(295),
-    kb: int = Form(50),
+    kb: int = Form(None),
 ):
     # try:
     image_bytes = await input_image.read()
@@ -205,7 +205,7 @@ async def generate_layout_photos(
     return result_messgae
 
 
-# 透明图像添加纯色背景接口
+# 透明图像添加水印接口
 @app.post("/watermark")
 async def watermark(
     input_image: UploadFile,
@@ -215,6 +215,7 @@ async def watermark(
     angle: int = 30,
     color: str = "#000000",
     space: int = 25,
+    kb: int = Form(None),
 ):
     image_bytes = await input_image.read()
     nparr = np.frombuffer(image_bytes, np.uint8)
@@ -223,9 +224,15 @@ async def watermark(
     try:
         result_image = add_watermark(img, text, size, opacity, angle, color, space)
 
+        if kb:
+            result_image = cv2.cvtColor(result_image, cv2.COLOR_RGB2BGR)
+            result_image_base64 = resize_image_to_kb_base64(result_image, int(kb))
+        else:
+            result_image_base64 = numpy_2_base64(result_image)
+
         result_messgae = {
             "status": True,
-            "image_base64": numpy_2_base64(result_image),
+            "image_base64": result_image_base64,
         }
     except Exception as e:
         result_messgae = {
