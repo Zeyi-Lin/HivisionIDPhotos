@@ -60,6 +60,7 @@ class IDCreator:
         head_top_range: float = (0.12, 0.1),
         face: Tuple[int, int, int, int] = None,
         whitening_strength: int = 0,
+        brightness_strength: int = 0,
     ) -> Result:
         """
         证件照处理函数
@@ -72,6 +73,7 @@ class IDCreator:
         :param head_top_range: 头距离顶部的比例（max,min)
         :param face: 人脸坐标
         :param whitening_strength: 美白强度
+        :param brightness_strength: 亮度强度
 
         :return: 返回处理后的证件照和一系列参数
         """
@@ -85,6 +87,7 @@ class IDCreator:
             crop_only=crop_only,
             face=face,
             whitening_strength=whitening_strength,
+            brightness_strength=brightness_strength,
         )
 
         self.ctx = Context(params)

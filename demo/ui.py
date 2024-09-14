@@ -160,11 +160,21 @@ def create_ui(
                 with gr.Tab(
                     LOCALES["beauty_tab"][DEFAULT_LANG]["label"]
                 ) as beauty_parameter_tab:
+                    # 美白组件
                     whitening_option = gr.Slider(
                         label=LOCALES["whitening_strength"][DEFAULT_LANG]["label"],
                         minimum=0,
                         maximum=15,
                         value=2,
+                        step=1,
+                        interactive=True,
+                    )
+                    # 亮度组件
+                    brightness_option = gr.Slider(
+                        label=LOCALES["brightness_strength"][DEFAULT_LANG]["label"],
+                        minimum=-5,
+                        maximum=25,
+                        value=0,
                         step=1,
                         interactive=True,
                     )
@@ -431,6 +441,9 @@ def create_ui(
                     custom_image_dpi_size: gr.update(
                         label=LOCALES["image_dpi"][language]["label"]
                     ),
+                    brightness_option: gr.update(
+                        label=LOCALES["brightness_strength"][language]["label"]
+                    ),
                 }
 
             def change_color(colors, lang):
@@ -507,6 +520,7 @@ def create_ui(
                     whitening_option,
                     image_dpi_options,
                     custom_image_dpi_size,
+                    brightness_option,
                 ],
             )
 
@@ -564,6 +578,7 @@ def create_ui(
                     whitening_option,
                     image_dpi_options,
                     custom_image_dpi_size,
+                    brightness_option,
                 ],
                 outputs=[
                     img_output_standard,

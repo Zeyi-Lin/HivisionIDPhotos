@@ -564,4 +564,18 @@ LOCALES = {
             "label": "미백 강도",
         },
     },
+    "brightness_strength": {
+        "en": {
+            "label": "brightness strength",
+        },
+        "zh": {
+            "label": "亮度强度",
+        },
+        "ja": {
+            "label": "明るさの強さ",
+        },
+        "ko": {
+            "label": "밝기 강도",
+        },
+    },
 }

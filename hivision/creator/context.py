@@ -22,6 +22,7 @@ class Params:
         head_top_range: float = (0.12, 0.1),
         face: Tuple[int, int, int, int] = None,
         whitening_strength: int = 0,
+        brightness_strength: int = 0,
     ):
         self.__size = size
         self.__change_bg_only = change_bg_only
@@ -31,6 +32,7 @@ class Params:
         self.__head_top_range = head_top_range
         self.__face = face
         self.__whitening_strength = whitening_strength
+        self.__brightness_strength = brightness_strength
 
     @property
     def size(self):
@@ -63,6 +65,10 @@ class Params:
     @property
     def whitening_strength(self):
         return self.__whitening_strength
+
+    @property
+    def brightness_strength(self):
+        return self.__brightness_strength
 
 
 class Result:

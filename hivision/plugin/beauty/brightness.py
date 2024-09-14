@@ -1,31 +1,57 @@
+"""
+亮度调整模块
+"""
+
 import cv2
-import numpy as np
 
 
-def adjust_brightness(image, brightness_factor):
+def adjust_brightness(image, brightness_factor=0):
     """
     调整图像的亮度。
 
     参数:
     image (numpy.ndarray): 输入的图像数组。
-    brightness_factor (float): 亮度调整因子。大于1增加亮度，小于1降低亮度。
+    brightness_factor (float): 亮度调整因子。大于0增加亮度，小于0降低亮度。
 
     返回:
     numpy.ndarray: 调整亮度后的图像。
     """
-    # 将图像转换为HSV颜色空间
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    if brightness_factor == 0:
+        return image.copy()
 
-    # 分离HSV通道
-    h, s, v = cv2.split(hsv)
+    # 将亮度因子转换为调整值
+    alpha = 1.0 + (brightness_factor / 100.0)
+    beta = 0
 
-    # 调整V通道（亮度）
-    v = np.clip(v * brightness_factor, 0, 255).astype(np.uint8)
+    # 使用 cv2.convertScaleAbs 函数调整亮度
+    bright_image = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
 
-    # 合并通道
-    hsv = cv2.merge((h, s, v))
+    return bright_image
 
-    # 转换回BGR颜色空间
-    adjusted = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
 
+# Gradio接口
+def brightness_adjustment(image, brightness):
+    adjusted = adjust_brightness(image, brightness)
     return adjusted
+
+
+if __name__ == "__main__":
+    import gradio as gr
+
+    iface = gr.Interface(
+        fn=brightness_adjustment,
+        inputs=[
+            gr.Image(label="Input Image"),
+            gr.Slider(
+                minimum=-20,
+                maximum=20,
+                value=0,  # Changed from 'default' to 'value'
+                step=1,
+                label="Brightness",
+            ),
+        ],
+        outputs=gr.Image(label="Adjusted Image"),
+        title="Image Brightness Adjustment",
+        description="Adjust the brightness of an image using a slider.",
+    )
+    iface.launch()
