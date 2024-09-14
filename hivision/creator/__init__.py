@@ -62,6 +62,7 @@ class IDCreator:
         brightness_strength: int = 0,
         contrast_strength: int = 0,
         sharpen_strength: int = 0,
+        saturation_strength: int = 0,
     ) -> Result:
         """
         证件照处理函数
@@ -92,6 +93,7 @@ class IDCreator:
             brightness_strength=brightness_strength,
             contrast_strength=contrast_strength,
             sharpen_strength=sharpen_strength,
+            saturation_strength=saturation_strength,
         )
 
         self.ctx = Context(params)

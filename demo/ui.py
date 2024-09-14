@@ -39,7 +39,7 @@ def create_ui(
     with demo:
         gr.HTML(load_description(os.path.join(root_dir, "assets/title.md")))
         with gr.Row():
-            # ------------ 左半边 UI ----------------
+            # ------------------------ 左半边 UI ------------------------
             with gr.Column():
                 img_input = gr.Image(height=400)
 
@@ -63,7 +63,7 @@ def create_ui(
                         value=human_matting_models[0],
                     )
 
-                # TAB1 - 关键参数
+                # TAB1 - 关键参数 ------------------------------------------------
                 with gr.Tab(
                     LOCALES["key_param"][DEFAULT_LANG]["label"]
                 ) as key_parameter_tab:
@@ -106,7 +106,7 @@ def create_ui(
                         value=LOCALES["render_mode"][DEFAULT_LANG]["choices"][0],
                     )
 
-                # TAB2 - 高级参数
+                # TAB2 - 高级参数 ------------------------------------------------
                 with gr.Tab(
                     LOCALES["advance_param"][DEFAULT_LANG]["label"]
                 ) as advance_parameter_tab:
@@ -156,7 +156,7 @@ def create_ui(
                         visible=False,
                     )
 
-                # TAB3 - 美颜
+                # TAB3 - 美颜 ------------------------------------------------
                 with gr.Tab(
                     LOCALES["beauty_tab"][DEFAULT_LANG]["label"]
                 ) as beauty_parameter_tab:
@@ -189,17 +189,27 @@ def create_ui(
                             step=1,
                             interactive=True,
                         )
-                        # 锐化组件
-                        sharpen_option = gr.Slider(
-                            label=LOCALES["sharpen_strength"][DEFAULT_LANG]["label"],
-                            minimum=0,
-                            maximum=5,
+                        # 饱和度组件
+                        saturation_option = gr.Slider(
+                            label=LOCALES["saturation_strength"][DEFAULT_LANG]["label"],
+                            minimum=-10,
+                            maximum=50,
                             value=0,
                             step=1,
                             interactive=True,
                         )
 
-                # TAB4 - 水印
+                    # 锐化组件
+                    sharpen_option = gr.Slider(
+                        label=LOCALES["sharpen_strength"][DEFAULT_LANG]["label"],
+                        minimum=0,
+                        maximum=5,
+                        value=0,
+                        step=1,
+                        interactive=True,
+                    )
+
+                # TAB4 - 水印 ------------------------------------------------
                 with gr.Tab(
                     LOCALES["watermark_tab"][DEFAULT_LANG]["label"]
                 ) as watermark_parameter_tab:
@@ -470,6 +480,9 @@ def create_ui(
                     sharpen_option: gr.update(
                         label=LOCALES["sharpen_strength"][language]["label"]
                     ),
+                    saturation_option: gr.update(
+                        label=LOCALES["saturation_strength"][language]["label"]
+                    ),
                 }
 
             def change_visibility(option, lang, locales_key, custom_component):
@@ -552,6 +565,7 @@ def create_ui(
                     brightness_option,
                     contrast_option,
                     sharpen_option,
+                    saturation_option,
                 ],
             )
 
@@ -612,6 +626,7 @@ def create_ui(
                     brightness_option,
                     contrast_option,
                     sharpen_option,
+                    saturation_option,
                 ],
                 outputs=[
                     img_output_standard,
