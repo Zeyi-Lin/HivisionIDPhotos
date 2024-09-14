@@ -99,7 +99,7 @@ We have shared some interesting applications and extensions of HivisionIDPhotos 
 
 [![](assets/comfyui.png)](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 
-- [zjzWx](https://github.com/no1xuan/zjzWx): Exquisite open source ID photo WeChat mini program project, contributed by [no1xuan](https://github.com/no1xuan)
+- [HivisionIDPhotos-wechat-weapp](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp): WeChat ID photo mini program, powered by the HivisionIDphotos algorithm, contributed by [no1xuan](https://github.com/no1xuan)
 
 <br>
 

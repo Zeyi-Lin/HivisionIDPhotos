@@ -97,6 +97,8 @@ HivisionIDPhoto가 여러분에게 도움이 된다면, 이 리포지토리를 �
 
 [![](assets/comfyui.png)](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 
+- [HivisionIDPhotos-wechat-weapp](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp): WeChat ID 사진 미니 프로그램, HivisionIDphotos 알고리즘을 기반으로 하며, [no1xuan](https://github.com/no1xuan)이 기여하였습니다.
+
 <br>
 
 # 🔧 준비 작업
