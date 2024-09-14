@@ -6,6 +6,9 @@ from hivision.creator.choose_handler import HUMAN_MATTING_MODELS
 
 root_dir = os.path.dirname(os.path.abspath(__file__))
 
+# 获取存在的人像分割模型列表
+# 通过检查 hivision/creator/weights 目录下的 .onnx 和 .mnn 文件
+# 只保留文件名（不包括扩展名）
 HUMAN_MATTING_MODELS_EXIST = [
     os.path.splitext(file)[0]
     for file in os.listdir(os.path.join(root_dir, "hivision/creator/weights"))
