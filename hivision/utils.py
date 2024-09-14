@@ -145,14 +145,14 @@ def resize_image_to_kb_base64(input_image, target_size_kb, mode="exact"):
 
     # Encode the image data to base64
     img_base64 = base64.b64encode(img_byte_arr.getvalue()).decode("utf-8")
-    return img_base64
+    return "data:image/png;base64," + img_base64
 
 
 def numpy_2_base64(img: np.ndarray) -> str:
     _, buffer = cv2.imencode(".png", img)
     base64_image = base64.b64encode(buffer).decode("utf-8")
 
-    return base64_image
+    return "data:image/png;base64," + base64_image
 
 
 def base64_2_numpy(base64_image: str) -> np.ndarray:
