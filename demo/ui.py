@@ -178,6 +178,15 @@ def create_ui(
                         step=1,
                         interactive=True,
                     )
+                    # 对比度组件
+                    contrast_option = gr.Slider(
+                        label=LOCALES["contrast_strength"][DEFAULT_LANG]["label"],
+                        minimum=-10,
+                        maximum=50,
+                        value=0,
+                        step=1,
+                        interactive=True,
+                    )
 
                 # TAB4 - 水印
                 with gr.Tab(
@@ -444,6 +453,9 @@ def create_ui(
                     brightness_option: gr.update(
                         label=LOCALES["brightness_strength"][language]["label"]
                     ),
+                    contrast_option: gr.update(
+                        label=LOCALES["contrast_strength"][language]["label"]
+                    ),
                 }
 
             def change_color(colors, lang):
@@ -521,6 +533,7 @@ def create_ui(
                     image_dpi_options,
                     custom_image_dpi_size,
                     brightness_option,
+                    contrast_option,
                 ],
             )
 
@@ -579,6 +592,7 @@ def create_ui(
                     image_dpi_options,
                     custom_image_dpi_size,
                     brightness_option,
+                    contrast_option,
                 ],
                 outputs=[
                     img_output_standard,

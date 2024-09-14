@@ -61,6 +61,7 @@ class IDCreator:
         face: Tuple[int, int, int, int] = None,
         whitening_strength: int = 0,
         brightness_strength: int = 0,
+        contrast_strength: int = 0,
     ) -> Result:
         """
         证件照处理函数
@@ -74,6 +75,7 @@ class IDCreator:
         :param face: 人脸坐标
         :param whitening_strength: 美白强度
         :param brightness_strength: 亮度强度
+        :param contrast_strength: 对比度强度
 
         :return: 返回处理后的证件照和一系列参数
         """
@@ -88,6 +90,7 @@ class IDCreator:
             face=face,
             whitening_strength=whitening_strength,
             brightness_strength=brightness_strength,
+            contrast_strength=contrast_strength,
         )
 
         self.ctx = Context(params)

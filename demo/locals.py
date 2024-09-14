@@ -578,4 +578,18 @@ LOCALES = {
             "label": "밝기 강도",
         },
     },
+    "contrast_strength": {
+        "en": {
+            "label": "contrast strength",
+        },
+        "zh": {
+            "label": "对比度强度",
+        },
+        "ja": {
+            "label": "コントラスト強度",
+        },
+        "ko": {
+            "label": "대비 강도",
+        },
+    },
 }
