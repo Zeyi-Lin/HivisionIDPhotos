@@ -606,4 +606,18 @@ LOCALES = {
             "label": "샤ープ 강도",
         },
     },
+    "saturation_strength": {
+        "en": {
+            "label": "saturation strength",
+        },
+        "zh": {
+            "label": "饱和度强度",
+        },
+        "ja": {
+            "label": "飽和度強度",
+        },
+        "ko": {
+            "label": "포화도 강도",
+        },
+    },
 }
