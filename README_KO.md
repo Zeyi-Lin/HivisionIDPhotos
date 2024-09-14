@@ -51,7 +51,7 @@
 
 - 온라인 체험: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
 
-- 2024.09.14: Gradio Demo에 **커스텀 DPI** 기능 추가, 일본어와 한국어 추가
+- 2024.09.14: Gradio Demo에 **커스텀 DPI** 기능 추가, 일본어와 한국어 추가, **밝기, 대비, 선명도 조절** 기능 추가
 - 2024.09.12: Gradio 데모에 **미백** 기능 추가 | API 인터페이스에 **워터마크 추가**, **사진 KB 크기 설정**, **증명사진 자르기** 추가
 - 2024.09.11: Gradio Demo에 **투명 이미지 표시 및 다운로드** 기능 추가
 - 2024.09.09: 새로운 **배경 제거 모델** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) 추가 | Gradio에 **고급 매개변수 설정** 및 **워터마크** 탭 추가
