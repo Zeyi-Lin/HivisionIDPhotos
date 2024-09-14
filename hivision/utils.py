@@ -258,7 +258,13 @@ def add_background(input_image, bgr=(0, 0, 0), mode="pure_color"):
     :return: output: 合成好的输出图像
     """
     height, width = input_image.shape[0], input_image.shape[1]
-    b, g, r, a = cv2.split(input_image)
+    try:
+        b, g, r, a = cv2.split(input_image)
+    except ValueError:
+        raise ValueError(
+            "The input image must have 4 channels. 输入图像必须有4个通道，即透明图像。"
+        )
+
     a_cal = a / 255
     if mode == "pure_color":
         # 纯色填充
