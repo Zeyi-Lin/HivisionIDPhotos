@@ -169,24 +169,35 @@ def create_ui(
                         step=1,
                         interactive=True,
                     )
-                    # 亮度组件
-                    brightness_option = gr.Slider(
-                        label=LOCALES["brightness_strength"][DEFAULT_LANG]["label"],
-                        minimum=-5,
-                        maximum=25,
-                        value=0,
-                        step=1,
-                        interactive=True,
-                    )
-                    # 对比度组件
-                    contrast_option = gr.Slider(
-                        label=LOCALES["contrast_strength"][DEFAULT_LANG]["label"],
-                        minimum=-10,
-                        maximum=50,
-                        value=0,
-                        step=1,
-                        interactive=True,
-                    )
+
+                    with gr.Row():
+                        # 亮度组件
+                        brightness_option = gr.Slider(
+                            label=LOCALES["brightness_strength"][DEFAULT_LANG]["label"],
+                            minimum=-5,
+                            maximum=25,
+                            value=0,
+                            step=1,
+                            interactive=True,
+                        )
+                        # 对比度组件
+                        contrast_option = gr.Slider(
+                            label=LOCALES["contrast_strength"][DEFAULT_LANG]["label"],
+                            minimum=-10,
+                            maximum=50,
+                            value=0,
+                            step=1,
+                            interactive=True,
+                        )
+                        # 锐化组件
+                        sharpen_option = gr.Slider(
+                            label=LOCALES["sharpen_strength"][DEFAULT_LANG]["label"],
+                            minimum=0,
+                            maximum=5,
+                            value=0,
+                            step=1,
+                            interactive=True,
+                        )
 
                 # TAB4 - 水印
                 with gr.Tab(
@@ -456,6 +467,9 @@ def create_ui(
                     contrast_option: gr.update(
                         label=LOCALES["contrast_strength"][language]["label"]
                     ),
+                    sharpen_option: gr.update(
+                        label=LOCALES["sharpen_strength"][language]["label"]
+                    ),
                 }
 
             def change_color(colors, lang):
@@ -534,6 +548,7 @@ def create_ui(
                     custom_image_dpi_size,
                     brightness_option,
                     contrast_option,
+                    sharpen_option,
                 ],
             )
 
@@ -593,6 +608,7 @@ def create_ui(
                     custom_image_dpi_size,
                     brightness_option,
                     contrast_option,
+                    sharpen_option,
                 ],
                 outputs=[
                     img_output_standard,

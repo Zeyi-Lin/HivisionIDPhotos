@@ -1,7 +1,7 @@
 import cv2
 from hivision.creator.context import Context
 from hivision.plugin.beauty.whitening import make_whitening
-from hivision.plugin.beauty.base_adjust import adjust_brightness_contrast
+from hivision.plugin.beauty.base_adjust import adjust_brightness_contrast_sharpen
 
 
 def beauty_face(ctx: Context):
@@ -20,12 +20,20 @@ def beauty_face(ctx: Context):
         middle_image = make_whitening(middle_image, ctx.params.whitening_strength)
         processed = True
 
-    # 如果亮度强度不为0，进行亮度调整
-    if ctx.params.brightness_strength != 0 or ctx.params.contrast_strength != 0:
-        middle_image = adjust_brightness_contrast(
+    # 如果亮度、对比度、锐化强度不为0，进行亮度、对比度、锐化处理
+    if (
+        ctx.params.brightness_strength != 0
+        or ctx.params.contrast_strength != 0
+        or ctx.params.sharpen_strength != 0
+    ):
+        print(
+            f"Brightness strength: {ctx.params.brightness_strength}, Contrast strength: {ctx.params.contrast_strength}, Sharpen strength: {ctx.params.sharpen_strength}"
+        )
+        middle_image = adjust_brightness_contrast_sharpen(
             middle_image,
             ctx.params.brightness_strength,
             ctx.params.contrast_strength,
+            ctx.params.sharpen_strength,
         )
         processed = True
 

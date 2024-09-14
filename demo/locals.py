@@ -592,4 +592,18 @@ LOCALES = {
             "label": "대비 강도",
         },
     },
+    "sharpen_strength": {
+        "en": {
+            "label": "sharpen strength",
+        },
+        "zh": {
+            "label": "锐化强度",
+        },
+        "ja": {
+            "label": "シャープ化強度",
+        },
+        "ko": {
+            "label": "샤ープ 강도",
+        },
+    },
 }

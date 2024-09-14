@@ -51,6 +51,7 @@ class IDPhotoProcessor:
         custom_image_dpi=None,
         brightness_strength=0,
         contrast_strength=0,
+        sharpen_strength=0,
     ):
         # 初始化参数
         top_distance_min = top_distance_max - 0.02
@@ -107,6 +108,7 @@ class IDPhotoProcessor:
                 whitening_strength,
                 brightness_strength,
                 contrast_strength,
+                sharpen_strength,
             )
         except (FaceError, APIError):
             return self._handle_photo_generation_error(language)
@@ -199,6 +201,7 @@ class IDPhotoProcessor:
         whitening_strength,
         brightness_strength,
         contrast_strength,
+        sharpen_strength,
     ):
         """生成证件照"""
         change_bg_only = (
@@ -213,6 +216,7 @@ class IDPhotoProcessor:
             whitening_strength=whitening_strength,
             brightness_strength=brightness_strength,
             contrast_strength=contrast_strength,
+            sharpen_strength=sharpen_strength,
         )
 
     def _handle_photo_generation_error(self, language):

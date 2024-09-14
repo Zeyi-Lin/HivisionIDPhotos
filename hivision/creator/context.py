@@ -24,6 +24,7 @@ class Params:
         whitening_strength: int = 0,
         brightness_strength: int = 0,
         contrast_strength: int = 0,
+        sharpen_strength: int = 0,
     ):
         self.__size = size
         self.__change_bg_only = change_bg_only
@@ -35,6 +36,7 @@ class Params:
         self.__whitening_strength = whitening_strength
         self.__brightness_strength = brightness_strength
         self.__contrast_strength = contrast_strength
+        self.__sharpen_strength = sharpen_strength
 
     @property
     def size(self):
@@ -75,6 +77,10 @@ class Params:
     @property
     def contrast_strength(self):
         return self.__contrast_strength
+
+    @property
+    def sharpen_strength(self):
+        return self.__sharpen_strength
 
 
 class Result:

@@ -45,7 +45,6 @@ class IDCreator:
         self.matting_handler: ContextHandler = extract_human
         self.detection_handler: ContextHandler = detect_face_mtcnn
         self.beauty_handler: ContextHandler = beauty_face
-
         # 上下文
         self.ctx = None
 
@@ -62,6 +61,7 @@ class IDCreator:
         whitening_strength: int = 0,
         brightness_strength: int = 0,
         contrast_strength: int = 0,
+        sharpen_strength: int = 0,
     ) -> Result:
         """
         证件照处理函数
@@ -76,7 +76,7 @@ class IDCreator:
         :param whitening_strength: 美白强度
         :param brightness_strength: 亮度强度
         :param contrast_strength: 对比度强度
-
+        :param sharpen_strength: 锐化强度
         :return: 返回处理后的证件照和一系列参数
         """
         # 0.初始化上下文
@@ -91,6 +91,7 @@ class IDCreator:
             whitening_strength=whitening_strength,
             brightness_strength=brightness_strength,
             contrast_strength=contrast_strength,
+            sharpen_strength=sharpen_strength,
         )
 
         self.ctx = Context(params)
