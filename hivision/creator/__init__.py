@@ -15,6 +15,7 @@ from .human_matting import extract_human
 from .face_detector import detect_face_mtcnn
 from hivision.plugin.beauty.whitening import make_whitening
 from .photo_adjuster import adjust_photo
+import cv2
 
 
 class IDCreator:
@@ -84,6 +85,7 @@ class IDCreator:
             face=face,
             whitening_strength=whitening_strength,
         )
+
         self.ctx = Context(params)
         ctx = self.ctx
         ctx.processing_image = image
@@ -93,12 +95,6 @@ class IDCreator:
         ctx.origin_image = ctx.processing_image.copy()
         self.before_all and self.before_all(ctx)
 
-        # 美白
-        if ctx.params.whitening_strength > 0:
-            ctx.processing_image = make_whitening(
-                ctx.processing_image, ctx.params.whitening_strength
-            )
-
         # 1. 人像抠图
         if not ctx.params.crop_only:
             # 调用抠图工作流
@@ -106,6 +102,14 @@ class IDCreator:
             self.after_matting and self.after_matting(ctx)
         else:
             ctx.matting_image = ctx.processing_image
+
+        # 美颜部分
+        if ctx.params.whitening_strength > 0:
+            _, _, _, alpha = cv2.split(ctx.matting_image)
+            b, g, r = cv2.split(
+                make_whitening(ctx.origin_image, ctx.params.whitening_strength)
+            )
+            ctx.matting_image = cv2.merge((b, g, r, alpha))
 
         # 如果仅换底，则直接返回抠图结果
         if ctx.params.change_bg_only:
