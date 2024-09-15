@@ -15,11 +15,12 @@
 [![][wechat-shield]][wechat-link]
 [![][spaces-shield]][spaces-link]
 [![][swanhub-demo-shield]][swanhub-demo-link]
+[![][modelscope-shield]][modelscope-link]
 
 [![][trendshift-shield]][trendshift-link]
 [![][hellogithub-shield]][hellogithub-link]
 
-<img src="assets/demoImage.png" width=900>
+<img src="assets/demoImage.jpg" width=900>
 
 👋 加入我们的[微信群][wechat-link]
 
@@ -45,13 +46,16 @@
 - [联系我们](#-联系我们)
 - [Q&A](#qa)
 - [贡献者](#贡献者)
+- [感谢支持](#感谢支持)
+- [License](#lincese)
 
 <br>
 
 # 🤩 最近更新
 
-- 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)
+- 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
 
+- 2024.09.14: Gradio Demo增加**自定义DPI**功能，增加日语和韩语支持，增加**调整亮度、对比度、锐度**功能
 - 2024.09.12: Gradio Demo增加**美白**功能 | API接口增加**加水印**、**设置照片KB值大小**、**证件照裁切**
 - 2024.09.11: Gradio Demo增加**透明图显示与下载**功能
 - 2024.09.10: 增加新的**人脸检测模型** Retinaface-resnet50，以稍弱于mtcnn的速度换取更高的检测精度，推荐使用
@@ -59,7 +63,6 @@
 - 2024.09.08: 增加新的**抠图模型** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) | **ComfyUI工作流** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) 贡献 by [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 - 2024.09.07: 增加**人脸检测API选项** [Face++](docs/face++_CN.md)，实现更高精度的人脸检测
 - 2024.09.06: 增加新的抠图模型 [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet)
-- 2024.09.05: 更新 [Restful API 文档](docs/api_CN.md)
 
 <br>
 
@@ -99,6 +102,7 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 [![](assets/comfyui.png)](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 
 - [HivisionIDPhotos-NAS](https://github.com/ONG-Leo/HivisionIDPhotos-NAS): 群晖NAS部署中文教程，由 [ONG-Leo](https://github.com/ONG-Leo) 贡献
+- [HivisionIDPhotos-wechat-weapp](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp): 微信证件照小程序，基于HivisionIDphotos算法驱动，由 [no1xuan](https://github.com/no1xuan) 贡献
 
 <br>
 
@@ -151,18 +155,20 @@ python scripts/download_model.py --models all
 
 ## 5. GPU推理加速（可选）
 
-如需使用英伟达GPU加速推理，在确保你已经安装CUDA与cuDNN后，根据[文档](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)找到对应的`onnxruntime-gpu`版本安装，如：
+在当前版本，可被英伟达GPU加速的模型为`birefnet-v1-lite`，并请确保你有16GB左右的显存。
+
+如需使用英伟达GPU加速推理，在确保你已经安装[CUDA](https://developer.nvidia.com/cuda-downloads)与[cuDNN](https://developer.nvidia.com/cudnn)后，根据[onnxruntime-gpu文档](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)找到对应的`onnxruntime-gpu`版本安装，以及根据[pytorch官网](https://pytorch.org/get-started/locally/)找到对应的`pytorch`版本安装。
 
 ```bash
-# CUDA 12.x, cuDNN 8
+# 假如你的电脑安装的是CUDA 12.x, cuDNN 8
+# 安装torch是可选的，如果你始终配置不好cuDNN，那么试试安装torch
 pip install onnxruntime-gpu==1.18.0
+pip install torch --index-url https://download.pytorch.org/whl/cu121
 ```
 
-完成后，调用如`birefnet-v1-lite`模型将会利用GPU加速推理。
+完成安装后，调用`birefnet-v1-lite`模型即可利用GPU加速推理。
 
-TIPS: 安装 `CUDA` and `CUDNN` 后 你还要 check 本地的`onnxruntime`包的版本与其相符合。如果安装的是最新版 cuda 那你只需要执行`pip install --upgrade onnxruntime`
-
-TIPS2: 你可能还需要安装 `torch`， 安装时也需要和 cuda 的版本互相吻合，cuda 可以向下兼容 比如你的 cuda 版本为 12.6 但是 torch 目前所匹配最高版本为 12.4 在你电脑安装 12.4 版本也是可以的
+> TIPS: cuda安装可以向下兼容 比如你的 cuda 版本为 12.6 但是 torch 目前所匹配最高版本为 12.4，在你电脑安装 12.4 版本也是可以的
 
 <br>
 
@@ -379,9 +385,19 @@ docker run  -d -p 7860:7860 \
 
 <br>
 
-# StarHistory
+# 感谢支持
+
+[![Stargazers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/stars/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/stargazers)
+
+[![Forkers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/forks/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/network/members)
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
+
+<br>
+
+# Lincese
+
+This repository is licensed under the [Apache-2.0 License](LICENSE).
 
 [github-stars-shield]: https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos?color=ffcb47&labelColor=black&style=flat-square
 [github-stars-link]: https://github.com/zeyi-lin/hivisionidphotos/stargazers
@@ -420,3 +436,6 @@ docker run  -d -p 7860:7860 \
 
 [github-forks-shield]: https://img.shields.io/github/forks/zeyi-lin/hivisionidphotos?color=8ae8ff&labelColor=black&style=flat-square
 [github-forks-link]: https://github.com/zeyi-lin/hivisionidphotos/network/members
+
+[modelscope-shield]: https://img.shields.io/badge/Demo_on_ModelScope-purple?logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIzIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KCiA8Zz4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPHBhdGggaWQ9InN2Z18xNCIgZmlsbD0iIzYyNGFmZiIgZD0ibTAsODkuODRsMjUuNjUsMGwwLDI1LjY0OTk5bC0yNS42NSwwbDAsLTI1LjY0OTk5eiIvPgogIDxwYXRoIGlkPSJzdmdfMTUiIGZpbGw9IiM2MjRhZmYiIGQ9Im05OS4xNCwxMTUuNDlsMjUuNjUsMGwwLDI1LjY1bC0yNS42NSwwbDAsLTI1LjY1eiIvPgogIDxwYXRoIGlkPSJzdmdfMTYiIGZpbGw9IiM2MjRhZmYiIGQ9Im0xNzYuMDksMTQxLjE0bC0yNS42NDk5OSwwbDAsMjIuMTlsNDcuODQsMGwwLC00Ny44NGwtMjIuMTksMGwwLDI1LjY1eiIvPgogIDxwYXRoIGlkPSJzdmdfMTciIGZpbGw9IiMzNmNmZDEiIGQ9Im0xMjQuNzksODkuODRsMjUuNjUsMGwwLDI1LjY0OTk5bC0yNS42NSwwbDAsLTI1LjY0OTk5eiIvPgogIDxwYXRoIGlkPSJzdmdfMTgiIGZpbGw9IiMzNmNmZDEiIGQ9Im0wLDY0LjE5bDI1LjY1LDBsMCwyNS42NWwtMjUuNjUsMGwwLC0yNS42NXoiLz4KICA8cGF0aCBpZD0ic3ZnXzE5IiBmaWxsPSIjNjI0YWZmIiBkPSJtMTk4LjI4LDg5Ljg0bDI1LjY0OTk5LDBsMCwyNS42NDk5OWwtMjUuNjQ5OTksMGwwLC0yNS42NDk5OXoiLz4KICA8cGF0aCBpZD0ic3ZnXzIwIiBmaWxsPSIjMzZjZmQxIiBkPSJtMTk4LjI4LDY0LjE5bDI1LjY0OTk5LDBsMCwyNS42NWwtMjUuNjQ5OTksMGwwLC0yNS42NXoiLz4KICA8cGF0aCBpZD0ic3ZnXzIxIiBmaWxsPSIjNjI0YWZmIiBkPSJtMTUwLjQ0LDQybDAsMjIuMTlsMjUuNjQ5OTksMGwwLDI1LjY1bDIyLjE5LDBsMCwtNDcuODRsLTQ3Ljg0LDB6Ii8+CiAgPHBhdGggaWQ9InN2Z18yMiIgZmlsbD0iIzM2Y2ZkMSIgZD0ibTczLjQ5LDg5Ljg0bDI1LjY1LDBsMCwyNS42NDk5OWwtMjUuNjUsMGwwLC0yNS42NDk5OXoiLz4KICA8cGF0aCBpZD0ic3ZnXzIzIiBmaWxsPSIjNjI0YWZmIiBkPSJtNDcuODQsNjQuMTlsMjUuNjUsMGwwLC0yMi4xOWwtNDcuODQsMGwwLDQ3Ljg0bDIyLjE5LDBsMCwtMjUuNjV6Ii8+CiAgPHBhdGggaWQ9InN2Z18yNCIgZmlsbD0iIzYyNGFmZiIgZD0ibTQ3Ljg0LDExNS40OWwtMjIuMTksMGwwLDQ3Ljg0bDQ3Ljg0LDBsMCwtMjIuMTlsLTI1LjY1LDBsMCwtMjUuNjV6Ii8+CiA8L2c+Cjwvc3ZnPg==&labelColor=white
+[modelscope-link]: https://modelscope.cn/studios/SwanLab/HivisionIDPhotos
