@@ -1,7 +1,4 @@
 import csv
-import numpy as np
-from PIL import Image
-from hivision.plugin.watermark import Watermarker, WatermarkerStyles
 
 
 def csv_to_size_list(csv_file: str) -> dict:

@@ -22,7 +22,7 @@ def adjust_photo(ctx: Context):
     params = ctx.params
     x, y = face_rect[0], face_rect[1]
     w, h = face_rect[2], face_rect[3]
-    height, width = ctx.processing_image.shape[:2]
+    height, width = ctx.matting_image.shape[:2]
     width_height_ratio = standard_size[0] / standard_size[1]
     # Step2. 计算高级参数
     face_center = (x + w / 2, y + h / 2)  # 面部中心坐标
@@ -46,7 +46,7 @@ def adjust_photo(ctx: Context):
     x2 = x1 + crop_size[1]
 
     # Step3, 裁剪框的调整
-    cut_image = IDphotos_cut(x1, y1, x2, y2, ctx.processing_image)
+    cut_image = IDphotos_cut(x1, y1, x2, y2, ctx.matting_image)
     cut_image = cv2.resize(cut_image, (crop_size[1], crop_size[0]))
     y_top, y_bottom, x_left, x_right = U.get_box(
         cut_image.astype(np.uint8), model=2, correction_factor=0
@@ -85,7 +85,7 @@ def adjust_photo(ctx: Context):
             y1 + cut_value_top + status_top * move_value,
             x2 - x_right,
             y2 - cut_value_top + status_top * move_value,
-            ctx.processing_image,
+            ctx.matting_image,
         )
 
     # 换装参数准备

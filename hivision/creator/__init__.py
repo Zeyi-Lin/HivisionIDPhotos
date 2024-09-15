@@ -13,8 +13,9 @@ import hivision.creator.utils as U
 from .context import Context, ContextHandler, Params, Result
 from .human_matting import extract_human
 from .face_detector import detect_face_mtcnn
-from hivision.plugin.beauty.whitening import make_whitening
+from hivision.plugin.beauty.handler import beauty_face
 from .photo_adjuster import adjust_photo
+import cv2
 
 
 class IDCreator:
@@ -43,7 +44,7 @@ class IDCreator:
         # 处理者
         self.matting_handler: ContextHandler = extract_human
         self.detection_handler: ContextHandler = detect_face_mtcnn
-
+        self.beauty_handler: ContextHandler = beauty_face
         # 上下文
         self.ctx = None
 
@@ -58,6 +59,10 @@ class IDCreator:
         head_top_range: float = (0.12, 0.1),
         face: Tuple[int, int, int, int] = None,
         whitening_strength: int = 0,
+        brightness_strength: int = 0,
+        contrast_strength: int = 0,
+        sharpen_strength: int = 0,
+        saturation_strength: int = 0,
     ) -> Result:
         """
         证件照处理函数
@@ -70,7 +75,9 @@ class IDCreator:
         :param head_top_range: 头距离顶部的比例（max,min)
         :param face: 人脸坐标
         :param whitening_strength: 美白强度
-
+        :param brightness_strength: 亮度强度
+        :param contrast_strength: 对比度强度
+        :param sharpen_strength: 锐化强度
         :return: 返回处理后的证件照和一系列参数
         """
         # 0.初始化上下文
@@ -83,7 +90,12 @@ class IDCreator:
             crop_only=crop_only,
             face=face,
             whitening_strength=whitening_strength,
+            brightness_strength=brightness_strength,
+            contrast_strength=contrast_strength,
+            sharpen_strength=sharpen_strength,
+            saturation_strength=saturation_strength,
         )
+
         self.ctx = Context(params)
         ctx = self.ctx
         ctx.processing_image = image
@@ -93,12 +105,6 @@ class IDCreator:
         ctx.origin_image = ctx.processing_image.copy()
         self.before_all and self.before_all(ctx)
 
-        # 美白
-        if ctx.params.whitening_strength > 0:
-            ctx.processing_image = make_whitening(
-                ctx.processing_image, ctx.params.whitening_strength
-            )
-
         # 1. 人像抠图
         if not ctx.params.crop_only:
             # 调用抠图工作流
@@ -106,6 +112,9 @@ class IDCreator:
             self.after_matting and self.after_matting(ctx)
         else:
             ctx.matting_image = ctx.processing_image
+
+        # 2. 美颜
+        self.beauty_handler(ctx)
 
         # 如果仅换底，则直接返回抠图结果
         if ctx.params.change_bg_only:

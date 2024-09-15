@@ -37,10 +37,9 @@ WEIGHTS = {
     ),
 }
 
-ONNX_DEVICE = (
-    "CUDAExecutionProvider"
-    if onnxruntime.get_device() == "GPU"
-    else "CPUExecutionProvider"
+ONNX_DEVICE = onnxruntime.get_device()
+ONNX_PROVIDER = (
+    "CUDAExecutionProvider" if ONNX_DEVICE == "GPU" else "CPUExecutionProvider"
 )
 
 HIVISION_MODNET_SESS = None
@@ -52,7 +51,7 @@ BIREFNET_V1_LITE_SESS = None
 def load_onnx_model(checkpoint_path, set_cpu=False):
     providers = (
         ["CUDAExecutionProvider", "CPUExecutionProvider"]
-        if ONNX_DEVICE == "CUDAExecutionProvider"
+        if ONNX_PROVIDER == "CUDAExecutionProvider"
         else ["CPUExecutionProvider"]
     )
 
@@ -365,7 +364,17 @@ def get_birefnet_portrait_matting(input_image, checkpoint_path, ref_size=512):
 
     if BIREFNET_V1_LITE_SESS is None:
         print("首次加载birefnet-v1-lite模型...")
-        BIREFNET_V1_LITE_SESS = load_onnx_model(checkpoint_path)
+        if ONNX_DEVICE == "GPU":
+            print("onnxruntime-gpu已安装，尝试使用CUDA加载模型")
+            try:
+                import torch
+            except ImportError:
+                print(
+                    "torch未安装，尝试直接使用onnxruntime-gpu加载模型，这需要配置好CUDA和cuDNN"
+                )
+            BIREFNET_V1_LITE_SESS = load_onnx_model(checkpoint_path)
+        else:
+            BIREFNET_V1_LITE_SESS = load_onnx_model(checkpoint_path, set_cpu=True)
 
     # 记录加载onnx模型的结束时间
     load_end_time = time()
