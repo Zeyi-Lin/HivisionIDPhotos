@@ -151,14 +151,18 @@ Store in the project's `hivision/creator/weights` directory:
 
 ## 5. GPU Inference Acceleration (Optional)
 
-If you need to use NVIDIA GPU for accelerated inference, ensure that you have installed CUDA and cuDNN, then find the corresponding `onnxruntime-gpu` version to install according to the [documentation](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x), for example:
+In the current version, the model that can be accelerated by NVIDIA GPUs is `birefnet-v1-lite`, and please ensure you have around 16GB of VRAM.
+
+If you want to use NVIDIA GPU acceleration for inference, after ensuring you have installed CUDA and cuDNN, find the corresponding `onnxruntime-gpu` version to install according to the [onnxruntime-gpu documentation](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x), and find the corresponding `pytorch` version to install according to the [pytorch official website](https://pytorch.org/get-started/locally/).
 
 ```bash
-# CUDA 12.x, cuDNN 8
+# If your computer is installed with CUDA 12.x and cuDNN 8
+# Installing torch is optional. If you can't configure cuDNN, try installing torch
 pip install onnxruntime-gpu==1.18.0
+pip install torch --index-url https://download.pytorch.org/whl/cu121
 ```
 
-After completing this, calling models like `birefnet-v1-lite` will utilize GPU acceleration for inference.
+After completing the installation, call the `birefnet-v1-lite` model to utilize GPU acceleration for inference.
 
 <br>
 

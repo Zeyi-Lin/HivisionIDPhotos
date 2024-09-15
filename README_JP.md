@@ -147,14 +147,18 @@ python scripts/download_model.py --models all
 
 ## 5. GPU推論の加速（オプション）
 
-NVIDIA GPUによる推論加速を使用する場合は、CUDAとcuDNNがインストールされていることを確認し、[文書](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)に従って対応する`onnxruntime-gpu`バージョンをインストールします。例：
+現在のバージョンでは、NVIDIA GPUで加速可能なモデルは`birefnet-v1-lite`です。約16GBのVRAMが必要であることにご注意ください。
+
+NVIDIA GPUを使用して推論を加速したい場合は、CUDAとcuDNNがインストールされていることを確認した上で、[onnxruntime-gpuのドキュメント](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)に従って適切な`onnxruntime-gpu`バージョンをインストールし、[PyTorchの公式サイト](https://pytorch.org/get-started/locally/)から適切な`pytorch`バージョンをインストールしてください。
 
 ```bash
-# CUDA 12.x, cuDNN 8
+# もしコンピュータにCUDA 12.xとcuDNN 8がインストールされている場合
+# torchのインストールは任意です。cuDNNが設定できない場合は、torchを試してみてください
 pip install onnxruntime-gpu==1.18.0
+pip install torch --index-url https://download.pytorch.org/whl/cu121
 ```
 
-完了後、`birefnet-v1-lite`モデルを呼び出すと、GPUによる推論加速が利用されます。
+インストールが完了したら、`birefnet-v1-lite`モデルを呼び出してGPU加速推論を利用します。
 
 <br>
 

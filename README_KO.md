@@ -147,14 +147,18 @@ python scripts/download_model.py --models all
 
 ## 5. GPU 추론 가속 (선택 사항)
 
-NVIDIA GPU를 통한 추론 가속을 사용하려면 CUDA와 cuDNN이 설치되어 있는지 확인하고, [문서](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)에 따라 해당 `onnxruntime-gpu` 버전을 설치합니다. 예:
+현재 버전에서 NVIDIA GPU로 가속화할 수 있는 모델은 `birefnet-v1-lite`입니다. 약 16GB의 VRAM이 필요합니다.
+
+NVIDIA GPU를 사용하여 추론을 가속화하려면, CUDA와 cuDNN이 설치되어 있는지 확인한 후, [onnxruntime-gpu 문서](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)에서 해당하는 `onnxruntime-gpu` 버전을 찾아 설치하고, [PyTorch 공식 웹사이트](https://pytorch.org/get-started/locally/)에서 해당하는 `pytorch` 버전을 찾아 설치하세요.
 
 ```bash
-# CUDA 12.x, cuDNN 8
+# 컴퓨터에 CUDA 12.x와 cuDNN 8이 설치되어 있는 경우
+# 설치 중 torch를 설치하는 것은 선택 사항입니다. cuDNN을 설정할 수 없는 경우 torch를 설치해 보세요.
 pip install onnxruntime-gpu==1.18.0
+pip install torch --index-url https://download.pytorch.org/whl/cu121
 ```
 
-완료 후, `birefnet-v1-lite` 모델을 호출하면 GPU에 의한 추론 가속이 이용됩니다.
+설치 완료 후, `birefnet-v1-lite` 모델을 호출하면 GPU에 의한 추론 가속이 이용됩니다.
 
 <br>
 
