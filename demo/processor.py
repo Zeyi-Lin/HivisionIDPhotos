@@ -403,98 +403,58 @@ class IDPhotoProcessor:
         idphoto_json,
     ):
         """如果需要，调整图片大小"""
-        # 创建输出路径
-        output_image_path_standard = f"{os.path.join(os.path.dirname(os.path.dirname(__file__)), 'demo/kb_output')}/{int(time.time())}_standard"
-        output_image_path_hd = f"{os.path.join(os.path.dirname(os.path.dirname(__file__)), 'demo/kb_output')}/{int(time.time())}_hd"
-        output_image_path_layout = f"{os.path.join(os.path.dirname(os.path.dirname(__file__)), 'demo/kb_output')}/{int(time.time())}_layout"
+        base_path = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "demo/kb_output"
+        )
+        timestamp = int(time.time())
+        output_paths = {
+            "standard": f"{base_path}/{timestamp}_standard",
+            "hd": f"{base_path}/{timestamp}_hd",
+            "layout": f"{base_path}/{timestamp}_layout",
+        }
 
-        # 如果同时设置了自定义KB大小和dpi
-        if idphoto_json["custom_image_kb"] and idphoto_json["custom_image_dpi"]:
-            # 给输出路径添加后缀，包含kb和dpi
-            output_image_path_standard += f"_{idphoto_json['custom_image_kb']}kb_{idphoto_json['custom_image_dpi']}dpi.jpg"
-            output_image_path_hd += f"_{idphoto_json['custom_image_dpi']}dpi.jpg"
-            output_image_path_layout += f"_{idphoto_json['custom_image_dpi']}dpi.jpg"
+        custom_kb = idphoto_json.get("custom_image_kb")
+        custom_dpi = idphoto_json.get("custom_image_dpi", 300)
 
-            # 调整标准照大小
-            resize_image_to_kb(
-                result_image_standard,
-                output_image_path_standard,
-                idphoto_json["custom_image_kb"],
-                dpi=idphoto_json["custom_image_dpi"],
+        if custom_kb and custom_dpi:
+            for key in output_paths:
+                output_paths[key] += f"_{custom_dpi}dpi.jpg"
+            output_paths["standard"] = output_paths["standard"].replace(
+                ".jpg", f"_{custom_kb}kb.jpg"
             )
-            # 调整高清照dpi
-            save_image_dpi_to_bytes(
-                result_image_hd,
-                output_image_path_hd,
-                dpi=idphoto_json["custom_image_dpi"],
-            )
-            # 调整排版照dpi
-            save_image_dpi_to_bytes(
-                result_image_layout,
-                output_image_path_layout,
-                dpi=idphoto_json["custom_image_dpi"],
-            )
-            return [
-                output_image_path_standard,
-                output_image_path_hd,
-                output_image_path_layout,
-            ]
-        # 如果只设置了dpi
-        elif idphoto_json["custom_image_dpi"]:
-            # 给输出路径添加后缀，包含dpi
-            output_image_path_standard += f"_{idphoto_json['custom_image_dpi']}dpi.jpg"
-            output_image_path_hd += f"_{idphoto_json['custom_image_dpi']}dpi.jpg"
-            output_image_path_layout += f"_{idphoto_json['custom_image_dpi']}dpi.jpg"
-
-            save_image_dpi_to_bytes(
-                result_image_standard,
-                output_image_path_standard,
-                dpi=(
-                    idphoto_json["custom_image_dpi"]
-                    if idphoto_json["custom_image_dpi"]
-                    else 300
-                ),
-            )
-            save_image_dpi_to_bytes(
-                result_image_hd,
-                output_image_path_hd,
-                dpi=(
-                    idphoto_json["custom_image_dpi"]
-                    if idphoto_json["custom_image_dpi"]
-                    else 300
-                ),
-            )
-            save_image_dpi_to_bytes(
-                result_image_layout,
-                output_image_path_layout,
-                dpi=(
-                    idphoto_json["custom_image_dpi"]
-                    if idphoto_json["custom_image_dpi"]
-                    else 300
-                ),
-            )
-            return [
-                output_image_path_standard,
-                output_image_path_hd,
-                output_image_path_layout,
-            ]
-        # 如果只设置了KB大小，那么只需调整标准照
-        elif idphoto_json["custom_image_kb"]:
-            # 给输出路径添加后缀，包含kb
-            output_image_path_standard += f"_{idphoto_json['custom_image_kb']}kb.jpg"
 
             resize_image_to_kb(
                 result_image_standard,
-                output_image_path_standard,
-                idphoto_json["custom_image_kb"],
-                dpi=(
-                    idphoto_json["custom_image_dpi"]
-                    if idphoto_json["custom_image_dpi"]
-                    else 300
-                ),
+                output_paths["standard"],
+                custom_kb,
+                dpi=custom_dpi,
+            )
+            save_image_dpi_to_bytes(result_image_hd, output_paths["hd"], dpi=custom_dpi)
+            save_image_dpi_to_bytes(
+                result_image_layout, output_paths["layout"], dpi=custom_dpi
             )
 
-            return [output_image_path_standard]
+            return list(output_paths.values())
+
+        elif custom_dpi:
+            for key in output_paths:
+                output_paths[key] += f"_{custom_dpi}dpi.jpg"
+                save_image_dpi_to_bytes(
+                    locals()[f"result_image_{key}"], output_paths[key], dpi=custom_dpi
+                )
+
+            return list(output_paths.values())
+
+        elif custom_kb:
+            output_paths["standard"] += f"_{custom_kb}kb.jpg"
+            resize_image_to_kb(
+                result_image_standard,
+                output_paths["standard"],
+                custom_kb,
+                dpi=300,
+            )
+
+            return [output_paths["standard"]]
 
         return None
 
