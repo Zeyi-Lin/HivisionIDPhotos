@@ -160,6 +160,8 @@ pip install torch --index-url https://download.pytorch.org/whl/cu121
 
 インストールが完了したら、`birefnet-v1-lite`モデルを呼び出してGPU加速推論を利用します。
 
+> TIPS: CUDAのインストールは下位互換性があります。たとえば、CUDAのバージョンが12.6で、torchが現在対応している最高バージョンが12.4である場合、コンピュータに12.4のバージョンをインストールすることも可能です。
+
 <br>
 
 # 🚀 デモの起動

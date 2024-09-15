@@ -164,6 +164,7 @@ pip install torch --index-url https://download.pytorch.org/whl/cu121
 
 After completing the installation, call the `birefnet-v1-lite` model to utilize GPU acceleration for inference.
 
+> TIP: CUDA installations are backward compatible. For example, if your CUDA version is 12.6 but the highest version currently matched by torch is 12.4, it's still possible to install version 12.4 on your computer.
 <br>
 
 # 🚀 Run Gradio Demo

@@ -157,7 +157,7 @@ python scripts/download_model.py --models all
 
 在当前版本，可被英伟达GPU加速的模型为`birefnet-v1-lite`，并请确保你有16GB左右的显存。
 
-如需使用英伟达GPU加速推理，在确保你已经安装CUDA与cuDNN后，根据[onnxruntime-gpu文档](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)找到对应的`onnxruntime-gpu`版本安装，以及根据[pytorch官网](https://pytorch.org/get-started/locally/)找到对应的`pytorch`版本安装。
+如需使用英伟达GPU加速推理，在确保你已经安装[CUDA](https://developer.nvidia.com/cuda-downloads)与[cuDNN](https://developer.nvidia.com/cudnn)后，根据[onnxruntime-gpu文档](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)找到对应的`onnxruntime-gpu`版本安装，以及根据[pytorch官网](https://pytorch.org/get-started/locally/)找到对应的`pytorch`版本安装。
 
 ```bash
 # 假如你的电脑安装的是CUDA 12.x, cuDNN 8
@@ -168,6 +168,7 @@ pip install torch --index-url https://download.pytorch.org/whl/cu121
 
 完成安装后，调用`birefnet-v1-lite`模型即可利用GPU加速推理。
 
+> TIPS: cuda安装可以向下兼容 比如你的 cuda 版本为 12.6 但是 torch 目前所匹配最高版本为 12.4，在你电脑安装 12.4 版本也是可以的
 
 <br>
 
