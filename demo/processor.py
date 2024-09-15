@@ -403,6 +403,7 @@ class IDPhotoProcessor:
         idphoto_json,
     ):
         """如果需要，调整图片大小"""
+        # 设置输出路径
         base_path = os.path.join(
             os.path.dirname(os.path.dirname(__file__)), "demo/kb_output"
         )
@@ -413,22 +414,28 @@ class IDPhotoProcessor:
             "layout": f"{base_path}/{timestamp}_layout",
         }
 
+        # 获取自定义的KB和DPI值
         custom_kb = idphoto_json.get("custom_image_kb")
         custom_dpi = idphoto_json.get("custom_image_dpi", 300)
 
+        # 处理同时有自定义KB和DPI的情况
         if custom_kb and custom_dpi:
+            # 为所有输出路径添加DPI信息
             for key in output_paths:
                 output_paths[key] += f"_{custom_dpi}dpi.jpg"
+            # 为标准图像添加KB信息
             output_paths["standard"] = output_paths["standard"].replace(
                 ".jpg", f"_{custom_kb}kb.jpg"
             )
 
+            # 调整标准图像大小并保存
             resize_image_to_kb(
                 result_image_standard,
                 output_paths["standard"],
                 custom_kb,
                 dpi=custom_dpi,
             )
+            # 保存高清图像和排版图像
             save_image_dpi_to_bytes(result_image_hd, output_paths["hd"], dpi=custom_dpi)
             save_image_dpi_to_bytes(
                 result_image_layout, output_paths["layout"], dpi=custom_dpi
@@ -436,17 +443,21 @@ class IDPhotoProcessor:
 
             return list(output_paths.values())
 
+        # 只有自定义DPI的情况
         elif custom_dpi:
             for key in output_paths:
                 output_paths[key] += f"_{custom_dpi}dpi.jpg"
+                # 保存所有图像，使用自定义DPI
                 save_image_dpi_to_bytes(
                     locals()[f"result_image_{key}"], output_paths[key], dpi=custom_dpi
                 )
 
             return list(output_paths.values())
 
+        # 只有自定义KB的情况
         elif custom_kb:
             output_paths["standard"] += f"_{custom_kb}kb.jpg"
+            # 只调整标准图像大小并保存
             resize_image_to_kb(
                 result_image_standard,
                 output_paths["standard"],
@@ -456,6 +467,7 @@ class IDPhotoProcessor:
 
             return [output_paths["standard"]]
 
+        # 如果没有自定义设置，返回None
         return None
 
     def _create_response(
