@@ -79,7 +79,7 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 1. 轻量级抠图（纯离线，仅需 **CPU** 即可快速推理）
 2. 根据不同尺寸规格生成不同的标准证件照、六寸排版照
 3. 支持 纯离线 或 端云 推理
-4. 美颜（waiting）
+4. 美颜
 5. 智能换正装（waiting）
 
 <div align="center">
@@ -157,7 +157,7 @@ python scripts/download_model.py --models all
 
 在当前版本，可被英伟达GPU加速的模型为`birefnet-v1-lite`，并请确保你有16GB左右的显存。
 
-如需使用英伟达GPU加速推理，在确保你已经安装[CUDA](https://developer.nvidia.com/cuda-downloads)与[cuDNN](https://developer.nvidia.com/cudnn)后，根据[onnxruntime-gpu文档](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)找到对应的`onnxruntime-gpu`版本安装，以及根据[pytorch官网](https://pytorch.org/get-started/locally/)找到对应的`pytorch`版本安装。
+如需使用英伟达GPU加速推理，在确保你已经安装[CUDA](https://developer.nvidia.com/cuda-downloads)与[cuDNN](https://developer.nvidia.com/cudnn)后，根据[onnxruntime-gpu文档](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)找到对应的`onnxruntime-gpu`版本安装，以及根据[pytorch官网](https://pytorch.org/get-started/locally/)找到对应的`torch`版本安装。
 
 ```bash
 # 假如你的电脑安装的是CUDA 12.x, cuDNN 8
@@ -168,7 +168,7 @@ pip install torch --index-url https://download.pytorch.org/whl/cu121
 
 完成安装后，调用`birefnet-v1-lite`模型即可利用GPU加速推理。
 
-> TIPS: cuda安装可以向下兼容 比如你的 cuda 版本为 12.6 但是 torch 目前所匹配最高版本为 12.4，在你电脑安装 12.4 版本也是可以的
+> TIPS: CUDA 支持向下兼容。比如你的 CUDA 版本为 12.6，`torch` 官方目前支持的最高版本为 12.4（<12.6），`torch`仍可以正常使用CUDA。
 
 <br>
 
