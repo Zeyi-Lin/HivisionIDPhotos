@@ -16,7 +16,7 @@ from demo.utils import range_check
 import gradio as gr
 import os
 import time
-from demo.locals import LOCALES
+from demo.locales import LOCALES
 
 
 class IDPhotoProcessor:

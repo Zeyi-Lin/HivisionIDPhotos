@@ -1,7 +1,7 @@
 import gradio as gr
 import os
 import pathlib
-from demo.locals import LOCALES
+from demo.locales import LOCALES
 from demo.processor import IDPhotoProcessor
 
 """
