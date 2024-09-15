@@ -155,14 +155,19 @@ python scripts/download_model.py --models all
 
 ## 5. GPU推理加速（可选）
 
-如需使用英伟达GPU加速推理，在确保你已经安装CUDA与cuDNN后，根据[文档](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)找到对应的`onnxruntime-gpu`版本安装，如：
+在当前版本，可被英伟达GPU加速的模型为`birefnet-v1-lite`，并请确保你有16GB左右的显存。
+
+如需使用英伟达GPU加速推理，在确保你已经安装CUDA与cuDNN后，根据[onnxruntime-gpu文档](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#cuda-12x)找到对应的`onnxruntime-gpu`版本安装，以及根据[pytorch官网](https://pytorch.org/get-started/locally/)找到对应的`pytorch`版本安装。
 
 ```bash
-# CUDA 12.x, cuDNN 8
+# 假如你的电脑安装的是CUDA 12.x, cuDNN 8
+# 安装torch是可选的，如果你始终配置不好cuDNN，那么试试安装torch
 pip install onnxruntime-gpu==1.18.0
+pip install torch --index-url https://download.pytorch.org/whl/cu121
 ```
 
-完成后，调用如`birefnet-v1-lite`模型将会利用GPU加速推理。
+完成安装后，调用`birefnet-v1-lite`模型即可利用GPU加速推理。
+
 
 <br>
 
