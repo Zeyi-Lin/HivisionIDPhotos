@@ -42,11 +42,16 @@ def detect_face_mtcnn(ctx: Context, scale: int = 2):
         (ctx.origin_image.shape[1] // scale, ctx.origin_image.shape[0] // scale),
         interpolation=cv2.INTER_AREA,
     )
-    faces, _ = mtcnn.detect(image, thresholds=[0.8, 0.8, 0.8])
+    # landmarks 是 5 个关键点，分别是左眼、右眼、鼻子、左嘴角、右嘴角，
+    # 示例landmarks [[142.74791 185.81003 161.31828 146.273 178.72911 123.10237 122.99277146.86353 166.1433  167.00732]]
+    faces, landmarks = mtcnn.detect(image, thresholds=[0.8, 0.8, 0.8])
+    print("faces", faces)
+    print("landmarks", landmarks)
+
     # print(len(faces))
     if len(faces) != 1:
         # 保险措施，如果检测到多个人脸或者没有人脸，用原图再检测一次
-        faces, _ = mtcnn.detect(ctx.origin_image)
+        faces, landmarks = mtcnn.detect(ctx.origin_image)
     else:
         # 如果只有一个人脸，将人脸坐标放大
         for item, param in enumerate(faces[0]):
@@ -59,7 +64,11 @@ def detect_face_mtcnn(ctx: Context, scale: int = 2):
     width = faces[0][2] - left + 1
     height = faces[0][3] - top + 1
 
-    ctx.face = (left, top, width, height)
+    # landmarks = landmarks[0]
+    # landmarks = landmarks.reshape(-1, 2)
+    # print("landmarks", landmarks)
+
+    ctx.face["rectangle"] = (left, top, width, height)
 
 
 def detect_face_face_plusplus(ctx: Context):
@@ -83,6 +92,8 @@ def detect_face_face_plusplus(ctx: Context):
         "api_key": (None, api_key),
         "api_secret": (None, api_secret),
         "image_base64": (None, image_base64),
+        "return_landmark": (None, "1"),
+        "return_attributes": (None, "headpose"),
     }
 
     # 发送 POST 请求
@@ -96,12 +107,21 @@ def detect_face_face_plusplus(ctx: Context):
         face_num = response_json["face_num"]
         if face_num == 1:
             face_rectangle = response_json["faces"][0]["face_rectangle"]
-            ctx.face = (
+            # landmarks = response_json["faces"][0]["landmark"]
+            # print("face++ landmarks", landmarks)
+            # headpose 是一个字典，包含俯仰角（pitch）、偏航角（yaw）和滚转角（roll）
+            # headpose示例 {'pitch_angle': 6.997899, 'roll_angle': 1.8011835, 'yaw_angle': 5.043002}
+            headpose = response_json["faces"][0]["attributes"]["headpose"]
+            # 以眼睛为标准，计算的人脸偏转角度，用于人脸矫正
+            roll_angle = headpose["roll_angle"] / 2
+
+            ctx.face["rectangle"] = (
                 face_rectangle["left"],
                 face_rectangle["top"],
                 face_rectangle["width"],
                 face_rectangle["height"],
             )
+            ctx.face["roll_angle"] = roll_angle
         else:
             raise FaceError(
                 "Expected 1 face, but got {}".format(face_num), len(face_num)
@@ -168,7 +188,7 @@ def detect_face_retinaface(ctx: Context):
     if faces_num != 1:
         raise FaceError("Expected 1 face, but got {}".format(faces_num), faces_num)
     face_det = faces_dets[0]
-    ctx.face = (
+    ctx.face["rectangle"] = (
         face_det[0],
         face_det[1],
         face_det[2] - face_det[0] + 1,

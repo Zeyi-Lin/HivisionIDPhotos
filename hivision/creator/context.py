@@ -143,7 +143,7 @@ class Context:
         """
         人像抠图结果
         """
-        self.face: Optional[Tuple[int, int, int, int, float]] = None
+        self.face: dict = dict(rectangle=None, roll_angle=None)
         """
         人脸检测结果，大于一个人脸时已在上层抛出异常
         元组长度为5，包含 x1, y1, x2, y2, score 的坐标, (x1, y1)为左上角坐标，(x2, y2)为右下角坐标, score为置信度, 最大值为1

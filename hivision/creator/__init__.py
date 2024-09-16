@@ -105,7 +105,7 @@ class IDCreator:
         ctx.origin_image = ctx.processing_image.copy()
         self.before_all and self.before_all(ctx)
 
-        # 1. 人像抠图
+        # 1. ------------------人像抠图------------------
         if not ctx.params.crop_only:
             # 调用抠图工作流
             self.matting_handler(ctx)
@@ -113,7 +113,7 @@ class IDCreator:
         else:
             ctx.matting_image = ctx.processing_image
 
-        # 2. 美颜
+        # 2. ------------------美颜------------------
         self.beauty_handler(ctx)
 
         # 如果仅换底，则直接返回抠图结果
@@ -129,16 +129,16 @@ class IDCreator:
             self.after_all and self.after_all(ctx)
             return ctx.result
 
-        # 2. 人脸检测
+        # 3. ------------------人脸检测------------------
         self.detection_handler(ctx)
         self.after_detect and self.after_detect(ctx)
 
-        # 3. 图像调整
+        # 4. ------------------图像调整------------------
         result_image_hd, result_image_standard, clothing_params, typography_params = (
             adjust_photo(ctx)
         )
 
-        # 4. 返回结果
+        # 5. ------------------返回结果------------------
         ctx.result = Result(
             standard=result_image_standard,
             hd=result_image_hd,
@@ -148,4 +148,5 @@ class IDCreator:
             face=ctx.face,
         )
         self.after_all and self.after_all(ctx)
+
         return ctx.result
