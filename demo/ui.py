@@ -23,7 +23,13 @@ def create_ui(
     face_detect_models: list,
     language: list,
 ):
-    DEFAULT_LANG = language[0]
+
+    # 加载环境变量DEFAULT_LANG, 如果有且在language中，则将DEFAULT_LANG设置为环境变量
+    if "DEFAULT_LANG" in os.environ and os.environ["DEFAULT_LANG"] in language:
+        DEFAULT_LANG = os.environ["DEFAULT_LANG"]
+    else:
+        DEFAULT_LANG = language[0]
+
     DEFAULT_HUMAN_MATTING_MODEL = "modnet_photographic_portrait_matting"
     DEFAULT_FACE_DETECT_MODEL = "retinaface-resnet50"
 
