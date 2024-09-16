@@ -288,7 +288,7 @@ class IDPhotoProcessor:
         )
 
         # 生成排版照片
-        result_image_layout, result_image_layout_gr = self._generate_image_layout(
+        result_image_layout, result_image_layout_visible = self._generate_image_layout(
             idphoto_json,
             result_image_standard,
             language,
@@ -315,21 +315,42 @@ class IDPhotoProcessor:
             )
 
         # 调整图片大小
-        output_image_path = self._resize_image_if_needed(
+        output_image_path_dict = self._resize_image_if_needed(
             result_image_standard,
             result_image_hd,
             result_image_layout,
             idphoto_json,
         )
 
-        return self._create_response(
-            result_image_standard,
-            result_image_hd,
-            result_image_standard_png,
-            result_image_hd_png,
-            result_image_layout_gr,
-            output_image_path,
-        )
+        # 如果output_image_path_dict为None，
+        if output_image_path_dict is None:
+            return self._create_response(
+                result_image_standard,
+                result_image_hd,
+                result_image_standard_png,
+                result_image_hd_png,
+                result_image_layout,
+                result_image_layout_visible,
+            )
+        else:
+            # 如果output_image_path_dict不为None，
+            if output_image_path_dict["layout"]["processed"]:
+                result_image_layout = output_image_path_dict["layout"]["path"]
+            return self._create_response(
+                (
+                    output_image_path_dict["standard"]["path"]
+                    if output_image_path_dict["standard"]["processed"]
+                    else result_image_standard
+                ),
+                (
+                    output_image_path_dict["hd"]["path"]
+                    if output_image_path_dict["hd"]["processed"]
+                    else result_image_hd
+                ),
+                result_image_standard_png,
+                result_image_hd_png,
+                gr.update(value=result_image_layout, visible=result_image_layout_visible),
+            )
 
     def _render_background(self, result_image_standard, result_image_hd, idphoto_json):
         """渲染背景"""
@@ -363,8 +384,9 @@ class IDPhotoProcessor:
         watermark_text_color,
     ):
         """生成排版照片"""
+        # 如果选择了自定义尺寸，则不生成排版照片
         if idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1]:
-            return None, gr.update(visible=False)
+            return None, False
 
         typography_arr, typography_rotate = generate_layout_photo(
             input_height=idphoto_json["size"][0],
@@ -391,10 +413,7 @@ class IDPhotoProcessor:
             width=idphoto_json["size"][1],
         )
 
-        return result_image_layout, gr.update(
-            value=result_image_layout,
-            visible=True,
-        )
+        return result_image_layout, True
 
     def _add_watermark(
         self,
@@ -436,9 +455,9 @@ class IDPhotoProcessor:
         )
         timestamp = int(time.time())
         output_paths = {
-            "standard": f"{base_path}/{timestamp}_standard",
-            "hd": f"{base_path}/{timestamp}_hd",
-            "layout": f"{base_path}/{timestamp}_layout",
+            "standard": {"path": f"{base_path}/{timestamp}_standard", "processed": False},
+            "hd": {"path": f"{base_path}/{timestamp}_hd", "processed": False},
+            "layout": {"path": f"{base_path}/{timestamp}_layout", "processed": False},
         }
 
         # 获取自定义的KB和DPI值
@@ -449,50 +468,59 @@ class IDPhotoProcessor:
         if custom_kb and custom_dpi:
             # 为所有输出路径添加DPI信息
             for key in output_paths:
-                output_paths[key] += f"_{custom_dpi}dpi.jpg"
+                output_paths[key]["path"] += f"_{custom_dpi}dpi.jpg"
             # 为标准图像添加KB信息
-            output_paths["standard"] = output_paths["standard"].replace(
+            output_paths["standard"]["path"] = output_paths["standard"]["path"].replace(
                 ".jpg", f"_{custom_kb}kb.jpg"
             )
 
             # 调整标准图像大小并保存
             resize_image_to_kb(
                 result_image_standard,
-                output_paths["standard"],
+                output_paths["standard"]["path"],
                 custom_kb,
                 dpi=custom_dpi,
             )
+            output_paths["standard"]["processed"] = True
             # 保存高清图像和排版图像
-            save_image_dpi_to_bytes(result_image_hd, output_paths["hd"], dpi=custom_dpi)
-            save_image_dpi_to_bytes(
-                result_image_layout, output_paths["layout"], dpi=custom_dpi
-            )
+            save_image_dpi_to_bytes(result_image_hd, output_paths["hd"]["path"], dpi=custom_dpi)
+            output_paths["hd"]["processed"] = True
+            if result_image_layout:
+                save_image_dpi_to_bytes(
+                    result_image_layout, output_paths["layout"]["path"], dpi=custom_dpi
+                )
+                output_paths["layout"]["processed"] = True
 
-            return list(output_paths.values())
+            return output_paths
 
         # 只有自定义DPI的情况
         elif custom_dpi:
             for key in output_paths:
-                output_paths[key] += f"_{custom_dpi}dpi.jpg"
+                output_paths[key]["path"] += f"_{custom_dpi}dpi.jpg"
                 # 保存所有图像，使用自定义DPI
-                save_image_dpi_to_bytes(
-                    locals()[f"result_image_{key}"], output_paths[key], dpi=custom_dpi
-                )
+                if key == "layout" and result_image_layout is None:
+                    pass
+                else:
+                    save_image_dpi_to_bytes(
+                        locals()[f"result_image_{key}"], output_paths[key]["path"], dpi=custom_dpi
+                    )
+                    output_paths[key]["processed"] = True
 
-            return list(output_paths.values())
+            return output_paths
 
         # 只有自定义KB的情况
         elif custom_kb:
-            output_paths["standard"] += f"_{custom_kb}kb.jpg"
+            output_paths["standard"]["path"] += f"_{custom_kb}kb.jpg"
             # 只调整标准图像大小并保存
             resize_image_to_kb(
                 result_image_standard,
-                output_paths["standard"],
+                output_paths["standard"]["path"],
                 custom_kb,
                 dpi=300,
             )
+            output_paths["standard"]["processed"] = True
 
-            return [output_paths["standard"]]
+            return output_paths
 
         # 如果没有自定义设置，返回None
         return None
@@ -504,7 +532,6 @@ class IDPhotoProcessor:
         result_image_standard_png,
         result_image_hd_png,
         result_layout_image,
-        output_image_path,
     ):
         """创建响应"""
         response = [
@@ -515,10 +542,7 @@ class IDPhotoProcessor:
             result_layout_image,
             gr.update(visible=False),
         ]
-        if output_image_path:
-            response.append(gr.update(visible=True, value=output_image_path))
-        else:
-            response.append(gr.update(visible=False))
+
         return response
 
     def _create_error_response(self, language):

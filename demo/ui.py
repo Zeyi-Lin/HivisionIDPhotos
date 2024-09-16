@@ -712,7 +712,6 @@ def create_ui(
                     img_output_standard_hd_png,
                     img_output_layout,
                     notification,
-                    file_download,
                 ],
             )
 
