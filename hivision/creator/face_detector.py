@@ -20,6 +20,7 @@ from hivision.creator.retinaface import retinaface_detect_faces
 import requests
 import cv2
 import os
+import numpy as np
 
 
 mtcnn = None
@@ -43,10 +44,7 @@ def detect_face_mtcnn(ctx: Context, scale: int = 2):
         interpolation=cv2.INTER_AREA,
     )
     # landmarks 是 5 个关键点，分别是左眼、右眼、鼻子、左嘴角、右嘴角，
-    # 示例landmarks [[142.74791 185.81003 161.31828 146.273 178.72911 123.10237 122.99277146.86353 166.1433  167.00732]]
     faces, landmarks = mtcnn.detect(image, thresholds=[0.8, 0.8, 0.8])
-    print("faces", faces)
-    print("landmarks", landmarks)
 
     # print(len(faces))
     if len(faces) != 1:
@@ -63,12 +61,18 @@ def detect_face_mtcnn(ctx: Context, scale: int = 2):
     top = faces[0][1]
     width = faces[0][2] - left + 1
     height = faces[0][3] - top + 1
-
-    # landmarks = landmarks[0]
-    # landmarks = landmarks.reshape(-1, 2)
-    # print("landmarks", landmarks)
-
     ctx.face["rectangle"] = (left, top, width, height)
+
+    # 根据landmarks计算人脸偏转角度，以眼睛为标准，计算的人脸偏转角度，用于人脸矫正
+    # 示例landmarks [106.37181  150.77415  127.21012  108.369156 144.61522  105.24723 107.45625  133.62355  151.24269  153.34407 ]
+    landmarks = landmarks[0]
+    left_eye = np.array([landmarks[0], landmarks[5]])
+    right_eye = np.array([landmarks[1], landmarks[6]])
+    dy = right_eye[1] - left_eye[1]
+    dx = right_eye[0] - left_eye[0]
+    roll_angle = np.degrees(np.arctan2(dy, dx))
+
+    ctx.face["roll_angle"] = roll_angle
 
 
 def detect_face_face_plusplus(ctx: Context):
@@ -107,8 +111,11 @@ def detect_face_face_plusplus(ctx: Context):
         face_num = response_json["face_num"]
         if face_num == 1:
             face_rectangle = response_json["faces"][0]["face_rectangle"]
+
+            # 获取人脸关键点
             # landmarks = response_json["faces"][0]["landmark"]
             # print("face++ landmarks", landmarks)
+
             # headpose 是一个字典，包含俯仰角（pitch）、偏航角（yaw）和滚转角（roll）
             # headpose示例 {'pitch_angle': 6.997899, 'roll_angle': 1.8011835, 'yaw_angle': 5.043002}
             headpose = response_json["faces"][0]["attributes"]["headpose"]

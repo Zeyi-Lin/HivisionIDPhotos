@@ -63,6 +63,7 @@ class IDCreator:
         contrast_strength: int = 0,
         sharpen_strength: int = 0,
         saturation_strength: int = 0,
+        align_face: bool = True,
     ) -> Result:
         """
         证件照处理函数
@@ -78,6 +79,8 @@ class IDCreator:
         :param brightness_strength: 亮度强度
         :param contrast_strength: 对比度强度
         :param sharpen_strength: 锐化强度
+        :param align_face: 是否需要人脸矫正
+
         :return: 返回处理后的证件照和一系列参数
         """
         # 0.初始化上下文
@@ -94,6 +97,7 @@ class IDCreator:
             contrast_strength=contrast_strength,
             sharpen_strength=sharpen_strength,
             saturation_strength=saturation_strength,
+            align_face=align_face,
         )
 
         self.ctx = Context(params)
@@ -132,6 +136,23 @@ class IDCreator:
         # 3. ------------------人脸检测------------------
         self.detection_handler(ctx)
         self.after_detect and self.after_detect(ctx)
+
+        # 3.1 ------------------人脸对齐------------------
+        if ctx.params.align_face and abs(ctx.face["roll_angle"]) > 1:
+            from hivision.creator.rotation_adjust import rotate_bound_4channels
+
+            print("ctx.face['roll_angle']", ctx.face["roll_angle"])
+            print("执行人脸对齐")
+            # 根据角度旋转原图和抠图
+            ctx.origin_image, ctx.matting_image, _, _, _, _ = rotate_bound_4channels(
+                ctx.origin_image,
+                cv2.split(ctx.matting_image)[-1],
+                -1 * ctx.face["roll_angle"],
+            )
+
+            # 旋转后再执行一遍人脸检测
+            self.detection_handler(ctx)
+            self.after_detect and self.after_detect(ctx)
 
         # 4. ------------------图像调整------------------
         result_image_hd, result_image_standard, clothing_params, typography_params = (

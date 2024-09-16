@@ -140,3 +140,67 @@ def detect_distance(value, crop_height, max=0.06, min=0.04):
         move_value = int(move_value * crop_height)
         # print("下移{}".format(move_value))
         return -1, move_value
+
+
+def cutting_rect_pan(
+    x1, y1, x2, y2, width, height, L1, L2, L3, clockwise, standard_size
+):
+    """
+    本函数的功能是对旋转矫正结果图的裁剪框进行修正 ———— 解决"旋转三角形"现象。
+    Args:
+        - x1: int, 裁剪框左上角的横坐标
+        - y1: int, 裁剪框左上角的纵坐标
+        - x2: int, 裁剪框右下角的横坐标
+        - y2: int, 裁剪框右下角的纵坐标
+        - width: int, 待裁剪图的宽度
+        - height:int, 待裁剪图的高度
+        - L1: CLassObject, 根据旋转点连线所构造函数
+        - L2: CLassObject, 根据旋转点连线所构造函数
+        - L3: ClassObject, 一个特殊裁切点的坐标
+        - clockwise: int, 旋转时针状态
+        - standard_size: tuple, 标准照的尺寸
+
+    Returns:
+        - x1: int, 新的裁剪框左上角的横坐标
+        - y1: int, 新的裁剪框左上角的纵坐标
+        - x2: int, 新的裁剪框右下角的横坐标
+        - y2: int, 新的裁剪框右下角的纵坐标
+        - x_bias: int, 裁剪框横坐标方向上的计算偏置量
+        - y_bias: int, 裁剪框纵坐标方向上的计算偏置量
+    """
+    # 用于计算的裁剪框坐标x1_cal,x2_cal,y1_cal,y2_cal(如果裁剪框超出了图像范围，则缩小直至在范围内)
+    x1_std = x1 if x1 > 0 else 0
+    x2_std = x2 if x2 < width else width
+    # y1_std = y1 if y1 > 0 else 0
+    y2_std = y2 if y2 < height else height
+
+    # 初始化x和y的计算偏置项x_bias和y_bias
+    x_bias = 0
+    y_bias = 0
+
+    # 如果顺时针偏转
+    if clockwise == 1:
+        if y2 > L1.forward_x(x1_std):
+            y_bias = int(-(y2_std - L1.forward_x(x1_std)))
+        if y2 > L2.forward_x(x2_std):
+            x_bias = int(-(x2_std - L2.forward_y(y2_std)))
+        x2 = x2_std + x_bias
+        if x1 < L3.x:
+            x1 = L3.x
+    # 如果逆时针偏转
+    else:
+        if y2 > L1.forward_x(x1_std):
+            x_bias = int(L1.forward_y(y2_std) - x1_std)
+        if y2 > L2.forward_x(x2_std):
+            y_bias = int(-(y2_std - L2.forward_x(x2_std)))
+        x1 = x1_std + x_bias
+        if x2 > L3.x:
+            x2 = L3.x
+
+    # 计算裁剪框的y的变化
+    y2 = int(y2_std + y_bias)
+    new_cut_width = x2 - x1
+    new_cut_height = int(new_cut_width / standard_size[1] * standard_size[0])
+    y1 = y2 - new_cut_height
+
+    return x1, y1, x2, y2, x_bias, y_bias

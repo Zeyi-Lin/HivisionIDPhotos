@@ -26,6 +26,7 @@ class Params:
         contrast_strength: int = 0,
         sharpen_strength: int = 0,
         saturation_strength: int = 0,
+        align_face: bool = False,
     ):
         self.__size = size
         self.__change_bg_only = change_bg_only
@@ -39,6 +40,7 @@ class Params:
         self.__contrast_strength = contrast_strength
         self.__sharpen_strength = sharpen_strength
         self.__saturation_strength = saturation_strength
+        self.__align_face = align_face
 
     @property
     def size(self):
@@ -87,6 +89,10 @@ class Params:
     @property
     def saturation_strength(self):
         return self.__saturation_strength
+
+    @property
+    def align_face(self):
+        return self.__align_face
 
 
 class Result:
@@ -146,11 +152,16 @@ class Context:
         self.face: dict = dict(rectangle=None, roll_angle=None)
         """
         人脸检测结果，大于一个人脸时已在上层抛出异常
-        元组长度为5，包含 x1, y1, x2, y2, score 的坐标, (x1, y1)为左上角坐标，(x2, y2)为右下角坐标, score为置信度, 最大值为1
+        rectangle: 人脸矩形框，包含 x1, y1, width, height 的坐标, x1, y1 为左上角坐标, width, height 为矩形框的宽度和高度
+        roll_angle: 人脸偏转角度，以眼睛为标准，计算的人脸偏转角度，用于人脸矫正
         """
         self.result: Optional[Result] = None
         """
         证件照处理结果
+        """
+        self.align_info: Optional[dict] = None
+        """
+        人脸矫正信息，仅当 align_face 为 True 时存在
         """
 
 
