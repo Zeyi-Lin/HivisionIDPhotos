@@ -33,6 +33,8 @@ class IDPhotoProcessor:
         custom_color_B,
         custom_size_height,
         custom_size_width,
+        custom_size_height_mm,
+        custom_size_width_mm,
         custom_image_kb,
         language,
         matting_model_option,
@@ -72,6 +74,8 @@ class IDPhotoProcessor:
             size_list_option,
             custom_size_height,
             custom_size_width,
+            custom_size_height_mm,
+            custom_size_width_mm,
         )
         if isinstance(size_result, list):
             return size_result  # 返回错误信息
@@ -159,14 +163,32 @@ class IDPhotoProcessor:
         size_list_option,
         custom_size_height,
         custom_size_width,
+        custom_size_height_mm,
+        custom_size_width_mm,
     ):
         """处理尺寸模式"""
+        # 如果选择了尺寸列表
         if idphoto_json["size_mode"] == LOCALES["size_mode"][language]["choices"][0]:
             idphoto_json["size"] = LOCALES["size_list"][language]["develop"][
                 size_list_option
             ]
-        elif idphoto_json["size_mode"] == LOCALES["size_mode"][language]["choices"][2]:
-            id_height, id_width = int(custom_size_height), int(custom_size_width)
+        # 如果选择了自定义尺寸(px或mm)
+        elif (
+            idphoto_json["size_mode"] == LOCALES["size_mode"][language]["choices"][2]
+            or idphoto_json["size_mode"] == LOCALES["size_mode"][language]["choices"][3]
+        ):
+            # 如果选择了自定义尺寸(px)
+            if (
+                idphoto_json["size_mode"]
+                == LOCALES["size_mode"][language]["choices"][2]
+            ):
+                id_height, id_width = int(custom_size_height), int(custom_size_width)
+            # 如果选择了自定义尺寸(mm)
+            else:
+                # 将mm转换为px
+                id_height = int(custom_size_height_mm / 25.4 * 300)
+                id_width = int(custom_size_width_mm / 25.4 * 300)
+            # 检查尺寸像素是否在100到1800之间
             if (
                 id_height < id_width
                 or min(id_height, id_width) < 100
@@ -174,6 +196,7 @@ class IDPhotoProcessor:
             ):
                 return self._create_error_response(language)
             idphoto_json["size"] = (id_height, id_width)
+        # 如果选择了只换底
         else:
             idphoto_json["size"] = (None, None)
 
