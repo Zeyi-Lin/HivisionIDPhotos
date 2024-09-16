@@ -17,7 +17,7 @@ import cv2
 
 def adjust_photo(ctx: Context):
     # Step1. 准备人脸参数
-    face_rect = ctx.face
+    face_rect = ctx.face["rectangle"]
     standard_size = ctx.params.size
     params = ctx.params
     x, y = face_rect[0], face_rect[1]

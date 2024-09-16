@@ -20,6 +20,7 @@ from hivision.creator.retinaface import retinaface_detect_faces
 import requests
 import cv2
 import os
+import numpy as np
 
 
 mtcnn = None
@@ -42,11 +43,13 @@ def detect_face_mtcnn(ctx: Context, scale: int = 2):
         (ctx.origin_image.shape[1] // scale, ctx.origin_image.shape[0] // scale),
         interpolation=cv2.INTER_AREA,
     )
-    faces, _ = mtcnn.detect(image, thresholds=[0.8, 0.8, 0.8])
+    # landmarks 是 5 个关键点，分别是左眼、右眼、鼻子、左嘴角、右嘴角，
+    faces, landmarks = mtcnn.detect(image, thresholds=[0.8, 0.8, 0.8])
+
     # print(len(faces))
     if len(faces) != 1:
         # 保险措施，如果检测到多个人脸或者没有人脸，用原图再检测一次
-        faces, _ = mtcnn.detect(ctx.origin_image)
+        faces, landmarks = mtcnn.detect(ctx.origin_image)
     else:
         # 如果只有一个人脸，将人脸坐标放大
         for item, param in enumerate(faces[0]):
@@ -54,12 +57,23 @@ def detect_face_mtcnn(ctx: Context, scale: int = 2):
     if len(faces) != 1:
         raise FaceError("Expected 1 face, but got {}".format(len(faces)), len(faces))
 
+    # 计算人脸坐标
     left = faces[0][0]
     top = faces[0][1]
     width = faces[0][2] - left + 1
     height = faces[0][3] - top + 1
+    ctx.face["rectangle"] = (left, top, width, height)
 
-    ctx.face = (left, top, width, height)
+    # 根据landmarks计算人脸偏转角度，以眼睛为标准，计算的人脸偏转角度，用于人脸矫正
+    # 示例landmarks [106.37181  150.77415  127.21012  108.369156 144.61522  105.24723 107.45625  133.62355  151.24269  153.34407 ]
+    landmarks = landmarks[0]
+    left_eye = np.array([landmarks[0], landmarks[5]])
+    right_eye = np.array([landmarks[1], landmarks[6]])
+    dy = right_eye[1] - left_eye[1]
+    dx = right_eye[0] - left_eye[0]
+    roll_angle = np.degrees(np.arctan2(dy, dx))
+
+    ctx.face["roll_angle"] = roll_angle
 
 
 def detect_face_face_plusplus(ctx: Context):
@@ -83,6 +97,8 @@ def detect_face_face_plusplus(ctx: Context):
         "api_key": (None, api_key),
         "api_secret": (None, api_secret),
         "image_base64": (None, image_base64),
+        "return_landmark": (None, "1"),
+        "return_attributes": (None, "headpose"),
     }
 
     # 发送 POST 请求
@@ -96,12 +112,24 @@ def detect_face_face_plusplus(ctx: Context):
         face_num = response_json["face_num"]
         if face_num == 1:
             face_rectangle = response_json["faces"][0]["face_rectangle"]
-            ctx.face = (
+
+            # 获取人脸关键点
+            # landmarks = response_json["faces"][0]["landmark"]
+            # print("face++ landmarks", landmarks)
+
+            # headpose 是一个字典，包含俯仰角（pitch）、偏航角（yaw）和滚转角（roll）
+            # headpose示例 {'pitch_angle': 6.997899, 'roll_angle': 1.8011835, 'yaw_angle': 5.043002}
+            headpose = response_json["faces"][0]["attributes"]["headpose"]
+            # 以眼睛为标准，计算的人脸偏转角度，用于人脸矫正
+            roll_angle = headpose["roll_angle"] / 2
+
+            ctx.face["rectangle"] = (
                 face_rectangle["left"],
                 face_rectangle["top"],
                 face_rectangle["width"],
                 face_rectangle["height"],
             )
+            ctx.face["roll_angle"] = roll_angle
         else:
             raise FaceError(
                 "Expected 1 face, but got {}".format(face_num), len(face_num)
@@ -165,12 +193,26 @@ def detect_face_retinaface(ctx: Context):
         print("二次RetinaFace模型推理用时: {:.4f}s".format(time() - tic))
 
     faces_num = len(faces_dets)
+    faces_landmarks = []
+    for face_det in faces_dets:
+        faces_landmarks.append(face_det[5:])
+
     if faces_num != 1:
         raise FaceError("Expected 1 face, but got {}".format(faces_num), faces_num)
     face_det = faces_dets[0]
-    ctx.face = (
+    ctx.face["rectangle"] = (
         face_det[0],
         face_det[1],
         face_det[2] - face_det[0] + 1,
         face_det[3] - face_det[1] + 1,
     )
+
+    # 计算roll_angle
+    face_landmarks = faces_landmarks[0]
+    # print("face_landmarks", face_landmarks)
+    left_eye = np.array([face_landmarks[0], face_landmarks[1]])
+    right_eye = np.array([face_landmarks[2], face_landmarks[3]])
+    dy = right_eye[1] - left_eye[1]
+    dx = right_eye[0] - left_eye[0]
+    roll_angle = np.degrees(np.arctan2(dy, dx))
+    ctx.face["roll_angle"] = roll_angle

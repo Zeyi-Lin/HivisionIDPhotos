@@ -63,6 +63,7 @@ class IDCreator:
         contrast_strength: int = 0,
         sharpen_strength: int = 0,
         saturation_strength: int = 0,
+        face_alignment: bool = False,
     ) -> Result:
         """
         证件照处理函数
@@ -78,6 +79,8 @@ class IDCreator:
         :param brightness_strength: 亮度强度
         :param contrast_strength: 对比度强度
         :param sharpen_strength: 锐化强度
+        :param align_face: 是否需要人脸矫正
+
         :return: 返回处理后的证件照和一系列参数
         """
         # 0.初始化上下文
@@ -94,6 +97,7 @@ class IDCreator:
             contrast_strength=contrast_strength,
             sharpen_strength=sharpen_strength,
             saturation_strength=saturation_strength,
+            face_alignment=face_alignment,
         )
 
         self.ctx = Context(params)
@@ -105,7 +109,7 @@ class IDCreator:
         ctx.origin_image = ctx.processing_image.copy()
         self.before_all and self.before_all(ctx)
 
-        # 1. 人像抠图
+        # 1. ------------------人像抠图------------------
         if not ctx.params.crop_only:
             # 调用抠图工作流
             self.matting_handler(ctx)
@@ -113,7 +117,7 @@ class IDCreator:
         else:
             ctx.matting_image = ctx.processing_image
 
-        # 2. 美颜
+        # 2. ------------------美颜------------------
         self.beauty_handler(ctx)
 
         # 如果仅换底，则直接返回抠图结果
@@ -129,16 +133,33 @@ class IDCreator:
             self.after_all and self.after_all(ctx)
             return ctx.result
 
-        # 2. 人脸检测
+        # 3. ------------------人脸检测------------------
         self.detection_handler(ctx)
         self.after_detect and self.after_detect(ctx)
 
-        # 3. 图像调整
+        # 3.1 ------------------人脸对齐------------------
+        if ctx.params.face_alignment and abs(ctx.face["roll_angle"]) > 2:
+            from hivision.creator.rotation_adjust import rotate_bound_4channels
+
+            print("执行人脸对齐")
+            print("旋转角度：", ctx.face["roll_angle"])
+            # 根据角度旋转原图和抠图
+            ctx.origin_image, ctx.matting_image, _, _, _, _ = rotate_bound_4channels(
+                ctx.origin_image,
+                cv2.split(ctx.matting_image)[-1],
+                -1 * ctx.face["roll_angle"],
+            )
+
+            # 旋转后再执行一遍人脸检测
+            self.detection_handler(ctx)
+            self.after_detect and self.after_detect(ctx)
+
+        # 4. ------------------图像调整------------------
         result_image_hd, result_image_standard, clothing_params, typography_params = (
             adjust_photo(ctx)
         )
 
-        # 4. 返回结果
+        # 5. ------------------返回结果------------------
         ctx.result = Result(
             standard=result_image_standard,
             hd=result_image_hd,
@@ -148,4 +169,5 @@ class IDCreator:
             face=ctx.face,
         )
         self.after_all and self.after_all(ctx)
+
         return ctx.result

@@ -73,12 +73,18 @@ def create_ui(
                 with gr.Tab(
                     LOCALES["key_param"][DEFAULT_LANG]["label"]
                 ) as key_parameter_tab:
-                    mode_options = gr.Radio(
-                        choices=LOCALES["size_mode"][DEFAULT_LANG]["choices"],
-                        label=LOCALES["size_mode"][DEFAULT_LANG]["label"],
-                        value=LOCALES["size_mode"][DEFAULT_LANG]["choices"][0],
-                    )
-
+                    with gr.Row():
+                        mode_options = gr.Radio(
+                            choices=LOCALES["size_mode"][DEFAULT_LANG]["choices"],
+                            label=LOCALES["size_mode"][DEFAULT_LANG]["label"],
+                            value=LOCALES["size_mode"][DEFAULT_LANG]["choices"][0],
+                            min_width=500,
+                        )
+                        face_alignment_options = gr.CheckboxGroup(
+                            label=LOCALES["face_alignment"][DEFAULT_LANG]["label"],
+                            choices=[LOCALES["face_alignment"][DEFAULT_LANG]["value"]],
+                            interactive=True,
+                        )
                     with gr.Row(visible=True) as size_list_row:
                         size_list_options = gr.Dropdown(
                             choices=LOCALES["size_list"][DEFAULT_LANG]["choices"],
@@ -86,7 +92,6 @@ def create_ui(
                             value=LOCALES["size_list"][DEFAULT_LANG]["choices"][0],
                             elem_id="size_list",
                         )
-
                     with gr.Row(visible=False) as custom_size:
                         custom_size_height = gr.Number(
                             value=413, label="height", interactive=True
@@ -489,6 +494,10 @@ def create_ui(
                     saturation_option: gr.update(
                         label=LOCALES["saturation_strength"][language]["label"]
                     ),
+                    face_alignment_options: gr.update(
+                        label=LOCALES["face_alignment"][language]["label"],
+                        value=LOCALES["face_alignment"][language]["value"],
+                    ),
                 }
 
             def change_visibility(option, lang, locales_key, custom_component):
@@ -503,20 +512,26 @@ def create_ui(
 
             def change_size_mode(size_option_item, lang):
                 choices = LOCALES["size_mode"][lang]["choices"]
+                # 如果选择自定义尺寸，则隐藏预设尺寸列表
                 if size_option_item == choices[2]:
                     return {
                         custom_size: gr.update(visible=True),
                         size_list_row: gr.update(visible=False),
+                        face_alignment_options: gr.update(visible=True),
                     }
+                # 如果选择只换底，则隐藏所有尺寸组件
                 elif size_option_item == choices[1]:
                     return {
                         custom_size: gr.update(visible=False),
                         size_list_row: gr.update(visible=False),
+                        face_alignment_options: gr.update(visible=False),
                     }
+                # 如果选择预设尺寸，则隐藏自定义尺寸组件
                 else:
                     return {
                         custom_size: gr.update(visible=False),
                         size_list_row: gr.update(visible=True),
+                        face_alignment_options: gr.update(visible=True),
                     }
 
             def change_image_kb(image_kb_option, lang):
@@ -572,6 +587,7 @@ def create_ui(
                     contrast_option,
                     sharpen_option,
                     saturation_option,
+                    face_alignment_options,
                 ],
             )
 
@@ -584,7 +600,7 @@ def create_ui(
             mode_options.input(
                 change_size_mode,
                 inputs=[mode_options, language_options],
-                outputs=[custom_size, size_list_row],
+                outputs=[custom_size, size_list_row, face_alignment_options],
             )
 
             image_kb_options.input(
@@ -633,6 +649,7 @@ def create_ui(
                     contrast_option,
                     sharpen_option,
                     saturation_option,
+                    face_alignment_options,
                 ],
                 outputs=[
                     img_output_standard,
