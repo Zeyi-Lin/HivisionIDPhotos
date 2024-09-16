@@ -78,7 +78,7 @@ def create_ui(
                             choices=LOCALES["size_mode"][DEFAULT_LANG]["choices"],
                             label=LOCALES["size_mode"][DEFAULT_LANG]["label"],
                             value=LOCALES["size_mode"][DEFAULT_LANG]["choices"][0],
-                            min_width=500,
+                            min_width=520,
                         )
                         face_alignment_options = gr.CheckboxGroup(
                             label=LOCALES["face_alignment"][DEFAULT_LANG]["label"],
@@ -92,25 +92,25 @@ def create_ui(
                             value=LOCALES["size_list"][DEFAULT_LANG]["choices"][0],
                             elem_id="size_list",
                         )
-                    with gr.Row(visible=False) as custom_size:
-                        custom_size_height = gr.Number(
+                    with gr.Row(visible=False) as custom_size_px:
+                        custom_size_height_px = gr.Number(
                             value=413,
                             label=LOCALES["custom_size_px"][DEFAULT_LANG]["height"],
                             interactive=True,
                         )
-                        custom_size_width = gr.Number(
+                        custom_size_width_px = gr.Number(
                             value=295,
                             label=LOCALES["custom_size_px"][DEFAULT_LANG]["width"],
                             interactive=True,
                         )
                     with gr.Row(visible=False) as custom_size_mm:
-                        custom_size_height = gr.Number(
-                            value=413,
+                        custom_size_height_mm = gr.Number(
+                            value=35,
                             label=LOCALES["custom_size_mm"][DEFAULT_LANG]["height"],
                             interactive=True,
                         )
-                        custom_size_width = gr.Number(
-                            value=295,
+                        custom_size_width_mm = gr.Number(
+                            value=25,
                             label=LOCALES["custom_size_mm"][DEFAULT_LANG]["width"],
                             interactive=True,
                         )
@@ -513,6 +513,18 @@ def create_ui(
                         label=LOCALES["face_alignment"][language]["label"],
                         choices=LOCALES["face_alignment"][language]["choices"],
                     ),
+                    custom_size_width_px: gr.update(
+                        label=LOCALES["custom_size_px"][language]["width"]
+                    ),
+                    custom_size_height_px: gr.update(
+                        label=LOCALES["custom_size_px"][language]["height"]
+                    ),
+                    custom_size_width_mm: gr.update(
+                        label=LOCALES["custom_size_mm"][language]["width"]
+                    ),
+                    custom_size_height_mm: gr.update(
+                        label=LOCALES["custom_size_mm"][language]["height"]
+                    ),
                 }
 
             def change_visibility(option, lang, locales_key, custom_component):
@@ -527,24 +539,35 @@ def create_ui(
 
             def change_size_mode(size_option_item, lang):
                 choices = LOCALES["size_mode"][lang]["choices"]
-                # 如果选择自定义尺寸，则隐藏预设尺寸列表
-                if size_option_item == choices[2]:
+                # 如果选择自定义尺寸mm
+                if size_option_item == choices[3]:
                     return {
-                        custom_size: gr.update(visible=True),
+                        custom_size_px: gr.update(visible=False),
+                        custom_size_mm: gr.update(visible=True),
+                        size_list_row: gr.update(visible=False),
+                        face_alignment_options: gr.update(visible=True),
+                    }
+                # 如果选择自定义尺寸px
+                elif size_option_item == choices[2]:
+                    return {
+                        custom_size_px: gr.update(visible=True),
+                        custom_size_mm: gr.update(visible=False),
                         size_list_row: gr.update(visible=False),
                         face_alignment_options: gr.update(visible=True),
                     }
                 # 如果选择只换底，则隐藏所有尺寸组件
                 elif size_option_item == choices[1]:
                     return {
-                        custom_size: gr.update(visible=False),
+                        custom_size_px: gr.update(visible=False),
+                        custom_size_mm: gr.update(visible=False),
                         size_list_row: gr.update(visible=False),
                         face_alignment_options: gr.update(visible=False),
                     }
                 # 如果选择预设尺寸，则隐藏自定义尺寸组件
                 else:
                     return {
-                        custom_size: gr.update(visible=False),
+                        custom_size_px: gr.update(visible=False),
+                        custom_size_mm: gr.update(visible=False),
                         size_list_row: gr.update(visible=True),
                         face_alignment_options: gr.update(visible=True),
                     }
@@ -603,27 +626,41 @@ def create_ui(
                     sharpen_option,
                     saturation_option,
                     face_alignment_options,
+                    custom_size_width_px,
+                    custom_size_height_px,
+                    custom_size_width_mm,
+                    custom_size_height_mm,
                 ],
             )
 
+            # ---------------- 设置隐藏/显示交互效果 ----------------
+            # 尺寸模式
+            mode_options.input(
+                change_size_mode,
+                inputs=[mode_options, language_options],
+                outputs=[
+                    custom_size_px,
+                    custom_size_mm,
+                    size_list_row,
+                    face_alignment_options,
+                ],
+            )
+
+            # 颜色
             color_options.input(
                 change_color,
                 inputs=[color_options, language_options],
                 outputs=[custom_color],
             )
 
-            mode_options.input(
-                change_size_mode,
-                inputs=[mode_options, language_options],
-                outputs=[custom_size, size_list_row, face_alignment_options],
-            )
-
+            # 图片kb
             image_kb_options.input(
                 change_image_kb,
                 inputs=[image_kb_options, language_options],
                 outputs=[custom_image_kb_size],
             )
 
+            # 图片dpi
             image_dpi_options.input(
                 change_image_dpi,
                 inputs=[image_dpi_options, language_options],
@@ -642,8 +679,10 @@ def create_ui(
                     custom_color_R,
                     custom_color_G,
                     custom_color_B,
-                    custom_size_height,
-                    custom_size_width,
+                    custom_size_height_px,
+                    custom_size_width_px,
+                    custom_size_height_mm,
+                    custom_size_width_mm,
                     custom_image_kb_size,
                     language_options,
                     matting_model_options,

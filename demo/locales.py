@@ -89,9 +89,9 @@ LOCALES = {
             "label": "ID photo size options",
             "choices": [
                 "Size List",
-                "Only Change Background",
-                "Custom Size(px)",
-                "Custom Size(mm)",
+                "Only Change BG",
+                "Custom(px)",
+                "Custom(mm)",
             ],
             "custom_size_eror": "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.",
         },
