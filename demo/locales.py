@@ -670,19 +670,19 @@ LOCALES = {
     "face_alignment": {
         "en": {
             "label": "Face Alignment",
-            "value": "Open",
+            "choices": ["Open"],
         },
         "zh": {
             "label": "人脸旋转对齐",
-            "value": "开启",
+            "choices": ["开启"],
         },
         "ja": {
             "label": "顔の整列",
-            "value": "開始",
+            "choices": ["開始"],
         },
         "ko": {
             "label": "얼굴 정렬",
-            "value": "시작",
+            "choices": ["시작"],
         },
     },
 }

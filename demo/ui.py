@@ -43,7 +43,7 @@ def create_ui(
     demo = gr.Blocks(title="HivisionIDPhotos")
 
     with demo:
-        gr.HTML(load_description(os.path.join(root_dir, "assets/title.md")))
+        gr.HTML(load_description(os.path.join(root_dir, "demo/assets/title.md")))
         with gr.Row():
             # ------------------------ 左半边 UI ------------------------
             with gr.Column():
@@ -82,13 +82,13 @@ def create_ui(
                         )
                         face_alignment_options = gr.CheckboxGroup(
                             label=LOCALES["face_alignment"][DEFAULT_LANG]["label"],
-                            choices=[LOCALES["face_alignment"][DEFAULT_LANG]["value"]],
+                            choices=LOCALES["face_alignment"][DEFAULT_LANG]["choices"],
                             interactive=True,
                         )
                     with gr.Row(visible=True) as size_list_row:
                         size_list_options = gr.Dropdown(
                             choices=LOCALES["size_list"][DEFAULT_LANG]["choices"],
-                            label="预设尺寸",
+                            label=LOCALES["size_list"][DEFAULT_LANG]["label"],
                             value=LOCALES["size_list"][DEFAULT_LANG]["choices"][0],
                             elem_id="size_list",
                         )
@@ -511,7 +511,7 @@ def create_ui(
                     ),
                     face_alignment_options: gr.update(
                         label=LOCALES["face_alignment"][language]["label"],
-                        value=LOCALES["face_alignment"][language]["value"],
+                        choices=LOCALES["face_alignment"][language]["choices"],
                     ),
                 }
 

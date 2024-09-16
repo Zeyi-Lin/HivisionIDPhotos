@@ -341,7 +341,7 @@ class IDPhotoProcessor:
     ):
         """生成排版照片"""
         if idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1]:
-            return gr.update(visible=False)
+            return None, gr.update(visible=False)
 
         typography_arr, typography_rotate = generate_layout_photo(
             input_height=idphoto_json["size"][0],
