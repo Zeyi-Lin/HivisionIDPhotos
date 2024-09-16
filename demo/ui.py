@@ -88,7 +88,7 @@ def create_ui(
                     with gr.Row(visible=True) as size_list_row:
                         size_list_options = gr.Dropdown(
                             choices=LOCALES["size_list"][DEFAULT_LANG]["choices"],
-                            label="预设尺寸",
+                            label=LOCALES["size_list"][DEFAULT_LANG]["label"],
                             value=LOCALES["size_list"][DEFAULT_LANG]["choices"][0],
                             elem_id="size_list",
                         )
