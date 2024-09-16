@@ -262,7 +262,7 @@ docker pull linzeyi/hivision_idphotos
 
 **方法二：Dockerfileから直接イメージをビルド：**
 
-モデル重みファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)を`hivision/creator/weights`に配置したことを確認した後、プロジェクトのルートディレクトリで実行：
+`hivision/creator/weights` ディレクトリに少なくとも1つの[マスキングモデルの重みファイル](#3-重みファイルのダウンロード)があることを確認してから、プロジェクトのルートディレクトリで以下を実行してください：
 
 ```bash
 docker build -t linzeyi/hivision_idphotos .
@@ -270,7 +270,7 @@ docker build -t linzeyi/hivision_idphotos .
 
 **方法三：Docker composeでビルド：**
 
-モデル重みファイル[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)を`hivision/creator/weights`に配置したことを確認した後、プロジェクトのルートディレクトリで実行：
+`hivision/creator/weights` ディレクトリに少なくとも1つの[マスキングモデルの重みファイル](#3-重みファイルのダウンロード)があることを確認してから、プロジェクトのルートディレクトリで以下を実行してください：
 
 ```bash
 docker compose build

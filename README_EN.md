@@ -265,7 +265,7 @@ docker pull linzeyi/hivision_idphotos
 
 **Method 2: Directly build the image from Dockerfile:**
 
-After ensuring that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in `hivision/creator/weights`, execute the following in the project root directory:
+After ensuring that at least one [matting model weight file](#3-download-weight-files) is placed in the `hivision/creator/weights` directory, execute the following in the project root directory:
 
 ```bash
 docker build -t linzeyi/hivision_idphotos .
@@ -273,7 +273,7 @@ docker build -t linzeyi/hivision_idphotos .
 
 **Method 3: Build using Docker Compose:**
 
-Ensure that the model weight file [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) is placed in `hivision/creator/weights`, then execute the following in the project root directory:
+After ensuring that at least one [matting model weight file](#3-download-weight-files) is placed in the `hivision/creator/weights` directory, execute the following in the project root directory:
 
 ```bash
 docker compose build

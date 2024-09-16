@@ -271,7 +271,7 @@ docker pull linzeyi/hivision_idphotos
 
 **方式二：Dockrfile 直接构建镜像：**
 
-在确保将模型权重文件[hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)放到`hivision/creator/weights`下后，在项目根目录执行：
+在确保将至少一个[抠图模型权重文件](#3-下载权重文件)放到`hivision/creator/weights`下后，在项目根目录执行：
 
 ```bash
 docker build -t linzeyi/hivision_idphotos .
@@ -279,7 +279,7 @@ docker build -t linzeyi/hivision_idphotos .
 
 **方式三：Docker compose 构建：**
 
-确保将模型权重文件 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model) 放在`hivision/creator/weights`下后，在项目根目录下执行：
+在确保将至少一个[抠图模型权重文件](#3-下载权重文件)放到`hivision/creator/weights`下后，在项目根目录下执行：
 
 ```bash
 docker compose build

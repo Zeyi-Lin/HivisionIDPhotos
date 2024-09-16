@@ -262,7 +262,7 @@ docker pull linzeyi/hivision_idphotos
 
 **방법 2: Dockerfile에서 직접 이미지 빌드하기:**
 
-모델 가중치 파일 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)를 `hivision/creator/weights`에 배치한 것을 확인한 후, 프로젝트의 루트 디렉토리에서 실행:
+`hivision/creator/weights` 디렉토리에 최소한 하나의 [마스킹 모델 가중치 파일](#3-가중치-파일-다운로드)이 있는지 확인한 후, 프로젝트 루트 디렉토리에서 다음을 실행하세요:
 
 ```bash
 docker build -t linzeyi/hivision_idphotos .
@@ -270,7 +270,7 @@ docker build -t linzeyi/hivision_idphotos .
 
 **방법 3: Docker compose로 빌드하기:**
 
-모델 가중치 파일 [hivision_modnet.onnx](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/tag/pretrained-model)를 `hivision/creator/weights`에 배치한 것을 확인한 후, 프로젝트의 루트 디렉토리에서 실행:
+`hivision/creator/weights` 디렉토리에 최소한 하나의 [마스킹 모델 가중치 파일](#3-가중치-파일-다운로드)이 있는지 확인한 후, 프로젝트 루트 디렉토리에서 다음을 실행하세요:
 
 ```bash
 docker compose build
