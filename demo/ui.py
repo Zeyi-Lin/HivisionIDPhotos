@@ -367,7 +367,7 @@ def create_ui(
                             elem_id="hd_photo_png",
                         )
 
-            # ---------------- 设置隐藏/显示组件 ----------------
+            # ---------------- 多语言切换函数 ----------------
             def change_language(language):
                 return {
                     face_detect_model_options: gr.update(
