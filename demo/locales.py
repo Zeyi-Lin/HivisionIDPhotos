@@ -87,12 +87,17 @@ LOCALES = {
     "size_mode": {
         "en": {
             "label": "ID photo size options",
-            "choices": ["Size List", "Only Change Background", "Custom Size"],
+            "choices": [
+                "Size List",
+                "Only Change Background",
+                "Custom Size(px)",
+                "Custom Size(mm)",
+            ],
             "custom_size_eror": "The width should not be greater than the length; the length and width should not be less than 100, and no more than 1800.",
         },
         "zh": {
             "label": "证件照尺寸选项",
-            "choices": ["尺寸列表", "只换底", "自定义尺寸"],
+            "choices": ["尺寸列表", "只换底", "自定义(px)", "自定义(mm)"],
             "custom_size_eror": "宽度不应大于长度；长度和宽度不应小于100，不大于1800。",
         },
         "ja": {
@@ -100,14 +105,56 @@ LOCALES = {
             "choices": [
                 "サイズリスト",
                 "背景のみ変更",
-                "カスタムサイズ",
+                "カスタムサイズ(px)",
+                "カスタムサイズ(mm)",
             ],
             "custom_size_eror": "幅は長さより大きくしないでください。長さと幅は100以上1800以下にしてください。",
         },
         "ko": {
             "label": "증명사진 크기 옵션",
-            "choices": ["크기 목록", "배경만 변경", "사용자 지정 크기"],
+            "choices": [
+                "크기 목록",
+                "배경만 변경",
+                "사용자 지정(px)",
+                "사용자 지정(mm)",
+            ],
             "custom_size_eror": "너비는 길이보다 크지 않아야 합니다; 길이와 너비는 100 이상 1800 이하여야 합니다.",
+        },
+    },
+    "custom_size_px": {
+        "en": {
+            "height": "Height(px)",
+            "width": "Width(px)",
+        },
+        "zh": {
+            "height": "高度(px)",
+            "width": "宽度(px)",
+        },
+        "ja": {
+            "height": "高さ(px)",
+            "width": "幅(px)",
+        },
+        "ko": {
+            "height": "높이(px)",
+            "width": "너비(px)",
+        },
+    },
+    "custom_size_mm": {
+        "en": {
+            "height": "Height(mm)",
+            "width": "Width(mm)",
+        },
+        "zh": {
+            "height": "高度(mm)",
+            "width": "宽度(mm)",
+        },
+        "ja": {
+            "height": "高さ(mm)",
+            "width": "幅(mm)",
+        },
+        "ko": {
+            "height": "높이(mm)",
+            "width": "너비(mm)",
         },
     },
     "size_list": {

@@ -94,10 +94,25 @@ def create_ui(
                         )
                     with gr.Row(visible=False) as custom_size:
                         custom_size_height = gr.Number(
-                            value=413, label="height", interactive=True
+                            value=413,
+                            label=LOCALES["custom_size_px"][DEFAULT_LANG]["height"],
+                            interactive=True,
                         )
                         custom_size_width = gr.Number(
-                            value=295, label="width", interactive=True
+                            value=295,
+                            label=LOCALES["custom_size_px"][DEFAULT_LANG]["width"],
+                            interactive=True,
+                        )
+                    with gr.Row(visible=False) as custom_size_mm:
+                        custom_size_height = gr.Number(
+                            value=413,
+                            label=LOCALES["custom_size_mm"][DEFAULT_LANG]["height"],
+                            interactive=True,
+                        )
+                        custom_size_width = gr.Number(
+                            value=295,
+                            label=LOCALES["custom_size_mm"][DEFAULT_LANG]["width"],
+                            interactive=True,
                         )
 
                     color_options = gr.Radio(
