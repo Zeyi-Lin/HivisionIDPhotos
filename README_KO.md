@@ -51,13 +51,13 @@
 
 - 온라인 체험: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
 
+- 2024.09.16: Gradio Demo에 **얼굴 회전 정렬** 기능 추가
 - 2024.09.14: Gradio Demo에 **커스텀 DPI** 기능 추가, 일본어와 한국어 추가, **밝기, 대비, 선명도 조절** 기능 추가
 - 2024.09.12: Gradio 데모에 **미백** 기능 추가 | API 인터페이스에 **워터마크 추가**, **사진 KB 크기 설정**, **증명사진 자르기** 추가
 - 2024.09.11: Gradio Demo에 **투명 이미지 표시 및 다운로드** 기능 추가
 - 2024.09.09: 새로운 **배경 제거 모델** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) 추가 | Gradio에 **고급 매개변수 설정** 및 **워터마크** 탭 추가
 - 2024.09.08: 새로운 **컷아웃 모델** [RMBG-1.4](https://huggingface.co/briaai/RMBG-1.4) 추가 | **ComfyUI 워크플로우** - [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) AIFSH의 기여
 - 2024.09.07: **얼굴 검출 API 옵션** [Face++](docs/face++_EN.md) 추가 및 보다 높은 정확도의 얼굴 검출 구현
-- 2024.09.06: 새로운 컷아웃 모델 [modnet_photographic_portrait_matting.onnx](https://github.com/ZHKKKe/MODNet) 추가
 
 <br>
 
