@@ -57,6 +57,7 @@ def detect_face_mtcnn(ctx: Context, scale: int = 2):
     if len(faces) != 1:
         raise FaceError("Expected 1 face, but got {}".format(len(faces)), len(faces))
 
+    # 计算人脸坐标
     left = faces[0][0]
     top = faces[0][1]
     width = faces[0][2] - left + 1
@@ -192,6 +193,10 @@ def detect_face_retinaface(ctx: Context):
         print("二次RetinaFace模型推理用时: {:.4f}s".format(time() - tic))
 
     faces_num = len(faces_dets)
+    faces_landmarks = []
+    for face_det in faces_dets:
+        faces_landmarks.append(face_det[5:])
+
     if faces_num != 1:
         raise FaceError("Expected 1 face, but got {}".format(faces_num), faces_num)
     face_det = faces_dets[0]
@@ -201,3 +206,13 @@ def detect_face_retinaface(ctx: Context):
         face_det[2] - face_det[0] + 1,
         face_det[3] - face_det[1] + 1,
     )
+
+    # 计算roll_angle
+    face_landmarks = faces_landmarks[0]
+    # print("face_landmarks", face_landmarks)
+    left_eye = np.array([face_landmarks[0], face_landmarks[1]])
+    right_eye = np.array([face_landmarks[2], face_landmarks[3]])
+    dy = right_eye[1] - left_eye[1]
+    dx = right_eye[0] - left_eye[0]
+    roll_angle = np.degrees(np.arctan2(dy, dx))
+    ctx.face["roll_angle"] = roll_angle
