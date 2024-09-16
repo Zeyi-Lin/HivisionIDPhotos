@@ -63,7 +63,7 @@ class IDCreator:
         contrast_strength: int = 0,
         sharpen_strength: int = 0,
         saturation_strength: int = 0,
-        align_face: bool = True,
+        face_alignment: bool = False,
     ) -> Result:
         """
         证件照处理函数
@@ -97,7 +97,7 @@ class IDCreator:
             contrast_strength=contrast_strength,
             sharpen_strength=sharpen_strength,
             saturation_strength=saturation_strength,
-            align_face=align_face,
+            face_alignment=face_alignment,
         )
 
         self.ctx = Context(params)
@@ -138,11 +138,11 @@ class IDCreator:
         self.after_detect and self.after_detect(ctx)
 
         # 3.1 ------------------人脸对齐------------------
-        if ctx.params.align_face and abs(ctx.face["roll_angle"]) > 1:
+        if ctx.params.face_alignment and abs(ctx.face["roll_angle"]) > 2:
             from hivision.creator.rotation_adjust import rotate_bound_4channels
 
-            print("ctx.face['roll_angle']", ctx.face["roll_angle"])
             print("执行人脸对齐")
+            print("旋转角度：", ctx.face["roll_angle"])
             # 根据角度旋转原图和抠图
             ctx.origin_image, ctx.matting_image, _, _, _, _ = rotate_bound_4channels(
                 ctx.origin_image,

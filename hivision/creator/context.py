@@ -26,7 +26,7 @@ class Params:
         contrast_strength: int = 0,
         sharpen_strength: int = 0,
         saturation_strength: int = 0,
-        align_face: bool = False,
+        face_alignment: bool = False,
     ):
         self.__size = size
         self.__change_bg_only = change_bg_only
@@ -40,7 +40,7 @@ class Params:
         self.__contrast_strength = contrast_strength
         self.__sharpen_strength = sharpen_strength
         self.__saturation_strength = saturation_strength
-        self.__align_face = align_face
+        self.__face_alignment = face_alignment
 
     @property
     def size(self):
@@ -91,8 +91,8 @@ class Params:
         return self.__saturation_strength
 
     @property
-    def align_face(self):
-        return self.__align_face
+    def face_alignment(self):
+        return self.__face_alignment
 
 
 class Result:
