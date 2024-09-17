@@ -12,6 +12,7 @@ from hivision.creator.layout_calculator import (
     generate_layout_image,
 )
 from hivision.creator.choose_handler import choose_handler
+from hivision.plugin.template.template_calculator import generte_template_photo
 from demo.utils import range_check
 import gradio as gr
 import os
@@ -141,6 +142,7 @@ class IDPhotoProcessor:
             watermark_text_color,
         )
 
+    # 初始化idphoto_json字典
     def _initialize_idphoto_json(
         self,
         mode_option,
@@ -158,6 +160,7 @@ class IDPhotoProcessor:
             "custom_image_dpi": None,
         }
 
+    # 处理尺寸模式
     def _process_size_mode(
         self,
         idphoto_json,
@@ -202,6 +205,7 @@ class IDPhotoProcessor:
         else:
             idphoto_json["size"] = (None, None)
 
+    # 处理颜色模式
     def _process_color_mode(
         self,
         idphoto_json,
@@ -238,6 +242,7 @@ class IDPhotoProcessor:
                 int(hex_color[i : i + 2], 16) for i in (0, 2, 4)
             )
 
+    # 生成证件照
     def _generate_id_photo(
         self,
         creator: IDCreator,
@@ -272,6 +277,7 @@ class IDPhotoProcessor:
             face_alignment=face_alignment_option,
         )
 
+    # 处理照片生成错误
     def _handle_photo_generation_error(self, language):
         """处理照片生成错误"""
         return [gr.update(value=None) for _ in range(4)] + [
@@ -282,6 +288,7 @@ class IDPhotoProcessor:
             None,
         ]
 
+    # 处理生成的照片
     def _process_generated_photo(
         self,
         result,
@@ -305,20 +312,6 @@ class IDPhotoProcessor:
             result_image_standard, result_image_hd, idphoto_json
         )
 
-        # 生成排版照片
-        result_image_layout, result_image_layout_visible = self._generate_image_layout(
-            idphoto_json,
-            result_image_standard,
-            language,
-            watermark_option,
-            watermark_text,
-            watermark_text_size,
-            watermark_text_opacity,
-            watermark_text_angle,
-            watermark_text_space,
-            watermark_text_color,
-        )
-
         # 添加水印
         if watermark_option == LOCALES["watermark_switch"][language]["choices"][1]:
             result_image_standard, result_image_hd = self._add_watermark(
@@ -331,6 +324,20 @@ class IDPhotoProcessor:
                 watermark_text_space,
                 watermark_text_color,
             )
+        
+        # 生成排版照片
+        result_image_layout, result_image_layout_visible = self._generate_image_layout(
+            idphoto_json,
+            result_image_standard,
+            language,
+        )
+        
+        # 生成模板照片
+        result_image_template, result_image_template_visible = self._generate_image_template(
+            idphoto_json,
+            result_image_hd,
+            language,
+        )
 
         # 调整图片大小
         output_image_path_dict = self._resize_image_if_needed(
@@ -348,6 +355,7 @@ class IDPhotoProcessor:
                 result_image_standard_png,
                 result_image_hd_png,
                 gr.update(value=result_image_layout, visible=result_image_layout_visible),
+                gr.update(value=result_image_template, visible=result_image_template_visible),
             )
         else:
             # 如果output_image_path_dict不为None，
@@ -362,13 +370,15 @@ class IDPhotoProcessor:
                 (
                     output_image_path_dict["hd"]["path"]
                     if output_image_path_dict["hd"]["processed"]
-                    else result_image_hd
+                    else result_image_hd    
                 ),
                 result_image_standard_png,
                 result_image_hd_png,
                 gr.update(value=result_image_layout, visible=result_image_layout_visible),
+                gr.update(value=result_image_template, visible=result_image_template_visible),
             )
 
+    # 渲染背景
     def _render_background(self, result_image_standard, result_image_hd, idphoto_json):
         """渲染背景"""
         render_modes = {0: "pure_color", 1: "updown_gradient", 2: "center_gradient"}
@@ -387,21 +397,15 @@ class IDPhotoProcessor:
 
         return result_image_standard, result_image_hd
 
+    # 生成排版照片
     def _generate_image_layout(
         self,
         idphoto_json,
         result_image_standard,
         language,
-        watermark_option,
-        watermark_text,
-        watermark_text_size,
-        watermark_text_opacity,
-        watermark_text_angle,
-        watermark_text_space,
-        watermark_text_color,
     ):
         """生成排版照片"""
-        # 如果选择了自定义尺寸，则不生成排版照片
+        # 如果选择了只换底，则不生成排版照片
         if idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1]:
             return None, False
 
@@ -409,21 +413,9 @@ class IDPhotoProcessor:
             input_height=idphoto_json["size"][0],
             input_width=idphoto_json["size"][1],
         )
-
-        image = result_image_standard
-        if watermark_option == LOCALES["watermark_switch"][language]["choices"][1]:
-            image = add_watermark(
-                image=image,
-                text=watermark_text,
-                size=watermark_text_size,
-                opacity=watermark_text_opacity,
-                angle=watermark_text_angle,
-                space=watermark_text_space,
-                color=watermark_text_color,
-            )
-
+        
         result_image_layout = generate_layout_image(
-            image,
+            result_image_standard,
             typography_arr,
             typography_rotate,
             height=idphoto_json["size"][0],
@@ -432,6 +424,20 @@ class IDPhotoProcessor:
 
         return result_image_layout, True
 
+    def _generate_image_template(
+        self,
+        idphoto_json,
+        result_image_hd,
+        language,
+    ):
+        """生成模板照片"""
+        result_image_template = generte_template_photo(
+            template_name="template_1",
+            input_image=result_image_hd,
+        )
+        return result_image_template, True
+
+    # 添加水印
     def _add_watermark(
         self,
         result_image_standard,
@@ -548,7 +554,8 @@ class IDPhotoProcessor:
         result_image_hd,
         result_image_standard_png,
         result_image_hd_png,
-        result_layout_image,
+        result_layout_image_gr,
+        result_image_template_gr,
     ):
         """创建响应"""
         response = [
@@ -556,7 +563,8 @@ class IDPhotoProcessor:
             result_image_hd,
             result_image_standard_png,
             result_image_hd_png,
-            result_layout_image,
+            result_layout_image_gr,
+            result_image_template_gr,
             gr.update(visible=False),
         ]
 
