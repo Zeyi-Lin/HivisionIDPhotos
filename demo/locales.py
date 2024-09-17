@@ -687,16 +687,16 @@ LOCALES = {
     },
     "template_photo": {
         "en": {
-            "label": "Share template photo",
+            "label": "Social Media Template Photo",
         },
         "zh": {
-            "label": "分享模版照",
+            "label": "社交媒体模版照",
         },
         "ja": {
-            "label": "テンプレート写真を共有",
+            "label": "SNS テンプレート写真",
         },
         "ko": {
-            "label": "템플릿 사진을 공유",
+            "label": "SNS 템플릿 사진",
         },
     },
 }
