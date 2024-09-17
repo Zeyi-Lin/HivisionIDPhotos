@@ -685,4 +685,18 @@ LOCALES = {
             "choices": ["시작"],
         },
     },
+    "template_photo": {
+        "en": {
+            "label": "Share template photo",
+        },
+        "zh": {
+            "label": "分享模版照",
+        },
+        "ja": {
+            "label": "テンプレート写真を共有",
+        },
+        "ko": {
+            "label": "템플릿 사진을 공유",
+        },
+    },
 }

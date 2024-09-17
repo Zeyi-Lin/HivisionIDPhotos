@@ -349,27 +349,31 @@ def create_ui(
                     label=LOCALES["notification"][DEFAULT_LANG]["label"], visible=False
                 )
                 with gr.Row():
+                    # 标准照
                     img_output_standard = gr.Image(
                         label=LOCALES["standard_photo"][DEFAULT_LANG]["label"],
                         height=350,
                         format="jpeg",
                     )
+                    # 高清照
                     img_output_standard_hd = gr.Image(
                         label=LOCALES["hd_photo"][DEFAULT_LANG]["label"],
                         height=350,
                         format="jpeg",
                     )
-
+                # 排版照
                 img_output_layout = gr.Image(
                     label=LOCALES["layout_photo"][DEFAULT_LANG]["label"],
                     height=350,
                     format="jpeg",
                 )
-
-                file_download = gr.File(
-                    label=LOCALES["download"][DEFAULT_LANG]["label"], visible=False
+                # 模版照片      
+                img_output_template = gr.Gallery(
+                    label=LOCALES["template_photo"][DEFAULT_LANG]["label"],
+                    height=350,
+                    format="jpeg",
                 )
-
+                # 抠图图像
                 with gr.Accordion(
                     LOCALES["matting_image"][DEFAULT_LANG]["label"], open=False
                 ) as matting_image_accordion:
@@ -442,9 +446,6 @@ def create_ui(
                     ),
                     img_output_layout: gr.update(
                         label=LOCALES["layout_photo"][language]["label"]
-                    ),
-                    file_download: gr.update(
-                        label=LOCALES["download"][language]["label"]
                     ),
                     head_measure_ratio_option: gr.update(
                         label=LOCALES["head_measure_ratio"][language]["label"]
@@ -530,6 +531,9 @@ def create_ui(
                     custom_size_height_mm: gr.update(
                         label=LOCALES["custom_size_mm"][language]["height"]
                     ),
+                    img_output_template: gr.update(
+                        label=LOCALES["template_photo"][language]["label"]
+                    ),
                 }
 
             def change_visibility(option, lang, locales_key, custom_component):
@@ -612,7 +616,6 @@ def create_ui(
                     img_output_standard_png,
                     img_output_standard_hd_png,
                     img_output_layout,
-                    file_download,
                     head_measure_ratio_option,
                     top_distance_option,
                     key_parameter_tab,
@@ -639,6 +642,7 @@ def create_ui(
                     custom_size_height_px,
                     custom_size_width_mm,
                     custom_size_height_mm,
+                    img_output_template,
                 ],
             )
 
@@ -721,6 +725,7 @@ def create_ui(
                     img_output_standard_png,
                     img_output_standard_hd_png,
                     img_output_layout,
+                    img_output_template,
                     notification,
                 ],
             )
