@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import json
-from rotation_adjust import rotate_bound
+from hivision.creator.rotation_adjust import rotate_bound
 import os
 
 base_path = os.path.dirname(os.path.abspath(__file__))
