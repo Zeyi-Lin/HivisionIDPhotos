@@ -432,6 +432,10 @@ class IDPhotoProcessor:
         result_image_hd,
         language,
     ):
+        # 如果选择了只换底，则不生成模板照片
+        if idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1]:
+            return None, False
+        
         TEMPLATE_NAME_LIST = ["template_1", "template_2"]
         """生成模板照片"""
         result_image_template_list = []

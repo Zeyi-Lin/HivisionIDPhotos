@@ -367,12 +367,15 @@ def create_ui(
                     height=350,
                     format="jpeg",
                 )
-                # 模版照片      
-                img_output_template = gr.Gallery(
-                    label=LOCALES["template_photo"][DEFAULT_LANG]["label"],
-                    height=350,
-                    format="jpeg",
-                )
+                # 模版照片
+                with gr.Accordion(
+                    LOCALES["template_photo"][DEFAULT_LANG]["label"], open=False
+                ) as template_image_accordion:      
+                    img_output_template = gr.Gallery(
+                        label=LOCALES["template_photo"][DEFAULT_LANG]["label"],
+                        height=350,
+                        format="jpeg",
+                    )
                 # 抠图图像
                 with gr.Accordion(
                     LOCALES["matting_image"][DEFAULT_LANG]["label"], open=False
@@ -534,6 +537,9 @@ def create_ui(
                     img_output_template: gr.update(
                         label=LOCALES["template_photo"][language]["label"]
                     ),
+                    template_image_accordion: gr.update(
+                        label=LOCALES["template_photo"][language]["label"]
+                    ),
                 }
 
             def change_visibility(option, lang, locales_key, custom_component):
@@ -643,6 +649,7 @@ def create_ui(
                     custom_size_width_mm,
                     custom_size_height_mm,
                     img_output_template,
+                    template_image_accordion,
                 ],
             )
 
