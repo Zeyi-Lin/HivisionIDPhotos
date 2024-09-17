@@ -66,6 +66,8 @@ def generte_template_photo(template_name: str, input_image: np.ndarray) -> np.nd
 
     # 将旋转后的图像粘贴到结果图像上
     result[paste_y:paste_y+paste_height, paste_x:paste_x+paste_width] = resized_image[:paste_height, :paste_width]
+    
+    template_image = cv2.cvtColor(template_image, cv2.COLOR_BGRA2RGBA)
 
     # 将template_image叠加到结果图像上
     if template_image.shape[2] == 4:  # 确保template_image有alpha通道

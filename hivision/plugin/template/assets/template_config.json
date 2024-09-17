@@ -9,5 +9,16 @@
             "right_bottom": [747, 1332],
             "rotation": -16.42
         }
+    },
+    "template_2": {
+        "width": 1080,
+        "height": 1440,
+        "anchor_points": {
+            "left_top": [199, 199],
+            "right_top": [921, 216],
+            "left_bottom": [163, 1129],
+            "right_bottom": [876, 1153],
+            "rotation": -2.2
+        }
     }
 }

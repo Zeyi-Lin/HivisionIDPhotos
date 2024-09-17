@@ -430,12 +430,16 @@ class IDPhotoProcessor:
         result_image_hd,
         language,
     ):
+        TEMPLATE_NAME_LIST = ["template_1", "template_2"]
         """生成模板照片"""
-        result_image_template = generte_template_photo(
-            template_name="template_1",
-            input_image=result_image_hd,
-        )
-        return result_image_template, True
+        result_image_template_list = []
+        for template_name in TEMPLATE_NAME_LIST:
+            result_image_template = generte_template_photo(
+                template_name=template_name,
+                input_image=result_image_hd,
+            )
+            result_image_template_list.append(result_image_template)
+        return result_image_template_list, True
 
     # 添加水印
     def _add_watermark(

@@ -368,7 +368,7 @@ def create_ui(
                     format="jpeg",
                 )
                 # 模版照片      
-                img_output_template = gr.Image(
+                img_output_template = gr.Gallery(
                     label=LOCALES["template_photo"][DEFAULT_LANG]["label"],
                     height=350,
                     format="jpeg",
