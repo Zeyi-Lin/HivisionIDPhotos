@@ -235,7 +235,9 @@ class IDPhotoProcessor:
                     int(hex_color[i : i + 2], 16) for i in (0, 2, 4)
                 )
             else:
-                raise ValueError("Invalid hex color. You can only use 6 or 7 characters. For example: #FFFFFF or FFFFFF")
+                raise ValueError(
+                    "Invalid hex color. You can only use 6 or 7 characters. For example: #FFFFFF or FFFFFF"
+                )
         else:
             hex_color = LOCALES["bg_color"][language]["develop"][color_option]
             idphoto_json["color_bgr"] = tuple(
@@ -482,7 +484,10 @@ class IDPhotoProcessor:
         )
         timestamp = int(time.time())
         output_paths = {
-            "standard": {"path": f"{base_path}/{timestamp}_standard", "processed": False},
+            "standard": {
+                "path": f"{base_path}/{timestamp}_standard",
+                "processed": False,
+            },
             "hd": {"path": f"{base_path}/{timestamp}_hd", "processed": False},
             "layout": {"path": f"{base_path}/{timestamp}_layout", "processed": False},
         }
@@ -510,9 +515,11 @@ class IDPhotoProcessor:
             )
             output_paths["standard"]["processed"] = True
             # 保存高清图像和排版图像
-            save_image_dpi_to_bytes(result_image_hd, output_paths["hd"]["path"], dpi=custom_dpi)
+            save_image_dpi_to_bytes(
+                result_image_hd, output_paths["hd"]["path"], dpi=custom_dpi
+            )
             output_paths["hd"]["processed"] = True
-            if result_image_layout:
+            if result_image_layout is not None:
                 save_image_dpi_to_bytes(
                     result_image_layout, output_paths["layout"]["path"], dpi=custom_dpi
                 )
@@ -529,7 +536,9 @@ class IDPhotoProcessor:
                     pass
                 else:
                     save_image_dpi_to_bytes(
-                        locals()[f"result_image_{key}"], output_paths[key]["path"], dpi=custom_dpi
+                        locals()[f"result_image_{key}"],
+                        output_paths[key]["path"],
+                        dpi=custom_dpi,
                     )
                     output_paths[key]["processed"] = True
 
