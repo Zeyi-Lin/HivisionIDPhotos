@@ -51,7 +51,7 @@
 
 - オンライン体験： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
 
-- 2024.09.17: Gradioデモに**カスタム底色-HEX入力**機能を追加
+- 2024.09.17: Gradioデモに**カスタム底色-HEX入力**機能を追加 | **（コミュニティ貢献）C++バージョン** - [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp) 貢献 by [zjkhahah](https://github.com/zjkhahah)
 - 2024.09.16: Gradioデモに**顔回転対応**機能を追加、カスタムサイズ入力に**ミリメートル**をサポート
 - 2024.09.14: Gradioデモに**カスタムDPI**機能を追加、日本語と韓国語を追加，**明るさ、コントラスト、鮮明度の調整**機能を追加
 - 2024.09.12: Gradioデモに**ホワイトニング**機能を追加 | APIインターフェースに**ウォーターマーク追加**、**写真のKBサイズ設定**、**証明写真のトリミング**を追加
@@ -91,12 +91,17 @@ HivisionIDPhotoがあなたに役立つ場合は、このリポジトリをス�
 
 私たちは、コミュニティによって構築されたHivisionIDPhotosの興味深いアプリケーションや拡張機能をいくつか共有しています：
 
-- [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)：Windowsクライアントアプリケーション、[zhaoyun0071](https://github.com/zhaoyun0071)によって構築されました
-- [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)：ComfyUI証明写真処理ワークフロー、[AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)によって構築されました 
+- [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)：ComfyUI証明写真処理ワークフロー、[AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)によって構築 
 
-[![](assets/comfyui.png)](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
+[<img src="assets/comfyui.png" width="900" alt="ComfyUI workflow">](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 
-- [HivisionIDPhotos-wechat-weapp](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp): WeChat ID写真ミニプログラムで、HivisionIDphotosアルゴリズムに基づいており、[no1xuan](https://github.com/no1xuan)が貢献しました。
+- [HivisionIDPhotos-wechat-weapp](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp)：WeChat証明写真ミニプログラム、HivisionIDphotosアルゴリズムに基づく、[no1xuan](https://github.com/no1xuan)による貢献
+
+[<img src="assets/community-wechat-miniprogram.png" width="900" alt="HivisionIDPhotos-wechat-weapp">](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp)
+
+- [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp)：HivisionIDphotos C++バージョン、[zjkhahah](https://github.com/zjkhahah)によって構築
+- [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)：Windowsクライアントアプリケーション、[zhaoyun0071](https://github.com/zhaoyun0071)によって構築
+- [HivisionIDPhotos-NAS](https://github.com/ONG-Leo/HivisionIDPhotos-NAS)：Synology NAS導入の中国語チュートリアル、[ONG-Leo](https://github.com/ONG-Leo)による貢献
 
 <br>
 
