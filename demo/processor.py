@@ -329,8 +329,7 @@ class IDPhotoProcessor:
                 result_image_hd,
                 result_image_standard_png,
                 result_image_hd_png,
-                result_image_layout,
-                result_image_layout_visible,
+                gr.update(value=result_image_layout, visible=result_image_layout_visible),
             )
         else:
             # 如果output_image_path_dict不为None，
