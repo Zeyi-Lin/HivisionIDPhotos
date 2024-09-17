@@ -31,6 +31,7 @@ class IDPhotoProcessor:
         custom_color_R,
         custom_color_G,
         custom_color_B,
+        custom_color_hex_value,
         custom_size_height,
         custom_size_width,
         custom_size_height_mm,
@@ -88,6 +89,7 @@ class IDPhotoProcessor:
             custom_color_R,
             custom_color_G,
             custom_color_B,
+            custom_color_hex_value,
         )
 
         # 如果设置了自定义KB大小
@@ -208,12 +210,28 @@ class IDPhotoProcessor:
         custom_color_R,
         custom_color_G,
         custom_color_B,
+        custom_color_hex_value,
     ):
         """处理颜色模式"""
-        if idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-1]:
+        # 如果选择了自定义颜色
+        if idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-2]:
             idphoto_json["color_bgr"] = tuple(
                 map(range_check, [custom_color_R, custom_color_G, custom_color_B])
             )
+        elif idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-1]:
+            hex_color = custom_color_hex_value
+            # 将十六进制颜色转换为RGB颜色，如果长度为6，则直接转换，如果长度为7，则去掉#号再转换
+            if len(hex_color) == 6:
+                idphoto_json["color_bgr"] = tuple(
+                    int(hex_color[i : i + 2], 16) for i in (0, 2, 4)
+                )
+            elif len(hex_color) == 7:
+                hex_color = hex_color[1:]
+                idphoto_json["color_bgr"] = tuple(
+                    int(hex_color[i : i + 2], 16) for i in (0, 2, 4)
+                )
+            else:
+                raise ValueError("Invalid hex color. You can only use 6 or 7 characters. For example: #FFFFFF or FFFFFF")
         else:
             hex_color = LOCALES["bg_color"][language]["develop"][color_option]
             idphoto_json["color_bgr"] = tuple(
