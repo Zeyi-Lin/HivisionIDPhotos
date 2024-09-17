@@ -120,11 +120,16 @@ def create_ui(
                         label=LOCALES["bg_color"][DEFAULT_LANG]["label"],
                         value=LOCALES["bg_color"][DEFAULT_LANG]["choices"][0],
                     )
-
-                    with gr.Row(visible=False) as custom_color:
-                        custom_color_R = gr.Number(value=0, label="R", interactive=True)
-                        custom_color_G = gr.Number(value=0, label="G", interactive=True)
-                        custom_color_B = gr.Number(value=0, label="B", interactive=True)
+                    
+                    # 自定义颜色RGB
+                    with gr.Row(visible=False) as custom_color_rgb:
+                        custom_color_R = gr.Number(value=0, label="R", minimum=0, maximum=255, interactive=True)
+                        custom_color_G = gr.Number(value=0, label="G", minimum=0, maximum=255, interactive=True)
+                        custom_color_B = gr.Number(value=0, label="B", minimum=0, maximum=255, interactive=True)
+                    
+                    # 自定义颜色HEX
+                    with gr.Row(visible=False) as custom_color_hex:
+                        custom_color_hex_value = gr.Text(value="000000", label="Hex", interactive=True)
 
                     render_options = gr.Radio(
                         choices=LOCALES["render_mode"][DEFAULT_LANG]["choices"],
@@ -535,7 +540,11 @@ def create_ui(
                 }
 
             def change_color(colors, lang):
-                return change_visibility(colors, lang, "bg_color", custom_color)
+                return {
+                    custom_color_rgb: gr.update(visible = colors == LOCALES["bg_color"][lang]["choices"][-2]),
+                    custom_color_hex: gr.update(visible = colors == LOCALES["bg_color"][lang]["choices"][-1]),
+                }
+                
 
             def change_size_mode(size_option_item, lang):
                 choices = LOCALES["size_mode"][lang]["choices"]
@@ -650,7 +659,7 @@ def create_ui(
             color_options.input(
                 change_color,
                 inputs=[color_options, language_options],
-                outputs=[custom_color],
+                outputs=[custom_color_rgb, custom_color_hex],
             )
 
             # 图片kb
@@ -679,6 +688,7 @@ def create_ui(
                     custom_color_R,
                     custom_color_G,
                     custom_color_B,
+                    custom_color_hex_value,
                     custom_size_height_px,
                     custom_size_width_px,
                     custom_size_height_mm,
