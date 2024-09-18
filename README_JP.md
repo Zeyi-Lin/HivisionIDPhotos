@@ -51,7 +51,7 @@
 
 - オンライン体験： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
 
-- 2024.09.18: Gradioデモに**テンプレート写真の共有**機能を追加
+- 2024.09.18: Gradioデモに**テンプレート写真の共有**機能を追加、**米国式**背景オプションを追加
 - 2024.09.17: Gradioデモに**カスタム底色-HEX入力**機能を追加 | **（コミュニティ貢献）C++バージョン** - [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp) 貢献 by [zjkhahah](https://github.com/zjkhahah)
 - 2024.09.16: Gradioデモに**顔回転対応**機能を追加、カスタムサイズ入力に**ミリメートル**をサポート
 - 2024.09.14: Gradioデモに**カスタムDPI**機能を追加、日本語と韓国語を追加，**明るさ、コントラスト、鮮明度の調整**機能を追加
