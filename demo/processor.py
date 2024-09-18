@@ -349,7 +349,7 @@ class IDPhotoProcessor:
             idphoto_json,
         )
 
-        # 如果output_image_path_dict为None，
+        # 如果output_image_path_dict为None，即没有设置KB和DPI
         if output_image_path_dict is None:
             return self._create_response(
                 result_image_standard,
@@ -358,9 +358,10 @@ class IDPhotoProcessor:
                 result_image_hd_png,
                 gr.update(value=result_image_layout, visible=result_image_layout_visible),
                 gr.update(value=result_image_template, visible=result_image_template_visible),
+                gr.update(visible = result_image_template_visible),
             )
+        # 如果output_image_path_dict不为None，即设置了KB和DPI
         else:
-            # 如果output_image_path_dict不为None，
             if output_image_path_dict["layout"]["processed"]:
                 result_image_layout = output_image_path_dict["layout"]["path"]
             return self._create_response(
@@ -378,6 +379,7 @@ class IDPhotoProcessor:
                 result_image_hd_png,
                 gr.update(value=result_image_layout, visible=result_image_layout_visible),
                 gr.update(value=result_image_template, visible=result_image_template_visible),
+                gr.update(visible = result_image_template_visible),
             )
 
     # 渲染背景
@@ -573,6 +575,7 @@ class IDPhotoProcessor:
         result_image_hd_png,
         result_layout_image_gr,
         result_image_template_gr,
+        result_image_template_accordion_gr,
     ):
         """创建响应"""
         response = [
@@ -582,6 +585,7 @@ class IDPhotoProcessor:
             result_image_hd_png,
             result_layout_image_gr,
             result_image_template_gr,
+            result_image_template_accordion_gr,
             gr.update(visible=False),
         ]
 
