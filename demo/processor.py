@@ -482,6 +482,7 @@ class IDPhotoProcessor:
         result_image_hd,
         result_image_layout,
         idphoto_json,
+        format="png",
     ):
         """如果需要，调整图片大小"""
         # 设置输出路径
@@ -506,10 +507,10 @@ class IDPhotoProcessor:
         if custom_kb and custom_dpi:
             # 为所有输出路径添加DPI信息
             for key in output_paths:
-                output_paths[key]["path"] += f"_{custom_dpi}dpi.jpg"
+                output_paths[key]["path"] += f"_{custom_dpi}dpi.{format}"
             # 为标准图像添加KB信息
             output_paths["standard"]["path"] = output_paths["standard"]["path"].replace(
-                ".jpg", f"_{custom_kb}kb.jpg"
+                f".{format}", f"_{custom_kb}kb.{format}"
             )
 
             # 调整标准图像大小并保存
@@ -536,7 +537,7 @@ class IDPhotoProcessor:
         # 只有自定义DPI的情况
         elif custom_dpi:
             for key in output_paths:
-                output_paths[key]["path"] += f"_{custom_dpi}dpi.jpg"
+                output_paths[key]["path"] += f"_{custom_dpi}dpi.{format}"
                 # 保存所有图像，使用自定义DPI
                 if key == "layout" and result_image_layout is None:
                     pass
@@ -552,7 +553,7 @@ class IDPhotoProcessor:
 
         # 只有自定义KB的情况
         elif custom_kb:
-            output_paths["standard"]["path"] += f"_{custom_kb}kb.jpg"
+            output_paths["standard"]["path"] += f"_{custom_kb}kb.{format}"
             # 只调整标准图像大小并保存
             resize_image_to_kb(
                 result_image_standard,

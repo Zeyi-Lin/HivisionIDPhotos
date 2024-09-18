@@ -353,19 +353,19 @@ def create_ui(
                     img_output_standard = gr.Image(
                         label=LOCALES["standard_photo"][DEFAULT_LANG]["label"],
                         height=350,
-                        format="jpeg",
+                        format="png",
                     )
                     # 高清照
                     img_output_standard_hd = gr.Image(
                         label=LOCALES["hd_photo"][DEFAULT_LANG]["label"],
                         height=350,
-                        format="jpeg",
+                        format="png",
                     )
                 # 排版照
                 img_output_layout = gr.Image(
                     label=LOCALES["layout_photo"][DEFAULT_LANG]["label"],
                     height=350,
-                    format="jpeg",
+                    format="png",
                 )
                 # 模版照片
                 with gr.Accordion(
@@ -374,7 +374,7 @@ def create_ui(
                     img_output_template = gr.Gallery(
                         label=LOCALES["template_photo"][DEFAULT_LANG]["label"],
                         height=350,
-                        format="jpeg",
+                        format="png",
                     )
                 # 抠图图像
                 with gr.Accordion(
