@@ -361,15 +361,24 @@ docker run  -d -p 7860:7860 \
 
 # Q&A
 
-## 如何修改预设尺寸和颜色？
+## 1. 如何修改预设尺寸和颜色？
 
 - 尺寸：修改[size_list_CN.csv](demo/assets/size_list_CN.csv)后再次运行 `app.py` 即可，其中第一列为尺寸名，第二列为高度，第三列为宽度。
 - 颜色：修改[color_list_CN.csv](demo/assets/color_list_CN.csv)后再次运行 `app.py` 即可，其中第一列为颜色名，第二列为Hex值。
 
-## 如何修改水印字体？
+## 2. 如何修改水印字体？
 
 1. 将字体文件放到`hivision/plugin/font`文件夹下
 2. 修改`hivision/plugin/watermark.py`的`font_file`参数值为字体文件名
+
+## 3. 如何添加社交媒体模板照？
+
+1. 将模板图片放到`hivision/plugin/template/assets`文件夹下。模板图片是一个4通道的透明png。
+2. 在`hivision/plugin/template/assets/template_config.json`文件中添加最新的模板信息，其中`width`为模板图宽度(px)，`height`为模板图高度(px)，`anchor_points`为模板中透明区域的四个角的坐标(px)；`rotation`为透明区域相对于垂直方向的旋转角度，>0为逆时针，<0为顺时针。
+3. 在`demo/processor.py`的`_generate_image_template`函数中的`TEMPLATE_NAME_LIST`变量添加最新的模板名
+
+<img src="assets/social_template.png" width="500">
+
 
 <br>
 

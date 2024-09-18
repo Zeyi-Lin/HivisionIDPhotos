@@ -43,6 +43,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 - [API Service Deployment](#️-deploy-api-service)
 - [Docker Deployment](#-docker-deployment)
 - [Contact Us](#-contact-us)
+- [Q&A](#qa)
 - [Contributors](#contributors)
 - [Thanks for support](#thanks-for-support)
 - [License](#lincese)
@@ -353,17 +354,25 @@ docker run  -d -p 7860:7860 \
 
 <br>
 
-# 💻 Development Tips
+# Q&A
 
-## How to modify preset sizes and colors?
+## 1. How to modify preset sizes and colors?
 
 - Size: After modifying [size_list_EN.csv](demo/assets/size_list_EN.csv), run `app.py` again. The first column is the size name, the second column is the height, and the third column is the width.
 - Color: After modifying [color_list_EN.csv](demo/assets/color_list_EN.csv), run `app.py` again. The first column is the color name, and the second column is the Hex value.
 
-## How to Change the Watermark Font?
+## 2. How to Change the Watermark Font?
 
 1. Place the font file in the `hivision/plugin/font` folder.
 2. Change the `font_file` parameter value in `hivision/plugin/watermark.py` to the name of the font file.
+
+## 3. How to Add Social Media Template Photos?
+
+1. Place the template image in the `hivision/plugin/template/assets` folder. The template image should be a 4-channel transparent PNG.
+2. Add the latest template information to the `hivision/plugin/template/assets/template_config.json` file. Here, `width` is the template image width (px), `height` is the template image height (px), `anchor_points` are the coordinates (px) of the four corners of the transparent area in the template; `rotation` is the rotation angle of the transparent area relative to the vertical direction, where >0 is counterclockwise and <0 is clockwise.
+3. Add the name of the latest template to the `TEMPLATE_NAME_LIST` variable in the `_generate_image_template` function of `demo/processor.py`.
+
+<img src="assets/social_template.png" width="500">
 
 <br>
 
