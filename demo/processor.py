@@ -3,6 +3,7 @@ from hivision import IDCreator
 from hivision.error import FaceError, APIError
 from hivision.utils import (
     add_background,
+    add_background_with_image,
     resize_image_to_kb,
     add_watermark,
     save_image_dpi_to_bytes,
@@ -16,9 +17,12 @@ from hivision.plugin.template.template_calculator import generte_template_photo
 from demo.utils import range_check
 import gradio as gr
 import os
+import cv2
 import time
 from demo.locales import LOCALES
 
+
+base_path = os.path.dirname(os.path.abspath(__file__))
 
 class IDPhotoProcessor:
     def process(
@@ -217,11 +221,12 @@ class IDPhotoProcessor:
         custom_color_hex_value,
     ):
         """处理颜色模式"""
-        # 如果选择了自定义颜色
+        # 如果选择了自定义颜色BGR
         if idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-2]:
             idphoto_json["color_bgr"] = tuple(
                 map(range_check, [custom_color_R, custom_color_G, custom_color_B])
             )
+        # 如果选择了自定义颜色HEX
         elif idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-1]:
             hex_color = custom_color_hex_value
             # 将十六进制颜色转换为RGB颜色，如果长度为6，则直接转换，如果长度为7，则去掉#号再转换
@@ -238,6 +243,9 @@ class IDPhotoProcessor:
                 raise ValueError(
                     "Invalid hex color. You can only use 6 or 7 characters. For example: #FFFFFF or FFFFFF"
                 )
+        # 如果选择了美式证件照
+        elif idphoto_json["color_mode"] == LOCALES["bg_color"][language]["choices"][-3]:
+            idphoto_json["color_bgr"] = (255, 255, 255)
         else:
             hex_color = LOCALES["bg_color"][language]["develop"][color_option]
             idphoto_json["color_bgr"] = tuple(
@@ -311,7 +319,7 @@ class IDPhotoProcessor:
 
         # 渲染背景
         result_image_standard, result_image_hd = self._render_background(
-            result_image_standard, result_image_hd, idphoto_json
+            result_image_standard, result_image_hd, idphoto_json, language
         )
 
         # 添加水印
@@ -383,22 +391,36 @@ class IDPhotoProcessor:
             )
 
     # 渲染背景
-    def _render_background(self, result_image_standard, result_image_hd, idphoto_json):
+    def _render_background(self, result_image_standard, result_image_hd, idphoto_json, language):
         """渲染背景"""
         render_modes = {0: "pure_color", 1: "updown_gradient", 2: "center_gradient"}
         render_mode = render_modes[idphoto_json["render_mode"]]
 
-        result_image_standard = np.uint8(
-            add_background(
-                result_image_standard, bgr=idphoto_json["color_bgr"], mode=render_mode
+        if idphoto_json["color_mode"] != LOCALES["bg_color"][language]["choices"][-3]:
+            result_image_standard = np.uint8(
+                add_background(
+                    result_image_standard, bgr=idphoto_json["color_bgr"], mode=render_mode
+                )
             )
-        )
-        result_image_hd = np.uint8(
-            add_background(
-                result_image_hd, bgr=idphoto_json["color_bgr"], mode=render_mode
+            result_image_hd = np.uint8(
+                add_background(
+                    result_image_hd, bgr=idphoto_json["color_bgr"], mode=render_mode
+                )
             )
-        )
-
+        # 如果选择了美式证件照
+        else:
+            result_image_standard = np.uint8(
+                add_background_with_image(
+                    result_image_standard, 
+                    background_image=cv2.imread(os.path.join(base_path, "assets", "american-style.png"))
+                )
+            )
+            result_image_hd = np.uint8(
+                add_background_with_image(
+                    result_image_hd, 
+                    background_image=cv2.imread(os.path.join(base_path, "assets", "american-style.png"))
+                )
+            )
         return result_image_standard, result_image_hd
 
     # 生成排版照片
@@ -427,7 +449,8 @@ class IDPhotoProcessor:
         )
 
         return result_image_layout, True
-
+    
+    # 生成模板照片
     def _generate_image_template(
         self,
         idphoto_json,

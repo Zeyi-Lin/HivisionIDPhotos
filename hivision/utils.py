@@ -298,6 +298,36 @@ def add_background(input_image, bgr=(0, 0, 0), mode="pure_color"):
 
     return output
 
+def add_background_with_image(input_image: np.ndarray, background_image: np.ndarray) -> np.ndarray:
+    """
+    本函数的功能为为透明图像加上背景。
+    :param input_image: numpy.array(4 channels), 透明图像
+    :param background_image: numpy.array(3 channels), 背景图像
+    :return: output: 合成好的输出图像
+    """
+    height, width = input_image.shape[:2]
+    try:
+        b, g, r, a = cv2.split(input_image)
+    except ValueError:
+        raise ValueError(
+            "The input image must have 4 channels. 输入图像必须有4个通道，即透明图像。"
+        )
+
+    # 确保背景图像与输入图像大小一致
+    background_image = cv2.resize(background_image, (width, height), cv2.INTER_AREA)
+    background_image = cv2.cvtColor(background_image, cv2.COLOR_BGR2RGB)
+    b2, g2, r2 = cv2.split(background_image)
+
+    a_cal = a / 255.0
+
+    # 修正混合公式
+    output = cv2.merge(
+        (b * a_cal + b2 * (1 - a_cal),
+         g * a_cal + g2 * (1 - a_cal),
+         r * a_cal + r2 * (1 - a_cal))
+    )
+
+    return output.astype(np.uint8)
 
 def add_watermark(
     image, text, size=50, opacity=0.5, angle=45, color="#8B8B1B", space=75
