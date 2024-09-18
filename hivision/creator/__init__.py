@@ -144,9 +144,10 @@ class IDCreator:
             print("执行人脸对齐")
             print("旋转角度：", ctx.face["roll_angle"])
             # 根据角度旋转原图和抠图
+            b, g, r, a = cv2.split(ctx.matting_image)
             ctx.origin_image, ctx.matting_image, _, _, _, _ = rotate_bound_4channels(
-                ctx.origin_image,
-                cv2.split(ctx.matting_image)[-1],
+                cv2.merge((b, g, r)),
+                a,
                 -1 * ctx.face["roll_angle"],
             )
 
