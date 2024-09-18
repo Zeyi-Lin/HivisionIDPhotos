@@ -73,6 +73,7 @@ def create_ui(
                 with gr.Tab(
                     LOCALES["key_param"][DEFAULT_LANG]["label"]
                 ) as key_parameter_tab:
+                    # 尺寸模式
                     with gr.Row():
                         mode_options = gr.Radio(
                             choices=LOCALES["size_mode"][DEFAULT_LANG]["choices"],
@@ -80,11 +81,13 @@ def create_ui(
                             value=LOCALES["size_mode"][DEFAULT_LANG]["choices"][0],
                             min_width=520,
                         )
+                        # 人脸对齐
                         face_alignment_options = gr.CheckboxGroup(
                             label=LOCALES["face_alignment"][DEFAULT_LANG]["label"],
                             choices=LOCALES["face_alignment"][DEFAULT_LANG]["choices"],
                             interactive=True,
                         )
+                    # 尺寸列表
                     with gr.Row(visible=True) as size_list_row:
                         size_list_options = gr.Dropdown(
                             choices=LOCALES["size_list"][DEFAULT_LANG]["choices"],
@@ -92,6 +95,7 @@ def create_ui(
                             value=LOCALES["size_list"][DEFAULT_LANG]["choices"][0],
                             elem_id="size_list",
                         )
+                    # 自定义尺寸px
                     with gr.Row(visible=False) as custom_size_px:
                         custom_size_height_px = gr.Number(
                             value=413,
@@ -103,6 +107,7 @@ def create_ui(
                             label=LOCALES["custom_size_px"][DEFAULT_LANG]["width"],
                             interactive=True,
                         )
+                    # 自定义尺寸mm
                     with gr.Row(visible=False) as custom_size_mm:
                         custom_size_height_mm = gr.Number(
                             value=35,
@@ -115,6 +120,7 @@ def create_ui(
                             interactive=True,
                         )
 
+                    # 背景颜色
                     color_options = gr.Radio(
                         choices=LOCALES["bg_color"][DEFAULT_LANG]["choices"],
                         label=LOCALES["bg_color"][DEFAULT_LANG]["label"],
@@ -131,6 +137,7 @@ def create_ui(
                     with gr.Row(visible=False) as custom_color_hex:
                         custom_color_hex_value = gr.Text(value="000000", label="Hex", interactive=True)
 
+                    # 渲染模式
                     render_options = gr.Radio(
                         choices=LOCALES["render_mode"][DEFAULT_LANG]["choices"],
                         label=LOCALES["render_mode"][DEFAULT_LANG]["label"],
