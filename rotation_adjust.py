@@ -26,7 +26,6 @@ def rotate_bound(image: np.ndarray, angle: float, center=None):
             - dW (int): 宽度变化量
             - dH (int): 高度变化量
     """
-    print("rotate_bound", image.shape)
     (h, w) = image.shape[:2]
     if center is None:
         (cX, cY) = (w / 2, h / 2)

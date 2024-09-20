@@ -101,6 +101,10 @@ class IDCreator:
             face_alignment=face_alignment,
         )
 
+
+        # 总的开始时间
+        total_start_time = time.time()
+        
         self.ctx = Context(params)
         ctx = self.ctx
         ctx.processing_image = image
@@ -114,12 +118,11 @@ class IDCreator:
         # 如果仅裁剪，则不进行抠图
         if not ctx.params.crop_only:
             # 调用抠图工作流
-            print("[0]  Start Human Matting...")
+            print("[1]  Start Human Matting...")
             start_matting_time = time.time()
             self.matting_handler(ctx)
             end_matting_time = time.time()
-            print(f"[0]  Human Matting Time: {end_matting_time - start_matting_time:.3f}s")
-            print("[0]  End Human Matting...")
+            print(f"[1]  Human Matting Time: {end_matting_time - start_matting_time:.3f}s")
             self.after_matting and self.after_matting(ctx)
         # 如果进行抠图
         else:
@@ -127,12 +130,11 @@ class IDCreator:
 
 
         # 2. ------------------美颜------------------
-        print("[1]  Start Beauty...")
+        print("[2]  Start Beauty...")
         start_beauty_time = time.time()
         self.beauty_handler(ctx)
         end_beauty_time = time.time()
-        print(f"[1]  Beauty Time: {end_beauty_time - start_beauty_time:.3f}s")
-        print("[1]  End Beauty...")
+        print(f"[2]  Beauty Time: {end_beauty_time - start_beauty_time:.3f}s")
 
         # 如果仅换底，则直接返回抠图结果
         if ctx.params.change_bg_only:
@@ -148,22 +150,19 @@ class IDCreator:
             return ctx.result
 
         # 3. ------------------人脸检测------------------
-        print("[2]  Start Face Detection...")
+        print("[3]  Start Face Detection...")
         start_detection_time = time.time()
         self.detection_handler(ctx)
         end_detection_time = time.time()
-        print(f"[2]  Face Detection Time: {end_detection_time - start_detection_time:.3f}s")
-        print("[2]  End Face Detection...")
+        print(f"[3]  Face Detection Time: {end_detection_time - start_detection_time:.3f}s")
         self.after_detect and self.after_detect(ctx)
 
         # 3.1 ------------------人脸对齐------------------
         if ctx.params.face_alignment and abs(ctx.face["roll_angle"]) > 2:
-            print("[2.1]  Start Face Alignment...")
+            print("[3.1]  Start Face Alignment...")
             start_alignment_time = time.time()
             from hivision.creator.rotation_adjust import rotate_bound_4channels
 
-            print("执行人脸对齐")
-            print("旋转角度：", ctx.face["roll_angle"])
             # 根据角度旋转原图和抠图
             b, g, r, a = cv2.split(ctx.matting_image)
             ctx.origin_image, ctx.matting_image, _, _, _, _ = rotate_bound_4channels(
@@ -176,18 +175,16 @@ class IDCreator:
             self.detection_handler(ctx)
             self.after_detect and self.after_detect(ctx)
             end_alignment_time = time.time()
-            print(f"[2.1]  Face Alignment Time: {end_alignment_time - start_alignment_time:.3f}s")
-            print("[2.1]  End Face Alignment...")
+            print(f"[3.1]  Face Alignment Time: {end_alignment_time - start_alignment_time:.3f}s")
 
         # 4. ------------------图像调整------------------
-        print("[3]  Start Image Post-Adjustment...")
+        print("[4]  Start Image Post-Adjustment...")
         start_adjust_time = time.time()
         result_image_hd, result_image_standard, clothing_params, typography_params = (
             adjust_photo(ctx)
         )
         end_adjust_time = time.time()
-        print(f"[3]  Image Post-Adjustment Time: {end_adjust_time - start_adjust_time:.3f}s")
-        print("[3]  End Image Post-Adjustment...")
+        print(f"[4]  Image Post-Adjustment Time: {end_adjust_time - start_adjust_time:.3f}s")
 
         # 5. ------------------返回结果------------------
         ctx.result = Result(
@@ -199,5 +196,9 @@ class IDCreator:
             face=ctx.face,
         )
         self.after_all and self.after_all(ctx)
+
+        # 总的结束时间
+        total_end_time = time.time()
+        print(f"[Total]  Total Time: {total_end_time - total_start_time:.3f}s")
 
         return ctx.result
