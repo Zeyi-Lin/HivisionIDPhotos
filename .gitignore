@@ -10,6 +10,7 @@ demo/kb_output/*.png
 scripts/sync_swanhub.py
 scripts/sync_huggingface.py
 scripts/sync_modelscope.py
+scripts/sync_all.py
 **/flagged/
 # build outputs
 dist
