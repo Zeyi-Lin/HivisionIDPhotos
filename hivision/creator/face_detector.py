@@ -173,7 +173,6 @@ def detect_face_retinaface(ctx: Context):
     global RETINAFCE_SESS
 
     if RETINAFCE_SESS is None:
-        print("首次加载RetinaFace模型...")
         # 计算用时
         tic = time()
         faces_dets, sess = retinaface_detect_faces(
@@ -182,7 +181,6 @@ def detect_face_retinaface(ctx: Context):
             sess=None,
         )
         RETINAFCE_SESS = sess
-        print("首次RetinaFace模型推理用时: {:.4f}s".format(time() - tic))
     else:
         tic = time()
         faces_dets, _ = retinaface_detect_faces(
@@ -190,7 +188,6 @@ def detect_face_retinaface(ctx: Context):
             os.path.join(base_dir, "retinaface/weights/retinaface-resnet50.onnx"),
             sess=RETINAFCE_SESS,
         )
-        print("二次RetinaFace模型推理用时: {:.4f}s".format(time() - tic))
 
     faces_num = len(faces_dets)
     faces_landmarks = []
