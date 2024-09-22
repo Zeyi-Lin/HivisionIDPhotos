@@ -213,3 +213,7 @@ def detect_face_retinaface(ctx: Context):
     dx = right_eye[0] - left_eye[0]
     roll_angle = np.degrees(np.arctan2(dy, dx))
     ctx.face["roll_angle"] = roll_angle
+
+    # 如果RUN_MODE不是野兽模式，则释放模型
+    if os.getenv("RUN_MODE") == "beast":
+        RETINAFCE_SESS = None

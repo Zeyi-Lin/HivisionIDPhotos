@@ -65,6 +65,11 @@ if __name__ == "__main__":
         FACE_DETECT_MODELS_CHOICE,
         LANGUAGE,
     )
+    
+    # 如果RUN_MODE是Beast，打印已开启野兽模式
+    if os.getenv("RUN_MODE") == "beast":
+        print("[Beast mode activated.] 已开启野兽模式。")
+
     demo.launch(
         server_name=args.host,
         server_port=args.port,
