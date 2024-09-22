@@ -3,7 +3,7 @@ import cv2
 import argparse
 import numpy as np
 from hivision.error import FaceError
-from hivision.utils import hex_to_rgb, resize_image_to_kb, add_background
+from hivision.utils import hex_to_rgb, resize_image_to_kb, add_background, save_image_dpi_to_bytes
 from hivision import IDCreator
 from hivision.creator.layout_calculator import (
     generate_layout_photo,
@@ -18,7 +18,6 @@ INFERENCE_TYPE = [
     "human_matting",
     "add_background",
     "generate_layout_photos",
-    "watermark",
     "idphoto_crop",
 ]
 MATTING_MODEL = [
@@ -48,14 +47,9 @@ parser.add_argument("-o", "--output_image_dir", help="保存图像路径", requi
 parser.add_argument("--height", help="证件照尺寸-高", default=413)
 parser.add_argument("--width", help="证件照尺寸-宽", default=295)
 parser.add_argument("-c", "--color", help="证件照背景色", default="638cce")
+parser.add_argument("--hd", type=bool, help="是否输出高清照", default=True)
 parser.add_argument(
     "-k", "--kb", help="输出照片的 KB 值，仅对换底和制作排版照生效", default=None
-)
-parser.add_argument(
-    "--matting_model",
-    help="抠图模型权重",
-    default="hivision_modnet",
-    choices=MATTING_MODEL,
 )
 parser.add_argument(
     "-r",
@@ -64,6 +58,24 @@ parser.add_argument(
     help="底色合成的模式，有 0:纯色、1:上下渐变、2:中心渐变 可选",
     choices=RENDER,
     default=0,
+)
+parser.add_argument(
+    "--dpi",
+    type=int,
+    help="输出照片的 DPI 值",
+    default=300,
+)
+parser.add_argument(
+    "--face_align",
+    type=bool,
+    help="是否进行人脸旋转矫正",
+    default=False,
+)
+parser.add_argument(
+    "--matting_model",
+    help="抠图模型权重",
+    default="modnet_photographic_portrait_matting",
+    choices=MATTING_MODEL,
 )
 parser.add_argument(
     "--face_detect_model",
@@ -86,17 +98,17 @@ if args.type == "idphoto":
     # 将字符串转为元组
     size = (int(args.height), int(args.width))
     try:
-        result = creator(input_image, size=size)
+        result = creator(input_image, size=size, face_alignment=args.face_align)
     except FaceError:
         print("人脸数量不等于 1，请上传单张人脸的图像。")
     else:
         # 保存标准照
-        cv2.imwrite(args.output_image_dir, result.standard)
+        save_image_dpi_to_bytes(cv2.cvtColor(result.standard, cv2.COLOR_RGBA2BGRA), args.output_image_dir, dpi=args.dpi)
 
         # 保存高清照
         file_name, file_extension = os.path.splitext(args.output_image_dir)
         new_file_name = file_name + "_hd" + file_extension
-        cv2.imwrite(new_file_name, result.hd)
+        save_image_dpi_to_bytes(cv2.cvtColor(result.hd, cv2.COLOR_RGBA2BGRA), new_file_name, dpi=args.dpi)
 
 # 如果模式是人像抠图
 elif args.type == "human_matting":
