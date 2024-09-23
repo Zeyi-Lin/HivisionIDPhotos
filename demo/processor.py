@@ -61,16 +61,26 @@ class IDPhotoProcessor:
         contrast_strength=0,
         sharpen_strength=0,
         saturation_strength=0,
-        face_alignment_option=False,
-    ):
+        plugin_option=[],
+    ):        
         # 初始化参数
         top_distance_min = top_distance_max - 0.02
         # 得到render_option在LOCALES["render_mode"][language]["choices"]中的索引
         render_option_index = LOCALES["render_mode"][language]["choices"].index(
             render_option
         )
+        # 读取插件选项
+        if LOCALES["plugin"][language]["choices"][0] in plugin_option:
+            face_alignment_option = True
+        else:
+            face_alignment_option = False
+        if LOCALES["plugin"][language]["choices"][1] in plugin_option:
+            layout_photo_crop_line_option = True
+        else:
+            layout_photo_crop_line_option = False
+        
         idphoto_json = self._initialize_idphoto_json(
-            mode_option, color_option, render_option_index, image_kb_options
+            mode_option, color_option, render_option_index, image_kb_options, layout_photo_crop_line_option
         )
 
         # 处理尺寸模式
@@ -153,6 +163,7 @@ class IDPhotoProcessor:
         color_option,
         render_option,
         image_kb_options,
+        layout_photo_crop_line_option,
     ):
         """初始化idphoto_json字典"""
         return {
@@ -162,6 +173,7 @@ class IDPhotoProcessor:
             "image_kb_mode": image_kb_options,
             "custom_image_kb": None,
             "custom_image_dpi": None,
+            "layout_photo_crop_line_option": layout_photo_crop_line_option,
         }
 
     # 处理尺寸模式
@@ -446,6 +458,7 @@ class IDPhotoProcessor:
             typography_rotate,
             height=idphoto_json["size"][0],
             width=idphoto_json["size"][1],
+            crop_line=idphoto_json["layout_photo_crop_line_option"],
         )
 
         return result_image_layout, True

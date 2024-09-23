@@ -118,23 +118,63 @@ def generate_layout_array(input_height, input_width):
 
 
 def generate_layout_image(
-    input_image, typography_arr, typography_rotate, width=295, height=413
+    input_image, typography_arr, typography_rotate, width=295, height=413, crop_line:bool=False,
 ):
+    # 定义画布的宽度和高度
     LAYOUT_WIDTH = 1746
     LAYOUT_HEIGHT = 1180
+    
+    # 创建一个白色背景的空白画布
     white_background = np.zeros([LAYOUT_HEIGHT, LAYOUT_WIDTH, 3], np.uint8)
     white_background.fill(255)
+    
+    # 如果输入图像的高度不等于指定高度，则调整图像大小
     if input_image.shape[0] != height:
         input_image = cv2.resize(input_image, (width, height))
+    
+    # 如果需要旋转排版，则对图像进行转置和垂直镜像
     if typography_rotate:
         input_image = cv2.transpose(input_image)
         input_image = cv2.flip(input_image, 0)  # 0 表示垂直镜像
 
+        # 交换高度和宽度
         height, width = width, height
+    
+    # 将图像按照排版数组中的位置放置到白色背景上
     for arr in typography_arr:
         locate_x, locate_y = arr[0], arr[1]
         white_background[locate_y : locate_y + height, locate_x : locate_x + width] = (
             input_image
         )
 
+    if crop_line:
+        # 添加裁剪线
+        line_color = (200, 200, 200)  # 浅灰色
+        line_thickness = 1
+
+        # 初始化裁剪线位置列表
+        vertical_lines = []
+        horizontal_lines = []
+
+        # 根据排版数组添加裁剪线
+        for arr in typography_arr:
+            x, y = arr[0], arr[1]
+            if x not in vertical_lines:
+                vertical_lines.append(x)
+            if x + width not in vertical_lines:
+                vertical_lines.append(x + width)
+            if y not in horizontal_lines:
+                horizontal_lines.append(y)
+            if y + height not in horizontal_lines:
+                horizontal_lines.append(y + height)
+
+        # 绘制垂直裁剪线
+        for x in vertical_lines:
+            cv2.line(white_background, (x, 0), (x, LAYOUT_HEIGHT), line_color, line_thickness)
+
+        # 绘制水平裁剪线
+        for y in horizontal_lines:
+            cv2.line(white_background, (0, y), (LAYOUT_WIDTH, y), line_color, line_thickness)
+
+    # 返回排版后的图像
     return white_background

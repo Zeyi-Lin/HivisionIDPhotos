@@ -667,22 +667,22 @@ LOCALES = {
             "label": "포화도 강도",
         },
     },
-    "face_alignment": {
+    "plugin": {
         "en": {
-            "label": "Face Alignment",
-            "choices": ["Open"],
+            "label": "🤖Plugin",
+            "choices": ["Face Alignment", "Layout Photo Crop Line"],
         },
         "zh": {
-            "label": "人脸旋转对齐",
-            "choices": ["开启"],
+            "label": "🤖插件",
+            "choices": ["人脸旋转对齐", "排版照裁剪线"],
         },
         "ja": {
-            "label": "顔の整列",
-            "choices": ["開始"],
+            "label": "🤖プラグイン",
+            "choices": ["顔の整列", "レイアウト写真の切り取り線"],
         },
         "ko": {
-            "label": "얼굴 정렬",
-            "choices": ["시작"],
+            "label": "🤖플러그인",
+            "choices": ["얼굴 정렬", "레이아웃 사진 자르기 선"],
         },
     },
     "template_photo": {
