@@ -6,7 +6,7 @@ from hivision.error import FaceError
 from hivision.utils import hex_to_rgb, resize_image_to_kb, add_background, save_image_dpi_to_bytes
 from hivision import IDCreator
 from hivision.creator.layout_calculator import (
-    generate_layout_photo,
+    generate_layout_array,
     generate_layout_image,
 )
 from hivision.creator.choose_handler import choose_handler
@@ -141,7 +141,7 @@ elif args.type == "generate_layout_photos":
 
     size = (int(args.height), int(args.width))
 
-    typography_arr, typography_rotate = generate_layout_photo(
+    typography_arr, typography_rotate = generate_layout_array(
         input_height=size[0], input_width=size[1]
     )
 

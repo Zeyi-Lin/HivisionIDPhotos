@@ -8,7 +8,7 @@ r"""
     证件照调整
 """
 from .context import Context
-from .layout_calculator import generate_layout_photo
+from .layout_calculator import generate_layout_array
 import hivision.creator.utils as U
 import numpy as np
 import math
@@ -111,7 +111,7 @@ def adjust_photo(ctx: Context):
     }
 
     # Step7. 排版照参数获取
-    typography_arr, typography_rotate = generate_layout_photo(
+    typography_arr, typography_rotate = generate_layout_array(
         input_height=standard_size[0], input_width=standard_size[1]
     )
 
