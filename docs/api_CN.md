@@ -36,11 +36,54 @@ python deploy_api.py
 > 问：为什么这么设计？  
 > 答：因为在实际产品中，经常用户会频繁切换底色预览效果，直接给透明底图像，由前端 js 代码合成颜色是更好体验的做法。
 
+**请求参数：**
+
+| 参数名 | 类型 | 必填 | 说明 |
+| :--- | :--- | :--- | :--- |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| height | int | 否 | 标准证件照高度，默认为`413` |
+| width | int | 否 | 标准证件照宽度，默认为`295` |
+| human_matting_model | str | 否 | 人像分割模型，默认为`modnet_photographic_portrait_matting`。可选值为`modnet_photographic_portrait_matting`、`hivision_modnet`、`rmbg-1.4`、`birefnet-v1-lite` |
+| face_detect_model | str | 否 | 人脸检测模型，默认为`mtcnn`。可选值为`mtcnn`、`face_plusplus`、`retinaface-resnet50` |
+| hd | bool | 否 | 是否生成高清证件照，默认为`true` |
+| dpi | int | 否 | 图像分辨率，默认为`300` |
+| face_alignment | bool | 否 | 是否进行人脸对齐，默认为`true` |
+| head_measure_ratio | float | 否 | 面部面积与照片面积的比例，默认为`0.2` |
+| head_height_ratio | float | 否 | 面部中心与照片顶部的高度比例，默认为`0.45` |
+| top_distance_max | float | 否 | 头部与照片顶部距离的比例最大值，默认为`0.12` |
+| top_distance_min | float | 否 | 头部与照片顶部距离的比例最小值，默认为`0.1` |
+
+
+**返回参数：**
+
+| 参数名 | 类型 | 说明 |
+| :--- | :--- | :--- |
+| status | int | 状态码，`true`表示成功 |
+| image_base64_standard | str | 标准证件照的base64编码 |
+| image_base64_hd | str | 高清证件照的base64编码。如`hd`参数为`false`，则不返回该参数 |
+
 ### 2.添加背景色
 
 接口名：`add_background`
 
 `添加背景色`接口的逻辑是接收一张 RGBA 图像（透明图），根据`color`添加背景色，合成一张 JPG 图像。
+
+**请求参数：**
+
+| 参数名 | 类型 | 必填 | 说明 |
+| :--- | :--- | :--- | :--- |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGBA四通道图像。 |
+| color | str | 否 | 背景色HEX值，默认为`000000` |
+| kb | int | 否 | 输出照片的 KB 值，默认为`None`，即不对图像进行KB调整。|
+| render | int | 否 | 渲染模式，默认为`0`。可选值为`0`、`1`、`2`，分别对应`纯色`、`上下渐变`、`中心渐变`。 |
+| dpi | int | 否 | 图像分辨率，默认为`300` |
+
+**返回参数：**
+
+| 参数名 | 类型 | 说明 |
+| :--- | :--- | :--- |
+| status | int | 状态码，`true`表示成功 |
+| image_base64 | str | 添加背景色之后的图像的base64编码 |
 
 ### 3.生成六寸排版照
 
@@ -48,11 +91,44 @@ python deploy_api.py
 
 `生成六寸排版照`接口的逻辑是接收一张 RGB 图像（一般为添加背景色之后的证件照），根据`size`进行照片排布，然后生成一张六寸排版照。
 
+**请求参数：**
+
+| 参数名 | 类型 | 必填 | 说明 |
+| :--- | :--- | :--- | :--- |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| height | int | 否 | 输入图像的高度，默认为`413` |
+| width | int | 否 | 输入图像的宽度，默认为`295` |
+| kb | int | 否 | 输出照片的 KB 值，默认为`None`，即不对图像进行KB调整。|
+| dpi | int | 否 | 图像分辨率，默认为`300` |
+
+**返回参数：**
+
+| 参数名 | 类型 | 说明 |
+| :--- | :--- | :--- |
+| status | int | 状态码，`true`表示成功 |
+| image_base64 | str | 六寸排版照的base64编码 |
+
 ### 4.人像抠图
 
 接口名：`human_matting`
 
 `人像抠图`接口的逻辑是接收一张 RGB 图像，输出一张标准抠图人像照和高清抠图人像照（无任何背景填充）。
+
+**请求参数：**
+
+| 参数名 | 类型 | 必填 | 说明 |
+| :--- | :--- | :--- | :--- |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| human_matting_model | str | 否 | 人像分割模型，默认为`modnet_photographic_portrait_matting`。可选值为`modnet_photographic_portrait_matting`、`hivision_modnet`、`rmbg-1.4`、`birefnet-v1-lite` |
+| dpi | int | 否 | 图像分辨率，默认为`300` |
+
+**返回参数：**
+
+| 参数名 | 类型 | 说明 |
+| :--- | :--- | :--- |
+| status | int | 状态码，`true`表示成功 |
+| image_base64 | str | 抠图人像照的base64编码 |
+
 
 ### 5.图像加水印
 
@@ -60,6 +136,25 @@ python deploy_api.py
 
 `图像加水印`接口的功能是接收一个水印文本，然后在原图上添加指定的水印。用户可以指定水印的位置、透明度和大小等属性，以便将水印无缝地融合到原图中。
 
+**请求参数：**
+
+| 参数名 | 类型 | 必填 | 说明 |
+| :--- | :--- | :--- | :--- |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| text | str | 否 | 水印文本，默认为`Hello` |
+| size | int | 否 | 水印字体大小，默认为`20` |
+| opacity | float | 否 | 水印透明度，默认为`0.5` |
+| angle | int | 否 | 水印旋转角度，默认为`30` |
+| color | str | 否 | 水印颜色，默认为`#000000` |
+| space | int | 否 | 水印间距，默认为`25` |
+| dpi | int | 否 | 图像分辨率，默认为`300` |
+
+**返回参数：**
+
+| 参数名 | 类型 | 说明 |
+| :--- | :--- | :--- |
+| status | int | 状态码，`true`表示成功 |
+| image_base64 | str | 添加水印之后的图像的base64编码 |
 
 ### 6.设置图像KB大小
 
@@ -67,11 +162,51 @@ python deploy_api.py
 
 `设置图像KB大小`接口的功能是接收一张图像和目标文件大小（以KB为单位），如果设置的KB值小于原文件，则调整压缩率；如果设置的KB值大于源文件，则通过给文件头添加信息的方式调大KB值，目标是让图像的最终大小与设置的KB值一致。
 
+**请求参数：**
+
+| 参数名 | 类型 | 必填 | 说明 |
+| :--- | :--- | :--- | :--- |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| kb | int | 否 | 输出照片的 KB 值，默认为`None`，即不对图像进行KB调整。|
+| dpi | int | 否 | 图像分辨率，默认为`300` |
+
+**返回参数：**
+
+| 参数名 | 类型 | 说明 |
+| :--- | :--- | :--- |
+| status | int | 状态码，`true`表示成功 |
+| image_base64 | str | 设置KB大小之后的图像的base64编码 |
+
+
+
 ### 7.证件照裁切
 
 接口名：`idphoto_crop`
 
 `证件照裁切`接口的功能是接收一张 RBGA 图像（透明图），输出一张标准证件照和一张高清证件照。
+
+**请求参数：**
+
+| 参数名 | 类型 | 必填 | 说明 |
+| :--- | :--- | :--- | :--- |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGBA四通道图像。 |
+| height | int | 否 | 标准证件照高度，默认为`413` |
+| width | int | 否 | 标准证件照宽度，默认为`295` |
+| face_detect_model | str | 否 | 人脸检测模型，默认为`mtcnn`。可选值为`mtcnn`、`face_plusplus`、`retinaface-resnet50` |
+| hd | bool | 否 | 是否生成高清证件照，默认为`true` |
+| dpi | int | 否 | 图像分辨率，默认为`300` |
+| head_measure_ratio | float | 否 | 面部面积与照片面积的比例，默认为`0.2` |
+| head_height_ratio | float | 否 | 面部中心与照片顶部的高度比例，默认为`0.45` |
+| top_distance_max | float | 否 | 头部与照片顶部距离的比例最大值，默认为`0.12` |
+| top_distance_min | float | 否 | 头部与照片顶部距离的比例最小值，默认为`0.1` |
+
+**返回参数：**
+
+| 参数名 | 类型 | 说明 |
+| :--- | :--- | :--- |
+| status | int | 状态码，`true`表示成功 |
+| image_base64 | str | 证件照裁切之后的图像的base64编码 |
+| image_base64_hd | str | 高清证件照裁切之后的图像的base64编码，如`hd`参数为`false`，则不返回该参数 |
 
 <br>
 
