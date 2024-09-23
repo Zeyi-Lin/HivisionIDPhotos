@@ -256,8 +256,6 @@ python deploy_api.py
 详细请求方式请参考 [API 文档](docs/api_CN.md)，包含以下请求示例：
 - [cURL](docs/api_CN.md#curl-请求示例)
 - [Python](docs/api_CN.md#python-请求示例)
-- [Java](docs/api_CN.md#java-请求示例)
-- [Javascript](docs/api_CN.md#javascript-请求示例)
 
 <br>
 

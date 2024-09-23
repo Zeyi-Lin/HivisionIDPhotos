@@ -1,6 +1,6 @@
 # API Docs
 
-[English](api_EN.md) / 中文 / [日本語](api_JP.md) / [한국어](api_KO.md)
+[English](api_EN.md) / 中文
 
 
 ## 目录
