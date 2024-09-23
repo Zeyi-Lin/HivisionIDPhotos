@@ -25,3 +25,6 @@ test/temp/*
 
 .python-version
 
+# Ignore .png and .jpg files in the root directory
+/*.png
+/*.jpg

@@ -51,13 +51,13 @@
 
 - オンライン体験： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
 
+- 2024.09.22: Gradioデモに**ビーストモード**と**DPI**パラメータを追加
 - 2024.09.18: Gradioデモに**テンプレート写真の共有**機能を追加、**米国式**背景オプションを追加
 - 2024.09.17: Gradioデモに**カスタム底色-HEX入力**機能を追加 | **（コミュニティ貢献）C++バージョン** - [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp) 貢献 by [zjkhahah](https://github.com/zjkhahah)
 - 2024.09.16: Gradioデモに**顔回転対応**機能を追加、カスタムサイズ入力に**ミリメートル**をサポート
 - 2024.09.14: Gradioデモに**カスタムDPI**機能を追加、日本語と韓国語を追加，**明るさ、コントラスト、鮮明度の調整**機能を追加
 - 2024.09.12: Gradioデモに**ホワイトニング**機能を追加 | APIインターフェースに**ウォーターマーク追加**、**写真のKBサイズ設定**、**証明写真のトリミング**を追加
 - 2024.09.11: Gradioデモに**透過画像表示とダウンロード**機能を追加しました。
-- 2024.09.09: 新しい**背景除去モデル** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) を追加 | Gradioに**高度なパラメータ設定**および**ウォーターマーク**タブを追加
 
 <br>
 
@@ -248,8 +248,6 @@ python deploy_api.py
 詳細なリクエスト方法は[APIドキュメント](docs/api_EN.md)を参照してください。以下のリクエスト例が含まれます：
 - [cURL](docs/api_EN.md#curl-request-examples)
 - [Python](docs/api_EN.md#python-request-example)
-- [Java](docs/api_EN.md#java-request-example)
-- [Javascript](docs/api_EN.md#javascript-request-examples)
 
 <br>
 

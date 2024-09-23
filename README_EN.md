@@ -54,6 +54,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 
 - Online Experience: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
 
+- 2024.09.22: Gradio Demo adds **Beast Mode** and **DPI** parameter
 - 2024.09.18: Gradio Demo adds **Share Template Photos** feature and **American Style** background option
 - 2024.09.17: Gradio Demo adds **Custom Background Color-HEX Input** feature | **(Community Contribution) C++ Version** - [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp) contributed by [zjkhahah](https://github.com/zjkhahah)
 - 2024.09.16: Gradio Demo adds **Face Rotation Alignment** feature, custom size input supports **millimeters**
@@ -61,7 +62,6 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 - 2024.09.12: Gradio Demo adds **Whitening** feature | API interface adds **Watermark**, **Set Photo KB Size**, **ID Photo Cropping**
 - 2024.09.11: Added **transparent image display and download** feature to Gradio Demo.
 - 2024.09.10: Added a new **face detection model** Retinaface-resnet50, which offers higher detection accuracy at a slightly slower speed compared to mtcnn. Recommended for use.
-- 2024.09.09: Added a new **Background Removal Model** [BiRefNet-v1-lite](https://github.com/ZhengPeng7/BiRefNet) | Gradio added **Advanced Parameter Settings** and **Watermark** tabs
 
 <br>
 
@@ -252,8 +252,6 @@ python deploy_api.py
 For detailed request methods, please refer to the [API Documentation](docs/api_EN.md), which includes the following request examples:
 - [cURL](docs/api_EN.md#curl-request-examples)
 - [Python](docs/api_EN.md#python-request-example)
-- [Java](docs/api_EN.md#java-request-example)
-- [Javascript](docs/api_EN.md#javascript-request-examples)
 
 <br>
 
