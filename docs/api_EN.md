@@ -68,8 +68,11 @@ curl -X POST "http://127.0.0.1:8080/idphoto" \
 -F "input_image=@demo/images/test0.jpg" \
 -F "height=413" \
 -F "width=295" \
--F "human_matting_model=hivision_modnet" \
--F "face_detect_model=mtcnn"
+-F "human_matting_model=modnet_photographic_portrait_matting" \
+-F "face_detect_model=mtcnn" \
+-F "dpi=300" \
+-F "hd=true" \
+-F "face_alignment=true"
 ```
 
 ### 2. Add Background Color
@@ -79,7 +82,8 @@ curl -X POST "http://127.0.0.1:8080/add_background" \
 -F "input_image=@test.png" \
 -F "color=638cce" \
 -F "kb=200" \
--F "render=0"
+-F "render=0" \
+-F "dpi=300"
 ```
 
 ### 3. Generate 6-inch Layout Photo
@@ -89,7 +93,8 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 -F "input_image=@test.jpg" \
 -F "height=413" \
 -F "width=295" \
--F "kb=200"
+-F "kb=200" \
+-F "dpi=300"
 ```
 
 ### 4. Human Matting
@@ -97,7 +102,8 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 ```bash
 curl -X POST "http://127.0.0.1:8080/human_matting" \
 -F "input_image=@demo/images/test0.jpg" \
--F "human_matting_model=hivision_modnet"
+-F "human_matting_model=modnet_photographic_portrait_matting" \
+-F "dpi=300"
 ```
 
 ### 5. Add Watermark to Image
@@ -107,7 +113,8 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'input_image=@demo/images/test0.jpg;type=image/jpeg' \
-  -F 'text=Hello'
+  -F 'text=Hello' \
+  -F 'dpi=300'
 ```
 
 <br>

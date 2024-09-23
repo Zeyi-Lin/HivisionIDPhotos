@@ -88,9 +88,11 @@ curl -X POST "http://127.0.0.1:8080/idphoto" \
 -F "input_image=@demo/images/test0.jpg" \
 -F "height=413" \
 -F "width=295" \
--F "human_matting_model=hivision_modnet" \
+-F "human_matting_model=modnet_photographic_portrait_matting" \
 -F "face_detect_model=mtcnn" \
--F "hd=true"
+-F "hd=true" \
+-F "dpi=300" \
+-F "face_alignment=true"
 ```
 
 ### 2. 添加背景色
@@ -100,7 +102,8 @@ curl -X POST "http://127.0.0.1:8080/add_background" \
 -F "input_image=@test.png" \
 -F "color=638cce" \
 -F "kb=200" \
--F "render=0"
+-F "render=0" \
+-F "dpi=300"
 ```
 
 ### 3. 生成六寸排版照
@@ -110,7 +113,8 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 -F "input_image=@test.jpg" \
 -F "height=413" \
 -F "width=295" \
--F "kb=200"
+-F "kb=200" \
+-F "dpi=300"
 ```
 
 ### 4. 人像抠图
@@ -118,7 +122,8 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 ```bash
 curl -X POST "http://127.0.0.1:8080/human_matting" \
 -F "input_image=@demo/images/test0.jpg" \
--F "human_matting_model=hivision_modnet"
+-F "human_matting_model=modnet_photographic_portrait_matting" \
+-F "dpi=300"
 ```
 
 ### 5. 图片加水印
@@ -128,7 +133,8 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'input_image=@demo/images/test0.jpg;type=image/jpeg' \
-  -F 'text=Hello'
+  -F 'text=Hello' \
+  -F 'dpi=300'
 ```
 
 ### 6. 设置图像KB大小
@@ -138,7 +144,8 @@ curl -X 'POST' \
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'input_image=@demo/images/test0.jpg;type=image/jpeg' \
-  -F 'kb=50'
+  -F 'kb=50' \
+  -F 'dpi=300'
 ```
 
 ### 7. 证件照裁切
@@ -151,7 +158,8 @@ curl -X 'POST' \
   -F 'height=413' \
   -F 'width=295' \
   -F 'face_detect_model=mtcnn' \
-  -F 'hd=true'
+  -F 'hd=true' \
+  -F 'dpi=300'
 ```
 
 <br>

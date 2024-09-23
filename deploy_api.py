@@ -243,6 +243,7 @@ async def watermark(
 @app.post("/set_kb")
 async def set_kb(
     input_image: UploadFile,
+    dpi: int = Form(300),
     kb: int = Form(50),
 ):
     image_bytes = await input_image.read()
@@ -251,7 +252,7 @@ async def set_kb(
 
     try:
         result_image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-        result_image_bytes = resize_image_to_kb(result_image, int(kb))
+        result_image_bytes = resize_image_to_kb(result_image, None, int(kb), dpi=dpi)
         result_image_base64 = bytes_2_base64(result_image_bytes)
 
         result_messgae = {
