@@ -1,6 +1,6 @@
 # API Docs
 
-English / [中文](README.md)
+English / [中文](api_CN.md)
 
 ## Table of Contents
 
