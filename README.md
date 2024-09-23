@@ -44,7 +44,7 @@
 - [API服务部署](#️-部署-api-服务)
 - [Docker部署](#-docker-部署)
 - [联系我们](#-联系我们)
-- [Q&A](#qa)
+- [FAQ](#faq)
 - [贡献者](#贡献者)
 - [感谢支持](#感谢支持)
 - [License](#lincese)
@@ -152,6 +152,8 @@ python scripts/download_model.py --models all
 | hivision_modnet | 对纯色换底适配性更好的抠图模型 | [下载](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/hivision_modnet.onnx)(24.7MB) |
 | rmbg-1.4 | [BRIA AI](https://huggingface.co/briaai/RMBG-1.4) 开源的抠图模型 | [下载](https://huggingface.co/briaai/RMBG-1.4/resolve/main/onnx/model.onnx?download=true)(176.2MB)后重命名为`rmbg-1.4.onnx` |
 | birefnet-v1-lite | [ZhengPeng7](https://github.com/ZhengPeng7/BiRefNet) 开源的抠图模型，拥有最好的分割精度 | [下载](https://github.com/ZhengPeng7/BiRefNet/releases/download/v1/BiRefNet-general-bb_swin_v1_tiny-epoch_232.onnx)(224MB)后重命名为`birefnet-v1-lite.onnx` |
+
+> 如果下载网速不顺利：前往[SwanHub](https://swanhub.co/ZeYiLin/HivisionIDPhotos_models/tree/main)下载。
 
 
 ## 4. 人脸检测模型配置（可选）
@@ -374,7 +376,7 @@ docker run  -d -p 7860:7860 \
 <br>
 
 
-# Q&A
+# FAQ
 
 ## 1. 如何修改预设尺寸和颜色？
 
@@ -394,6 +396,9 @@ docker run  -d -p 7860:7860 \
 
 <img src="assets/social_template.png" width="500">
 
+## 4. 如何修改Gradio Demo的顶部导航栏？
+
+- 修改`demo/assets/title.md`
 
 <br>
 
