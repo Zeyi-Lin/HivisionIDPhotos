@@ -9,8 +9,6 @@
 - [接口功能说明](#接口功能说明)
 - [cURL 请求示例](#curl-请求示例)
 - [Python 请求示例](#python-请求示例)
-- [Java 请求示例](#java-请求示例)
-- [Javascript 请求示例](#javascript-请求示例)
 
 ## 开始之前：开启后端服务
 
@@ -167,21 +165,34 @@ curl -X 'POST' \
 ## Python 请求示例
 
 #### 1.生成证件照(底透明)
-
 ```python
 import requests
 
 url = "http://127.0.0.1:8080/idphoto"
 input_image_path = "demo/images/test0.jpg"
 
+# 设置请求参数
+params = {
+    "head_measure_ratio": 0.2,
+    "head_height_ratio": 0.45,
+    "top_distance_max": 0.12,
+    "top_distance_min": 0.1,
+}
 files = {"input_image": open(input_image_path, "rb")}
-data = {"height": 413, "width": 295, "human_matting_model": "hivision_modnet", "face_detect_model": "mtcnn", "hd": True}
+data = {
+    "height": 413,
+    "width": 295,
+    "human_matting_model": "modnet_photographic_portrait_matting",
+    "face_detect_model": "mtcnn",
+    "hd": True,
+    "dpi": 300,
+    "face_alignment": True,
+}
 
-response = requests.post(url, files=files, data=data).json()
+response = requests.post(url, params=params, files=files, data=data).json()
 
 # response为一个json格式字典，包含status、image_base64_standard和image_base64_hd三项
 print(response)
-
 ```
 
 #### 2.添加背景色
@@ -193,7 +204,12 @@ url = "http://127.0.0.1:8080/add_background"
 input_image_path = "test.png"
 
 files = {"input_image": open(input_image_path, "rb")}
-data = {"color": '638cce', "kb": None, "render": 0}
+data = {
+    "color": '638cce',
+    "kb": None,
+    "render": 0,
+    "dpi": 300,
+}
 
 response = requests.post(url, files=files, data=data).json()
 
@@ -210,7 +226,12 @@ url = "http://127.0.0.1:8080/generate_layout_photos"
 input_image_path = "test.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
-data = {"height": 413, "width": 295, "kb": 200}
+data = {
+    "height": 413,
+    "width": 295,
+    "kb": 200,
+    "dpi": 300,
+}
 
 response = requests.post(url, files=files, data=data).json()
 
@@ -227,7 +248,10 @@ url = "http://127.0.0.1:8080/human_matting"
 input_image_path = "test.jpg"
 
 files = {"input_image": open(input_image_path, "rb")}
-data = {"human_matting_model": "hivision_modnet"}
+data = {
+    "human_matting_model": "modnet_photographic_portrait_matting",
+    "dpi": 300,
+}
 
 response = requests.post(url, files=files, data=data).json()
 
@@ -242,12 +266,18 @@ import requests
 
 # 设置请求的 URL 和参数
 url = "http://127.0.0.1:8080/watermark"
-params = {"size": 20, "opacity": 0.5, "angle": 30, "color": "#000000", "space": 25}
+params = {
+    "size": 20,
+    "opacity": 0.5,
+    "angle": 30,
+    "color": "#000000",
+    "space": 25,
+}
 
 # 设置文件和其他表单数据
 input_image_path = "demo/images/test0.jpg"
 files = {"input_image": open(input_image_path, "rb")}
-data = {"text": "Hello"}
+data = {"text": "Hello", "dpi": 300}
 
 # 发送 POST 请求
 response = requests.post(url, params=params, files=files, data=data)
@@ -272,7 +302,7 @@ url = "http://127.0.0.1:8080/set_kb"
 # 设置文件和其他表单数据
 input_image_path = "demo/images/test0.jpg"
 files = {"input_image": open(input_image_path, "rb")}
-data = {"kb": 50}
+data = {"kb": 50, "dpi": 300}
 
 # 发送 POST 请求
 response = requests.post(url, files=files, data=data)
@@ -309,7 +339,8 @@ data = {
     "height": 413,
     "width": 295,
     "face_detect_model": "mtcnn",
-    "hd": "true"
+    "hd": "true",
+    "dpi": 300,
 }
 
 # 发送 POST 请求
@@ -322,292 +353,4 @@ if response.ok:
 else:
     # 输出错误信息
     print(f"Request failed with status code {response.status_code}: {response.text}")
-```
-
-<br>
-
-## Java 请求示例
-
-### 添加 maven 依赖
-
-```java
-<dependency>
-    <groupId>cn.hutool</groupId>
-    <artifactId>hutool-all</artifactId>
-    <version>5.8.16</version>
-</dependency>
-
-<dependency>
-    <groupId>commons-io</groupId>
-    <artifactId>commons-io</artifactId>
-    <version>2.6</version>
-</dependency>
-```
-
-### 运行代码
-
-#### 1.生成证件照(底透明)
-
-```java
-/**
-* 生成证件照(底透明)  /idphoto 接口
-* @param inputImageDir 文件地址
-* @return
-* @throws IOException
-*/
-public static String requestIdPhoto(String inputImageDir) throws IOException {
-    String url = BASE_URL+"/idphoto";
-    // 创建文件对象
-    File inputFile = new File(inputImageDir);
-    Map<String, Object> paramMap=new HashMap<>();
-    paramMap.put("input_image",inputFile);
-    paramMap.put("height","413");
-    paramMap.put("width","295");
-    //包含status、image_base64_standard和image_base64_hd三项
-    return HttpUtil.post(url, paramMap);
-}
-```
-
-#### 2.添加背景色
-
-```java
-/**
-* 添加背景色  /add_background 接口
-* @param inputImageDir 文件地址
-* @return
-* @throws IOException
-*/
-public static String requestAddBackground(String inputImageDir) throws IOException {
-    String url = BASE_URL+"/add_background";
-    // 创建文件对象
-    File inputFile = new File(inputImageDir);
-    Map<String, Object> paramMap=new HashMap<>();
-    paramMap.put("input_image",inputFile);
-    paramMap.put("color","638cce");
-    paramMap.put("kb","200");
-    // response为一个json格式字典，包含status和image_base64
-    return HttpUtil.post(url, paramMap);
-}
-```
-
-#### 3.生成六寸排版照
-
-```java
-/**
-* 生成六寸排版照  /generate_layout_photos 接口
-* @param inputImageDir 文件地址
-* @return
-* @throws IOException
-*/
-public static String requestGenerateLayoutPhotos(String inputImageDir) throws IOException {
-    String url = BASE_URL+"/generate_layout_photos";
-    // 创建文件对象
-    File inputFile = new File(inputImageDir);
-    Map<String, Object> paramMap=new HashMap<>();
-    paramMap.put("input_image",inputFile);
-    paramMap.put("height","413");
-    paramMap.put("width","295");
-    paramMap.put("kb","200");
-    //response为一个json格式字典，包含status和image_base64
-    return HttpUtil.post(url, paramMap);
-}
-```
-
-#### 4.人像抠图
-
-```java
-/**
-* 生成人像抠图照  /human_matting 接口
-* @param inputImageDir 文件地址
-* @return
-* @throws IOException
-*/
-public static String requestHumanMattingPhotos(String inputImageDir) throws IOException {
-    String url = BASE_URL+"/human_matting";
-    // 创建文件对象
-    File inputFile = new File(inputImageDir);
-    Map<String, Object> paramMap=new HashMap<>();
-    paramMap.put("input_image",inputFile);
-    //包含status、image_base64
-    return HttpUtil.post(url, paramMap);
-}
-```
-
-### 5.图像加水印
-
-```java
-/**
- * 添加水印到图片 /watermark 接口
- * @param inputImageDir 文件地址
- * @param text 水印文本
- * @param size 水印文字大小
- * @param opacity 水印透明度
- * @param angle 水印旋转角度
- * @param color 水印颜色
- * @param space 水印间距
- * @return
- * @throws IOException
- */
-public static String requestAddWatermark(String inputImageDir, String text, int size, double opacity, int angle, String color, int space) throws IOException {
-    String url = BASE_URL + "/watermark?size=" + size + "&opacity=" + opacity + "&angle=" + angle + "&color=" + color + "&space=" + space;
-    
-    // 创建文件对象
-    File inputFile = new File(inputImageDir);
-    
-    // 创建参数映射
-    Map<String, Object> paramMap = new HashMap<>();
-    paramMap.put("input_image", inputFile);
-    paramMap.put("text", text);
-    
-    // 发送POST请求并返回响应
-    return HttpUtil.post(url, paramMap);
-}
-```
-
-<br>
-
-## JavaScript 请求示例
-
-在JavaScript中，我们可以使用`fetch` API来发送HTTP请求。以下是如何使用JavaScript调用这些API的示例。
-
-### 1. 生成证件照(底透明)
-
-```javascript
-async function generateIdPhoto(inputImagePath, height, width) {
-    const url = "http://127.0.0.1:8080/idphoto";
-    const formData = new FormData();
-    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.jpg"));
-    formData.append("height", height);
-    formData.append("width", width);
-
-    const response = await fetch(url, {
-        method: 'POST',
-        body: formData
-    });
-
-    const result = await response.json();
-    console.log(result);
-    return result;
-}
-
-// 示例调用
-generateIdPhoto("images/test.jpg", 413, 295).then(response => {
-    console.log(response);
-});
-```
-
-### 2. 添加背景色
-
-```javascript
-async function addBackground(inputImagePath, color, kb) {
-    const url = "http://127.0.0.1:8080/add_background";
-    const formData = new FormData();
-    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.png"));
-    formData.append("color", color);
-    formData.append("kb", kb);
-
-    const response = await fetch(url, {
-        method: 'POST',
-        body: formData
-    });
-
-    const result = await response.json();
-    console.log(result);
-    return result;
-}
-
-// 示例调用
-addBackground("test.png", "638cce", 200).then(response => {
-    console.log(response);
-});
-```
-
-### 3. 生成六寸排版照
-
-```javascript
-async function generateLayoutPhotos(inputImagePath, height, width, kb) {
-    const url = "http://127.0.0.1:8080/generate_layout_photos";
-    const formData = new FormData();
-    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.jpg"));
-    formData.append("height", height);
-    formData.append("width", width);
-    formData.append("kb", kb);
-
-    const response = await fetch(url, {
-        method: 'POST',
-        body: formData
-    });
-
-    const result = await response.json();
-    console.log(result);
-    return result;
-}
-
-// 示例调用
-generateLayoutPhotos("test.jpg", 413, 295, 200).then(response => {
-    console.log(response);
-});
-```
-
-### 4.人像抠图
-
-```javascript
-async function uploadImage(inputImagePath) {
-    const url = "http://127.0.0.1:8080/human_matting";
-    const formData = new FormData();
-    formData.append("input_image", new File([await fetch(inputImagePath).then(res => res.blob())], "test.jpg"));
-
-    const response = await fetch(url, {
-        method: 'POST',
-        body: formData
-    });
-
-    const result = await response.json(); // 假设响应是JSON格式
-    console.log(result);
-    return result;
-}
-
-// 示例调用
-uploadImage("demo/images/test0.jpg").then(response => {
-    console.log(response);
-});
-```
-
-### 5.图像加水印
-
-```javascript
-async function sendMultipartRequest() {
-    const url = "http://127.0.0.1:8080/watermark?size=20&opacity=0.5&angle=30&color=%23000000&space=25";
-
-    const formData = new FormData();
-    formData.append("text", "Hello");
-
-    // Assuming you have a file input element with id 'fileInput'
-    const fileInput = document.getElementById('fileInput');
-    if (fileInput.files.length > 0) {
-        formData.append("input_image", fileInput.files[0]);
-    }
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json'
-            },
-            body: formData
-        });
-
-        if (response.ok) {
-            const jsonResponse = await response.json();
-            console.log(jsonResponse);
-        } else {
-            console.error('Request failed:', response.status, response.statusText);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-// Call the function to send request
-sendMultipartRequest();
 ```
