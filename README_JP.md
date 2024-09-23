@@ -358,17 +358,29 @@ docker run  -d -p 7860:7860 \
 
 <br>
 
-# 💻 開発のヒント
+# よくある質問 (FAQ)
 
-## どのようにデフォルトのサイズと色を変更しますか？
+## 1. 基本的なサイズと色をどのように変更しますか？
 
-- サイズ：`size_list_EN.csv`を修正した後、再度`app.py`を実行すれば、第一列がサイズ名、第二列が高さ、第三列が幅になります。
-- 色：`color_list_EN.csv`を修正した後、再度`app.py`を実行すれば、第一列が色名、第二列がHex値になります。
+- サイズ: [size_list_EN.csv](demo/assets/size_list_EN.csv) ファイルを修正した後、`app.py`を再実行すれば大丈夫です。最初の列はサイズ名、二番目の列は高さ、三番目の列は幅です。
+- 色: [color_list_EN.csv](demo/assets/color_list_EN.csv) ファイルを修正した後、`app.py`を再実行すれば大丈夫です。最初の列は色名、二番目の列はHex値です。
 
-## ウォーターマークフォントの変更方法
+## 2. ウォーターマークのフォントをどのように変更しますか？
 
-1. フォントファイルを `hivision/plugin/font` フォルダーに配置します。
-2. `hivision/plugin/watermark.py` の `font_file` パラメータの値をフォントファイルの名前に変更します。
+1. フォントファイルを`hivision/plugin/font`フォルダーに置きます。
+2. `hivision/plugin/watermark.py`ファイル内の`font_file`パラメータの値をフォントファイル名に変更します。
+
+## 3. ソーシャルメディアのテンプレート画像をどのように追加しますか？
+
+1. テンプレート画像を`hivision/plugin/template/assets`フォルダーに置きます。テンプレート画像は4チャンネルの透明PNGです。
+2. `hivision/plugin/template/assets/template_config.json`ファイルに最新のテンプレート情報を追加します。ここで`width`はテンプレート画像の幅(px)、`height`はテンプレート画像の高さ(px)、`anchor_points`はテンプレートの透明領域の4つの隅の座標(px)です。`rotation`は透明領域の垂直方向に対する回転角度で、>0は反時計回り、<0は時計回りです。
+3. `demo/processor.py`の`_generate_image_template`関数内の`TEMPLATE_NAME_LIST`変数に最新のテンプレート名を追加します。
+
+<img src="assets/social_template.png" width="500">
+
+## 4. Gradio Demoの上部ナビゲーションバーをどのように変更しますか？
+
+- `demo/assets/title.md`ファイルを修正します。
 
 <br>
 
