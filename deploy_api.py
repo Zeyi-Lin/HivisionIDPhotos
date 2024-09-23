@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, Form
+from fastapi import FastAPI, UploadFile, Form, File
 from hivision import IDCreator
 from hivision.error import FaceError
 from hivision.creator.layout_calculator import (
@@ -10,7 +10,7 @@ from hivision.utils import (
     add_background,
     resize_image_to_kb,
     bytes_2_base64,
-    numpy_2_base64,
+    base64_2_numpy,
     hex_to_rgb,
     add_watermark,
     save_image_dpi_to_bytes,
@@ -38,7 +38,8 @@ app.add_middleware(
 # 证件照智能制作接口
 @app.post("/idphoto")
 async def idphoto_inference(
-    input_image: UploadFile,
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
     height: int = Form(413),
     width: int = Form(295),
     human_matting_model: str = Form("modnet_photographic_portrait_matting"),
@@ -50,10 +51,15 @@ async def idphoto_inference(
     head_height_ratio: float = 0.45,
     top_distance_max: float = 0.12,
     top_distance_min: float = 0.10,
-):
-    image_bytes = await input_image.read()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+):  
+    # 如果传入了base64，则直接使用base64解码
+    if input_image_base64:
+        img = base64_2_numpy(input_image_base64)
+    # 否则使用上传的图片
+    else:
+        image_bytes = await input_image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     # ------------------- 选择抠图与人脸检测模型 -------------------
     choose_handler(creator, human_matting_model, face_detect_model)
@@ -91,13 +97,17 @@ async def idphoto_inference(
 # 人像抠图接口
 @app.post("/human_matting")
 async def human_matting_inference(
-    input_image: UploadFile,
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
     human_matting_model: str = Form("hivision_modnet"),
     dpi: int = Form(300),
 ):
-    image_bytes = await input_image.read()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    if input_image_base64:
+        img = base64_2_numpy(input_image_base64)
+    else:
+        image_bytes = await input_image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     # ------------------- 选择抠图与人脸检测模型 -------------------
     choose_handler(creator, human_matting_model, None)
@@ -122,7 +132,8 @@ async def human_matting_inference(
 # 透明图像添加纯色背景接口
 @app.post("/add_background")
 async def photo_add_background(
-    input_image: UploadFile,
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
     color: str = Form("000000"),
     kb: int = Form(None),
     dpi: int = Form(300),
@@ -130,9 +141,12 @@ async def photo_add_background(
 ):
     render_choice = ["pure_color", "updown_gradient", "center_gradient"]
 
-    image_bytes = await input_image.read()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
+    if input_image_base64:
+        img = base64_2_numpy(input_image_base64)
+    else:
+        image_bytes = await input_image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)
 
     color = hex_to_rgb(color)
     color = (color[2], color[1], color[0])
@@ -160,16 +174,20 @@ async def photo_add_background(
 # 六寸排版照生成接口
 @app.post("/generate_layout_photos")
 async def generate_layout_photos(
-    input_image: UploadFile,
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
     height: int = Form(413),
     width: int = Form(295),
     kb: int = Form(None),
     dpi: int = Form(300),
 ):
     # try:
-    image_bytes = await input_image.read()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    if input_image_base64:
+        img = base64_2_numpy(input_image_base64)
+    else:
+        image_bytes = await input_image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     size = (int(height), int(width))
 
@@ -202,7 +220,8 @@ async def generate_layout_photos(
 # 透明图像添加水印接口
 @app.post("/watermark")
 async def watermark(
-    input_image: UploadFile,
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
     text: str = Form("Hello"),
     size: int = 20,
     opacity: float = 0.5,
@@ -212,9 +231,12 @@ async def watermark(
     kb: int = Form(None),
     dpi: int = Form(300),
 ):
-    image_bytes = await input_image.read()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    if input_image_base64:
+        img = base64_2_numpy(input_image_base64)
+    else:
+        image_bytes = await input_image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     try:
         result_image = add_watermark(img, text, size, opacity, angle, color, space)
@@ -242,13 +264,17 @@ async def watermark(
 # 设置照片KB值接口(RGB图)
 @app.post("/set_kb")
 async def set_kb(
-    input_image: UploadFile,
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
     dpi: int = Form(300),
     kb: int = Form(50),
 ):
-    image_bytes = await input_image.read()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    if input_image_base64:
+        img = base64_2_numpy(input_image_base64)
+    else:
+        image_bytes = await input_image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     try:
         result_image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
@@ -271,7 +297,8 @@ async def set_kb(
 # 证件照智能裁剪接口
 @app.post("/idphoto_crop")
 async def idphoto_crop_inference(
-    input_image: UploadFile,
+    input_image: UploadFile = File(None),
+    input_image_base64: str = Form(None),
     height: int = Form(413),
     width: int = Form(295),
     face_detect_model: str = Form("mtcnn"),
@@ -282,9 +309,12 @@ async def idphoto_crop_inference(
     top_distance_max: float = 0.12,
     top_distance_min: float = 0.10,
 ):
-    image_bytes = await input_image.read()
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)  # 读取图像(4通道)
+    if input_image_base64:
+        img = base64_2_numpy(input_image_base64)
+    else:
+        image_bytes = await input_image.read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_UNCHANGED)  # 读取图像(4通道)
 
     # ------------------- 选择抠图与人脸检测模型 -------------------
     choose_handler(creator, face_detect_option=face_detect_model)

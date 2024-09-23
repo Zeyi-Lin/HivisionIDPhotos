@@ -175,9 +175,19 @@ def numpy_2_base64(img: np.ndarray) -> str:
 
 
 def base64_2_numpy(base64_image: str) -> np.ndarray:
-    img = base64.b64decode(base64_image)
-    img = np.frombuffer(img, np.uint8)
-
+    # Remove the data URL prefix if present
+    if base64_image.startswith('data:image'):
+        base64_image = base64_image.split(',')[1]
+    
+    # Decode base64 string to bytes
+    img_bytes = base64.b64decode(base64_image)
+    
+    # Convert bytes to numpy array
+    img_array = np.frombuffer(img_bytes, dtype=np.uint8)
+    
+    # Decode the image array
+    img = cv2.imdecode(img_array, cv2.IMREAD_UNCHANGED)
+    
     return img
 
 # 字节流转base64
