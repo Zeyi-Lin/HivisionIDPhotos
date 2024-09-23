@@ -7,6 +7,13 @@
 
 - [开始之前：开启后端服务](#开始之前开启后端服务)
 - [接口功能说明](#接口功能说明)
+  - [1.生成证件照(底透明)](#1生成证件照底透明)
+  - [2.添加背景色](#2添加背景色)
+  - [3.生成六寸排版照](#3生成六寸排版照)
+  - [4.人像抠图](#4人像抠图)
+  - [5.图像加水印](#5图像加水印)
+  - [6.设置图像KB大小](#6设置图像KB大小)
+  - [7.证件照裁切](#7证件照裁切)
 - [cURL 请求示例](#curl-请求示例)
 - [Python 请求示例](#python-请求示例)
 
@@ -40,7 +47,8 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| input_image | file | 和`input_image_base64`二选一 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| input_image_base64 | str | 和`input_image`二选一 | 传入的图像文件的base64编码，图像文件为需为RGB三通道图像。 |
 | height | int | 否 | 标准证件照高度，默认为`413` |
 | width | int | 否 | 标准证件照宽度，默认为`295` |
 | human_matting_model | str | 否 | 人像分割模型，默认为`modnet_photographic_portrait_matting`。可选值为`modnet_photographic_portrait_matting`、`hivision_modnet`、`rmbg-1.4`、`birefnet-v1-lite` |
@@ -62,6 +70,8 @@ python deploy_api.py
 | image_base64_standard | str | 标准证件照的base64编码 |
 | image_base64_hd | str | 高清证件照的base64编码。如`hd`参数为`false`，则不返回该参数 |
 
+<br>
+
 ### 2.添加背景色
 
 接口名：`add_background`
@@ -72,7 +82,8 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件，图像文件为需为RGBA四通道图像。 |
+| input_image | file | 和`input_image_base64`二选一 | 传入的图像文件，图像文件为需为RGBA四通道图像。 |
+| input_image_base64 | str | 和`input_image`二选一 | 传入的图像文件的base64编码，图像文件为需为RGBA四通道图像。 |
 | color | str | 否 | 背景色HEX值，默认为`000000` |
 | kb | int | 否 | 输出照片的 KB 值，默认为`None`，即不对图像进行KB调整。|
 | render | int | 否 | 渲染模式，默认为`0`。可选值为`0`、`1`、`2`，分别对应`纯色`、`上下渐变`、`中心渐变`。 |
@@ -85,6 +96,8 @@ python deploy_api.py
 | status | int | 状态码，`true`表示成功 |
 | image_base64 | str | 添加背景色之后的图像的base64编码 |
 
+<br>
+
 ### 3.生成六寸排版照
 
 接口名：`generate_layout_photos`
@@ -95,7 +108,8 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| input_image | file | 和`input_image_base64`二选一 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| input_image_base64 | str | 和`input_image`二选一 | 传入的图像文件的base64编码，图像文件为需为RGB三通道图像。 |
 | height | int | 否 | 输入图像的高度，默认为`413` |
 | width | int | 否 | 输入图像的宽度，默认为`295` |
 | kb | int | 否 | 输出照片的 KB 值，默认为`None`，即不对图像进行KB调整。|
@@ -107,6 +121,8 @@ python deploy_api.py
 | :--- | :--- | :--- |
 | status | int | 状态码，`true`表示成功 |
 | image_base64 | str | 六寸排版照的base64编码 |
+
+<br>
 
 ### 4.人像抠图
 
@@ -129,6 +145,7 @@ python deploy_api.py
 | status | int | 状态码，`true`表示成功 |
 | image_base64 | str | 抠图人像照的base64编码 |
 
+<br>
 
 ### 5.图像加水印
 
@@ -140,7 +157,8 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| input_image | file | 和`input_image_base64`二选一 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| input_image_base64 | str | 和`input_image`二选一 | 传入的图像文件的base64编码，图像文件为需为RGB三通道图像。 |
 | text | str | 否 | 水印文本，默认为`Hello` |
 | size | int | 否 | 水印字体大小，默认为`20` |
 | opacity | float | 否 | 水印透明度，默认为`0.5` |
@@ -156,6 +174,8 @@ python deploy_api.py
 | status | int | 状态码，`true`表示成功 |
 | image_base64 | str | 添加水印之后的图像的base64编码 |
 
+<br>
+
 ### 6.设置图像KB大小
 
 接口名：`set_kb`
@@ -166,7 +186,8 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| input_image | file | 和`input_image_base64`二选一 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
+| input_image_base64 | str | 和`input_image`二选一 | 传入的图像文件的base64编码，图像文件为需为RGB三通道图像。 |
 | kb | int | 否 | 输出照片的 KB 值，默认为`None`，即不对图像进行KB调整。|
 | dpi | int | 否 | 图像分辨率，默认为`300` |
 
@@ -177,7 +198,7 @@ python deploy_api.py
 | status | int | 状态码，`true`表示成功 |
 | image_base64 | str | 设置KB大小之后的图像的base64编码 |
 
-
+<br>
 
 ### 7.证件照裁切
 
@@ -189,7 +210,8 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件，图像文件为需为RGBA四通道图像。 |
+| input_image | file | 和`input_image_base64`二选一 | 传入的图像文件，图像文件为需为RGBA四通道图像。 |
+| input_image_base64 | str | 和`input_image`二选一 | 传入的图像文件的base64编码，图像文件为需为RGBA四通道图像。 |
 | height | int | 否 | 标准证件照高度，默认为`413` |
 | width | int | 否 | 标准证件照宽度，默认为`295` |
 | face_detect_model | str | 否 | 人脸检测模型，默认为`mtcnn`。可选值为`mtcnn`、`face_plusplus`、`retinaface-resnet50` |
