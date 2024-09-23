@@ -6,6 +6,13 @@ English / [中文](README.md)
 
 - [Before You Start: Start the Backend Service](#before-you-start-start-the-backend-service)
 - [API Functionality Description](#api-functionality-description)
+  - [1. Generate ID Photo (Transparent Background)](#1-generate-id-photo-transparent-background)
+  - [2. Add Background Color](#2-add-background-color)
+  - [3. Generate Six-Inch Layout Photo](#3-generate-six-inch-layout-photo)
+  - [4. Human Matting](#4-human-matting)
+  - [5. Add Watermark to Image](#5-add-watermark-to-image)
+  - [6. Set Image KB Size](#6-set-image-kb-size)
+  - [7. ID Photo Cropping](#7-id-photo-cropping)
 - [cURL Request Examples](#curl-request-examples)
 - [Python Request Examples](#python-request-examples)
 
@@ -39,7 +46,8 @@ It is important to note that both generated photos are transparent (RGBA four-ch
 
 | Parameter Name | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| input_image | file | Yes | input image file, with the image file needing to be an RGB three-channel image. |
+| input_image | file | Choose one of `input_image` or `input_image_base64` | The input image file, which needs to be an RGB three-channel image. |
+| input_image_base64 | str | Choose one of `input_image` or `input_image_base64` | The base64 encoding of the input image file, which needs to be an RGB three-channel image. |
 | height | int | No | The height of the standard ID photo, with a default value of `413`. |
 | width | int | No | The width of the standard ID photo, with a default value of `295`. |
 | human_matting_model | str | No | The human segmentation model, with a default value of `modnet_photographic_portrait_matting`. Available values are `modnet_photographic_portrait_matting`, `hivision_modnet`, `rmbg-1.4`, and `birefnet-v1-lite`. |
@@ -70,7 +78,8 @@ The logic of the `Add Background Color` API is to receive an RGBA image (transpa
 
 | Parameter Name | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| input_image | file | Yes | the input image file, with the image file needing to be an RGBA four-channel image. |
+| input_image | file | Choose one of `input_image` or `input_image_base64` | The input image file, which needs to be an RGB three-channel image. |
+| input_image_base64 | str | Choose one of `input_image` or `input_image_base64` | The base64 encoding of the input image file, which needs to be an RGB three-channel image. |
 | color | str | Yes | The background color in hexadecimal format, e.g., `#000000` for black. |
 | kb | int | No | The target file size in KB. If the specified KB value is less than the original file, it adjusts the compression rate. If the specified KB value is greater than the source file, it increases the KB value by adding information to the file header, aiming for the final size of the image to match the specified KB value. |
 | render | int | No | The rendering mode, with a default value of `0`. Available values are `0`, `1`, and `2`. |
@@ -95,7 +104,8 @@ The logic of the `Generate Six-Inch Layout Photo` API is to receive an RGB image
 
 | Parameter Name | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| input_image | file | Yes | the input image file, with the image file needing to be an RGB three-channel image. |
+| input_image | file | Choose one of `input_image` or `input_image_base64` | The input image file, which needs to be an RGB three-channel image. |
+| input_image_base64 | str | Choose one of `input_image` or `input_image_base64` | The base64 encoding of the input image file, which needs to be an RGB three-channel image. |
 | height | int | No | The height of the standard ID photo, with a default value of `413`. |
 | width | int | No | The width of the standard ID photo, with a default value of `295`. |
 | kb | int | No | The target file size in KB. If the specified KB value is less than the original file, it adjusts the compression rate. If the specified KB value is greater than the source file, it increases the KB value by adding information to the file header, aiming for the final size of the image to match the specified KB value. |
@@ -121,7 +131,8 @@ The logic of the `Human Matting` API is to receive an RGB image and output a sta
 
 | Parameter Name | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| input_image | file | Yes | input image file, with the image file needing to be an RGB three-channel image. |
+| input_image | file | Choose one of `input_image` or `input_image_base64` | The input image file, which needs to be an RGB three-channel image. |
+| input_image_base64 | str | Choose one of `input_image` or `input_image_base64` | The base64 encoding of the input image file, which needs to be an RGB three-channel image. |
 | human_matting_model | str | No | The human segmentation model, with a default value of `modnet_photographic_portrait_matting`. Available values are `modnet_photographic_portrait_matting`, `hivision_modnet`, `rmbg-1.4`, and `birefnet-v1-lite`. |
 | dpi | int | No | The image resolution, with a default value of `300`. |
 
@@ -145,7 +156,8 @@ The functionality of the `Add Watermark to Image` API is to receive a watermark 
 
 | Parameter Name | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| input_image | file | Yes | input image file, with the image file needing to be an RGB three-channel image. |
+| input_image | file | Choose one of `input_image` or `input_image_base64` | The input image file, which needs to be an RGB three-channel image. |
+| input_image_base64 | str | Choose one of `input_image` or `input_image_base64` | The base64 encoding of the input image file, which needs to be an RGB three-channel image. |
 | text | str | Yes | The watermark text to be added. |
 | size | int | No | The size of the watermark text, with a default value of `20`. |
 | opacity | float | No | The opacity of the watermark text, with a default value of `0.5`. |
@@ -172,7 +184,8 @@ The functionality of the `Set Image KB Size` API is to receive an image and a ta
 
 | Parameter Name | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| input_image | file | Yes | input image file, with the image file needing to be an RGB three-channel image. |
+| input_image | file | Choose one of `input_image` or `input_image_base64` | The input image file, which needs to be an RGB three-channel image. |
+| input_image_base64 | str | Choose one of `input_image` or `input_image_base64` | The base64 encoding of the input image file, which needs to be an RGB three-channel image. |
 | kb | int | Yes | The target file size in KB. |
 | dpi | int | No | The image resolution, with a default value of `300`. |
 
@@ -196,7 +209,8 @@ The functionality of the `ID Photo Cropping` API is to receive an RGBA image (tr
 
 | Parameter Name | Type | Required | Description |
 | :--- | :--- | :--- | :--- |
-| input_image | file | Yes | input image file, with the image file needing to be an RGB three-channel image. |
+| input_image | file | Choose one of `input_image` or `input_image_base64` | The input image file, which needs to be an RGB three-channel image. |
+| input_image_base64 | str | Choose one of `input_image` or `input_image_base64` | The base64 encoding of the input image file, which needs to be an RGB three-channel image. |
 | height | int | Yes | The height of the standard ID photo. |
 | width | int | Yes | The width of the standard ID photo. |
 | face_detect_model | str | No | The face detection model, with a default value of `mtcnn`. Available values are `mtcnn`, `face_plusplus`, and `retinaface-resnet50`. |
