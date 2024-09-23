@@ -55,7 +55,7 @@
 
 - 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
 
-- 2024.09.24: Gradio Demo增加**排版照裁剪线**功能
+- 2024.09.24: API接口增加base64图像传入选项 | Gradio Demo增加**排版照裁剪线**功能
 - 2024.09.22: Gradio Demo增加**野兽模式**，可设置内存加载策略 | API接口增加**dpi、face_alignment**参数
 - 2024.09.18: Gradio Demo增加**分享模版照**功能、增加**美式证件照**背景选项
 - 2024.09.17: Gradio Demo增加**自定义底色-HEX输入**功能 | **（社区贡献）C++版本** - [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp) 贡献 by [zjkhahah](https://github.com/zjkhahah)
