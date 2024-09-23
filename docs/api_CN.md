@@ -40,7 +40,7 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件路径，图像文件为需为RGB三通道图像。 |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
 | height | int | 否 | 标准证件照高度，默认为`413` |
 | width | int | 否 | 标准证件照宽度，默认为`295` |
 | human_matting_model | str | 否 | 人像分割模型，默认为`modnet_photographic_portrait_matting`。可选值为`modnet_photographic_portrait_matting`、`hivision_modnet`、`rmbg-1.4`、`birefnet-v1-lite` |
@@ -72,7 +72,7 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件路径，图像文件为需为RGBA四通道图像。 |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGBA四通道图像。 |
 | color | str | 否 | 背景色HEX值，默认为`000000` |
 | kb | int | 否 | 输出照片的 KB 值，默认为`None`，即不对图像进行KB调整。|
 | render | int | 否 | 渲染模式，默认为`0`。可选值为`0`、`1`、`2`，分别对应`纯色`、`上下渐变`、`中心渐变`。 |
@@ -95,7 +95,7 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件路径，图像文件为需为RGB三通道图像。 |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
 | height | int | 否 | 输入图像的高度，默认为`413` |
 | width | int | 否 | 输入图像的宽度，默认为`295` |
 | kb | int | 否 | 输出照片的 KB 值，默认为`None`，即不对图像进行KB调整。|
@@ -118,7 +118,7 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件路径，图像文件为需为RGB三通道图像。 |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
 | human_matting_model | str | 否 | 人像分割模型，默认为`modnet_photographic_portrait_matting`。可选值为`modnet_photographic_portrait_matting`、`hivision_modnet`、`rmbg-1.4`、`birefnet-v1-lite` |
 | dpi | int | 否 | 图像分辨率，默认为`300` |
 
@@ -140,7 +140,7 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件路径，图像文件为需为RGB三通道图像。 |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
 | text | str | 否 | 水印文本，默认为`Hello` |
 | size | int | 否 | 水印字体大小，默认为`20` |
 | opacity | float | 否 | 水印透明度，默认为`0.5` |
@@ -166,7 +166,7 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件路径，图像文件为需为RGB三通道图像。 |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGB三通道图像。 |
 | kb | int | 否 | 输出照片的 KB 值，默认为`None`，即不对图像进行KB调整。|
 | dpi | int | 否 | 图像分辨率，默认为`300` |
 
@@ -189,7 +189,7 @@ python deploy_api.py
 
 | 参数名 | 类型 | 必填 | 说明 |
 | :--- | :--- | :--- | :--- |
-| input_image | file | 是 | 传入的图像文件路径，图像文件为需为RGBA四通道图像。 |
+| input_image | file | 是 | 传入的图像文件，图像文件为需为RGBA四通道图像。 |
 | height | int | 否 | 标准证件照高度，默认为`413` |
 | width | int | 否 | 标准证件照宽度，默认为`295` |
 | face_detect_model | str | 否 | 人脸检测模型，默认为`mtcnn`。可选值为`mtcnn`、`face_plusplus`、`retinaface-resnet50` |

@@ -35,11 +35,55 @@ It is important to note that both generated photos are transparent (RGBA four-ch
 > Q: Why is it designed this way?  
 > A: Because in actual products, users frequently switch background color preview effects, providing a transparent background image for the front-end JS code to composite colors is a better experience.
 
+**Request Parameters:**
+
+| Parameter Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| input_image | file | Yes | input image file, with the image file needing to be an RGB three-channel image. |
+| height | int | No | The height of the standard ID photo, with a default value of `413`. |
+| width | int | No | The width of the standard ID photo, with a default value of `295`. |
+| human_matting_model | str | No | The human segmentation model, with a default value of `modnet_photographic_portrait_matting`. Available values are `modnet_photographic_portrait_matting`, `hivision_modnet`, `rmbg-1.4`, and `birefnet-v1-lite`. |
+| face_detect_model | str | No | The face detection model, with a default value of `mtcnn`. Available values are `mtcnn`, `face_plusplus`, and `retinaface-resnet50`. |
+| hd | bool | No | Whether to generate a high-definition ID photo, with a default value of `true`. |
+| dpi | int | No | The image resolution, with a default value of `300`. |
+| face_alignment | bool | No | Whether to perform face alignment, with a default value of `true`. |
+| head_measure_ratio | float | No | The ratio of the face area to the photo area, with a default value of `0.2`. |
+| head_height_ratio | float | No | The ratio of the face center to the top of the photo, with a default value of `0.45`. |
+| top_distance_max | float | No | The maximum ratio of the head to the top of the photo, with a default value of `0.12`. |
+| top_distance_min | float | No | The minimum ratio of the head to the top of the photo, with a default value of `0.1`. |
+
+**Return Parameters:**
+
+| Parameter Name | Type | Description |
+| :--- | :--- | :--- |
+| status | str | The status of the request, with a default value of `success`. |
+| image_base64_standard | str | The base64 encoding of the standard ID photo. |
+| image_base64_hd | str | The base64 encoding of the high-definition ID photo. |
+
 ### 2. Add Background Color
 
 API Name: `add_background`
 
 The logic of the `Add Background Color` API is to receive an RGBA image (transparent image) and add a background color based on `color`, composing a JPG image.
+
+**Request Parameters:**
+
+| Parameter Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| input_image | file | Yes | the input image file, with the image file needing to be an RGBA four-channel image. |
+| color | str | Yes | The background color in hexadecimal format, e.g., `#000000` for black. |
+| kb | int | No | The target file size in KB. If the specified KB value is less than the original file, it adjusts the compression rate. If the specified KB value is greater than the source file, it increases the KB value by adding information to the file header, aiming for the final size of the image to match the specified KB value. |
+| render | int | No | The rendering mode, with a default value of `0`. Available values are `0`, `1`, and `2`. |
+| dpi | int | No | The image resolution, with a default value of `300`. |
+
+**Return Parameters:**
+
+| Parameter Name | Type | Description |
+| :--- | :--- | :--- |
+| status | str | The status of the request, with a default value of `success`. |
+| image_base64 | str | The base64 encoding of the image with the background color added. |
+
+
 
 ### 3. Generate Six-Inch Layout Photo
 
@@ -47,11 +91,49 @@ API Name: `generate_layout_photos`
 
 The logic of the `Generate Six-Inch Layout Photo` API is to receive an RGB image (usually the ID photo after adding background color), arrange the photos based on `size`, and then generate a six-inch layout photo.
 
+**Request Parameters:**
+
+| Parameter Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| input_image | file | Yes | the input image file, with the image file needing to be an RGB three-channel image. |
+| height | int | No | The height of the standard ID photo, with a default value of `413`. |
+| width | int | No | The width of the standard ID photo, with a default value of `295`. |
+| kb | int | No | The target file size in KB. If the specified KB value is less than the original file, it adjusts the compression rate. If the specified KB value is greater than the source file, it increases the KB value by adding information to the file header, aiming for the final size of the image to match the specified KB value. |
+| dpi | int | No | The image resolution, with a default value of `300`. |
+
+**Return Parameters:**
+
+| Parameter Name | Type | Description |
+| :--- | :--- | :--- |
+| status | str | The status of the request, with a default value of `success`. |
+| image_base64 | str | The base64 encoding of the six-inch layout photo. |
+
+
+
+
 ### 4. Human Matting
 
 API Name: `human_matting`
 
 The logic of the `Human Matting` API is to receive an RGB image and output a standard matting portrait and a high-definition matting portrait (without any background filling).
+
+**Request Parameters:**
+
+| Parameter Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| input_image | file | Yes | input image file, with the image file needing to be an RGB three-channel image. |
+| human_matting_model | str | No | The human segmentation model, with a default value of `modnet_photographic_portrait_matting`. Available values are `modnet_photographic_portrait_matting`, `hivision_modnet`, `rmbg-1.4`, and `birefnet-v1-lite`. |
+| dpi | int | No | The image resolution, with a default value of `300`. |
+
+**Return Parameters:**
+
+| Parameter Name | Type | Description |
+| :--- | :--- | :--- |
+| status | str | The status of the request, with a default value of `success`. |
+| image_base64 | str | The base64 encoding of the human matting portrait. |
+
+
+
 
 ### 5. Add Watermark to Image
 
@@ -59,17 +141,80 @@ API Name: `watermark`
 
 The functionality of the `Add Watermark to Image` API is to receive a watermark text and add the specified watermark to the original image. Users can specify attributes such as the watermark's position, opacity, and size to seamlessly blend the watermark into the original image.
 
+**Request Parameters:**
+
+| Parameter Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| input_image | file | Yes | input image file, with the image file needing to be an RGB three-channel image. |
+| text | str | Yes | The watermark text to be added. |
+| size | int | No | The size of the watermark text, with a default value of `20`. |
+| opacity | float | No | The opacity of the watermark text, with a default value of `0.5`. |
+| angle | int | No | The angle of the watermark text, with a default value of `30`. |
+| color | str | No | The color of the watermark text, with a default value of `#000000`. |
+| space | int | No | The space between the watermark text and the image, with a default value of `25`. |
+| dpi | int | No | The image resolution, with a default value of `300`. |
+
+**Return Parameters:**
+
+| Parameter Name | Type | Description |
+| :--- | :--- | :--- |
+| status | str | The status of the request, with a default value of `success`. |
+
+
+
 ### 6. Set Image KB Size
 
 API Name: `set_kb`
 
 The functionality of the `Set Image KB Size` API is to receive an image and a target file size (in KB). If the specified KB value is less than the original file, it adjusts the compression rate. If the specified KB value is greater than the source file, it increases the KB value by adding information to the file header, aiming for the final size of the image to match the specified KB value.
 
+**Request Parameters:**
+
+| Parameter Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| input_image | file | Yes | input image file, with the image file needing to be an RGB three-channel image. |
+| kb | int | Yes | The target file size in KB. |
+| dpi | int | No | The image resolution, with a default value of `300`. |
+
+**Return Parameters:**
+
+| Parameter Name | Type | Description |
+| :--- | :--- | :--- |
+| status | str | The status of the request, with a default value of `success`. |
+| image_base64 | str | The base64 encoding of the image with the specified KB size. |
+
+
+
+
 ### 7. ID Photo Cropping
 
 API Name: `idphoto_crop`
 
 The functionality of the `ID Photo Cropping` API is to receive an RGBA image (transparent image) and output a standard ID photo and a high-definition ID photo.
+
+**Request Parameters:**
+
+| Parameter Name | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| input_image | file | Yes | input image file, with the image file needing to be an RGB three-channel image. |
+| height | int | Yes | The height of the standard ID photo. |
+| width | int | Yes | The width of the standard ID photo. |
+| face_detect_model | str | No | The face detection model, with a default value of `mtcnn`. Available values are `mtcnn`, `face_plusplus`, and `retinaface-resnet50`. |
+| hd | bool | No | Whether to generate a high-definition ID photo, with a default value of `true`. |
+| dpi | int | No | The image resolution, with a default value of `300`. |
+| head_measure_ratio | float | No | The ratio of the face area to the photo area, with a default value of `0.2`. |
+| head_height_ratio | float | No | The ratio of the face center to the top of the photo, with a default value of `0.45`. |
+| top_distance_max | float | No | The maximum ratio of the head to the top of the photo, with a default value of `0.12`. |
+| top_distance_min | float | No | The minimum ratio of the head to the top of the photo, with a default value of `0.1`. |
+
+**Return Parameters:**
+
+| Parameter Name | Type | Description |
+| :--- | :--- | :--- |
+| status | str | The status of the request, with a default value of `success`. |
+| image_base64 | str | The base64 encoding of the ID photo. |
+
+
 
 <br>
 
