@@ -150,7 +150,17 @@ python scripts/download_model.py --models all
 | MTCNN | **オフライン**顔検出モデル、高性能CPU推論、デフォルトモデル、検出精度は低い | このプロジェクトをクローン後、直接使用 |
 | Face++ | Megviiが提供するオンライン顔検出API、高精度の検出、[公式文書](https://console.faceplusplus.com.cn/documents/4888373) | [使用文書](docs/face++_EN.md)|
 
-## 5. GPU推論の加速（オプション）
+## 5. パフォーマンスリファレンス
+
+> テスト環境はMac M1 Max 64GB、非GPU加速、テスト画像の解像度は512x715(1)と764×1146(2)。
+
+| モデルの組み合わせ | メモリ使用量 | 推論時間(1) | 推論時間(2) |
+| -- | -- | -- | -- |
+| MODNet + mtcnn | 410MB | 0.207秒 | 0.246秒 |
+| MODNet + retinaface | 405MB | 0.571秒 | 0.971秒 |
+| birefnet-v1-lite + retinaface | 6.20GB | 7.063秒 | 7.128秒 |
+
+## 6. GPU推論の加速（オプション）
 
 現在のバージョンでは、NVIDIA GPUで加速可能なモデルは`birefnet-v1-lite`です。約16GBのVRAMが必要であることにご注意ください。
 

@@ -150,7 +150,17 @@ python scripts/download_model.py --models all
 | MTCNN | **오프라인** 얼굴 검출 모델, 고성능 CPU 추론, 기본 모델, 검출 정확도가 낮음 | 이 프로젝트를 클론한 후 직접 사용 |
 | Face++ | Megvii에서 제공하는 온라인 얼굴 검출 API, 고정밀 검출, [공식 문서](https://console.faceplusplus.com.cn/documents/4888373) | [사용 문서](docs/face++_EN.md)|
 
-## 5. GPU 추론 가속 (선택 사항)
+## 5. 성능 참조
+
+> 테스트 환경은 Mac M1 Max 64GB, 비GPU 가속, 테스트 이미지 해상도는 512x715(1) 및 764×1146(2)입니다.
+
+| 모델 조합 | 메모리 사용량 | 추론 시간(1) | 추론 시간(2) |
+| -- | -- | -- | -- |
+| MODNet + mtcnn | 410MB | 0.207초 | 0.246초 |
+| MODNet + retinaface | 405MB | 0.571초 | 0.971초 |
+| birefnet-v1-lite + retinaface | 6.20GB | 7.063초 | 7.128초 |
+
+## 6. GPU 추론 가속 (선택 사항)
 
 현재 버전에서 NVIDIA GPU로 가속화할 수 있는 모델은 `birefnet-v1-lite`입니다. 약 16GB의 VRAM이 필요합니다.
 

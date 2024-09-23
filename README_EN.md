@@ -155,7 +155,17 @@ Store in the project's `hivision/creator/weights` directory:
 | RetinaFace | **Offline** face detection model, moderate CPU inference speed (in seconds), and high accuracy | [Download](https://github.com/Zeyi-Lin/HivisionIDPhotos/releases/download/pretrained-model/retinaface-resnet50.onnx) and place it in the `hivision/creator/retinaface/weights` directory |
 | Face++ | Online face detection API launched by Megvii, higher detection accuracy, [official documentation](https://console.faceplusplus.com.cn/documents/4888373) | [Usage Documentation](docs/face++_EN.md)|
 
-## 5. GPU Inference Acceleration (Optional)
+## 5. Performance Reference
+
+> Test environment: Mac M1 Max 64GB, non-GPU acceleration, test image resolution: 512x715(1) and 764×1146(2).
+
+| Model Combination | Memory Occupation | Inference Time (1) | Inference Time (2) |
+| -- | -- | -- | -- |
+| MODNet + mtcnn | 410MB | 0.207s | 0.246s |
+| MODNet + retinaface | 405MB | 0.571s | 0.971s |
+| birefnet-v1-lite + retinaface | 6.20GB | 7.063s | 7.128s |
+
+## 6. GPU Inference Acceleration (Optional)
 
 In the current version, the model that can be accelerated by NVIDIA GPUs is `birefnet-v1-lite`, and please ensure you have around 16GB of VRAM.
 
@@ -313,12 +323,14 @@ This project provides some additional configuration options, which can be set us
 |--|--|--|--|
 | FACE_PLUS_API_KEY | Optional | This is your API key obtained from the Face++ console | `7-fZStDJ····` |
 | FACE_PLUS_API_SECRET | Optional | Secret corresponding to the Face++ API key | `VTee824E····` |
+| RUN_MODE | Optional | Running mode, with the option of `beast` (beast mode). In beast mode, the face detection and matting models will not release memory, achieving faster secondary inference speeds. It is recommended to try to have at least 16GB of memory. | `beast` |
 
 Example of using environment variables in Docker:
 ```bash
 docker run  -d -p 7860:7860 \
     -e FACE_PLUS_API_KEY=7-fZStDJ···· \
     -e FACE_PLUS_API_SECRET=VTee824E···· \
+    -e RUN_MODE=beast \
     linzeyi/hivision_idphotos 
 ```
 
