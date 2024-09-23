@@ -360,17 +360,29 @@ docker run  -d -p 7860:7860 \
 
 <br>
 
-# 💻 개발 팁
+# 자주 묻는 질문 (FAQ)
 
-## 기본 크기와 색상을 어떻게 수정하나요?**
+## 1. 기본 크기와 색상을 어떻게 수정하나요?
 
 - 크기: [size_list_EN.csv](demo/assets/size_list_EN.csv) 파일을 수정한 후 `app.py`를 다시 실행하면 됩니다. 첫 번째 열은 크기 이름, 두 번째 열은 높이, 세 번째 열은 너비입니다.
 - 색상: [color_list_EN.csv](demo/assets/color_list_EN.csv) 파일을 수정한 후 `app.py`를 다시 실행하면 됩니다. 첫 번째 열은 색상 이름, 두 번째 열은 Hex 값입니다.
 
-## 워터마크 폰트 변경 방법
+## 2. 워터마크 글꼴을 어떻게 수정하나요?
 
-1. 폰트 파일을 `hivision/plugin/font` 폴더에 배치합니다.
-2. `hivision/plugin/watermark.py`의 `font_file` 매개변수 값을 폰트 파일 이름으로 변경합니다.
+1. 글꼴 파일을 `hivision/plugin/font` 폴더에 넣습니다.
+2. `hivision/plugin/watermark.py` 파일에서 `font_file` 매개변수 값을 글꼴 파일 이름으로 수정합니다.
+
+## 3. 소셜 미디어 템플릿 사진을 어떻게 추가하나요?
+
+1. 템플릿 이미지를 `hivision/plugin/template/assets` 폴더에 넣습니다. 템플릿 이미지는 4채널 투명 PNG입니다.
+2. `hivision/plugin/template/assets/template_config.json` 파일에 최신 템플릿 정보를 추가합니다. 여기서 `width`는 템플릿 이미지의 너비(px), `height`는 템플릿 이미지의 높이(px), `anchor_points`는 템플릿의 투명 영역 네 모서리의 좌표(px)입니다. `rotation`은 투명 영역의 수직 방향에 대한 회전 각도로, >0은 반시계 방향, <0은 시계 방향입니다.
+3. `demo/processor.py`의 `_generate_image_template` 함수 내의 `TEMPLATE_NAME_LIST` 변수에 최신 템플릿 이름을 추가합니다.
+
+<img src="assets/social_template.png" width="500">
+
+## 4. Gradio Demo의 상단 내비게이션 바를 어떻게 수정하나요?
+
+- `demo/assets/title.md` 파일을 수정합니다.
 
 <br>
 

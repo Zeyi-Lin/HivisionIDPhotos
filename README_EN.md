@@ -384,6 +384,10 @@ docker run  -d -p 7860:7860 \
 
 <img src="assets/social_template.png" width="500">
 
+## 4. How to Modify the Top Navigation Bar of the Gradio Demo?
+
+- Modify the `demo/assets/title.md` file.
+
 <br>
 
 # 📧 Contact Us
