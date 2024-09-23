@@ -133,10 +133,10 @@ elif args.type == "add_background":
     if args.kb:
         result_image = cv2.cvtColor(result_image, cv2.COLOR_RGB2BGR)
         result_image = resize_image_to_kb(
-            result_image, args.output_image_dir, int(args.kb)
+            result_image, args.output_image_dir, int(args.kb), dpi=args.dpi
         )
     else:
-        cv2.imwrite(args.output_image_dir, result_image)
+        save_image_dpi_to_bytes(cv2.cvtColor(result_image, cv2.COLOR_RGBA2BGRA), args.output_image_dir, dpi=args.dpi)
 
 # 如果模式是生成排版照
 elif args.type == "generate_layout_photos":
@@ -158,10 +158,10 @@ elif args.type == "generate_layout_photos":
     if args.kb:
         result_layout_image = cv2.cvtColor(result_layout_image, cv2.COLOR_RGB2BGR)
         result_layout_image = resize_image_to_kb(
-            result_layout_image, args.output_image_dir, int(args.kb)
+            result_layout_image, args.output_image_dir, int(args.kb), dpi=args.dpi
         )
     else:
-        cv2.imwrite(args.output_image_dir, result_layout_image)
+        save_image_dpi_to_bytes(cv2.cvtColor(result_layout_image, cv2.COLOR_RGBA2BGRA), args.output_image_dir, dpi=args.dpi)
 
 # 如果模式是证件照裁切
 elif args.type == "idphoto_crop":
@@ -173,9 +173,9 @@ elif args.type == "idphoto_crop":
         print("人脸数量不等于 1，请上传单张人脸的图像。")
     else:
         # 保存标准照
-        cv2.imwrite(args.output_image_dir, result.standard)
+        save_image_dpi_to_bytes(cv2.cvtColor(result.standard, cv2.COLOR_RGBA2BGRA), args.output_image_dir, dpi=args.dpi)
 
         # 保存高清照
         file_name, file_extension = os.path.splitext(args.output_image_dir)
         new_file_name = file_name + "_hd" + file_extension
-        cv2.imwrite(new_file_name, result.hd)
+        save_image_dpi_to_bytes(cv2.cvtColor(result.hd, cv2.COLOR_RGBA2BGRA), new_file_name, dpi=args.dpi)
