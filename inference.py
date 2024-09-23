@@ -129,12 +129,10 @@ elif args.type == "add_background":
         input_image, bgr=color, mode=render_choice[args.render]
     )
     result_image = result_image.astype(np.uint8)
-
+    result_image = cv2.cvtColor(result_image, cv2.COLOR_RGBA2BGRA)
+    
     if args.kb:
-        result_image = cv2.cvtColor(result_image, cv2.COLOR_RGB2BGR)
-        result_image = resize_image_to_kb(
-            result_image, args.output_image_dir, int(args.kb), dpi=args.dpi
-        )
+        resize_image_to_kb(result_image, args.output_image_dir, int(args.kb), dpi=args.dpi)
     else:
         save_image_dpi_to_bytes(cv2.cvtColor(result_image, cv2.COLOR_RGBA2BGRA), args.output_image_dir, dpi=args.dpi)
 
