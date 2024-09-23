@@ -75,7 +75,7 @@ def judge_layout(
         return layout_mode, centerBlockWidth_1, centerBlockHeight_1
 
 
-def generate_layout_photo(input_height, input_width):
+def generate_layout_array(input_height, input_width):
     # 1.基础参数表
     LAYOUT_WIDTH = 1746
     LAYOUT_HEIGHT = 1180

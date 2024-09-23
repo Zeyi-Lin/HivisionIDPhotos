@@ -9,7 +9,7 @@ from hivision.utils import (
     save_image_dpi_to_bytes,
 )
 from hivision.creator.layout_calculator import (
-    generate_layout_photo,
+    generate_layout_array,
     generate_layout_image,
 )
 from hivision.creator.choose_handler import choose_handler
@@ -435,7 +435,7 @@ class IDPhotoProcessor:
         if idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1]:
             return None, False
 
-        typography_arr, typography_rotate = generate_layout_photo(
+        typography_arr, typography_rotate = generate_layout_array(
             input_height=idphoto_json["size"][0],
             input_width=idphoto_json["size"][1],
         )

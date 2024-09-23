@@ -2,7 +2,7 @@ from fastapi import FastAPI, UploadFile, Form
 from hivision import IDCreator
 from hivision.error import FaceError
 from hivision.creator.layout_calculator import (
-    generate_layout_photo,
+    generate_layout_array,
     generate_layout_image,
 )
 from hivision.creator.choose_handler import choose_handler
@@ -173,7 +173,7 @@ async def generate_layout_photos(
 
     size = (int(height), int(width))
 
-    typography_arr, typography_rotate = generate_layout_photo(
+    typography_arr, typography_rotate = generate_layout_array(
         input_height=size[0], input_width=size[1]
     )
 
