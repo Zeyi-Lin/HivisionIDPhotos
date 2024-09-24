@@ -11,6 +11,9 @@ from demo.processor import IDPhotoProcessor
 
 
 def load_description(fp):
+    """
+    加载title.md文件作为Demo的顶部栏
+    """
     with open(fp, "r", encoding="utf-8") as f:
         content = f.read()
     return content
@@ -338,7 +341,9 @@ def create_ui(
                     )
 
                 img_but = gr.Button(
-                    LOCALES["button"][DEFAULT_LANG]["label"], elem_id="btn"
+                    LOCALES["button"][DEFAULT_LANG]["label"],
+                    elem_id="btn",
+                    variant="primary"
                 )
 
                 example_images = gr.Examples(
