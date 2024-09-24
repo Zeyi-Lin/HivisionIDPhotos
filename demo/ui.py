@@ -148,6 +148,7 @@ def create_ui(
                             label=LOCALES["plugin"][DEFAULT_LANG]["label"],
                             choices=LOCALES["plugin"][DEFAULT_LANG]["choices"],
                             interactive=True,
+                            value=LOCALES["plugin"][DEFAULT_LANG]["value"]
                         )
 
                 # TAB2 - 高级参数 ------------------------------------------------
