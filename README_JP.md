@@ -102,6 +102,7 @@ HivisionIDPhotoがあなたに役立つ場合は、このリポジトリをス�
 - [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp)：HivisionIDphotos C++バージョン、[zjkhahah](https://github.com/zjkhahah)によって構築
 - [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)：Windowsクライアントアプリケーション、[zhaoyun0071](https://github.com/zhaoyun0071)によって構築
 - [HivisionIDPhotos-NAS](https://github.com/ONG-Leo/HivisionIDPhotos-NAS)：Synology NAS導入の中国語チュートリアル、[ONG-Leo](https://github.com/ONG-Leo)による貢献
+- [HivisionIDPhotos-Uniapp](https://github.com/soulerror/HivisionIDPhotos-Uniapp): 基于uniapp的微信证件照小程序前端，基于HivisionIDphotos算法驱动，由 [soulerror](https://github.com/soulerror) 贡献
 
 <br>
 
