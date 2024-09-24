@@ -45,9 +45,9 @@
 - [Docker部署](#-docker-部署)
 - [联系我们](#-联系我们)
 - [FAQ](#faq)
-- [贡献者](#贡献者)
-- [感谢支持](#感谢支持)
-- [License](#lincese)
+- [感谢支持](#-感谢支持)
+- [License](#-lincese)
+- [引用](#-引用)
 
 <br>
 
@@ -193,7 +193,7 @@ pip install torch --index-url https://download.pytorch.org/whl/cu121
 
 <br>
 
-# 🚀 运行 Gradio Demo
+# ⚡️ 运行 Gradio Demo
 
 ```bash
 python app.py
@@ -347,35 +347,6 @@ docker run  -d -p 7860:7860 \
 
 <br>
 
-# 📖 引用项目
-
-1. MTCNN:
-
-```bibtex
-@software{ipazc_mtcnn_2021,
-    author = {ipazc},
-    title = {{MTCNN}},
-    url = {https://github.com/ipazc/mtcnn},
-    year = {2021},
-    publisher = {GitHub}
-}
-```
-
-2. ModNet:
-
-```bibtex
-@software{zhkkke_modnet_2021,
-    author = {ZHKKKe},
-    title = {{ModNet}},
-    url = {https://github.com/ZHKKKe/MODNet},
-    year = {2021},
-    publisher = {GitHub}
-}
-```
-
-<br>
-
-
 # FAQ
 
 ## 1. 如何修改预设尺寸和颜色？
@@ -408,7 +379,15 @@ docker run  -d -p 7860:7860 \
 
 <br>
 
-# 贡献者
+# 🙏 感谢支持
+
+[![Stargazers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/stars/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/stargazers)
+
+[![Forkers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/forks/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/network/members)
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
+
+贡献者们：
 
 <a href="https://github.com/Zeyi-Lin/HivisionIDPhotos/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Zeyi-Lin/HivisionIDPhotos" />
@@ -418,19 +397,28 @@ docker run  -d -p 7860:7860 \
 
 <br>
 
-# 感谢支持
+# 📜 Lincese
 
-[![Stargazers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/stars/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/stargazers)
-
-[![Forkers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/forks/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/network/members)
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
+This repository is licensed under the [Apache-2.0 License](LICENSE).
 
 <br>
 
-# Lincese
+# 📚 引用
 
-This repository is licensed under the [Apache-2.0 License](LICENSE).
+如果您在研究或项目中使用了HivisionIDPhotos，请考虑引用我们的工作。您可以使用以下BibTeX条目：
+
+```bibtex
+@misc{hivisionidphotos,
+      title={{HivisionIDPhotos: A Lightweight and Efficient AI ID Photos Tool}},
+      author={Zeyi Lin and SwanLab Team},
+      year={2024},
+      publisher={GitHub},
+      url = {\url{https://github.com/Zeyi-Lin/HivisionIDPhotos}},
+}
+```
+
+
+
 
 [github-stars-shield]: https://img.shields.io/github/stars/zeyi-lin/hivisionidphotos?color=ffcb47&labelColor=black&style=flat-square
 [github-stars-link]: https://github.com/zeyi-lin/hivisionidphotos/stargazers
