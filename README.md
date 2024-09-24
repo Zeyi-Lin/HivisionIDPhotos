@@ -335,6 +335,7 @@ docker compose up -d
 | FACE_PLUS_API_KEY	 | 可选	| 这是你在 Face++ 控制台申请的 API 密钥	 | `7-fZStDJ····` |
 | FACE_PLUS_API_SECRET	 | 可选	| Face++ API密钥对应的Secret | `VTee824E····` |
 | RUN_MODE | 可选 | 运行模式，可选值为`beast`(野兽模式)。野兽模式下人脸检测和抠图模型将不释放内存，从而获得更快的二次推理速度。建议内存16GB以上尝试。 | `beast` |
+| DEFAULT_LANG | 可选 | Gradio Demo启动时的默认语言| `en` |
 
 docker使用环境变量示例：
 ```bash
@@ -342,6 +343,7 @@ docker run  -d -p 7860:7860 \
     -e FACE_PLUS_API_KEY=7-fZStDJ···· \
     -e FACE_PLUS_API_SECRET=VTee824E···· \
     -e RUN_MODE=beast \
+    -e DEFAULT_LANG=en \
     linzeyi/hivision_idphotos  
 ```
 
