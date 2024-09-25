@@ -70,21 +70,29 @@ class IDPhotoProcessor:
             render_option
         )
         # 读取插件选项
+        # 人脸对齐选项
         if LOCALES["plugin"][language]["choices"][0] in plugin_option:
             face_alignment_option = True
         else:
             face_alignment_option = False
+        # 排版裁剪线选项
         if LOCALES["plugin"][language]["choices"][1] in plugin_option:
             layout_photo_crop_line_option = True
         else:
             layout_photo_crop_line_option = False
+        # JPEG格式选项
         if LOCALES["plugin"][language]["choices"][2] in plugin_option:
             jpeg_format_option = True
         else:
             jpeg_format_option = False
+        # 五寸相纸选项
+        if LOCALES["plugin"][language]["choices"][3] in plugin_option:
+            five_inch_option = True
+        else:
+            five_inch_option = False
         
         idphoto_json = self._initialize_idphoto_json(
-            mode_option, color_option, render_option_index, image_kb_options, layout_photo_crop_line_option, jpeg_format_option
+            mode_option, color_option, render_option_index, image_kb_options, layout_photo_crop_line_option, jpeg_format_option, five_inch_option
         )
 
         # 处理尺寸模式
@@ -169,6 +177,7 @@ class IDPhotoProcessor:
         image_kb_options,
         layout_photo_crop_line_option,
         jpeg_format_option,
+        five_inch_option,
     ):
         """初始化idphoto_json字典"""
         return {
@@ -180,6 +189,7 @@ class IDPhotoProcessor:
             "custom_image_dpi": None,
             "layout_photo_crop_line_option": layout_photo_crop_line_option,
             "jpeg_format_option": jpeg_format_option,
+            "five_inch_option": five_inch_option,
         }
 
     # 处理尺寸模式
@@ -438,6 +448,8 @@ class IDPhotoProcessor:
         typography_arr, typography_rotate = generate_layout_array(
             input_height=idphoto_json["size"][0],
             input_width=idphoto_json["size"][1],
+            LAYOUT_HEIGHT= 1205 if not idphoto_json["five_inch_option"] else 1051,
+            LAYOUT_WIDTH= 1795 if not idphoto_json["five_inch_option"] else 1500,
         )
         
         result_image_layout = generate_layout_image(
@@ -447,6 +459,8 @@ class IDPhotoProcessor:
             height=idphoto_json["size"][0],
             width=idphoto_json["size"][1],
             crop_line=idphoto_json["layout_photo_crop_line_option"],
+            LAYOUT_HEIGHT=1205 if not idphoto_json["five_inch_option"] else 1051,
+            LAYOUT_WIDTH=1795 if not idphoto_json["five_inch_option"] else 1500,
         )
 
         return result_image_layout, True
