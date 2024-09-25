@@ -99,10 +99,14 @@ HivisionIDPhoto가 여러분에게 도움이 된다면, 이 리포지토리를 �
 
 [<img src="assets/community-wechat-miniprogram.png" width="900" alt="HivisionIDPhotos-wechat-weapp">](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp)
 
+- [HivisionIDPhotos-Uniapp](https://github.com/soulerror/HivisionIDPhotos-Uniapp): 기본 uniapp 증명사진 미니 프로그램 전면, HivisionIDphotos 알고리즘 기반, [soulerror](https://github.com/soulerror)이 기여
+
+[<img src="assets/community-uniapp-wechat-miniprogram.png" width="900" alt="HivisionIDPhotos-uniapp">](https://github.com/soulerror/HivisionIDPhotos-Uniapp)
+
 - [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp): HivisionIDphotos C++ 버전, [zjkhahah](https://github.com/zjkhahah)이 구축
 - [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI): Windows 클라이언트 애플리케이션, [zhaoyun0071](https://github.com/zhaoyun0071)이 구축
 - [HivisionIDPhotos-NAS](https://github.com/ONG-Leo/HivisionIDPhotos-NAS): Synology NAS 배포 중국어 튜토리얼, [ONG-Leo](https://github.com/ONG-Leo)가 기여
-- [HivisionIDPhotos-Uniapp](https://github.com/soulerror/HivisionIDPhotos-Uniapp): 基于uniapp的微信证件照小程序前端，基于HivisionIDphotos算法驱动，由 [soulerror](https://github.com/soulerror) 贡献
+
 
 <br>
 

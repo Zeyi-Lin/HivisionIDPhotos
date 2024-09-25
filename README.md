@@ -100,14 +100,17 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 
 [<img src="assets/comfyui.png" width="900" alt="ComfyUI workflow">](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
 
-- [HivisionIDPhotos-wechat-weapp](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp): 微信证件照小程序，基于HivisionIDphotos算法驱动，由 [no1xuan](https://github.com/no1xuan) 贡献
+- [HivisionIDPhotos-wechat-weapp](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp): 微信证件照小程序，基于HivisionIDPhotos算法驱动，由 [no1xuan](https://github.com/no1xuan) 贡献
 
 [<img src="assets/community-wechat-miniprogram.png" width="900" alt="HivisionIDPhotos-wechat-weapp">](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp)
+
+- [HivisionIDPhotos-Uniapp](https://github.com/soulerror/HivisionIDPhotos-Uniapp): 基于uniapp的微信证件照小程序前端，HivisionIDPhotos算法驱动，由 [soulerror](https://github.com/soulerror) 贡献
+
+[<img src="assets/community-uniapp-wechat-miniprogram.png" width="900" alt="HivisionIDPhotos-uniapp">](https://github.com/soulerror/HivisionIDPhotos-Uniapp)
 
 - [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp): HivisionIDphotos C++版本，由 [zjkhahah](https://github.com/zjkhahah) 构建
 - [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)：Windows客户端应用，由 [zhaoyun0071](https://github.com/zhaoyun0071) 构建
 - [HivisionIDPhotos-NAS](https://github.com/ONG-Leo/HivisionIDPhotos-NAS): 群晖NAS部署中文教程，由 [ONG-Leo](https://github.com/ONG-Leo) 贡献
-- [HivisionIDPhotos-Uniapp](https://github.com/soulerror/HivisionIDPhotos-Uniapp): 基于uniapp的微信证件照小程序前端，基于HivisionIDphotos算法驱动，由 [soulerror](https://github.com/soulerror) 贡献
 
 <br>
 

@@ -103,10 +103,13 @@ We have shared some interesting applications and extensions of HivisionIDPhotos 
 
 [<img src="assets/community-wechat-miniprogram.png" width="900" alt="HivisionIDPhotos-wechat-weapp">](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp)
 
+- [HivisionIDPhotos-Uniapp](https://github.com/soulerror/HivisionIDPhotos-Uniapp): Front-end of WeChat ID photo mini program based on uniapp, powered by the HivisionIDphotos algorithm, contributed by [soulerror](https://github.com/soulerror)
+
+[<img src="assets/community-uniapp-wechat-miniprogram.png" width="900" alt="HivisionIDPhotos-uniapp">](https://github.com/soulerror/HivisionIDPhotos-Uniapp)
+
 - [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp): C++ version of HivisionIDphotos, built by [zjkhahah](https://github.com/zjkhahah)
 - [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI): Windows client application built by [zhaoyun0071](https://github.com/zhaoyun0071)
 - [HivisionIDPhotos-NAS](https://github.com/ONG-Leo/HivisionIDPhotos-NAS): Chinese tutorial for Synology NAS deployment, contributed by [ONG-Leo](https://github.com/ONG-Leo)
-- [HivisionIDPhotos-Uniapp](https://github.com/soulerror/HivisionIDPhotos-Uniapp): Front-end of WeChat ID photo mini program based on uniapp, powered by the HivisionIDphotos algorithm, contributed by [soulerror](https://github.com/soulerror)
 
 <br>
 
