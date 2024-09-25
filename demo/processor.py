@@ -78,9 +78,13 @@ class IDPhotoProcessor:
             layout_photo_crop_line_option = True
         else:
             layout_photo_crop_line_option = False
+        if LOCALES["plugin"][language]["choices"][2] in plugin_option:
+            jpeg_format_option = True
+        else:
+            jpeg_format_option = False
         
         idphoto_json = self._initialize_idphoto_json(
-            mode_option, color_option, render_option_index, image_kb_options, layout_photo_crop_line_option
+            mode_option, color_option, render_option_index, image_kb_options, layout_photo_crop_line_option, jpeg_format_option
         )
 
         # 处理尺寸模式
@@ -164,6 +168,7 @@ class IDPhotoProcessor:
         render_option,
         image_kb_options,
         layout_photo_crop_line_option,
+        jpeg_format_option,
     ):
         """初始化idphoto_json字典"""
         return {
@@ -174,6 +179,7 @@ class IDPhotoProcessor:
             "custom_image_kb": None,
             "custom_image_dpi": None,
             "layout_photo_crop_line_option": layout_photo_crop_line_option,
+            "jpeg_format_option": jpeg_format_option,
         }
 
     # 处理尺寸模式
@@ -367,10 +373,18 @@ class IDPhotoProcessor:
             result_image_hd,
             result_image_layout,
             idphoto_json,
+            format="jpeg" if idphoto_json["jpeg_format_option"] else "png",
         )
 
         # 如果output_image_path_dict为None，即没有设置KB和DPI
         if output_image_path_dict is None:
+            if idphoto_json["jpeg_format_option"]:
+                result_image_standard = gr.update(value=result_image_standard, format="jpeg")
+                result_image_hd = gr.update(value=result_image_hd, format="jpeg")
+            else:
+                result_image_standard = gr.update(value=result_image_standard, format="png")
+                result_image_hd = gr.update(value=result_image_hd, format="png")
+                
             return self._create_response(
                 result_image_standard,
                 result_image_hd,
@@ -613,7 +627,7 @@ class IDPhotoProcessor:
         result_layout_image_gr,
         result_image_template_gr,
         result_image_template_accordion_gr,
-    ):
+    ):    
         """创建响应"""
         response = [
             result_image_standard,
