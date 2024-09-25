@@ -55,6 +55,7 @@
 
 - 在线体验： [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
 
+- 2024.09.25: 增加**五寸相纸**和**JPEG下载**选项｜默认照片下载支持300DPI
 - 2024.09.24: API接口增加base64图像传入选项 | Gradio Demo增加**排版照裁剪线**功能
 - 2024.09.22: Gradio Demo增加**野兽模式**，可设置内存加载策略 | API接口增加**dpi、face_alignment**参数
 - 2024.09.18: Gradio Demo增加**分享模版照**功能、增加**美式证件照**背景选项
@@ -62,7 +63,6 @@
 - 2024.09.16: Gradio Demo增加**人脸旋转对齐**功能，自定义尺寸输入支持**毫米**单位
 - 2024.09.14: Gradio Demo增加**自定义DPI**功能，增加日语和韩语支持，增加**调整亮度、对比度、锐度**功能
 - 2024.09.12: Gradio Demo增加**美白**功能 | API接口增加**加水印**、**设置照片KB值大小**、**证件照裁切**
-- 2024.09.11: Gradio Demo增加**透明图显示与下载**功能
 
 <br>
 
