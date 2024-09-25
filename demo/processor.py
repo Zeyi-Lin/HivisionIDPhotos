@@ -508,10 +508,9 @@ class IDPhotoProcessor:
         idphoto_json,
         format="png",
     ):
-        # 设置输出路径
-        base_path = os.path.join(
-            os.path.dirname(os.path.dirname(__file__)), "demo/kb_output"
-        )
+        # 设置输出路径（临时目录）
+        import tempfile
+        base_path = tempfile.mkdtemp()
         timestamp = int(time.time())
         output_paths = {
             "standard": {
@@ -597,7 +596,6 @@ class IDPhotoProcessor:
             return output_paths
         # 没有自定义设置
         else: 
-            print("没有自定义设置")
             output_paths["standard"]["path"] += f".{format}"
             output_paths["hd"]["path"] += f".{format}"
             output_paths["layout"]["path"] += f".{format}"
