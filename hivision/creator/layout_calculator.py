@@ -75,10 +75,8 @@ def judge_layout(
         return layout_mode, centerBlockWidth_1, centerBlockHeight_1
 
 
-def generate_layout_array(input_height, input_width):
+def generate_layout_array(input_height, input_width, LAYOUT_WIDTH=1795, LAYOUT_HEIGHT=1205):
     # 1.基础参数表
-    LAYOUT_WIDTH = 1746
-    LAYOUT_HEIGHT = 1180
     PHOTO_INTERVAL_H = 30  # 证件照与证件照之间的垂直距离
     PHOTO_INTERVAL_W = 30  # 证件照与证件照之间的水平距离
     SIDES_INTERVAL_H = 50  # 证件照与画布边缘的垂直距离
@@ -118,12 +116,12 @@ def generate_layout_array(input_height, input_width):
 
 
 def generate_layout_image(
-    input_image, typography_arr, typography_rotate, width=295, height=413, crop_line:bool=False,
+    input_image, typography_arr, typography_rotate, width=295, height=413, 
+    crop_line:bool=False,
+    LAYOUT_WIDTH=1795, 
+    LAYOUT_HEIGHT=1205,
 ):
-    # 定义画布的宽度和高度
-    LAYOUT_WIDTH = 1746
-    LAYOUT_HEIGHT = 1180
-    
+  
     # 创建一个白色背景的空白画布
     white_background = np.zeros([LAYOUT_HEIGHT, LAYOUT_WIDTH, 3], np.uint8)
     white_background.fill(255)
