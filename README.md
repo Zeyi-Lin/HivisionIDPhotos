@@ -108,9 +108,11 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 
 
 - [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp): HivisionIDphotos C++版本，由 [zjkhahah](https://github.com/zjkhahah) 构建
+- [ai-idphoto](https://github.com/wmlcjj/ai-idphoto): [HivisionIDPhotos-wechat-weapp](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp) 的uniapp多端兼容版，由 [wmlcjj](https://github.com/wmlcjj) 贡献
+- [HivisionIDPhotos-uniapp-WeChat-gpto1](https://github.com/jkm199/HivisionIDPhotos-uniapp-WeChat-gpto1/): 由gpt-o1辅助完成开发的证件照微信小程序，由 [jkm199](https://github.com/jkm199) 贡献
 - [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)：Windows客户端应用，由 [zhaoyun0071](https://github.com/zhaoyun0071) 构建
 - [HivisionIDPhotos-NAS](https://github.com/ONG-Leo/HivisionIDPhotos-NAS): 群晖NAS部署中文教程，由 [ONG-Leo](https://github.com/ONG-Leo) 贡献
-- [HivisionIDPhotos-uniapp-WeChat-gpto1](https://github.com/jkm199/HivisionIDPhotos-uniapp-WeChat-gpto1/): 由gpt-o1辅助完成开发的证件照微信小程序，由 [jkm199](https://github.com/jkm199) 贡献
+
 
 <br>
 
