@@ -96,21 +96,21 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 
 我们分享了一些由社区构建的HivisionIDPhotos的有趣应用和扩展：
 
-- [HivisionIDPhotos-ComfyUI](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)：ComfyUI证件照处理工作流，由 [AIFSH](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI) 构建 
+| [HivisionIDPhotos-ComfyUI][community-hivision-comfyui] | [HivisionIDPhotos-wechat-weapp][community-hivision-wechat] |
+| :----------------------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------: |
+| <a href="https://github.com/AIFSH/HivisionIDPhotos-ComfyUI"> <img src="assets/comfyui.png" width="900" alt="ComfyUI workflow"> </a>  | <a href="https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp"> <img src="assets/community-wechat-miniprogram.png" width="900" alt="ComfyUI workflow"> </a>  |
+|ComfyUI证件照处理工作流 | 证件照微信小程序（JAVA后端+原生前端） |
 
-[<img src="assets/comfyui.png" width="900" alt="ComfyUI workflow">](https://github.com/AIFSH/HivisionIDPhotos-ComfyUI)
+| [HivisionIDPhotos-Uniapp][community-hivision-uniapp] | [HivisionIDPhotos-web](https://github.com/jkm199/HivisionIDPhotos-web)|
+| :------------------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------: |
+| <a href="https://github.com/soulerror/HivisionIDPhotos-Uniapp"> <img src="assets/community-uniapp-wechat-miniprogram.png" width="900" alt="HivisionIDPhotos-uniapp"> </a>  | <a href="https://github.com/jkm199/HivisionIDPhotos-web"> <img src="assets/community-web.png" width="900" alt="HivisionIDPhotos-uniapp"> </a>  |
+| 证件照微信小程序（uniapp）| 证件照应用网页版 |
 
-- [HivisionIDPhotos-wechat-weapp](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp): 微信证件照小程序，基于HivisionIDPhotos算法驱动，由 [no1xuan](https://github.com/no1xuan) 贡献
-
-[<img src="assets/community-wechat-miniprogram.png" width="900" alt="HivisionIDPhotos-wechat-weapp">](https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp)
-
-- [HivisionIDPhotos-Uniapp](https://github.com/soulerror/HivisionIDPhotos-Uniapp): 基于uniapp的微信证件照小程序前端，HivisionIDPhotos算法驱动，由 [soulerror](https://github.com/soulerror) 贡献
-
-[<img src="assets/community-uniapp-wechat-miniprogram.png" width="900" alt="HivisionIDPhotos-uniapp">](https://github.com/soulerror/HivisionIDPhotos-Uniapp)
 
 - [HivisionIDPhotos-cpp](https://github.com/zjkhahah/HivisionIDPhotos-cpp): HivisionIDphotos C++版本，由 [zjkhahah](https://github.com/zjkhahah) 构建
 - [HivisionIDPhotos-windows-GUI](https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI)：Windows客户端应用，由 [zhaoyun0071](https://github.com/zhaoyun0071) 构建
 - [HivisionIDPhotos-NAS](https://github.com/ONG-Leo/HivisionIDPhotos-NAS): 群晖NAS部署中文教程，由 [ONG-Leo](https://github.com/ONG-Leo) 贡献
+- [HivisionIDPhotos-uniapp-WeChat-gpto1](https://github.com/jkm199/HivisionIDPhotos-uniapp-WeChat-gpto1/): 由gpt-o1辅助完成开发的证件照微信小程序，由 [jkm199](https://github.com/jkm199) 贡献
 
 <br>
 
@@ -466,3 +466,11 @@ This repository is licensed under the [Apache-2.0 License](LICENSE).
 
 [modelscope-shield]: https://img.shields.io/badge/Demo_on_ModelScope-purple?logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIzIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KCiA8Zz4KICA8dGl0bGU+TGF5ZXIgMTwvdGl0bGU+CiAgPHBhdGggaWQ9InN2Z18xNCIgZmlsbD0iIzYyNGFmZiIgZD0ibTAsODkuODRsMjUuNjUsMGwwLDI1LjY0OTk5bC0yNS42NSwwbDAsLTI1LjY0OTk5eiIvPgogIDxwYXRoIGlkPSJzdmdfMTUiIGZpbGw9IiM2MjRhZmYiIGQ9Im05OS4xNCwxMTUuNDlsMjUuNjUsMGwwLDI1LjY1bC0yNS42NSwwbDAsLTI1LjY1eiIvPgogIDxwYXRoIGlkPSJzdmdfMTYiIGZpbGw9IiM2MjRhZmYiIGQ9Im0xNzYuMDksMTQxLjE0bC0yNS42NDk5OSwwbDAsMjIuMTlsNDcuODQsMGwwLC00Ny44NGwtMjIuMTksMGwwLDI1LjY1eiIvPgogIDxwYXRoIGlkPSJzdmdfMTciIGZpbGw9IiMzNmNmZDEiIGQ9Im0xMjQuNzksODkuODRsMjUuNjUsMGwwLDI1LjY0OTk5bC0yNS42NSwwbDAsLTI1LjY0OTk5eiIvPgogIDxwYXRoIGlkPSJzdmdfMTgiIGZpbGw9IiMzNmNmZDEiIGQ9Im0wLDY0LjE5bDI1LjY1LDBsMCwyNS42NWwtMjUuNjUsMGwwLC0yNS42NXoiLz4KICA8cGF0aCBpZD0ic3ZnXzE5IiBmaWxsPSIjNjI0YWZmIiBkPSJtMTk4LjI4LDg5Ljg0bDI1LjY0OTk5LDBsMCwyNS42NDk5OWwtMjUuNjQ5OTksMGwwLC0yNS42NDk5OXoiLz4KICA8cGF0aCBpZD0ic3ZnXzIwIiBmaWxsPSIjMzZjZmQxIiBkPSJtMTk4LjI4LDY0LjE5bDI1LjY0OTk5LDBsMCwyNS42NWwtMjUuNjQ5OTksMGwwLC0yNS42NXoiLz4KICA8cGF0aCBpZD0ic3ZnXzIxIiBmaWxsPSIjNjI0YWZmIiBkPSJtMTUwLjQ0LDQybDAsMjIuMTlsMjUuNjQ5OTksMGwwLDI1LjY1bDIyLjE5LDBsMCwtNDcuODRsLTQ3Ljg0LDB6Ii8+CiAgPHBhdGggaWQ9InN2Z18yMiIgZmlsbD0iIzM2Y2ZkMSIgZD0ibTczLjQ5LDg5Ljg0bDI1LjY1LDBsMCwyNS42NDk5OWwtMjUuNjUsMGwwLC0yNS42NDk5OXoiLz4KICA8cGF0aCBpZD0ic3ZnXzIzIiBmaWxsPSIjNjI0YWZmIiBkPSJtNDcuODQsNjQuMTlsMjUuNjUsMGwwLC0yMi4xOWwtNDcuODQsMGwwLDQ3Ljg0bDIyLjE5LDBsMCwtMjUuNjV6Ii8+CiAgPHBhdGggaWQ9InN2Z18yNCIgZmlsbD0iIzYyNGFmZiIgZD0ibTQ3Ljg0LDExNS40OWwtMjIuMTksMGwwLDQ3Ljg0bDQ3Ljg0LDBsMCwtMjIuMTlsLTI1LjY1LDBsMCwtMjUuNjV6Ii8+CiA8L2c+Cjwvc3ZnPg==&labelColor=white
 [modelscope-link]: https://modelscope.cn/studios/SwanLab/HivisionIDPhotos
+
+<!-- 社区项目链接 -->
+[community-hivision-comfyui]: https://github.com/AIFSH/HivisionIDPhotos-ComfyUI
+[community-hivision-wechat]: https://github.com/no1xuan/HivisionIDPhotos-wechat-weapp
+[community-hivision-uniapp]: https://github.com/soulerror/HivisionIDPhotos-Uniapp
+[community-hivision-cpp]: https://github.com/zjkhahah/HivisionIDPhotos-cpp
+[community-hivision-windows-gui]: https://github.com/zhaoyun0071/HivisionIDPhotos-windows-GUI
+[community-hivision-nas]: https://github.com/ONG-Leo/HivisionIDPhotos-NAS
