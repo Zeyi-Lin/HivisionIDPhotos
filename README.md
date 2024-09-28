@@ -22,8 +22,6 @@
 
 <img src="assets/demoImage.jpg" width=900>
 
-👋 加入我们的[微信群][wechat-link]
-
 </div>
 
 > **相关项目**：
