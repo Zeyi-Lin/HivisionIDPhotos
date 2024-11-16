@@ -320,10 +320,11 @@ class IDPhotoProcessor:
         """处理照片生成错误"""
         return [gr.update(value=None) for _ in range(4)] + [
             gr.update(visible=False),
+            gr.update(value=None),
+            gr.update(value=None),
             gr.update(
                 value=LOCALES["notification"][language]["face_error"], visible=True
             ),
-            None,
         ]
 
     # 处理生成的照片
