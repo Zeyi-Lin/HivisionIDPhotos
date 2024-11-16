@@ -60,7 +60,10 @@ python deploy_api.py
 | head_height_ratio | float | 否 | 面部中心与照片顶部的高度比例，默认为`0.45` |
 | top_distance_max | float | 否 | 头部与照片顶部距离的比例最大值，默认为`0.12` |
 | top_distance_min | float | 否 | 头部与照片顶部距离的比例最小值，默认为`0.1` |
-
+| brightness_strength | float | 否 | 亮度调整强度，默认为`0` |
+| contrast_strength | float | 否 | 对比度调整强度，默认为`0` |
+| sharpen_strength | float | 否 | 锐化调整强度，默认为`0` |
+| saturation_strength | float | 否 | 饱和度调整强度，默认为`0` |
 
 **返回参数：**
 
@@ -247,7 +250,15 @@ curl -X POST "http://127.0.0.1:8080/idphoto" \
 -F "face_detect_model=mtcnn" \
 -F "hd=true" \
 -F "dpi=300" \
--F "face_alignment=true"
+-F "face_alignment=true" \
+-F 'head_height_ratio=0.45' \
+-F 'head_measure_ratio=0.2' \
+-F 'top_distance_min=0.1' \
+-F 'top_distance_max=0.12' \
+-F 'sharpen_strength=0' \
+-F 'saturation_strength=0' \
+-F 'brightness_strength=10' \
+-F 'contrast_strength=0'
 ```
 
 ### 2. 添加背景色
@@ -305,8 +316,7 @@ curl -X 'POST' \
 
 ### 7. 证件照裁切
 ```bash
-curl -X 'POST' \
-  'http://127.0.0.1:8080/idphoto_crop?head_measure_ratio=0.2&head_height_ratio=0.45&top_distance_max=0.12&top_distance_min=0.1' \
+curl -X 'POST' 'http://127.0.0.1:8080/idphoto_crop' \
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'input_image=@idphoto_matting.png;type=image/png' \
@@ -314,7 +324,11 @@ curl -X 'POST' \
   -F 'width=295' \
   -F 'face_detect_model=mtcnn' \
   -F 'hd=true' \
-  -F 'dpi=300'
+  -F 'dpi=300' \
+  -F 'head_height_ratio=0.45' \
+  -F 'head_measure_ratio=0.2' \
+  -F 'top_distance_min=0.1' \
+  -F 'top_distance_max=0.12'
 ```
 
 <br>
@@ -328,13 +342,6 @@ import requests
 url = "http://127.0.0.1:8080/idphoto"
 input_image_path = "demo/images/test0.jpg"
 
-# 设置请求参数
-params = {
-    "head_measure_ratio": 0.2,
-    "head_height_ratio": 0.45,
-    "top_distance_max": 0.12,
-    "top_distance_min": 0.1,
-}
 files = {"input_image": open(input_image_path, "rb")}
 data = {
     "height": 413,
@@ -344,6 +351,14 @@ data = {
     "hd": True,
     "dpi": 300,
     "face_alignment": True,
+    "head_measure_ratio": 0.2,
+    "head_height_ratio": 0.45,
+    "top_distance_max": 0.12,
+    "top_distance_min": 0.1,
+    "brightness_strength": 0,
+    "contrast_strength": 0,
+    "sharpen_strength": 0,
+    "saturation_strength": 0,
 }
 
 response = requests.post(url, params=params, files=files, data=data).json()
@@ -481,14 +496,6 @@ import requests
 # 设置请求的 URL
 url = "http://127.0.0.1:8080/idphoto_crop"
 
-# 设置请求参数
-params = {
-    "head_measure_ratio": 0.2,
-    "head_height_ratio": 0.45,
-    "top_distance_max": 0.12,
-    "top_distance_min": 0.1,
-}
-
 # 设置文件和其他表单数据
 input_image_path = "idphoto_matting.png"
 files = {"input_image": ("idphoto_matting.png", open(input_image_path, "rb"), "image/png")}
@@ -498,10 +505,14 @@ data = {
     "face_detect_model": "mtcnn",
     "hd": "true",
     "dpi": 300,
+    "head_measure_ratio": 0.2,
+    "head_height_ratio": 0.45,
+    "top_distance_max": 0.12,
+    "top_distance_min": 0.1,
 }
 
 # 发送 POST 请求
-response = requests.post(url, params=params, files=files, data=data)
+response = requests.post(url, files=files, data=data)
 
 # 检查响应
 if response.ok:
