@@ -15,7 +15,6 @@ from hivision.utils import (
     add_watermark,
     save_image_dpi_to_bytes,
 )
-import base64
 import numpy as np
 import cv2
 from starlette.middleware.cors import CORSMiddleware
@@ -47,10 +46,14 @@ async def idphoto_inference(
     hd: bool = Form(True),
     dpi: int = Form(300),
     face_align: bool = Form(False),
-    head_measure_ratio: float = 0.2,
-    head_height_ratio: float = 0.45,
-    top_distance_max: float = 0.12,
-    top_distance_min: float = 0.10,
+    head_measure_ratio: float = Form(0.2),
+    head_height_ratio: float = Form(0.45),
+    top_distance_max: float = Form(0.12),
+    top_distance_min: float = Form(0.10),
+    brightness_strength: float = Form(0),
+    contrast_strength: float = Form(0),
+    sharpen_strength: float = Form(0),
+    saturation_strength: float = Form(0),
 ):  
     # 如果传入了base64，则直接使用base64解码
     if input_image_base64:
@@ -74,6 +77,10 @@ async def idphoto_inference(
             head_height_ratio=head_height_ratio,
             head_top_range=(top_distance_max, top_distance_min),
             face_alignment=face_align,
+            brightness_strength=brightness_strength,
+            contrast_strength=contrast_strength,
+            sharpen_strength=sharpen_strength,
+            saturation_strength=saturation_strength,
         )
     except FaceError:
         result_message = {"status": False}
@@ -304,10 +311,10 @@ async def idphoto_crop_inference(
     face_detect_model: str = Form("mtcnn"),
     hd: bool = Form(True),
     dpi: int = Form(300),
-    head_measure_ratio: float = 0.2,
-    head_height_ratio: float = 0.45,
-    top_distance_max: float = 0.12,
-    top_distance_min: float = 0.10,
+    head_measure_ratio: float = Form(0.2),
+    head_height_ratio: float = Form(0.45),
+    top_distance_max: float = Form(0.12),
+    top_distance_min: float = Form(0.10),
 ):
     if input_image_base64:
         img = base64_2_numpy(input_image_base64)

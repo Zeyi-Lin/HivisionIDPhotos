@@ -59,6 +59,10 @@ It is important to note that both generated photos are transparent (RGBA four-ch
 | head_height_ratio | float | No | The ratio of the face center to the top of the photo, with a default value of `0.45`. |
 | top_distance_max | float | No | The maximum ratio of the head to the top of the photo, with a default value of `0.12`. |
 | top_distance_min | float | No | The minimum ratio of the head to the top of the photo, with a default value of `0.1`. |
+| brightness_strength | float | No | Brightness adjustment strength, default is `0` |
+| contrast_strength | float | No | Contrast adjustment strength, default is `0` |
+| sharpen_strength | float | No | Sharpening adjustment strength, default is `0` |
+| saturation_strength | float | No | Saturation adjustment strength, default is `0` |
 
 **Return Parameters:**
 
@@ -329,12 +333,6 @@ url = "http://127.0.0.1:8080/idphoto"
 input_image_path = "demo/images/test0.jpg"
 
 # Set request parameters
-params = {
-    "head_measure_ratio": 0.2,
-    "head_height_ratio": 0.45,
-    "top_distance_max": 0.12,
-    "top_distance_min": 0.1,
-}
 files = {"input_image": open(input_image_path, "rb")}
 data = {
     "height": 413,
@@ -344,9 +342,17 @@ data = {
     "hd": True,
     "dpi": 300,
     "face_alignment": True,
+    "head_measure_ratio": 0.2,
+    "head_height_ratio": 0.45,
+    "top_distance_max": 0.12,
+    "top_distance_min": 0.1,
+    "brightness_strength": 0,
+    "contrast_strength": 0,
+    "sharpen_strength": 0,
+    "saturation_strength": 0,
 }
 
-response = requests.post(url, params=params, files=files, data=data).json()
+response = requests.post(url, files=files, data=data).json()
 
 # response is a JSON formatted dictionary containing status, image_base64_standard, and image_base64_hd
 print(response)
@@ -481,14 +487,6 @@ import requests
 # Set the request URL
 url = "http://127.0.0.1:8080/idphoto_crop"
 
-# Set request parameters
-params = {
-    "head_measure_ratio": 0.2,
-    "head_height_ratio": 0.45,
-    "top_distance_max": 0.12,
-    "top_distance_min": 0.1,
-}
-
 # Set file and other form data
 input_image_path = "idphoto_matting.png"
 files = {"input_image": ("idphoto_matting.png", open(input_image_path, "rb"), "image/png")}
@@ -498,10 +496,14 @@ data = {
     "face_detect_model": "mtcnn",
     "hd": "true",
     "dpi": 300,
+    "head_measure_ratio": 0.2,
+    "head_height_ratio": 0.45,
+    "top_distance_max": 0.12,
+    "top_distance_min": 0.1,
 }
 
 # Send POST request
-response = requests.post(url, params=params, files=files, data=data)
+response = requests.post(url, files=files, data=data)
 
 # Check response
 if response.ok:
