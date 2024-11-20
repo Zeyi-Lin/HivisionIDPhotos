@@ -62,6 +62,7 @@ class IDPhotoProcessor:
         sharpen_strength=0,
         saturation_strength=0,
         plugin_option=[],
+        print_switch=None,
     ):        
         # 初始化参数
         top_distance_min = top_distance_max - 0.02
@@ -85,14 +86,9 @@ class IDPhotoProcessor:
             jpeg_format_option = True
         else:
             jpeg_format_option = False
-        # 五寸相纸选项
-        if LOCALES["plugin"][language]["choices"][3] in plugin_option:
-            five_inch_option = True
-        else:
-            five_inch_option = False
         
         idphoto_json = self._initialize_idphoto_json(
-            mode_option, color_option, render_option_index, image_kb_options, layout_photo_crop_line_option, jpeg_format_option, five_inch_option
+            mode_option, color_option, render_option_index, image_kb_options, layout_photo_crop_line_option, jpeg_format_option, print_switch
         )
 
         # 处理尺寸模式
@@ -177,7 +173,7 @@ class IDPhotoProcessor:
         image_kb_options,
         layout_photo_crop_line_option,
         jpeg_format_option,
-        five_inch_option,
+        print_switch,
     ):
         """初始化idphoto_json字典"""
         return {
@@ -189,7 +185,7 @@ class IDPhotoProcessor:
             "custom_image_dpi": None,
             "layout_photo_crop_line_option": layout_photo_crop_line_option,
             "jpeg_format_option": jpeg_format_option,
-            "five_inch_option": five_inch_option,
+            "print_switch": print_switch,
         }
 
     # 处理尺寸模式
@@ -446,11 +442,29 @@ class IDPhotoProcessor:
         if idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1]:
             return None, False
 
+        # 预设排版照尺寸
+        SIX_INCH = [1205, 1795]
+        FIVE_INCH = [1051, 1500]
+        A4 = [2479, 3508]
+        THREE_R = [1051, 1500]
+        FOUR_R = [1205, 1795]
+
+        # 预设排版照尺寸字典
+        PRESET_LAYOUT_SIZE = {
+            LOCALES["print_switch"][language]["choices"][0]: SIX_INCH,
+            LOCALES["print_switch"][language]["choices"][1]: FIVE_INCH,
+            LOCALES["print_switch"][language]["choices"][2]: A4,
+            LOCALES["print_switch"][language]["choices"][3]: THREE_R,
+            LOCALES["print_switch"][language]["choices"][4]: FOUR_R,
+        }
+        
+        choose_layout_size = PRESET_LAYOUT_SIZE[idphoto_json["print_switch"]]
+        
         typography_arr, typography_rotate = generate_layout_array(
             input_height=idphoto_json["size"][0],
             input_width=idphoto_json["size"][1],
-            LAYOUT_HEIGHT= 1205 if not idphoto_json["five_inch_option"] else 1051,
-            LAYOUT_WIDTH= 1795 if not idphoto_json["five_inch_option"] else 1500,
+            LAYOUT_HEIGHT= choose_layout_size[0],
+            LAYOUT_WIDTH= choose_layout_size[1],
         )
         
         result_image_layout = generate_layout_image(
@@ -460,8 +474,8 @@ class IDPhotoProcessor:
             height=idphoto_json["size"][0],
             width=idphoto_json["size"][1],
             crop_line=idphoto_json["layout_photo_crop_line_option"],
-            LAYOUT_HEIGHT=1205 if not idphoto_json["five_inch_option"] else 1051,
-            LAYOUT_WIDTH=1795 if not idphoto_json["five_inch_option"] else 1500,
+            LAYOUT_HEIGHT=choose_layout_size[0],
+            LAYOUT_WIDTH=choose_layout_size[1],
         )
 
         return result_image_layout, True

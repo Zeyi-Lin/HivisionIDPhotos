@@ -340,6 +340,19 @@ def create_ui(
                             watermark_text_space,
                         ],
                     )
+                
+                # TAB5 - 打印 ------------------------------------------------
+                with gr.Tab(
+                    LOCALES["print_tab"][DEFAULT_LANG]["label"]
+                ) as print_parameter_tab:
+                    print_options = gr.Radio(
+                        choices=LOCALES["print_switch"][DEFAULT_LANG]["choices"],
+                        label=LOCALES["print_switch"][DEFAULT_LANG]["label"],
+                        value=LOCALES["print_switch"][DEFAULT_LANG]["choices"][0],
+                        interactive=True,
+                    )
+                    
+                
 
                 img_but = gr.Button(
                     LOCALES["button"][DEFAULT_LANG]["label"],
@@ -557,6 +570,14 @@ def create_ui(
                         choices=LOCALES["plugin"][language]["choices"],
                         value=LOCALES["plugin"][language]["choices"][0],
                     ),
+                    print_parameter_tab: gr.update(
+                        label=LOCALES["print_tab"][language]["label"]
+                    ),
+                    print_options: gr.update(
+                        label=LOCALES["print_switch"][language]["label"],
+                        choices=LOCALES["print_switch"][language]["choices"],
+                        value=LOCALES["print_switch"][language]["choices"][0],
+                    ),
                 }
 
             def change_visibility(option, lang, locales_key, custom_component):
@@ -667,6 +688,8 @@ def create_ui(
                     custom_size_height_mm,
                     img_output_template,
                     template_image_accordion,
+                    print_parameter_tab,
+                    print_options,
                 ],
             )
 
@@ -742,6 +765,7 @@ def create_ui(
                     sharpen_option,
                     saturation_option,
                     plugin_options,
+                    print_options,
                 ],
                 outputs=[
                     img_output_standard,
