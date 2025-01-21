@@ -18,6 +18,12 @@ from hivision.utils import (
 import numpy as np
 import cv2
 from starlette.middleware.cors import CORSMiddleware
+from starlette.formparsers import MultiPartParser
+
+# 设置Starlette表单字段大小限制
+MultiPartParser.max_part_size = 10 * 1024 * 1024  # 10MB
+# 设置Starlette文件上传大小限制
+MultiPartParser.max_file_size = 20 * 1024 * 1024   # 20MB
 
 app = FastAPI()
 creator = IDCreator()
