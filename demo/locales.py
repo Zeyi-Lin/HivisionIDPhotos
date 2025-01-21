@@ -718,6 +718,7 @@ LOCALES = {
         },
     },
     "print_switch": {
+        "shape": [[1205, 1795], [1051, 1500], [2479, 3508], [1051, 1500], [1205, 1795]],
         "en": {
             "label": "Paper size",
             "choices": ["6 inch", "5 inch", "A4", "3R", "4R"],

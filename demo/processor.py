@@ -442,20 +442,13 @@ class IDPhotoProcessor:
         if idphoto_json["size_mode"] in LOCALES["size_mode"][language]["choices"][1]:
             return None, False
 
-        # 预设排版照尺寸
-        SIX_INCH = [1205, 1795]
-        FIVE_INCH = [1051, 1500]
-        A4 = [2479, 3508]
-        THREE_R = [1051, 1500]
-        FOUR_R = [1205, 1795]
-
         # 预设排版照尺寸字典
         PRESET_LAYOUT_SIZE = {
-            LOCALES["print_switch"][language]["choices"][0]: SIX_INCH,
-            LOCALES["print_switch"][language]["choices"][1]: FIVE_INCH,
-            LOCALES["print_switch"][language]["choices"][2]: A4,
-            LOCALES["print_switch"][language]["choices"][3]: THREE_R,
-            LOCALES["print_switch"][language]["choices"][4]: FOUR_R,
+            choice: shape
+            for choice, shape in zip(
+                LOCALES["print_switch"][language]["choices"],
+                LOCALES["print_switch"]["shape"]
+            )
         }
         
         choose_layout_size = PRESET_LAYOUT_SIZE[idphoto_json["print_switch"]]
