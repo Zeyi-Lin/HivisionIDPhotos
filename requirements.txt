@@ -5,3 +5,4 @@ requests
 mtcnn-runtime
 tqdm
 starlette
+security==1.3.1
