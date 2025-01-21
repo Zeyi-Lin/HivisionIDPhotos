@@ -378,6 +378,10 @@ docker run  -d -p 7860:7860 \
 
 - 修改`demo/assets/title.md`
 
+## 5. 如何添加/修改「打印排版」中的尺寸？
+
+- 修改`demo/locales.py`中的`print_switch`字典，添加/修改新的尺寸名称和尺寸参数
+
 <br>
 
 # 📧 联系我们

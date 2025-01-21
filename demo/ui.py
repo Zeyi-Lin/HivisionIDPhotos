@@ -351,7 +351,6 @@ def create_ui(
                         value=LOCALES["print_switch"][DEFAULT_LANG]["choices"][0],
                         interactive=True,
                     )
-                    
                 
 
                 img_but = gr.Button(
