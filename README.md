@@ -27,7 +27,7 @@
 
 > **相关项目**：
 >
-> - [SwanLab](https://github.com/SwanHubX/SwanLab)：训练人像抠图模型全程用它来分析和监控，以及和实验室同学协作交流，大幅提升了训练效率。
+> - [SwanLab](https://github.com/SwanHubX/SwanLab)：一个开源、现代化设计的深度学习训练跟踪与可视化工具，同时支持云端/离线使用，国内好用的Wandb平替；适配30+主流框架（PyTorch、HuggingFace Transformers、LLaMA Factory、Lightning等），欢迎使用！
 
 
 <br>
