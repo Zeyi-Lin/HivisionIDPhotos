@@ -17,6 +17,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 [![][swanhub-demo-shield]][swanhub-demo-link]
 [![][modelscope-shield]][modelscope-link]
 [![][modelers-shield]][modelers-link]
+[![][compshare-shield]][compshare-link]
 
 [![][trendshift-shield]][trendshift-link]
 [![][hellogithub-shield]][hellogithub-link]
@@ -53,7 +54,7 @@ English / [中文](README.md) / [日本語](README_JP.md) / [한국어](README_K
 
 # 🤩 Recent Updates
 
-- Online Experience: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]
+- Online Experience: [![SwanHub Demo](https://img.shields.io/static/v1?label=Demo&message=SwanHub%20Demo&color=blue)](https://swanhub.co/ZeYiLin/HivisionIDPhotos/demo)、[![Spaces](https://img.shields.io/badge/🤗-Open%20in%20Spaces-blue)](https://huggingface.co/spaces/TheEeeeLin/HivisionIDPhotos)、[![][modelscope-shield]][modelscope-link]、[![][compshare-shield]][compshare-link]
 
 - 2024.11.20: Gradio Demo adds **Print Layout** option, supports six-inch, five-inch, A4, 3R, and 4R layout sizes
 - 2024.11.16: API interface adds beauty effect parameter
@@ -467,3 +468,6 @@ This repository is licensed under the [Apache-2.0 License](LICENSE).
 
 [modelers-shield]: https://img.shields.io/badge/Demo_on_Modelers-c42a2a?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCAxMjQgNjQiIGZpbGw9Im5vbmUiPgo8cGF0aCBkPSJNNDIuNzc4MyAwSDI2LjU5NzdWMTUuNzc4N0g0Mi43NzgzVjBaIiBmaWxsPSIjREUwNDI5Ii8+CjxwYXRoIGQ9Ik0xNi41MDg4IDQuMTc5MkgwLjMyODEyNVYxOS45NTc5SDE2LjUwODhWNC4xNzkyWiIgZmlsbD0iIzI0NDk5QyIvPgo8cGF0aCBkPSJNMTIzLjk1MiA0LjE3OTJIMTA3Ljc3MVYxOS45NTc5SDEyMy45NTJWNC4xNzkyWiIgZmlsbD0iIzI0NDk5QyIvPgo8cGF0aCBkPSJNMTYuNTA4OCA0NS40NjE5SDAuMzI4MTI1VjYxLjI0MDZIMTYuNTA4OFY0NS40NjE5WiIgZmlsbD0iIzI0NDk5QyIvPgo8cGF0aCBkPSJNMTIzLjk1MiA0NS40NjE5SDEwNy43NzFWNjEuMjQwNkgxMjMuOTUyVjQ1LjQ2MTlaIiBmaWxsPSIjMjQ0OTlDIi8+CjxwYXRoIGQ9Ik0zMi43MDggMTUuNzc4OEgxNi41MjczVjMxLjU1NzVIMzIuNzA4VjE1Ljc3ODhaIiBmaWxsPSIjREUwNDI5Ii8+CjxwYXRoIGQ9Ik01Mi44NDg2IDE1Ljc3ODhIMzYuNjY4VjMxLjU1NzVINTIuODQ4NlYxNS43Nzg4WiIgZmlsbD0iI0RFMDQyOSIvPgo8cGF0aCBkPSJNOTcuNzIzNyAwSDgxLjU0M1YxNS43Nzg3SDk3LjcyMzdWMFoiIGZpbGw9IiNERTA0MjkiLz4KPHBhdGggZD0iTTg3LjY1MzQgMTUuNzc4OEg3MS40NzI3VjMxLjU1NzVIODcuNjUzNFYxNS43Nzg4WiIgZmlsbD0iI0RFMDQyOSIvPgo8cGF0aCBkPSJNMTA3Ljc5NCAxNS43Nzg4SDkxLjYxMzNWMzEuNTU3NUgxMDcuNzk0VjE1Ljc3ODhaIiBmaWxsPSIjREUwNDI5Ii8+CjxwYXRoIGQ9Ik0yNC42NzQ4IDMxLjU1NzZIOC40OTQxNFY0Ny4zMzYzSDI0LjY3NDhWMzEuNTU3NloiIGZpbGw9IiNERTA0MjkiLz4KPHBhdGggZD0iTTYwLjg3OTkgMzEuNTU3Nkg0NC42OTkyVjQ3LjMzNjNINjAuODc5OVYzMS41NTc2WiIgZmlsbD0iI0RFMDQyOSIvPgo8cGF0aCBkPSJNNzkuNjIwMSAzMS41NTc2SDYzLjQzOTVWNDcuMzM2M0g3OS42MjAxVjMxLjU1NzZaIiBmaWxsPSIjREUwNDI5Ii8+CjxwYXRoIGQ9Ik0xMTUuODI1IDMxLjU1NzZIOTkuNjQ0NVY0Ny4zMzYzSDExNS44MjVWMzEuNTU3NloiIGZpbGw9IiNERTA0MjkiLz4KPHBhdGggZD0iTTcwLjI1NDkgNDcuMzM1OUg1NC4wNzQyVjYzLjExNDdINzAuMjU0OVY0Ny4zMzU5WiIgZmlsbD0iI0RFMDQyOSIvPgo8L3N2Zz4=&labelColor=white
 [modelers-link]: https://modelers.cn/spaces/SwanLab/HivisionIDPhotos
+
+[compshare-shield]: https://www-s.ucloud.cn/2025/02/dbef8b07ea3d316006d9c22765c3cd53_1740104342584.svg
+[compshare-link]: https://www.compshare.cn/images-detail?ImageID=compshareImage-17jacgm4ju16&ytag=HG_GPU_HivisionIDPhotos
