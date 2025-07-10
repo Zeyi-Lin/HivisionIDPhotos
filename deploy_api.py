@@ -52,6 +52,7 @@ async def idphoto_inference(
     hd: bool = Form(True),
     dpi: int = Form(300),
     face_align: bool = Form(False),
+    whitening_strength: int = Form(0),
     head_measure_ratio: float = Form(0.2),
     head_height_ratio: float = Form(0.45),
     top_distance_max: float = Form(0.12),
@@ -69,6 +70,8 @@ async def idphoto_inference(
         image_bytes = await input_image.read()
         nparr = np.frombuffer(image_bytes, np.uint8)
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        # 将BGR转换为RGB
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
     # ------------------- 选择抠图与人脸检测模型 -------------------
     choose_handler(creator, human_matting_model, face_detect_model)
@@ -83,6 +86,7 @@ async def idphoto_inference(
             head_height_ratio=head_height_ratio,
             head_top_range=(top_distance_max, top_distance_min),
             face_alignment=face_align,
+            whitening_strength=whitening_strength,
             brightness_strength=brightness_strength,
             contrast_strength=contrast_strength,
             sharpen_strength=sharpen_strength,
@@ -92,7 +96,7 @@ async def idphoto_inference(
         result_message = {"status": False}
     # 如果检测到人脸数量等于1, 则返回标准证和高清照结果（png 4通道图像）
     else:
-        result_image_standard_bytes = save_image_dpi_to_bytes(cv2.cvtColor(result.standard, cv2.COLOR_RGBA2BGRA), None, dpi)
+        result_image_standard_bytes = save_image_dpi_to_bytes(result.standard, None, dpi)
         
         result_message = {
             "status": True,
@@ -101,7 +105,7 @@ async def idphoto_inference(
 
         # 如果hd为True, 则增加高清照结果（png 4通道图像）
         if hd:
-            result_image_hd_bytes = save_image_dpi_to_bytes(cv2.cvtColor(result.hd, cv2.COLOR_RGBA2BGRA), None, dpi)
+            result_image_hd_bytes = save_image_dpi_to_bytes(result.hd, None, dpi)
             result_message["image_base64_hd"] = bytes_2_base64(result_image_hd_bytes)
 
     return result_message
