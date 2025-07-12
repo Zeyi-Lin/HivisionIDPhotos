@@ -95,6 +95,10 @@ def adjust_photo(ctx: Context):
     # Step7. 当照片底部存在空隙时，下拉至底部
     result_image, y_high = move(result_image.astype(np.uint8))
     relative_y = relative_y + y_high  # 更新换装参数
+    
+    # Step7.1 水平翻转
+    if params.horizontal_flip:
+        result_image = cv2.flip(result_image, 1)
 
     # Step8. 标准照与高清照转换
     result_image_standard = standard_photo_resize(result_image, standard_size)

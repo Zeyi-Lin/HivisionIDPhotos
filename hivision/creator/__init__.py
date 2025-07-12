@@ -65,6 +65,7 @@ class IDCreator:
         sharpen_strength: int = 0,
         saturation_strength: int = 0,
         face_alignment: bool = False,
+        horizontal_flip: bool = False,
     ) -> Result:
         """
         证件照处理函数
@@ -80,7 +81,8 @@ class IDCreator:
         :param brightness_strength: 亮度强度
         :param contrast_strength: 对比度强度
         :param sharpen_strength: 锐化强度
-        :param align_face: 是否需要人脸矫正
+        :param face_alignment: 是否需要人脸矫正
+        :param horizontal_flip: 是否需要水平翻转
 
         :return: 返回处理后的证件照和一系列参数
         """
@@ -99,6 +101,7 @@ class IDCreator:
             sharpen_strength=sharpen_strength,
             saturation_strength=saturation_strength,
             face_alignment=face_alignment,
+            horizontal_flip=horizontal_flip,
         )
 
 

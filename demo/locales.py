@@ -670,22 +670,22 @@ LOCALES = {
     "plugin": {
         "en": {
             "label": "🤖Plugin",
-            "choices": ["Face Alignment", "Layout Photo Crop Line", "JPEG Format", "Five Inch Paper"],
+            "choices": ["Face Alignment", "Horizontal Flip", "Layout Photo Crop Line", "JPEG Format", "Five Inch Paper"],
             "value": ["Layout Photo Crop Line"]
         },
         "zh": {
             "label": "🤖插件",
-            "choices": ["人脸旋转对齐", "排版照裁剪线", "JPEG格式"],
+            "choices": ["人脸旋转对齐", "水平翻转", "排版照裁剪线", "JPEG格式"],
             "value": ["排版照裁剪线"]
         },
         "ja": {
             "label": "🤖プラグイン",
-            "choices": ["顔の整列", "レイアウト写真の切り取り線", "JPEGフォーマット"],
+            "choices": ["顔の整列", "水平反転", "レイアウト写真の切り取り線", "JPEGフォーマット"],
             "value": ["レイアウト写真の切り取り線"]
         },
         "ko": {
             "label": "🤖플러그인",
-            "choices": ["얼굴 정렬", "레이아웃 사진 자르기 선", "JPEG 포맷", "오렌지 사진"],
+            "choices": ["얼굴 정렬", "수평 반전", "레이아웃 사진 자르기 선", "JPEG 포맷", "오렌지 사진"],
             "value": ["레이아웃 사진 자르기 선"]
         },
     },
