@@ -27,6 +27,7 @@ class Params:
         sharpen_strength: int = 0,
         saturation_strength: int = 0,
         face_alignment: bool = False,
+        horizontal_flip: bool = False,
     ):
         self.__size = size
         self.__change_bg_only = change_bg_only
@@ -41,7 +42,7 @@ class Params:
         self.__sharpen_strength = sharpen_strength
         self.__saturation_strength = saturation_strength
         self.__face_alignment = face_alignment
-
+        self.__horizontal_flip = horizontal_flip
     @property
     def size(self):
         return self.__size
@@ -93,6 +94,10 @@ class Params:
     @property
     def face_alignment(self):
         return self.__face_alignment
+
+    @property
+    def horizontal_flip(self):
+        return self.__horizontal_flip
 
 
 class Result:

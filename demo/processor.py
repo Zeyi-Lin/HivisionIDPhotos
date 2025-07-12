@@ -76,13 +76,18 @@ class IDPhotoProcessor:
             face_alignment_option = True
         else:
             face_alignment_option = False
-        # 排版裁剪线选项
+        # 水平翻转选项
         if LOCALES["plugin"][language]["choices"][1] in plugin_option:
+            horizontal_flip_option = True
+        else:
+            horizontal_flip_option = False
+        # 排版裁剪线选项
+        if LOCALES["plugin"][language]["choices"][2] in plugin_option:
             layout_photo_crop_line_option = True
         else:
             layout_photo_crop_line_option = False
         # JPEG格式选项
-        if LOCALES["plugin"][language]["choices"][2] in plugin_option:
+        if LOCALES["plugin"][language]["choices"][3] in plugin_option:
             jpeg_format_option = True
         else:
             jpeg_format_option = False
@@ -146,6 +151,7 @@ class IDPhotoProcessor:
                 sharpen_strength,
                 saturation_strength,
                 face_alignment_option,
+                horizontal_flip_option,
             )
         except (FaceError, APIError):
             return self._handle_photo_generation_error(language)
@@ -292,6 +298,7 @@ class IDPhotoProcessor:
         sharpen_strength,
         saturation_strength,
         face_alignment_option,
+        horizontal_flip_option,
     ):
         """生成证件照"""
         change_bg_only = (
@@ -309,6 +316,7 @@ class IDPhotoProcessor:
             sharpen_strength=sharpen_strength,
             saturation_strength=saturation_strength,
             face_alignment=face_alignment_option,
+            horizontal_flip=horizontal_flip_option,
         )
 
     # 处理照片生成错误
