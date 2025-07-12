@@ -603,25 +603,27 @@ class IDPhotoProcessor:
         elif custom_kb:
             output_paths["standard"]["path"] += f"_{custom_kb}kb.{format}"
             output_paths["hd"]["path"] += f".{format}"
-            if not (key == "layout" and result_image_layout is None):
+            for key in output_paths:
+                if key == "layout" and result_image_layout is None:
+                    continue
                 output_paths[key]["path"] += f".{format}"
-            
-            # 只调整标准图像大小
-            resize_image_to_kb(
-                result_image_standard,
-                output_paths["standard"]["path"],
-                custom_kb,
-                dpi=300,
-            )
-            
-            # 保存高清图像和排版图像
-            save_image_dpi_to_bytes(
-                result_image_hd, output_paths["hd"]["path"], dpi=300
-            )
-            if result_image_layout is not None:
-                save_image_dpi_to_bytes(
-                    result_image_layout, output_paths["layout"]["path"], dpi=300
+                
+                # 只调整标准图像大小
+                resize_image_to_kb(
+                    result_image_standard,
+                    output_paths["standard"]["path"],
+                    custom_kb,
+                    dpi=300,
                 )
+                
+                # 保存高清图像和排版图像
+                save_image_dpi_to_bytes(
+                    result_image_hd, output_paths["hd"]["path"], dpi=300
+                )
+                if result_image_layout is not None:
+                    save_image_dpi_to_bytes(
+                        result_image_layout, output_paths["layout"]["path"], dpi=300
+                    )
 
             return output_paths
         # 没有自定义设置
