@@ -63,6 +63,7 @@ class IDPhotoProcessor:
         saturation_strength=0,
         plugin_option=[],
         print_switch=None,
+        layout_direction_options=None,
     ):        
         # 初始化参数
         top_distance_min = top_distance_max - 0.02
@@ -92,8 +93,11 @@ class IDPhotoProcessor:
         else:
             jpeg_format_option = False
         
+        # 处理布局方向选项
+        layout_direction = self._process_layout_direction(layout_direction_options, language)
+        
         idphoto_json = self._initialize_idphoto_json(
-            mode_option, color_option, render_option_index, image_kb_options, layout_photo_crop_line_option, jpeg_format_option, print_switch
+            mode_option, color_option, render_option_index, image_kb_options, layout_photo_crop_line_option, jpeg_format_option, print_switch, layout_direction
         )
 
         # 处理尺寸模式
@@ -170,6 +174,28 @@ class IDPhotoProcessor:
             watermark_text_color,
         )
 
+    def _process_layout_direction(self, layout_direction_options, language):
+        """
+        处理排版方向选项
+        
+        Args:
+            layout_direction_options: 用户选择的排版方向
+            language: 当前语言
+            
+        Returns:
+            int or None: 布局方向 (None=自动, 1=横向, 2=竖向)
+        """
+        direction_choices = LOCALES["layout_direction"][language]["choices"]
+        
+        if layout_direction_options == direction_choices[0]:  # 自动
+            return None
+        elif layout_direction_options == direction_choices[1]:  # 横向
+            return 1
+        elif layout_direction_options == direction_choices[2]:  # 竖向
+            return 2
+        else:
+            return None  # 默认自动
+
     # 初始化idphoto_json字典
     def _initialize_idphoto_json(
         self,
@@ -180,6 +206,7 @@ class IDPhotoProcessor:
         layout_photo_crop_line_option,
         jpeg_format_option,
         print_switch,
+        layout_direction=None,  # None=自动, 1=横向, 2=竖向
     ):
         """初始化idphoto_json字典"""
         return {
@@ -192,6 +219,7 @@ class IDPhotoProcessor:
             "layout_photo_crop_line_option": layout_photo_crop_line_option,
             "jpeg_format_option": jpeg_format_option,
             "print_switch": print_switch,
+            "layout_direction": layout_direction,
         }
 
     # 处理尺寸模式
@@ -466,6 +494,7 @@ class IDPhotoProcessor:
             input_width=idphoto_json["size"][1],
             LAYOUT_HEIGHT= choose_layout_size[0],
             LAYOUT_WIDTH= choose_layout_size[1],
+            layout_direction=idphoto_json["layout_direction"],
         )
         
         result_image_layout = generate_layout_image(

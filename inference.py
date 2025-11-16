@@ -3,7 +3,7 @@ import cv2
 import argparse
 import numpy as np
 from hivision.error import FaceError
-from hivision.utils import hex_to_rgb, resize_image_to_kb, add_background, save_image_dpi_to_bytes
+from hivision.utils import hex_to_rgb, resize_image_to_kb, add_background, save_image_dpi_to_bytes, convert_layout_direction
 from hivision import IDCreator
 from hivision.creator.layout_calculator import (
     generate_layout_array,
@@ -83,6 +83,18 @@ parser.add_argument(
     default="mtcnn",
     choices=FACE_DETECT_MODEL,
 )
+parser.add_argument(
+    "--layout_direction",
+    help="证件照排版方向",
+    choices=["auto", "horizontal", "vertical"],
+    default="auto"
+)
+parser.add_argument(
+    "--crop_line",
+    help="添加该参数后启用排版照添加裁剪线",
+    action="store_true",
+    default=False
+)
 
 args = parser.parse_args()
 
@@ -141,8 +153,12 @@ elif args.type == "generate_layout_photos":
 
     size = (int(args.height), int(args.width))
 
+    # 转换排版方向参数
+    layout_direction_internal = convert_layout_direction(args.layout_direction)
+    
     typography_arr, typography_rotate = generate_layout_array(
-        input_height=size[0], input_width=size[1]
+        input_height=size[0], input_width=size[1],
+        layout_direction=layout_direction_internal
     )
 
     result_layout_image = generate_layout_image(
@@ -151,6 +167,7 @@ elif args.type == "generate_layout_photos":
         typography_rotate,
         height=size[0],
         width=size[1],
+        crop_line=args.crop_line
     )
 
     if args.kb:

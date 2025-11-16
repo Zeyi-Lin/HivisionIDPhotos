@@ -252,7 +252,7 @@ python inference.py -t add_background -i ./idphoto.png -o ./idphoto_ab.jpg  -c 4
 输入 1 张 3 通道照片，获得 1 张六寸排版照
 
 ```python
-python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg  --height 413 --width 295 -k 200
+python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg  --height 413 --width 295 -k 200 --layout_direction auto
 ```
 
 ## 5. 证件照裁剪

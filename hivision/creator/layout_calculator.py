@@ -19,6 +19,7 @@ def judge_layout(
     PHOTO_INTERVAL_H,
     LIMIT_BLOCK_W,
     LIMIT_BLOCK_H,
+    layout_direction=None,  # None for auto, 1 for horizontal, 2 for vertical
 ):
     centerBlockHeight_1, centerBlockWidth_1 = (
         input_height,
@@ -67,15 +68,23 @@ def judge_layout(
             break
     layout_number_transpose = layout_row_transpose * layout_col_transpose
 
-    if layout_number_transpose > layout_number_no_transpose:
-        layout_mode = (layout_col_transpose, layout_row_transpose, 2)
-        return layout_mode, centerBlockWidth_2, centerBlockHeight_2
-    else:
+    # 如果用户指定了排版方向，则使用指定的方向
+    if layout_direction == 1:  # 水平排版
         layout_mode = (layout_col_no_transpose, layout_row_no_transpose, 1)
         return layout_mode, centerBlockWidth_1, centerBlockHeight_1
+    elif layout_direction == 2:  # 垂直排版
+        layout_mode = (layout_col_transpose, layout_row_transpose, 2)
+        return layout_mode, centerBlockWidth_2, centerBlockHeight_2
+    else:  # 自动选择（默认行为）
+        if layout_number_transpose > layout_number_no_transpose:
+            layout_mode = (layout_col_transpose, layout_row_transpose, 2)
+            return layout_mode, centerBlockWidth_2, centerBlockHeight_2
+        else:
+            layout_mode = (layout_col_no_transpose, layout_row_no_transpose, 1)
+            return layout_mode, centerBlockWidth_1, centerBlockHeight_1
 
 
-def generate_layout_array(input_height, input_width, LAYOUT_WIDTH=1795, LAYOUT_HEIGHT=1205):
+def generate_layout_array(input_height, input_width, LAYOUT_WIDTH=1795, LAYOUT_HEIGHT=1205, layout_direction=None):
     # 1.基础参数表
     PHOTO_INTERVAL_H = 30  # 证件照与证件照之间的垂直距离
     PHOTO_INTERVAL_W = 30  # 证件照与证件照之间的水平距离
@@ -96,6 +105,7 @@ def generate_layout_array(input_height, input_width, LAYOUT_WIDTH=1795, LAYOUT_H
         PHOTO_INTERVAL_H,
         LIMIT_BLOCK_W,
         LIMIT_BLOCK_H,
+        layout_direction,
     )
     # 4.开始排列组合
     x11 = (LAYOUT_WIDTH - centerBlockWidth) // 2
