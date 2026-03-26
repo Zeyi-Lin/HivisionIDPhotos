@@ -362,3 +362,21 @@ def add_watermark(
         space=space,
     )
     return np.array(watermarker.image.convert("RGB"))
+
+
+def convert_layout_direction(direction_str):
+    """
+    将排版方向字符串转换为内部格式
+    
+    Args:
+        direction_str (str): 排版方向字符串，可选值为 "auto", "horizontal", "vertical"
+        
+    Returns:
+        int or None: 内部格式，None=自动, 1=横向, 2=竖向
+    """
+    mapping = {
+        "auto": None,
+        "horizontal": 1,
+        "vertical": 2
+    }
+    return mapping.get(direction_str, None)  # 默认为auto
