@@ -187,18 +187,19 @@ async def photo_add_background(
 
     return result_messgae
 
-
 # 六寸排版照生成接口
 @app.post("/generate_layout_photos")
 async def generate_layout_photos(
     input_image: UploadFile = File(None),
     input_image_base64: str = Form(None),
-    height: int = Form(413),
-    width: int = Form(295),
+    height: int = Form(413),        # 单个照片高度（保持原名）
+    width: int = Form(295),         # 单个照片宽度（保持原名）
+    paper_width: int = Form(1795),  # 新增：纸张总宽度（原LAYOUT_WIDTH）
+    paper_height: int = Form(1205), # 新增：纸张总高度（原LAYOUT_HEIGHT）
     kb: int = Form(None),
     dpi: int = Form(300),
 ):
-    # try:
+    # 图像处理逻辑完全不变 ▼
     if input_image_base64:
         img = base64_2_numpy(input_image_base64)
     else:
@@ -207,15 +208,23 @@ async def generate_layout_photos(
         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     size = (int(height), int(width))
-
     typography_arr, typography_rotate = generate_layout_array(
-        input_height=size[0], input_width=size[1]
+        input_height=size[0], 
+        input_width=size[1], 
+        LAYOUT_WIDTH=paper_width,   # 修正：使用全大写参数名
+        LAYOUT_HEIGHT=paper_height  # 修正：使用全大写参数名
     )
-
+    # 仅修改这一行调用 ▼
     result_layout_image = generate_layout_image(
-        img, typography_arr, typography_rotate, height=size[0], width=size[1]
+        img, 
+        typography_arr, 
+        typography_rotate, 
+        width=size[1], 
+        height=size[0],
+        LAYOUT_WIDTH=paper_width,   # 修正：使用全大写参数名
+        LAYOUT_HEIGHT=paper_height  # 修正：使用全大写参数名
     ).astype(np.uint8)
-
+    # 后续处理完全不变 ▲
     result_layout_image = cv2.cvtColor(result_layout_image, cv2.COLOR_RGB2BGR)
     if kb:
         result_layout_image_bytes = resize_image_to_kb(
@@ -224,15 +233,10 @@ async def generate_layout_photos(
     else:
         result_layout_image_bytes = save_image_dpi_to_bytes(result_layout_image, None, dpi=dpi)
         
-    result_layout_image_base64 = bytes_2_base64(result_layout_image_bytes)
-
-    result_messgae = {
+    return {
         "status": True,
-        "image_base64": result_layout_image_base64,
+        "image_base64": bytes_2_base64(result_layout_image_bytes),
     }
-
-    return result_messgae
-
 
 # 透明图像添加水印接口
 @app.post("/watermark")
