@@ -242,7 +242,7 @@ python inference.py -t add_background -i ./idphoto.png -o ./idphoto_ab.jpg -c 4f
 Input 1 3-channel photo to obtain 1 six-inch layout photo.
 
 ```python
-python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg --height 413 --width 295 -k 200
+python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg --height 413 --width 295 -k 200 --layout_direction auto
 ```
 
 ## 5. ID Photo Cropping

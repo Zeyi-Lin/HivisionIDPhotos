@@ -736,4 +736,22 @@ LOCALES = {
             "choices": ["6인치", "5인치", "A4", "3R", "4R"],
         },
     },
+    "layout_direction": {
+        "en": {
+            "label": "Layout direction",
+            "choices": ["Auto", "Horizontal", "Vertical"],
+        },
+        "zh": {
+            "label": "排版方向",
+            "choices": ["自动", "横向", "竖向"],
+        },
+        "ja": {
+            "label": "レイアウト方向",
+            "choices": ["自動", "水平", "垂直"],
+        },
+        "ko": {
+            "label": "레이아웃 방향",
+            "choices": ["자동", "가로", "세로"],
+        },
+    },
 }

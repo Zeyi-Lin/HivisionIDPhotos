@@ -238,7 +238,7 @@ python inference.py -t add_background -i ./idphoto.png -o ./idphoto_ab.jpg -c 4f
 1枚の3チャンネル写真を入力し、1枚の六寸レイアウト写真を取得します。
 
 ```python
-python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg --height 413 --width 295 -k 200
+python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg --height 413 --width 295 -k 200 --layout_direction auto
 ```
 
 ## 5. 証明写真のトリミング

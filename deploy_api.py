@@ -14,6 +14,7 @@ from hivision.utils import (
     hex_to_rgb,
     add_watermark,
     save_image_dpi_to_bytes,
+    convert_layout_direction,
 )
 import numpy as np
 import cv2
@@ -197,6 +198,8 @@ async def generate_layout_photos(
     width: int = Form(295),
     kb: int = Form(None),
     dpi: int = Form(300),
+    layout_direction: str = Form("auto"),
+    crop_line: bool = Form(False),
 ):
     # try:
     if input_image_base64:
@@ -208,12 +211,16 @@ async def generate_layout_photos(
 
     size = (int(height), int(width))
 
+    # 转换排版方向参数
+    layout_direction_internal = convert_layout_direction(layout_direction)
+    
     typography_arr, typography_rotate = generate_layout_array(
-        input_height=size[0], input_width=size[1]
+        input_height=size[0], input_width=size[1],
+        layout_direction=layout_direction_internal
     )
 
     result_layout_image = generate_layout_image(
-        img, typography_arr, typography_rotate, height=size[0], width=size[1]
+        img, typography_arr, typography_rotate, height=size[0], width=size[1], crop_line=crop_line
     ).astype(np.uint8)
 
     result_layout_image = cv2.cvtColor(result_layout_image, cv2.COLOR_RGB2BGR)

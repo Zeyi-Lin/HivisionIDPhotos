@@ -114,6 +114,7 @@ The logic of the `Generate Six-Inch Layout Photo` API is to receive an RGB image
 | width | int | No | The width of the standard ID photo, with a default value of `295`. |
 | kb | int | No | The target file size in KB. If the specified KB value is less than the original file, it adjusts the compression rate. If the specified KB value is greater than the source file, it increases the KB value by adding information to the file header, aiming for the final size of the image to match the specified KB value. |
 | dpi | int | No | The image resolution, with a default value of `300`. |
+| layout_direction | str | no | Typesetting direction, defaults to auto. Options are auto, horizontal, vertical |
 
 **Return Parameters:**
 
@@ -273,8 +274,12 @@ curl -X POST "http://127.0.0.1:8080/generate_layout_photos" \
 -F "height=413" \
 -F "width=295" \
 -F "kb=200" \
--F "dpi=300"
+-F "dpi=300" \
+-F "layout_direction=auto" \
+-F "crop_line=true"
 ```
+
+
 
 ### 4. Human Matting
 

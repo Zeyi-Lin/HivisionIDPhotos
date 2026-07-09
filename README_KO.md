@@ -239,7 +239,7 @@ python inference.py -t add_background -i ./idphoto.png -o ./idphoto_ab.jpg  -c 4
 1장의 3채널 사진을 입력하여 1장의 6인치 배치 사진을 얻습니다.
 
 ```python
-python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg  --height 413 --width 295 -k 200
+python inference.py -t generate_layout_photos -i ./idphoto_ab.jpg -o ./idphoto_layout.jpg --height 413 --width 295 -k 200 --layout_direction auto
 ```
 
 ## 5. 증명사진 자르기

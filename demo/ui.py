@@ -351,6 +351,14 @@ def create_ui(
                         value=LOCALES["print_switch"][DEFAULT_LANG]["choices"][0],
                         interactive=True,
                     )
+                    
+                    # 添加排版方向选项
+                    layout_direction_options = gr.Radio(
+                        choices=LOCALES["layout_direction"][DEFAULT_LANG]["choices"],
+                        label=LOCALES["layout_direction"][DEFAULT_LANG]["label"],
+                        value=LOCALES["layout_direction"][DEFAULT_LANG]["choices"][0],  # 默认选择"自动"
+                        interactive=True,
+                    )
                 
 
                 img_but = gr.Button(
@@ -577,6 +585,11 @@ def create_ui(
                         choices=LOCALES["print_switch"][language]["choices"],
                         value=LOCALES["print_switch"][language]["choices"][0],
                     ),
+                    layout_direction_options: gr.update(
+                        label=LOCALES["layout_direction"][language]["label"],
+                        choices=LOCALES["layout_direction"][language]["choices"],
+                        value=LOCALES["layout_direction"][language]["choices"][0],  # 默认选择"自动"
+                    ),
                 }
 
             def change_visibility(option, lang, locales_key, custom_component):
@@ -689,6 +702,7 @@ def create_ui(
                     template_image_accordion,
                     print_parameter_tab,
                     print_options,
+                    layout_direction_options,
                 ],
             )
 
@@ -765,6 +779,7 @@ def create_ui(
                     saturation_option,
                     plugin_options,
                     print_options,
+                    layout_direction_options,
                 ],
                 outputs=[
                     img_output_standard,
