@@ -89,7 +89,7 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 
 ---
 
-如果 HivisionIDPhoto 对你有帮助，请 star 这个 repo 或推荐给你的朋友，解决证件照应急制作问题！
+如果 HivisionIDPhoto 对你有帮助，请 star 这个 repo 或推荐给你的朋友，解决证件照应急制作问题！谢谢!
 
 <br>
 
@@ -115,7 +115,6 @@ HivisionIDPhoto 旨在开发一种实用、系统性的证件照智能制作算�
 - [HivisionIDPhotos-NAS](https://github.com/ONG-Leo/HivisionIDPhotos-NAS): 群晖NAS部署中文教程，由 [ONG-Leo](https://github.com/ONG-Leo) 贡献
 
 
-<br>
 
 # 🔧 准备工作
 
