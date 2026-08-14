@@ -415,7 +415,7 @@ docker run  -d -p 7860:7860 \
 
 [![Forkers repo roster for @Zeyi-Lin/HivisionIDPhotos](https://reporoster.com/forks/Zeyi-Lin/HivisionIDPhotos)](https://github.com/Zeyi-Lin/HivisionIDPhotos/network/members)
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=Date)](https://star-history.com/#Zeyi-Lin/HivisionIDPhotos&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=Zeyi-Lin/HivisionIDPhotos&type=date)](https://star-history.dera.page/#Zeyi-Lin/HivisionIDPhotos&type=date)
 
 <br>
 
