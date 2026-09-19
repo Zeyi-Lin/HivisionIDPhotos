@@ -410,7 +410,7 @@ docker run  -d -p 7860:7860 \
 
 <br>
 
-# 📜 Lincese
+# 📜 License
 
 This repository is licensed under the [Apache-2.0 License](LICENSE).
 
